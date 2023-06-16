@@ -18,10 +18,10 @@ debts with a minimal number of transactions.
 ## Basic User Tasks
 
 - Create or select a group
-- Invite other people
+- Invite other people to the group
 - Add an expense involving other group members
 - View all expenses
-- Edit an expenses
+- Edit an expense
 - Delete an expense
 - Retrieve a suggestion on how to balance debts with minimal number of transactions
 
@@ -64,7 +64,7 @@ expenses will be derived. A Python reference implementation can already be found
 [here](https://git.sr.ht/~talfus-laddus/splt-exps-py).
 
 *Note: The trivial case of settling debts among two person (group size of two) is
-supported.*
+of course supported.*
 
 ### Backend
 
@@ -79,8 +79,8 @@ rates and conversions.
 
 The frontend will be a mobile-first website.
 
-It is an open question whether the frontend will be served from Mars or Earth. 
-The website, of course, should eventually be served from the ship.
+It is an open question whether the frontend will in the initial phase be served from
+Mars or Earth. The website should eventually be served from the ship.
 
 ## Milestones
 
@@ -99,8 +99,8 @@ Deliverables
 : Edmonds-Karp Library
 
 The Proof of Concept (POC) demonstrates how to model shared expenses as a flow network
-and how to derive from it the minimum number of transactions needed to settle debts
-. The POC implements the Edmonds-Karp algorithm as well as the logic of how to
+and how to derive from it the minimum number of transactions needed to settle debts.
+The POC implements the Edmonds-Karp algorithm as well as the logic of how to
 construct the flow network from a list of expenses and how to derive a list of
 transactions from the residual network.
 
@@ -128,9 +128,9 @@ frontend.
 3. Add a feature to "simplify debts" by integrating the Edmonds-Karp library into the
    gall agent. The agent can suggest a way to balance out shared expenses with a minimal
    number of transactions.
-4. Synchronize the state of the gall agent among the group members.
-5. Handle different currencies by creating and integrating a library. The library can
-   retrieve the current exchange rate and do conversions between currencies.
+4. Synchronize expenses among the group members.
+5. Handle different currencies. Retrieve the current exchange rate and do conversions
+   between currencies.
 6. Make the app available through Software Distribution.
 
 ## Limitations
