@@ -4,7 +4,7 @@
 ::
 |%
 ++  bfs
-  ::  describe product of function
+  ::  find a path in the graph between source and sink
   ::
   |=  ::  g: graph
       ::  s: source
@@ -14,20 +14,20 @@
           t=@ud
       ==
   ^-  (unit (list @sd))
-  =/  n    (lent g)      :: size
-  =/  vis  (reap n %.y)  :: visited
-  =/  pat  (reap n --1)  :: path
-  =/  que  (limo [s ~])  :: queue
-  =/  u    (head que)    :: vertex
-  =/  v    0             :: vertex
-  ::       [u v]         :: edge
+  =/  n    (lent g)         :: size
+  =/  vis  (reap n `?`%.n)  :: visited
+  =/  pat  (reap n --1)     :: path
+  =/  que  (limo [s ~])     :: queue
+  =/  u    (head que)       :: vertex
+  =/  v    0                :: vertex
+  ::       [u v]            :: edge
   ::
   |-
   ?:  =((lent que) 0)
     ?:  (snag s vis)
       [~ pat]
     ~
-  :: for every neighboring vertices
+  :: for each neighbor
   ::
   |-
   ?:  =(n v)
@@ -36,7 +36,7 @@
     ?:  &(!(snag v vis) (gth (snag v (snag u g)) 0))
       %=  $
         v    +(v)
-        vis  (snap vis v %.y)
+        vis  (snap vis v `?`%.y)
         pat  (snap pat v `@sd`u)
         que  (snoc que v)
       ==
@@ -46,6 +46,6 @@
   %=  ^$
     u    (head que)
     que  (tail que)
-    vis  (snap vis u %.y)
+    vis  (snap vis u `?`%.y)
   ==
 --
