@@ -63,6 +63,9 @@ will be computed. From the resulting residual network transactions to balance ou
 expenses will be derived. A Python reference implementation can already be found
 [here](https://git.sr.ht/~talfus-laddus/splt-exps-py).
 
+*Note: The trivial case of settling debts among two person (group size of two) is
+supported.*
+
 ### Backend
 
 The backend will be a gall agent with a basic set of operations addressing the users
@@ -130,17 +133,16 @@ frontend.
    retrieve the current exchange rate and do conversions between currencies.
 6. Make the app available through Software Distribution.
 
+## Limitations
 
-## Considerations
-
-The applications design is based around groups of people such as roommates or a bunch of
-friends on a trip. The nature of such groups is rather static. The group members do
-not change frequently, and expenses (re)occur over time. Keeping track of one-to-one
-transactions by going through an interface designed around groups is tedious.
+Since the list of expenses is stored on the group initiator's ship, when it is down
+other people can not synchronize their state of the application.
 
 ## Additional Future Work
 
 The future of the app could entail:
+- A robust decentralization/synchronization mechanism which adressess the limitation
+  raised above
 - A more polished interface
 - An integration into Groups
 - Apps for Android and iOS
