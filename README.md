@@ -1,5 +1,7 @@
 # Expense Sharing App for Urbit
 
+For details about this app, see the [proposal](./proposal.md).
+
 ## Development
 
 ### Setup
