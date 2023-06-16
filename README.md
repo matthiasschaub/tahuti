@@ -8,22 +8,27 @@
 $ git clone https://git.sr.ht/~talfus-laddus/splt-exps
 $ cd splt-exps
 $ urbit -F zod
-> |mount %base  :: create %base folder on earth
+> |merge %splt-exps our %base
+> |mount %splt-exps
 ```
 
-Start continuous synchronisation between the git repository's `gen` directory and the `%base` desk's `gen` directory:
+Start continuous synchronisation between the git repository's `splt-exps` directory
+(Earth) and the `%splt-exps` desk's directory (Mars):
+
 ```bash
-$ watch "rsync -zr ./lib/* zod/base/lib"
+./sync.sh
 ```
 
-Then run the fake ship and `commit` the files:
+### Usage
+
+Run the fake ship, start the language server, `commit` the files and run tests.
 ```bash
 $ urbit zod
 > |start %language-server
-> |commit %base  :: sync %base desk with earth
+> |commit %splt-exps
+> -test /=splt-exps=/tests/lib/bsf/hoon ~
 ```
 
-Finally run `splt-exps`:
-```dojo
-> +splt-exps
-``
+## Contact
+
+Reach out to me on the network: `~talfus-laddus`
