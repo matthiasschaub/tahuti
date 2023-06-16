@@ -7,7 +7,7 @@ with other Urbiters. Urbit needs its own expense sharing app that seamlessly kee
 track of all expenses and IOUs in one place and works with both crypto and fiat
 ([RFP](https://urbit.org/grants/splitwise)).
 
-Urbit is for small communities. Communities need a way to keep track of and to split
+Urbit is for small communities. And those need a way to keep track of and to split
 shared expenses.
 
 ## Basic User Story
@@ -21,6 +21,7 @@ debts with a minimal number of transactions.
 - Invite other people
 - Add an expense involving other group members
 - View all expenses
+- Edit an expenses
 - Delete an expense
 - Retrieve a suggestion on how to balance debts with minimal number of transactions
 
@@ -29,7 +30,7 @@ debts with a minimal number of transactions.
 1. Select a group
 2. Add an expense
 3. Check balance
-    - Who are owed, and who owes money to the group and how much?
+    - Who is owed, and who owes money to the group and how much?
 4. Settle debts
     - The app suggests an efficient way to settle debts in the group
     - Mark outstanding expenses as paid
@@ -50,7 +51,7 @@ An expense can involve only a subset of all group members. It has the following 
 
 All group members are ships (`@p`). A list of group members and all expenses of the
 group will be stored on the ship of the group initiator. Other group members will read
-and write from and to there.
+and write from/to there.
 
 In order to find a minimum number of transaction to settle debts in the group
 ("simplified debts"), shared expenses will be modeled as a flow network. Money flows
@@ -105,7 +106,7 @@ transactions from the residual network.
 Completion
 : End of App School Live before Assembly (October 2023)
 
-Payment 
+Payment
 : 1 Star
 
 Deliverables
