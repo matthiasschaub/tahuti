@@ -3,7 +3,7 @@
 ++  test-bfs
   ;:  weld
   %+  expect-eq
-    !>  (limo [--1 0 0 1 2 3 ~])
+    !>  (limo [0 0 0 1 2 3 ~])
     !>
       %-  need  %-  bfs
         :*
