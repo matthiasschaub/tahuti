@@ -28,7 +28,7 @@ Run the fake ship, start the language server, `commit` the files and run tests.
 $ urbit zod
 > |start %language-server
 > |commit %splt-exps
-> -test /=splt-exps=/tests/lib/bsf/hoon ~
+> -test /=splt-exps=/tests/lib/bfs/hoon ~
 ```
 
 ## Contact
