@@ -24,7 +24,6 @@
   =/  u    s                    :: vertex
   =/  v    0                    :: vertex
   ::       [u v]                :: edge
-  ::  TODO: heaviest twig first?
   ::
   |-
   ?:  =((lent que) 0)           :: if, empty queue
