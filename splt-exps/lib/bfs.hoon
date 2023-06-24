@@ -28,7 +28,7 @@
   |-
   ?:  =((lent que) 0)           :: if, empty queue
     ?:  (snag s vis)            :: if, sink visited
-      [~ pat]
+      (some pat)
     ~
   |-                            :: for each neighbor
   ?:  =(n v)
