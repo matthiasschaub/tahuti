@@ -20,16 +20,16 @@
   =/  pat  (reap n 0)           :: path
   =/  que  (limo [s ~])         :: queue
   ::
-  =.  vis  (snap vis s &)
   =/  u    s                    :: vertex
   =/  v    0                    :: vertex
   ::       [u v]                :: edge
   ::
   |-
   ?:  =((lent que) 0)           :: if, empty queue
-    ?:  (snag s vis)            :: if, sink visited
+    ?:  (snag t vis)            :: if, sink visited
       (some pat)
     ~
+  =.  vis  (snap vis s &)
   |-                            :: for each neighbor
   ?:  =(n v)
     %=  ^$
