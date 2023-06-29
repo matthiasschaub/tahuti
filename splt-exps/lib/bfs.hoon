@@ -17,25 +17,25 @@
   ::
   =/  n    (lent g)             :: size
   =/  vis  (reap n |)           :: visited
+  =.  vis  (snap vis s &)
   =/  pat  (reap n 0)           :: path
   =/  que  (limo [s ~])         :: queue
   ::
-  =/  u    s                    :: vertex
   =/  v    0                    :: vertex
-  ::       [u v]                :: edge
+  ::  u    s                    :: vertex
+  ::  e    [u v]                :: edge
   ::
   |-
   ?:  =((lent que) 0)           :: if, empty queue
     ?:  (snag t vis)            :: if, sink visited
       (some pat)
     ~
-  =.  vis  (snap vis s &)
+  =/  u  (head que)
   |-                            :: for each neighbor
   ?:  =(n v)
     %=  ^$
-      v    0
-      u    (head que)
       que  (tail que)
+      v    0
       vis  (snap vis u &)
     ==
   ?:  :: if, not visited and capacity > 0
