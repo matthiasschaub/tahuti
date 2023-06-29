@@ -1,11 +1,12 @@
 ::    Edmonds-Karp algorithm for finding the maximum flow.
 ::
 /+  *bfs
+!:
 |%
 ++  get
   :: the capacity of an edge
   ::
-  |=  ::  .g:  adjacency matrix
+  |=  ::  .g: graph as adjacency matrix
       ::  .v: vertex (row)
       ::  .u: vertex (col)
       $:  g=(list (list @ud))
@@ -17,7 +18,7 @@
 ++  set
   :: a graph with the capacity of an edge changed
   ::
-  |=  ::  .g: adjacency matrix
+  |=  ::  .g: graph as adjacency matrix
       ::  .v: vertex (row)
       ::  .u: vertex (col)
       ::  .c: capacity
@@ -41,48 +42,49 @@
       ==
   ^-  (unit @ud)
   ::
-  =/  n    (lent g)             :: size
-  =/  flow-graph  (reap n (reap n 0))
-  =/  max-flow  0
-  =/  path  (bfs [g s t])
-  =/  inf  100
+  =/  n     (lent g)            :: size
+  =/  flow  (reap n (reap n 0))
+  =/  maxi  0                   :: maximum flow
+  =/  path  (bfs [g s t])       :: augmenting path
+  =/  inf   100                 :: TODO: how to define inf equivalent value?
   ::  while there is an augmenting path
   ::
   |-
   ?:  =([~] path)
-    (some max-flow)
+    (some maxi)
   =/  path  (need path)
+  =/  mini  inf                 :: bottleneck capacity
+  =/  v  t
   ::  find bottleneck of the path
-  =/  bottleneck  inf
-  =/  v  s
-  =/  u  (snag v path)
+  ::
   |-
-  ?:  !=(v t)
+  ?:  ?!(.=(v s))
+    =/  u  (snag v path)
     %=  $
-      bottleneck  (min bottleneck (snag u (snag v g)))
-      v  u
-      u  (snag v path)
+      mini  (min mini (get [g u v]))
+      v     u
     ==
-  :: update residual path
-  =/  v  s
-  =/  u  (snag v path)
+  =/  v  t
+  ::  update residual path
+  ::
   |-
-  ?:  !=(v t)
-    =/  uv  (snag u (snag v g))  :: capacity u->v
-    =/  vu  (snag v (snag u g))
+  ?:  ?!(.=(v s))
+    =/  u   (snag v path)
+    =/  uv  (get [g u v])             :: capacity u->v
+    =/  g1  (set [g u v (sub uv mini)])
+    =/  vu  (get [g1 v u])
+    =/  g2  (set [g1 v u (add vu mini)])
     %=  $
       :: decrease capacity u->v by bottleneck
       :: increase capacity v->u by bottleneck
       :: increase flow u->v by bottleneck
       ::
-      g       (into g u (into (snag g u) v (sub uv bottleneck)))
-      g       (into g v (into (snag g v) u (add vu bottleneck)))
-      flow-graph  (into g u (into (snag g u) v (sub uv bottleneck)))
-      v  u
-      u  (snag v path)
+      g     g2
+      flow  (set [flow u v (add (get [flow u v]) mini)])
+      v     u
     ==
-  %=  $
-    max-flow  (add max-flow bottleneck)
+  %=  ^^$
+    maxi  (add maxi mini)
     path  (bfs [g s t])
   ==
 --
