@@ -40,6 +40,6 @@
   ;:  weld
     %+  expect-eq
       !>  23
-      !>  (need (edmonds-karp [fixture-graph 0 5]))
+      !>  (head (need (edmonds-karp [fixture-graph 0 5])))
   ==
 --

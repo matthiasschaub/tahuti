@@ -30,8 +30,7 @@
   ^-  (list (list @ud))
   (snap g v (snap (snag v g) u c))
 ++  edmonds-karp
-  ::  a pair of the maximum flow from source to sink and the resulting
-  ::  flow graph
+  ::  a pair of the maximum flow from source to sink and the flow graph
   ::
   |=  ::  .g: graph as adjacency matrix
       ::  .s: source
@@ -40,51 +39,53 @@
           s=@ud
           t=@ud
       ==
-  ^-  (unit @ud)
+  ^-  (unit (pair maxflow=@ud flowgraph=(list (list @ud))))
   ::
-  =/  n     (lent g)            :: size
-  =/  flow  (reap n (reap n 0))
-  =/  maxi  0                   :: maximum flow
-  =/  path  (bfs [g s t])       :: augmenting path
-  =/  inf   100                 :: TODO: how to define inf equivalent value?
+  =/  n         (lent g)                         :: size
+  =/  f         (reap n (reap n 0))              :: flow graph as adjacency matrix
+  =/  maxflow   0
+  =/  path      (bfs [g s t])                    :: augmenting path
+  ::  TODO:     how to define inf equivalent value?
+  ::
+  =/  inf       100
   ::  while there is an augmenting path
   ::
   |-
   ?:  =([~] path)
-    (some maxi)
-  =/  path  (need path)
-  =/  mini  inf                 :: bottleneck capacity
-  =/  v  t
+    (some [maxflow f])
+  =/  path        (need path)
+  =/  bottleneck  inf                            :: bottleneck capacity
+  =/  v           t
   ::  find bottleneck of the path
   ::
   |-
   ?:  ?!(.=(v s))
     =/  u  (snag v path)
     %=  $
-      mini  (min mini (get [g u v]))
-      v     u
+      bottleneck  (min bottleneck (get [g u v]))
+      v           u
     ==
   =/  v  t
-  ::  update residual path
+  ::  update residual and flow graph
   ::
   |-
   ?:  ?!(.=(v s))
     =/  u   (snag v path)
-    =/  uv  (get [g u v])             :: capacity u->v
-    =/  g1  (set [g u v (sub uv mini)])
-    =/  vu  (get [g1 v u])
-    =/  g2  (set [g1 v u (add vu mini)])
+    =/  uv  (get [g u v])                        :: capacity u->v
+    =.  g   (set [g u v (sub uv bottleneck)])
+    =/  vu  (get [g v u])
+    =.  g   (set [g v u (add vu bottleneck)])
     %=  $
       :: decrease capacity u->v by bottleneck
       :: increase capacity v->u by bottleneck
-      :: increase flow u->v by bottleneck
+      :: increase flow     u->v by bottleneck
       ::
-      g     g2
-      flow  (set [flow u v (add (get [flow u v]) mini)])
-      v     u
+      g  g
+      f  (set [f u v (add (get [f u v]) bottleneck)])
+      v  u
     ==
   %=  ^^$
-    maxi  (add maxi mini)
-    path  (bfs [g s t])
+    maxflow   (add maxflow bottleneck)
+    path      (bfs [g s t])
   ==
 --
