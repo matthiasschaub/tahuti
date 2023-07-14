@@ -11,13 +11,6 @@
   ==
 +$  exes  (list ex)
 ::
-::++  add
-::  ::    add expense to shared expense list
-::  ::
-::  |=  [=exes =ex]
-::  ^-  exes
-::  (snoc exes ex)
-::
 ++  sum
   ::    total sum of expenses
   ::
@@ -33,8 +26,9 @@
     sum  (add sum amount:(snag i exes))
     i    +(i)
   ==
+::
 ++  gro
-  ::    gross amount of members
+  ::    gross amount of ship
   ::
   |=  [=exes]
   ^-  (map @p @ud)
@@ -51,32 +45,33 @@
     gro  (~(put by gro) [payer:ex total])
     i    +(i)
   ==
+::
 ++  net
-  ::    net amount of members
+  ::    net amount of ship
   ::
-  |=  [=exes ships=(list @p)]
+  |=  [=exes fleet=(list @p)]
   ^-  (map @p @rs)
   =/  net  *(map @p @rs)
   =/  i    0
-  |-                            :: for each member
-  ?:  =(i (lent ships))
+  |-                            :: for each ship
+  ?:  =(i (lent fleet))
     net
-  =/  m  (snag i ships)         :: member
-  =/  d  .0                     :: debit
-  =/  c  .0                     :: credit
-  =/  j  0
+  =/  ship  (snag i fleet)
+  =/  d     .0                  :: debit
+  =/  c     .0                  :: credit
+  =/  j     0
   |-                            :: for each expense
   ?:  =(j (lent exes))
     %=  ^$
-      net  (~(put by net) [m (sub:rs c d)])
+      net  (~(put by net) [ship (sub:rs c d)])
       i    +(i)
     ==
   =/  ex  (snag j exes)
-  ?:  :: if, member is involved and is payer
+  ?:  :: if, ship is involved and is payer
       ::
       ?&
-        ?!  .=  (find [m ~] involves.ex)  ~
-        .=  m  payer.ex
+        ?!  .=  (find [ship ~] involves.ex)  ~
+        .=  ship  payer.ex
       ==
       :: then, increase debit and credit
       ::
@@ -87,9 +82,9 @@
       ==
   :: else
   ::
-  ?~  :: if, member is only involved
+  ?~  :: if, ship is only involved
       ::
-      (find [m ~] involves.ex)
+      (find [ship ~] involves.ex)
       :: then, increase debit
       ::
       %=  $
@@ -98,9 +93,9 @@
       ==
   :: else
   ::
-  ?:  :: if, member is only payer
+  ?:  :: if, ship is only payer
       ::
-      .=  m  payer.ex
+      .=  ship  payer.ex
       :: then, increase credit
       ::
       %=  $
