@@ -16,6 +16,8 @@
         :*  ~zod  .1  (limo [~zod ~])  ==
       ==
     ++  multi-single
+      ::  multiple expenses single ship
+      ::
       ^-  (list [@p @rs (list @p)])
       :~
         :*  ~zod  .1  (limo [~zod ~])  ==
@@ -23,6 +25,8 @@
         :*  ~zod  .3  (limo [~zod ~])  ==
       ==
     ++  multi-multi
+      ::  multiple expenses multiple ships
+      ::
       ^-  (list [@p @rs (list @p)])
       :~
         :*  ~zod  .1  (limo [~zod ~nus ~])  ==
@@ -31,10 +35,6 @@
       ==
     --
   --
-:: ++  test-sum-empty
-::   %+  expect-eq
-::     !>  0
-::     !>  (sum (limo [~]))
 ++  test-sum-single
   ;:  weld
     %+  expect-eq
@@ -75,11 +75,5 @@
     %+  expect-eq
       !>  (malt (limo [[~zod .0.5] [~nus .2.5] ~]))
       !>  (net [multi-multi:exes:fixtures (limo [~zod ~nus ~])])
-    :: %+  expect-eq
-    ::   !>  (malt (limo [[~zod .-3] [~nus .3]~]))
-    ::   !>  (net (limo [[~zod 3] [~nus 6] ~]))
-    :: %+  expect-eq
-    ::   !>  (malt (limo [[~zod 7] [~nus 14]~]))
-    ::   !>  (net (limo [[~zod 3] [~zod 4] [~nus 6] [~nus 8] ~]))
   ==
 --
