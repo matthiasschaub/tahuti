@@ -72,18 +72,18 @@
       !>  (malt (limo [[~zod .1] [~nus .5] ~]))
       !>  (gro multi-multi-equal:exes:fixtures)
   ==
-:: ++  test-net-single
-::   %+  expect-eq
-::     !>  (malt (limo [[~zod .0] ~]))
-::     !>  (net [single:exes:fixtures (limo [~zod ~])])
+++  test-net-single
+  %+  expect-eq
+    !>  (malt (limo [[~zod .0] ~]))
+    !>  (net [single:exes:fixtures (limo [~zod ~])])
 ++  test-net-multi
   ;:  weld
-    :: %+  expect-eq
-    ::   !>  (malt (limo [[~zod .0] ~]))
-    ::   !>  (net [multi-single:exes:fixtures (limo [~zod ~])])
-    :: %+  expect-eq
-    ::   !>  (malt (limo [[~zod .0.5] [~nus .2.5] ~]))
-    ::   !>  (net [multi-multi-equal:exes:fixtures (limo [~zod ~nus ~])])
+    %+  expect-eq
+      !>  (malt (limo [[~zod .0] ~]))
+      !>  (net [multi-single:exes:fixtures (limo [~zod ~])])
+    %+  expect-eq
+      !>  (malt (limo [[~zod .-2] [~nus .2] ~]))
+      !>  (net [multi-multi-equal:exes:fixtures (limo [~zod ~nus ~])])
     %+  expect-eq
       !>  (malt (limo [[~zod .-3] [~nus .3] ~]))
       !>  (net [multi-multi-diff:exes:fixtures (limo [~zod ~nus ~])])
