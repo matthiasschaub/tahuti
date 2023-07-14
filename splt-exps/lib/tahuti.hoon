@@ -54,6 +54,7 @@
   =/  net  *(map @p @rs)
   =/  i    0
   |-                            :: for each ship
+  ~&  i
   ?:  =(i (lent fleet))
     net
   =/  ship  (snag i fleet)
@@ -82,9 +83,9 @@
       ==
   :: else
   ::
-  ?~  :: if, ship is only involved
+  ?:  :: if, ship is only involved
       ::
-      (find [ship ~] involves.ex)
+      ?!  .=  (find [ship ~] involves.ex)  ~
       :: then, increase debit
       ::
       %=  $
