@@ -54,7 +54,6 @@
   =/  net  *(map @p @rs)
   =/  i    0
   |-                            :: for each ship
-  ~&  i
   ?:  =(i (lent fleet))
     net
   =/  ship  (snag i fleet)

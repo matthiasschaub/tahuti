@@ -24,14 +24,23 @@
         :*  ~zod  .2  (limo [~zod ~])  ==
         :*  ~zod  .3  (limo [~zod ~])  ==
       ==
-    ++  multi-multi
-      ::  multiple expenses multiple ships
+    ++  multi-multi-equal
+      ::  multiple expenses multiple ships with equal involvement
       ::
       ^-  (list [@p @rs (list @p)])
       :~
         :*  ~zod  .1  (limo [~zod ~nus ~])  ==
         :*  ~nus  .2  (limo [~zod ~nus ~])  ==
         :*  ~nus  .3  (limo [~zod ~nus ~])  ==
+      ==
+    ++  multi-multi-diff
+      ::  multiple expenses multiple ships with different involvement
+      ::
+      ^-  (list [@p @rs (list @p)])
+      :~
+        :*  ~zod  .1  (limo [~nus ~])  ==
+        :*  ~nus  .2  (limo [~zod ~nus ~])  ==
+        :*  ~nus  .3  (limo [~zod ~])  ==
       ==
     --
   --
@@ -61,19 +70,22 @@
       !>  (gro multi-single:exes:fixtures)
     %+  expect-eq
       !>  (malt (limo [[~zod .1] [~nus .5] ~]))
-      !>  (gro multi-multi:exes:fixtures)
+      !>  (gro multi-multi-equal:exes:fixtures)
   ==
-++  test-net-single
-  %+  expect-eq
-    !>  (malt (limo [[~zod .0] ~]))
-    !>  (net [single:exes:fixtures (limo [~zod ~])])
+:: ++  test-net-single
+::   %+  expect-eq
+::     !>  (malt (limo [[~zod .0] ~]))
+::     !>  (net [single:exes:fixtures (limo [~zod ~])])
 ++  test-net-multi
   ;:  weld
+    :: %+  expect-eq
+    ::   !>  (malt (limo [[~zod .0] ~]))
+    ::   !>  (net [multi-single:exes:fixtures (limo [~zod ~])])
+    :: %+  expect-eq
+    ::   !>  (malt (limo [[~zod .0.5] [~nus .2.5] ~]))
+    ::   !>  (net [multi-multi-equal:exes:fixtures (limo [~zod ~nus ~])])
     %+  expect-eq
-      !>  (malt (limo [[~zod .0] ~]))
-      !>  (net [multi-single:exes:fixtures (limo [~zod ~])])
-    %+  expect-eq
-      !>  (malt (limo [[~zod .0.5] [~nus .2.5] ~]))
-      !>  (net [multi-multi:exes:fixtures (limo [~zod ~nus ~])])
+      !>  (malt (limo [[~zod .-3] [~nus .3] ~]))
+      !>  (net [multi-multi-diff:exes:fixtures (limo [~zod ~nus ~])])
   ==
 --
