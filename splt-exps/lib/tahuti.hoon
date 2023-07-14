@@ -6,7 +6,7 @@
 +$  ex
   $:
     payer=@p
-    amount=@ud
+    amount=@rs
     involves=(list @p)
   ==
 +$  exes  (list ex)
@@ -15,15 +15,15 @@
   ::    total sum of expenses
   ::
   |=  [=exes]
-  ^-  @ud
+  ^-  @rs
   =/  n    (lent exes)
   =/  i    0
-  =/  sum  0
+  =/  sum  .0
   |-
   ?:  =(i n)
     sum
   %=  $
-    sum  (add sum amount:(snag i exes))
+    sum  (add:rs sum amount:(snag i exes))
     i    +(i)
   ==
 ::
@@ -31,16 +31,16 @@
   ::    gross amount of ship
   ::
   |=  [=exes]
-  ^-  (map @p @ud)
+  ^-  (map @p @rs)
   =/  n    (lent exes)
   =/  i    0
-  =/  gro  *(map @p @ud)
+  =/  gro  *(map @p @rs)
   |-
   ?:  =(i n)
     gro
   =/  ex  (snag i exes)
-  =/  current  (~(gut by gro) payer:ex 0)
-  =/  total    (add current amount:ex)
+  =/  current  (~(gut by gro) payer:ex .0)
+  =/  total    (add:rs current amount:ex)
   %=  $
     gro  (~(put by gro) [payer:ex total])
     i    +(i)
@@ -76,8 +76,8 @@
       :: then, increase debit and credit
       ::
       %=  $
-        d  (add:rs d (div:rs (sun:rs amount.ex) (sun:rs (lent involves.ex))))
-        c  (add:rs c (sun:rs amount.ex))
+        d  (add:rs d (div:rs amount.ex (sun:rs (lent involves.ex))))
+        c  (add:rs c amount.ex)
         j  +(j)
       ==
   :: else
@@ -88,7 +88,7 @@
       :: then, increase debit
       ::
       %=  $
-        d  (add:rs d (div:rs (sun:rs amount.ex) (sun:rs (lent involves.ex))))
+        d  (add:rs d (div:rs amount.ex (sun:rs (lent involves.ex))))
         j  +(j)
       ==
   :: else
@@ -99,7 +99,7 @@
       :: then, increase credit
       ::
       %=  $
-        c  (add:rs c (sun:rs amount.ex))
+        c  (add:rs c amount.ex)
         j  +(j)
       ==
   :: else, continue
