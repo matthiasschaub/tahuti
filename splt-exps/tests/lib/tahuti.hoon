@@ -88,4 +88,12 @@
       !>  (malt (limo [[~zod .-3] [~nus .3] ~]))
       !>  (net [multi-multi-diff:exes:fixtures (limo [~zod ~nus ~])])
   ==
+++  test-ind-single
+  %+  expect-eq
+    !>  [(limo [1 ~]) (limo [~])]
+    !>  (ind (limo [.1 ~]))
+++  test-ind-multi
+  %+  expect-eq
+    !>  [(limo [1 3 ~]) (limo [2 4 5 ~])]
+    !>  (ind (limo [.1 .-4 .3 .-2 .-1 ~]))
 --

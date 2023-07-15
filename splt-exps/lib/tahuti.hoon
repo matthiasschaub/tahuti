@@ -28,7 +28,7 @@
   ==
 ::
 ++  gro
-  ::    gross amount of ship
+  ::    gross amount of ships
   ::
   |=  [=exes]
   ^-  (map @p @rs)
@@ -47,7 +47,7 @@
   ==
 ::
 ++  net
-  ::    net amount of ship
+  ::    net amount of ships
   ::
   |=  [=exes fleet=(list @p)]
   ^-  (map @p @rs)
@@ -104,7 +104,32 @@
       ==
   :: else, continue
   ::
-  %=  $
-    j  +(j)
-  ==
+  %=($ i +(i))
+++  ind
+  ::  creditor and debitor indices
+  ::
+  ::    indices are shifted by one to account for the source node
+  ::
+  |=
+      ::  .net: net amount of ships
+      ::
+      net=(list @rs)
+  ^-  (pair (list @ud) (list @ud))
+  =/  c  *(list @ud)            :: creditor indices
+  =/  d  *(list @ud)            :: debitor indices
+  =/  i  0
+  |-
+  ?:  .=  i  (lent net)
+    [c d]
+  ?:  (gth:rs (snag i net) .0)
+    %=  $
+      c  (snoc c +(i))
+      i  +(i)
+    ==
+  ?:  (lth:rs (snag i net) .0)
+    %=  $
+      d  (snoc d +(i))
+      i  +(i)
+    ==
+  %=($ i +(i))
 --
