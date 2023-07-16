@@ -1,15 +1,7 @@
+/-  *tahuti
 ::    split expenses
 ::
 |%
-::  $ex: expense
-::  $exes: expenses
-+$  ex
-  $:
-    payer=@p
-    amount=@rs
-    involves=(list @p)
-  ==
-+$  exes  (list ex)
 ::
 ++  sum
   ::    total sum of expenses
@@ -49,7 +41,7 @@
 ++  net
   ::    net amount of ships
   ::
-  |=  [=exes fleet=(list @p)]
+  |=  [=exes =fleet]
   ^-  (map @p @rs)
   =/  net  *(map @p @rs)
   =/  i    0
