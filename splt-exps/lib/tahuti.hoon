@@ -1,12 +1,12 @@
 /-  *tahuti
 ::    split expenses
-::
 |%
+++  tahuti
+|_  [=exes =fleet]
 ::
 ++  sum
   ::    total sum of expenses
   ::
-  |=  [=exes]
   ^-  @rs
   =/  n    (lent exes)
   =/  i    0
@@ -22,7 +22,6 @@
 ++  gro
   ::    gross amount of ships
   ::
-  |=  [=exes]
   ^-  (map @p @rs)
   =/  n    (lent exes)
   =/  i    0
@@ -41,7 +40,6 @@
 ++  net
   ::    net amount of ships
   ::
-  |=  [=exes =fleet]
   ^-  (map @p @rs)
   =/  net  *(map @p @rs)
   =/  i    0
@@ -102,11 +100,8 @@
   ::
   ::    indices are shifted by one to account for the source node
   ::
-  |=
-      ::  .net: net amount of ships
-      ::
-      net=(list @rs)
-  ^-  (pair (list @ud) (list @ud))
+  ^-  [(list @ud) (list @ud)]
+  =/  net  ~(val by net)
   =/  c  *(list @ud)            :: creditor indices
   =/  d  *(list @ud)            :: debitor indices
   =/  i  0
@@ -124,4 +119,5 @@
       i  +(i)
     ==
   %=($ i +(i))
+--
 --

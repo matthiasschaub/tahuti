@@ -2,98 +2,107 @@
 ::
 |%
 ++  fixtures
+  ::  fixtures are a pair of expenses and ships
+  ::
   |%
-  ++  exes
-    |%
-    ++  single-zero
-      ^-  (list [@p @rs (list @p)])
+  ++  single-zero
+    ^-  (pair (list [@p @rs (list @p)]) (list @p))
+    :-
       :~
         :*  ~zod  .0  (limo [~zod ~])  ==
       ==
-    ++  single
-      ^-  (list [@p @rs (list @p)])
+    :~  ~zod  ==
+  ++  single-single
+    ^-  (pair (list [@p @rs (list @p)]) (list @p))
+    :-
       :~
         :*  ~zod  .1  (limo [~zod ~])  ==
       ==
-    ++  multi-single
-      ::  multiple expenses single ship
-      ::
-      ^-  (list [@p @rs (list @p)])
+    :~  ~zod  ==
+  ++  multi-single
+    ::  multiple expenses single ship
+    ::
+    ^-  (pair (list [@p @rs (list @p)]) (list @p))
+    :-
       :~
         :*  ~zod  .1  (limo [~zod ~])  ==
         :*  ~zod  .2  (limo [~zod ~])  ==
         :*  ~zod  .3  (limo [~zod ~])  ==
       ==
-    ++  multi-multi-equal
-      ::  multiple expenses multiple ships with equal involvement
-      ::
-      ^-  (list [@p @rs (list @p)])
+    :~  ~zod  ==
+  ++  multi-multi-equal
+    ::  multiple expenses multiple ships with equal involvement
+    ::
+    ^-  (pair (list [@p @rs (list @p)]) (list @p))
+    :-
       :~
         :*  ~zod  .1  (limo [~zod ~nus ~])  ==
         :*  ~nus  .2  (limo [~zod ~nus ~])  ==
         :*  ~nus  .3  (limo [~zod ~nus ~])  ==
       ==
-    ++  multi-multi-diff
-      ::  multiple expenses multiple ships with different involvement
-      ::
-      ^-  (list [@p @rs (list @p)])
+    :~  ~zod  ~nus  ==
+  ++  multi-multi-diff
+    ::  multiple expenses multiple ships with different involvement
+    ::
+    ^-  (pair (list [@p @rs (list @p)]) (list @p))
+    :-
       :~
         :*  ~zod  .1  (limo [~nus ~])  ==
         :*  ~nus  .2  (limo [~zod ~nus ~])  ==
         :*  ~nus  .3  (limo [~zod ~])  ==
       ==
-    --
+    :~  ~zod  ~nus  ==
   --
 ++  test-sum-single
   ;:  weld
     %+  expect-eq
       !>   .0
-      !>  (sum single-zero:exes:fixtures)
+      !>  ~(sum tahuti single-zero:fixtures)
     %+  expect-eq
       !>  .1
-      !>  (sum single:exes:fixtures)
+      !>  ~(sum tahuti single-single:fixtures)
   ==
 ++  test-sum-multi
   ;:  weld
     %+  expect-eq
       !>   .6
-      !>  (sum multi-single:exes:fixtures)
+      !>  ~(sum tahuti multi-single:fixtures)
   ==
 ++  test-gro-single
   %+  expect-eq
     !>  (malt (limo [[~zod .1] ~]))
-    !>  (gro single:exes:fixtures)
+    !>  ~(gro tahuti single-single:fixtures)
 ++  test-gro-multi
   ;:  weld
     %+  expect-eq
       !>  (malt (limo [[~zod .6] ~]))
-      !>  (gro multi-single:exes:fixtures)
+      !>  ~(gro tahuti multi-single:fixtures)
     %+  expect-eq
       !>  (malt (limo [[~zod .1] [~nus .5] ~]))
-      !>  (gro multi-multi-equal:exes:fixtures)
+      !>  ~(gro tahuti multi-multi-equal:fixtures)
   ==
 ++  test-net-single
   %+  expect-eq
     !>  (malt (limo [[~zod .0] ~]))
-    !>  (net [single:exes:fixtures (limo [~zod ~])])
+    !>  ~(net tahuti single-single:fixtures)
 ++  test-net-multi
   ;:  weld
     %+  expect-eq
       !>  (malt (limo [[~zod .0] ~]))
-      !>  (net [multi-single:exes:fixtures (limo [~zod ~])])
+      !>  ~(net tahuti multi-single:fixtures)
     %+  expect-eq
       !>  (malt (limo [[~zod .-2] [~nus .2] ~]))
-      !>  (net [multi-multi-equal:exes:fixtures (limo [~zod ~nus ~])])
+      !>  ~(net tahuti multi-multi-equal:fixtures)
     %+  expect-eq
       !>  (malt (limo [[~zod .-3] [~nus .3] ~]))
-      !>  (net [multi-multi-diff:exes:fixtures (limo [~zod ~nus ~])])
+      !>  ~(net tahuti multi-multi-diff:fixtures)
   ==
 ++  test-ind-single
   %+  expect-eq
-    !>  [(limo [1 ~]) (limo [~])]
-    !>  (ind (limo [.1 ~]))
+    !>  [(limo [~]) (limo [~])]
+    !>  ~(ind tahuti single-single:fixtures)
 ++  test-ind-multi
   %+  expect-eq
-    !>  [(limo [1 3 ~]) (limo [2 4 5 ~])]
-    !>  (ind (limo [.1 .-4 .3 .-2 .-1 ~]))
+    !>  [(limo [2 ~]) (limo [1 ~])]
+    !>  ~(ind tahuti multi-multi-equal:fixtures)
 --
