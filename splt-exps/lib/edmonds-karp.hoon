@@ -1,34 +1,8 @@
 ::    Edmonds-Karp algorithm for finding the maximum flow.
 ::
-/+  *bfs
-!:
+/+  *bfs, *graph
+::
 |%
-++  get
-  :: the capacity of an edge
-  ::
-  |=  ::  .g: graph as adjacency matrix
-      ::  .v: vertex (row)
-      ::  .u: vertex (col)
-      $:  g=(list (list @ud))
-          v=@ud
-          u=@ud
-      ==
-  ^-  @ud
-  (snag u (snag v g))
-++  set
-  :: a graph with the capacity of an edge changed
-  ::
-  |=  ::  .g: graph as adjacency matrix
-      ::  .v: vertex (row)
-      ::  .u: vertex (col)
-      ::  .c: capacity
-      $:  g=(list (list @ud))
-          v=@ud
-          u=@ud
-          c=@ud
-      ==
-  ^-  (list (list @ud))
-  (snap g v (snap (snag v g) u c))
 ++  edmonds-karp
   ::  a pair of the maximum flow from source to sink and the flow graph
   ::
@@ -62,7 +36,7 @@
   ?:  ?!(.=(v s))
     =/  u  (snag v path)
     %=  $
-      bottleneck  (min bottleneck (get [g u v]))
+      bottleneck  (min bottleneck (get:edge [g u v]))
       v           u
     ==
   =/  v  t
@@ -70,18 +44,18 @@
   ::
   |-
   ?:  ?!(.=(v s))
+    :: decrease capacity u->v by bottleneck
+    :: increase capacity v->u by bottleneck
+    :: increase flow     u->v by bottleneck
+    ::
     =/  u   (snag v path)
-    =/  uv  (get [g u v])                        :: capacity u->v
-    =.  g   (set [g u v (sub uv bottleneck)])
-    =/  vu  (get [g v u])
-    =.  g   (set [g v u (add vu bottleneck)])
+    =/  uv  (get:edge [g u v])
+    =.  g   (set:edge [g u v (sub uv bottleneck)])
+    =/  vu  (get:edge [g v u])
+    =.  g   (set:edge [g v u (add vu bottleneck)])
     %=  $
-      :: decrease capacity u->v by bottleneck
-      :: increase capacity v->u by bottleneck
-      :: increase flow     u->v by bottleneck
-      ::
       g  g
-      f  (set [f u v (add (get [f u v]) bottleneck)])
+      f  (set:edge [f u v (add (get:edge [f u v]) bottleneck)])
       v  u
     ==
   %=  ^^$
