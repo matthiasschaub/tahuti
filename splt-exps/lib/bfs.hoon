@@ -2,6 +2,8 @@
 ::
 ::  BFS performed recursively on an adjacency matrix.
 ::
+/-  *graph
+::
 |%
 ++  bfs
   ::  a path from source to sink
@@ -9,7 +11,7 @@
   |=  ::  .g: graph as adjacency matrix
       ::  .s: source
       ::  .t: sink
-      $:  g=(list (list @rs))
+      $:  g=graph
           s=@ud
           t=@ud
       ==

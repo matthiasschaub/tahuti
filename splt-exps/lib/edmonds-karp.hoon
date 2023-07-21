@@ -1,6 +1,7 @@
 ::    Edmonds-Karp algorithm for finding the maximum flow.
 ::
 /+  *bfs, *graph
+/-  *graph
 ::
 |%
 ++  edmonds-karp
@@ -9,11 +10,11 @@
   |=  ::  .g: graph as adjacency matrix
       ::  .s: source
       ::  .t: sink
-      $:  g=(list (list @rs))
+      $:  g=graph
           s=@ud
           t=@ud
       ==
-  ^-  (unit (pair maxflow=@rs flowgraph=(list (list @rs))))
+  ^-  (unit (pair maxflow=@rs flowgraph=graph))
   ::
   =/  n         (lent g)                         :: size
   =/  f         (reap n (reap n .0))              :: flow graph as adjacency matrix

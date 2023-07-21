@@ -1,4 +1,8 @@
-::  helper library to get and set edges between vertices in a graph
+::    Graph Helper Arms
+::
+::  helper library to get and set edges between vertices in a graph.
+::
+/-  *graph
 ::
 |%
 ++  edge
@@ -9,7 +13,7 @@
     |=  ::  .g: graph as adjacency matrix
         ::  .v: vertex (row)
         ::  .u: vertex (col)
-        $:  g=(list (list @rs))
+        $:  g=graph
             v=@ud
             u=@ud
         ==
@@ -22,7 +26,7 @@
         ::  .v: vertex (row)
         ::  .u: vertex (col)
         ::  .c: capacity
-        $:  g=(list (list @rs))
+        $:  g=graph
             v=@ud
             u=@ud
             c=@rs
