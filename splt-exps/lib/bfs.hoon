@@ -9,7 +9,7 @@
   |=  ::  .g: graph as adjacency matrix
       ::  .s: source
       ::  .t: sink
-      $:  g=(list (list @ud))
+      $:  g=(list (list @rs))
           s=@ud
           t=@ud
       ==

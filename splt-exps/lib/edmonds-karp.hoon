@@ -9,19 +9,19 @@
   |=  ::  .g: graph as adjacency matrix
       ::  .s: source
       ::  .t: sink
-      $:  g=(list (list @ud))
+      $:  g=(list (list @rs))
           s=@ud
           t=@ud
       ==
-  ^-  (unit (pair maxflow=@ud flowgraph=(list (list @ud))))
+  ^-  (unit (pair maxflow=@rs flowgraph=(list (list @rs))))
   ::
   =/  n         (lent g)                         :: size
-  =/  f         (reap n (reap n 0))              :: flow graph as adjacency matrix
-  =/  maxflow   0
+  =/  f         (reap n (reap n .0))              :: flow graph as adjacency matrix
+  =/  maxflow   .0
   =/  path      (bfs [g s t])                    :: augmenting path
   ::  TODO:     how to define inf equivalent value?
   ::
-  =/  inf       100
+  =/  inf       .100
   ::  while there is an augmenting path
   ::
   |-
@@ -36,6 +36,8 @@
   ?:  ?!(.=(v s))
     =/  u  (snag v path)
     %=  $
+      ::  TODO:  does min work with @rs?
+      ::
       bottleneck  (min bottleneck (get:edge [g u v]))
       v           u
     ==
@@ -50,16 +52,16 @@
     ::
     =/  u   (snag v path)
     =/  uv  (get:edge [g u v])
-    =.  g   (set:edge [g u v (sub uv bottleneck)])
+    =.  g   (set:edge [g u v (sub:rs uv bottleneck)])
     =/  vu  (get:edge [g v u])
-    =.  g   (set:edge [g v u (add vu bottleneck)])
+    =.  g   (set:edge [g v u (add:rs vu bottleneck)])
     %=  $
       g  g
-      f  (set:edge [f u v (add (get:edge [f u v]) bottleneck)])
+      f  (set:edge [f u v (add:rs (get:edge [f u v]) bottleneck)])
       v  u
     ==
   %=  ^^$
-    maxflow   (add maxflow bottleneck)
+    maxflow   (add:rs maxflow bottleneck)
     path      (bfs [g s t])
   ==
 --
