@@ -132,4 +132,18 @@
           ==
       !>  ~(adj tahuti multi-multi-diff:fixtures)
   ==
+++  test-rei-multi
+  %+  expect-eq
+      !>
+        :-  .2
+          %-  limo
+            :*
+              ::         s ~zod ~nus t
+              %-  limo  [.0 .2 .0 .0 ~]  :: s
+              %-  limo  [.0 .0 .2 .0 ~]  :: ~zod
+              %-  limo  [.0 .0 .0 .2 ~]  :: ~nus
+              %-  limo  [.0 .0 .0 .0 ~]  ::  t
+              ~
+            ==
+    !>  (need ~(rei tahuti multi-multi-equal:fixtures))
 --

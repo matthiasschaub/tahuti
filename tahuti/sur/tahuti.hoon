@@ -3,9 +3,18 @@
 ::  $exes:   list of all expenses
 ::  $fleet:  a list of all group members
 ::
+:: +$  ex
+::   $:
+::     id=@ud
+::     title=@t
+::     payer=@p
+::     amount=@rs
+::     involves=(list @p)
+::     timestamp=@da
+::     what=@t
+::   ==
 +$  ex
-  $:  ::  title=@t
-      payer=@p
+  $:  payer=@p
       amount=@rs
       involves=(list @p)
   ==

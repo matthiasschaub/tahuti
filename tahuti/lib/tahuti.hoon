@@ -1,7 +1,7 @@
 ::    split expenses
 ::
 /-  *tahuti, *graph
-/+  *graph
+/+  *graph, *edmonds-karp
 ::
 |%
 ++  tahuti
@@ -51,7 +51,7 @@
       net
     =/  ship  (snag i fleet)
     =/  d     .0                  :: debit
-    =/  c     .0                  :: credit
+    =/  c     .0                  :: cr
     =/  j     0
     |-                            :: for each expense
     ?:  =(j n)
@@ -216,5 +216,9 @@
       j  +(j)
     ==
   g
+  ++  rei
+    :: reimbursement
+    ::
+    (edmonds-karp [adj 0 +((lent fleet))])
   --
 --
