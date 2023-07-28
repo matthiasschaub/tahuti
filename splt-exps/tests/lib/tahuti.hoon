@@ -103,7 +103,7 @@
     !>  ~(ind tahuti single-single:fixtures)
 ++  test-ind-multi
   %+  expect-eq
-    !>  [(limo [2 ~]) (limo [1 ~])]
+    !>  [(limo [1 ~]) (limo [0 ~])]
     !>  ~(ind tahuti multi-multi-equal:fixtures)
 ++  test-adj-multi
   ;:  weld
