@@ -1,17 +1,16 @@
 ::    split expenses
 ::
-/-  *tahuti
+/-  *tahuti, *graph
 /+  *graph
 ::
 |%
 ++  tahuti
-  |_  [=exes =fleet]
-  ++  n  (lent exes)
-  ::
+  |_  [exes=exes fleet=fleet]
   ++  sum
     ::    total sum of expenses
     ::
     ^-  @rs
+    =/  n    (lent exes)
     =/  i    0
     =/  sum  .0
     |-
@@ -26,6 +25,7 @@
     ::    gross amount of ships
     ::
     ^-  (map @p @rs)
+    =/  n    (lent exes)
     =/  i    0
     =/  gro  *(map @p @rs)
     |-
@@ -43,8 +43,9 @@
     ::    net amount of ships
     ::
     ^-  (map @p @rs)
-    =/  net  *(map @p @rs)
+    =/  n    (lent exes)
     =/  i    0
+    =/  net  *(map @p @rs)
     |-                            :: for each ship
     ?:  =(i (lent fleet))
       net
@@ -100,8 +101,6 @@
   ++  ind
     ::  creditor and debitor indices
     ::
-    ::    indices are shifted by one to account for the source node
-    ::
     ^-  [(list @ud) (list @ud)]
     =/  net  ~(val by net)
     =/  c  *(list @ud)            :: creditor indices
@@ -112,12 +111,12 @@
       [c d]
     ?:  (gth:rs (snag i net) .0)
       %=  $
-        c  (snoc c +(i))
+        c  (snoc c i)
         i  +(i)
       ==
     ?:  (lth:rs (snag i net) .0)
       %=  $
-        d  (snoc d +(i))
+        d  (snoc d i)
         i  +(i)
       ==
     %=($ i +(i))
@@ -134,66 +133,87 @@
   ::    TODO: is the map of net amount ordered? 
   ::      Should ships have an id which translates to node in graph?
   ::
-  ^-  (list (list @ud))
+  ^-  graph
+  ::  .n: size
   ::  .g: graph
   ::  .c: creditor indices
   ::  .d: debitor indices
   ::  .v: vertex (row)
   ::  .u: vertex (col)
-  =/  g  (reap n (reap n 0))
+  ::
+  =/  n    (lent fleet)
+  =/  g    (reap (add n 2) (reap (add n 2) .0))
   ::  TODO:     how to define inf equivalent value?
   ::
-  =/  inf       100
   =/  [c=(list @ud) d=(list @ud)]  ind
-  =/  v  0
+  =/  inf  .100
+  ::    indices are shifted by one to account for the source node
+  ::
+  =/  i    0
+  =/  j    0
+  =/  v    0
+  =/  u    0
   |-
-  ?.  =(v (lent d))
+  ?.  =(i (lent d))
     ::  assigning expenses as capacities to edges
     ::
-    =/  u  0
+    =.  v  +((snag i d))
+    =.  j  0
     |-
-    ?.  =(u (lent c))
+    ?.  =(j (lent c))
       :: debitor -> creditor edges
       :: are connected by edges with infinit capacity
       ::
+      =.  u  +((snag j c))
       %=  $
         g  (set:edge g v u inf)
-        u  +(u)
+        j  +(j)
       ==
-    =/  u  0
+    =.  j  0
     |-
-    ?.  =(u (lent d))
-      :: debitor -> debitor ediges
+    ?.  =(j (lent d))
+      :: debitor -> debitor edges
       :: are connected by edges with infinit capacity
       ::
+      =.  u  +((snag j d))
       ?:  =(v u)
         ::  avoid self-loop
         ::
-        %=($ u +(u))
+        %=($ j +(j))
       =.  g  (set:edge g v u inf)
       =.  g  (set:edge g u v inf)
       %=  $
         g  g
-        u  +(u)
+        j  +(j)
       ==
-    %=(^^$ v +(v))
-  =/  v  0
+    %=(^^$ i +(i))
+  =.  i  0
   |-
-  ?.  =(v (lent d))
+  ?.  =(i (lent d))
     ::  source -> debitor edges
     ::
+    =.  v  +((snag i d))
     %=  $
-      g  g  :: TODO
-      v  +(v)
+      ::  TODO:
+      ::    use absolute value
+      ::    is val by net ordered?
+      ::
+      g  (set:edge g 0 v (snag (sub v 1) ~(val by net)))
+      i  +(i)
     ==
-  =/  v  0
+  =/  j  0
   |-
-  ?.  =(v (lent d))
+  ?.  =(j (lent d))
     ::  creditor -> sink edges
     ::
+    =.  u  +((snag j c))
     %=  $
-      g  g  :: TODO
-      v  +(v)
+      ::  TODO:
+      ::    use absolute value
+      ::    is val by net ordered?
+      ::
+      g  (set:edge g u +(n) (snag (sub u 1) ~(val by net)))
+      j  +(j)
     ==
   g
   --

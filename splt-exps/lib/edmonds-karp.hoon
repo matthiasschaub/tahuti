@@ -1,7 +1,7 @@
 ::    Edmonds-Karp algorithm for finding the maximum flow.
 ::
-/+  *bfs, *graph
 /-  *graph
+/+  *bfs, *graph
 ::
 |%
 ++  edmonds-karp

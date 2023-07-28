@@ -105,4 +105,17 @@
   %+  expect-eq
     !>  [(limo [2 ~]) (limo [1 ~])]
     !>  ~(ind tahuti multi-multi-equal:fixtures)
+++  test-adj-multi
+  %+  expect-eq
+    !>
+      %-  limo
+        :*
+          ::         s ~zod ~nus t
+          %-  limo  [.0 .2 .0 .0 ~]  :: s
+          %-  limo  [.0 .0 .100 .0 ~]  :: ~zod
+          %-  limo  [.0 .0 .0 .2 ~]  :: ~nus
+          %-  limo  [.0 .0 .0 .0 ~]  ::  t
+          ~
+        ==
+    !>  ~(adj tahuti multi-multi-equal:fixtures)
 --
