@@ -1,4 +1,4 @@
-# Expense Sharing App for Urbit
+# Tahuti - An Expense Sharing App for Urbit
 
 For details about this app, see the [proposal](./proposal.md).
 
@@ -7,7 +7,7 @@ For details about this app, see the [proposal](./proposal.md).
 ### Setup
 
 ```bash
-git clone https://git.sr.ht/~talfus-laddus/splt-exps tahuti
+git clone https://git.sr.ht/~talfus-laddus/tahuti
 cd tahuti
 urbit -F zod
 ```
@@ -32,12 +32,6 @@ To run all tests files:
 ```dojo
 |commit %tahuti
 -test /=tahuti=/tests/lib
-```
-
-For individual test files:
-```dojo
--test /=tahuti=/tests/lib/bfs/hoon ~
--test /=tahuti=/tests/lib/edmonds-karp/hoon ~
 ```
 
 ## Contact
