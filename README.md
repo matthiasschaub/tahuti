@@ -2,6 +2,8 @@
 
 For details about this app, see the [proposal](./proposal.md).
 
+For the front-end , see [this repository](https://git.sr.ht/~talfus-laddus/tahuti-website)
+
 ## Development
 
 ### Setup
