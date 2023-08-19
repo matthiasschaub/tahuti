@@ -14,15 +14,15 @@
           s=@ud
           t=@ud
       ==
-  ^-  (unit (pair maxflow=@rs flowgraph=graph))
+  ^-  (unit (pair maxflow=@ud flowgraph=graph))
   ::
   =/  n         (lent g)                         :: size
-  =/  f         (reap n (reap n .0))              :: flow graph as adjacency matrix
-  =/  maxflow   .0
+  =/  f         (reap n (reap n 0))              :: flow graph as adjacency matrix
+  =/  maxflow   0
   =/  path      (bfs [g s t])                    :: augmenting path
   ::  TODO:     how to define inf equivalent value?
   ::
-  =/  inf       .100
+  =/  inf       100
   ::  while there is an augmenting path
   ::
   |-
@@ -53,16 +53,16 @@
     ::
     =/  u   (snag v path)
     =/  uv  (get:edge [g u v])
-    =.  g   (set:edge [g u v (sub:rs uv bottleneck)])
+    =.  g   (set:edge [g u v (sub uv bottleneck)])
     =/  vu  (get:edge [g v u])
-    =.  g   (set:edge [g v u (add:rs vu bottleneck)])
+    =.  g   (set:edge [g v u (add vu bottleneck)])
     %=  $
       g  g
-      f  (set:edge [f u v (add:rs (get:edge [f u v]) bottleneck)])
+      f  (set:edge [f u v (add (get:edge [f u v]) bottleneck)])
       v  u
     ==
   %=  ^^$
-    maxflow   (add:rs maxflow bottleneck)
+    maxflow   (add maxflow bottleneck)
     path      (bfs [g s t])
   ==
 --

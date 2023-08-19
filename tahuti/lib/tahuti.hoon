@@ -9,31 +9,31 @@
   ++  sum
     ::    total sum of expenses
     ::
-    ^-  @rs
+    ^-  @ud
     =/  n    (lent exes)
     =/  i    0
-    =/  sum  .0
+    =/  sum  0
     |-
     ?:  =(i n)
       sum
     %=  $
-      sum  (add:rs sum amount:(snag i exes))
+      sum  (add sum amount:(snag i exes))
       i    +(i)
     ==
   ::
   ++  gro
     ::    gross amount of ships
     ::
-    ^-  (map @p @rs)
+    ^-  (map @p @ud)
     =/  n    (lent exes)
     =/  i    0
-    =/  gro  *(map @p @rs)
+    =/  gro  *(map @p @ud)
     |-
     ?:  =(i n)
       gro
     =/  ex  (snag i exes)
-    =/  current  (~(gut by gro) payer:ex .0)
-    =/  total    (add:rs current amount:ex)
+    =/  current  (~(gut by gro) payer:ex 0)
+    =/  total    (add current amount:ex)
     %=  $
       gro  (~(put by gro) [payer:ex total])
       i    +(i)
@@ -42,21 +42,21 @@
   ++  net
     ::    net amount of ships
     ::
-    ^-  (map @p @rs)
+    ^-  (map @p @sd)
     =/  n    (lent exes)
     =/  i    0
-    =/  net  *(map @p @rs)
+    =/  net  *(map @p @sd)
     |-                            :: for each ship
     ?:  =(i (lent fleet))
       net
     =/  ship  (snag i fleet)
-    =/  d     .0                  :: debit
-    =/  c     .0                  :: cr
+    =/  d     --0                 :: debit
+    =/  c     --0                 :: credit
     =/  j     0
     |-                            :: for each expense
     ?:  =(j n)
       %=  ^$
-        net  (~(put by net) [ship (sub:rs c d)])
+        net  (~(put by net) [ship (dif:si c d)])
         i    +(i)
       ==
     =/  ex  (snag j exes)
@@ -69,8 +69,8 @@
         :: then, increase debit and credit
         ::
         %=  $
-          d  (add:rs d (div:rs amount.ex (sun:rs (lent involves.ex))))
-          c  (add:rs c amount.ex)
+          d  (sum:si d (fra:si (new:si & amount.ex) (new:si & (lent involves.ex))))
+          c  (sum:si c (new:si & amount.ex))
           j  +(j)
         ==
     :: else
@@ -81,7 +81,7 @@
         :: then, increase debit
         ::
         %=  $
-          d  (add:rs d (div:rs amount.ex (sun:rs (lent involves.ex))))
+          d  (sum:si d (fra:si (new:si & amount.ex) (new:si & (lent involves.ex))))
           j  +(j)
         ==
     :: else
@@ -92,7 +92,7 @@
         :: then, increase credit
         ::
         %=  $
-          c  (add:rs c amount.ex)
+          c  (sum:si c (new:si & amount.ex))
           j  +(j)
         ==
     :: else, continue
@@ -109,12 +109,12 @@
     |-
     ?:  .=  i  (lent net)
       [c d]
-    ?:  (gth:rs (snag i net) .0)
+    ?:  =((cmp:si (snag i net) --0) --1)
       %=  $
         c  (snoc c i)
         i  +(i)
       ==
-    ?:  (lth:rs (snag i net) .0)
+    ?:  =((cmp:si (snag i net) --0) -1)
       %=  $
         d  (snoc d i)
         i  +(i)
@@ -142,11 +142,11 @@
   ::  .u: vertex (col)
   ::
   =/  n    (lent fleet)
-  =/  g    (reap (add n 2) (reap (add n 2) .0))
+  =/  g    (reap (add n 2) (reap (add n 2) 0))
   ::  TODO:     how to define inf equivalent value?
   ::
   =/  [c=(list @ud) d=(list @ud)]  ind
-  =/  inf  .100
+  =/  inf  100
   ::    indices are shifted by one to account for the source node
   ::
   =/  i    0
@@ -194,11 +194,7 @@
     ::
     =.  v  +((snag i d))
     %=  $
-      ::  TODO:
-      ::    use absolute value
-      ::    is val by net ordered?
-      ::
-      g  (set:edge g 0 v (snag (sub v 1) ~(val by net)))
+      g  (set:edge g 0 v (abs:si (snag (sub v 1) ~(val by net))))
       i  +(i)
     ==
   =/  j  0
@@ -208,11 +204,7 @@
     ::
     =.  u  +((snag j c))
     %=  $
-      ::  TODO:
-      ::    use absolute value
-      ::    is val by net ordered?
-      ::
-      g  (set:edge g u +(n) (snag (sub u 1) ~(val by net)))
+      g  (set:edge g u +(n) (abs:si (snag (sub u 1) ~(val by net))))
       j  +(j)
     ==
   g

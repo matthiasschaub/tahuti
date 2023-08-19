@@ -8,16 +8,18 @@
 ::     id=@ud
 ::     title=@t
 ::     payer=@p
-::     amount=@rs
+::     amount=@ud
+::     currency=[%usd]  :: three-letter ISO code
 ::     involves=(list @p)
+::     involments=(map @p @ud)  :: how much am I involved: E.g. 0.2 * amount
 ::     timestamp=@da
 ::     what=@t
 ::   ==
 +$  ex
   $:  payer=@p
-      amount=@rs
+      amount=@ud      :: in currency’s smallest unit
       involves=(list @p)
   ==
 +$  exes   (list ex)
-+$  fleet  (list @p)  :: TODO: should this be a set?
++$  fleet  (list @p)  :: TODO: this should be a set?
 --

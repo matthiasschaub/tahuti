@@ -17,7 +17,7 @@
             v=@ud
             u=@ud
         ==
-    ^-  @rs
+    ^-  @ud
     (snag u (snag v g))
   ++  set
     :: a graph with the capacity of an edge changed
@@ -29,9 +29,9 @@
         $:  g=graph
             v=@ud
             u=@ud
-            c=@rs
+            c=@ud
         ==
-    ^-  (list (list @rs))
+    ^-  (list (list @ud))
     (snap g v (snap (snag v g) u c))
   --
 --
