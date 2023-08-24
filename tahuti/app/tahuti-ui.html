@@ -1,0 +1,56 @@
+<head>
+  <style>
+    body { 
+      background-color: f9f5ec; 
+      font-family: "arial"; 
+      text-align: center;
+      border-radius: 5;
+    }
+  </style>
+  <title>Feature</title>
+</head>
+
+<body>
+  <main>
+    <h1>Feature</h1>
+    <div id="feature"></div>
+    <script>
+    
+
+function post(tag, data) {
+    fetch('/apps/feature', {
+        method: 'POST',
+        body: JSON.stringify({[tag]: data})
+    })
+    location.reload()
+}
+
+
+function postNewPage()
+{
+    post("new-page", document.getElementById('newpageBox').value);
+}
+
+function renderPage()
+{
+    const feature = document.getElementById("feature");
+
+    const featureText = document.createElement("div");
+    featureText.textContent = "Paste raw HTML into the box below. Hit enter to make it public at [your-ship-url]/feature/public";
+    feature.appendChild(featureText);
+
+    const newpageBox = document.createElement('input'); 
+    newpageBox.type = "text"; 
+    newpageBox.id = "newpageBox";
+    feature.appendChild(newpageBox);
+
+    const newpageButton = document.createElement("button");
+    newpageButton.textContent = "Create New Page";
+    newpageButton.addEventListener('click', postNewPage);
+    feature.appendChild(newpageButton);
+}
+
+renderPage()
+
+</script>
+</main>
