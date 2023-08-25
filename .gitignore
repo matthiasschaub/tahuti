@@ -1,5 +1,8 @@
 zod/
 zod.bk/
 zod.backup/
+nus/
+nus.bk/
+nus.backup/
 *.pill
 urbit
