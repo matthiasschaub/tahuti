@@ -1,37 +1,89 @@
-/+  default-agent, dbug
+/+  dbug, default-agent, server, schooner
+/*  tahuti-ui-html  %html  /app/tahuti-ui/html
 |%
 +$  versioned-state
   $%  state-0
   ==
-+$  state-0
-  $:  [%0 values=(list @)]
-  ==
++$  state-0  [%0 page=@t]
 +$  card  card:agent:gall
 --
 %-  agent:dbug
-=|  state-0  :: bunt value with name
-=*  state  -  :: refer to state 0
 ^-  agent:gall
+=|  state-0
+=*  state  -
 |_  =bowl:gall
 +*  this  .
-    default  ~(. (default-agent this %|) bowl)
+    default  ~(. (default-agent this %.n) bowl)
 ++  on-init
-  :: list of things this agent would like to do
-  ::
-  ^-  (quip card _this)  :: TODO: how can this be written as a list?
-  ~&  >  '%bravo initialized successfully'
-  =.  state  [%0 *(list @)]  [~ this]
-++  on-save   on-save:default
-++  on-load   on-load:default
-++  on-poke   on-poke:default
-++  on-arvo   on-arvo:default
-++  on-watch  on-watch:default
+  ^-  (quip card _this)
+  :_  this(page 'Hello World')
+  :~
+    :*  %pass  /eyre/connect  %arvo  %e
+        %connect  `/apps/tahuti  %tahuti-ui
+    ==
+  ==
+::
+++  on-save
+  ^-  vase
+  !>(state)
+::
+++  on-load
+  |=  old-state=vase
+  ^-  (quip card _this)
+  =/  old  !<(versioned-state old-state)
+  ?-  -.old
+    %0  [~ this(state old)]
+  ==
+::
+++  on-poke
+  |=  [=mark =vase]
+  ^-  (quip card _this)
+  |^
+  ?+    mark  (on-poke:default mark vase)
+      %handle-http-request
+    ?>  =(src.bowl our.bowl)
+    =^  cards  state
+      (handle-http !<([@ta =inbound-request:eyre] vase))
+    [cards this]
+  ==
+  ++  handle-http
+    |=  [eyre-id=@ta =inbound-request:eyre]
+    ^-  (quip card _state)
+    =/  ,request-line:server
+      (parse-request-line:server url.request.inbound-request)
+    =+  send=(cury response:schooner eyre-id)
+    ::
+    ?+    method.request.inbound-request
+      [(send [405 ~ [%stock ~]]) state]
+      ::
+        %'GET'
+      ?+    site
+          :_  state
+          (send [404 ~ [%plain "Tahuti: 404 - Not Found"]])
+        ::
+          [%apps %tahuti ~]
+        ?.  authenticated.inbound-request
+          :_  state
+          %-  send
+          [302 ~ [%login-redirect './apps/tahuti']]
+        :_  state
+        %-  send
+        :+  200  ~
+        :-  %html  tahuti-ui-html
+      ==
+    ==
+  --
+++  on-peek  on-peek:default
+++  on-watch
+  |=  =path
+  ^-  (quip card _this)
+  ?+    path  (on-watch:default path)
+      [%http-response *] 
+    `this
+  ==
+::
 ++  on-leave  on-leave:default
-++  on-peek   on-peek:default
 ++  on-agent  on-agent:default
-++  on-fail   on-fail:default
+++  on-arvo  on-arvo:default
+++  on-fail  on-fail:default
 --
-:: TODO: does not work yet
-:: |%
-:: ++  helper-core  !!
-:: --

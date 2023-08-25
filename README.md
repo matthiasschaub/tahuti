@@ -14,20 +14,24 @@ cd tahuti
 
 curl -L https://urbit.org/install/linux-x86_64/latest | tar xzk --transform='s/.*/urbit/g'
 wget https://bootstrap.urbit.org/dev-latest.pill
-
 urbit -B dev-latest.pill -F zod
 ```
 
 ```dojo
 |merge %tahuti our %base
 |mount %tahuti
-|install our %tahuti
 ```
 
 Start continuous synchronisation between the git repository's `tahuti` directory (Earth) and the `tahuti` desk's directory (Mars):
 
 ```bash
 ./sync.sh
+```
+
+```dojo
+|commit %tahuti
+|install our %tahuti
+|rein %tahuti [& %tahuti-ui]
 ```
 
 ### Tests
@@ -51,6 +55,11 @@ There are three agents:
 |rein %tahuti [& %tahuti]  :: start agent
 |rein %tahuti [| %tahuti]  :: stop agent
 ```
+
+#### %tahuti-ui
+
+Inspired by [%feature](https://developers.urbit.org/guides/additional/app-workbook/feature). Depends on [%schooner](https://github.com/dalten-collective/boat).
+
 
 ## Contact
 

@@ -1,56 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-  <style>
-    body { 
-      background-color: f9f5ec; 
-      font-family: "arial"; 
-      text-align: center;
-      border-radius: 5;
-    }
-  </style>
-  <title>Feature</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Tahuti - An Expense Sharing App for Urbit" />
+    <link rel="stylesheet" href="/static/css/style.min.css" />
+    <link rel="stylesheet" href="/static/css/print.min.css" media="print" />
+    <title>Tahuti</title>
 </head>
 
 <body>
-  <main>
-    <h1>Feature</h1>
-    <div id="feature"></div>
-    <script>
-    
+    <header>
+        <nav aria-label="Global">
+            <ul>
+                <li>
+                    _
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <h1>Tahuti</h1>
+    <h2>Groups</h2>
+    <ul>
+        <li><a href="/expenses.html">My Group Title</a> </li>
+    </ul>
+    <h2>Join</h2>
+    <input type="text" name="join" placeholder="~sampel-palnet/group-title" aria-label="Join" required />
+    <button type="submit">Join</button>
+    <h2>Create</h2>
+    <input type="text" name="Create" placeholder="My Group Title" aria-label="create" required />
+    <button type="submit">Create</button>
+</body>
 
-function post(tag, data) {
-    fetch('/apps/feature', {
-        method: 'POST',
-        body: JSON.stringify({[tag]: data})
-    })
-    location.reload()
-}
-
-
-function postNewPage()
-{
-    post("new-page", document.getElementById('newpageBox').value);
-}
-
-function renderPage()
-{
-    const feature = document.getElementById("feature");
-
-    const featureText = document.createElement("div");
-    featureText.textContent = "Paste raw HTML into the box below. Hit enter to make it public at [your-ship-url]/feature/public";
-    feature.appendChild(featureText);
-
-    const newpageBox = document.createElement('input'); 
-    newpageBox.type = "text"; 
-    newpageBox.id = "newpageBox";
-    feature.appendChild(newpageBox);
-
-    const newpageButton = document.createElement("button");
-    newpageButton.textContent = "Create New Page";
-    newpageButton.addEventListener('click', postNewPage);
-    feature.appendChild(newpageButton);
-}
-
-renderPage()
-
-</script>
-</main>
+</html>
