@@ -1,5 +1,10 @@
-/+  dbug, default-agent, server, schooner
+/+  dbug           :: debug wrapper for agent
+/+  default-agent  :: agent arm defaults
+/+  server         :: HTTP request processing
+/+  schooner       :: HTTP response handling
 /*  tahuti-ui-html  %html  /app/tahuti-ui/html
+/*  tahuti-ui-css  %css  /app/static/css/style/css
+::
 |%
 +$  versioned-state
   $%  state-0
@@ -14,6 +19,7 @@
 |_  =bowl:gall
 +*  this  .
     default  ~(. (default-agent this %.n) bowl)
+::
 ++  on-init
   ^-  (quip card _this)
   :_  this(page 'Hello World')
@@ -49,41 +55,57 @@
   ++  handle-http
     |=  [eyre-id=@ta =inbound-request:eyre]
     ^-  (quip card _state)
-    =/  ,request-line:server
+    =/  ,request-line:server  :: ^: switch parser into structure mode and produce a gate
       (parse-request-line:server url.request.inbound-request)
     =+  send=(cury response:schooner eyre-id)
     ::
-    ?+    method.request.inbound-request
-      [(send [405 ~ [%stock ~]]) state]
+    ?.  authenticated.inbound-request
+            [(send [302 ~ [%login-redirect './apps/tahuti']]) state]
+    ?+  method.request.inbound-request
+            [(send [405 ~ [%plain "405 - Method Not Allowed"]]) state]
       ::
-        %'GET'
-      ?+    site
-          :_  state
-          (send [404 ~ [%plain "Tahuti: 404 - Not Found"]])
-        ::
+       %'PUT'
+        ?~  body.request.inbound-request
+            [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
+        ?+  site
+            [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
+          [%apps %tahuti %api %groups @t ~]
+            =/  group  (need (de-json:html q.u.body.request.inbound-request))
+            =/  uuid  (rear `(list @t)`site)
+            =/  response  (pairs:enjs:format [[uuid group] ~])
+            [(send [200 ~ [%json response]]) state]
+        ==
+      ::
+      %'GET'
+        ?+  site
+            [(send [404 ~ [%plain "404 - Not Found"]]) state]
+          ::
+          ::    UI
+          ::
           [%apps %tahuti ~]
-        ?.  authenticated.inbound-request
-          :_  state
-          %-  send
-          [302 ~ [%login-redirect './apps/tahuti']]
-        :_  state
-        %-  send
-        :+  200  ~
-        :-  %html  tahuti-ui-html
-      ==
+            [(send [200 ~ [%html tahuti-ui-html]]) state]
+          ::
+          [%apps %tahuti %static %css %style ~]
+            [(send [200 ~ [%css tahuti-ui-css]]) state]
+          ::
+          ::    API
+          ::
+          [%apps %tahuti %api %groups ~]
+            [(send [200 ~ [%json (ship:enjs:format ~zod)]]) state]
+        ==
     ==
   --
-++  on-peek  on-peek:default
+++  on-arvo  on-arvo:default
 ++  on-watch
   |=  =path
   ^-  (quip card _this)
   ?+    path  (on-watch:default path)
-      [%http-response *] 
-    `this
+      [%http-response *]
+    [~ this]
   ==
 ::
 ++  on-leave  on-leave:default
+++  on-peek  on-peek:default
 ++  on-agent  on-agent:default
-++  on-arvo  on-arvo:default
 ++  on-fail  on-fail:default
 --
