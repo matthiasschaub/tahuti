@@ -5,7 +5,7 @@
 ::
 |%
 ++  tahuti
-  |_  [exes=exes fleet=fleet]
+  |_  [exes=exes fleet=(list @p)]
   ++  sum
     ::    total sum of expenses
     ::
@@ -121,93 +121,93 @@
       ==
     %=($ i +(i))
   ++  adj
-  ::  adjacency matrix with net amount as capacities
-  ::
-  ::    the adjacency matrix contains a source and sink node.
-  ::
-  ::    debitors are adjacent to the source node.
-  ::    creditors are adjacent to the sink node.
-  ::
-  ::    debitors are connected to themself and to the creditors.
-  ::
-  ::    TODO: is the map of net amount ordered? 
-  ::      Should ships have an id which translates to node in graph?
-  ::
-  ^-  graph
-  ::  .n: size
-  ::  .g: graph
-  ::  .c: creditor indices
-  ::  .d: debitor indices
-  ::  .v: vertex (row)
-  ::  .u: vertex (col)
-  ::
-  =/  n    (lent fleet)
-  =/  g    (reap (add n 2) (reap (add n 2) 0))
-  ::  TODO:     how to define inf equivalent value?
-  ::
-  =/  [c=(list @ud) d=(list @ud)]  ind
-  =/  inf  100
-  ::    indices are shifted by one to account for the source node
-  ::
-  =/  i    0
-  =/  j    0
-  =/  v    0
-  =/  u    0
-  |-
-  ?.  =(i (lent d))
-    ::  assigning expenses as capacities to edges
+    ::  adjacency matrix with net amount as capacities
     ::
-    =.  v  +((snag i d))
-    =.  j  0
+    ::    the adjacency matrix contains a source and sink node.
+    ::
+    ::    debitors are adjacent to the source node.
+    ::    creditors are adjacent to the sink node.
+    ::
+    ::    debitors are connected to themself and to the creditors.
+    ::
+    ::    TODO: is the map of net amount ordered? 
+    ::      Should ships have an id which translates to node in graph?
+    ::
+    ^-  graph
+    ::  .n: size
+    ::  .g: graph
+    ::  .c: creditor indices
+    ::  .d: debitor indices
+    ::  .v: vertex (row)
+    ::  .u: vertex (col)
+    ::
+    =/  n    (lent fleet)
+    =/  g    (reap (add n 2) (reap (add n 2) 0))
+    ::  TODO:     how to define inf equivalent value?
+    ::
+    =/  [c=(list @ud) d=(list @ud)]  ind
+    =/  inf  100
+    ::    indices are shifted by one to account for the source node
+    ::
+    =/  i    0
+    =/  j    0
+    =/  v    0
+    =/  u    0
     |-
-    ?.  =(j (lent c))
-      :: debitor -> creditor edges
-      :: are connected by edges with infinit capacity
+    ?.  =(i (lent d))
+      ::  assigning expenses as capacities to edges
+      ::
+      =.  v  +((snag i d))
+      =.  j  0
+      |-
+      ?.  =(j (lent c))
+        :: debitor -> creditor edges
+        :: are connected by edges with infinit capacity
+        ::
+        =.  u  +((snag j c))
+        %=  $
+          g  (set:edge g v u inf)
+          j  +(j)
+        ==
+      =.  j  0
+      |-
+      ?.  =(j (lent d))
+        :: debitor -> debitor edges
+        :: are connected by edges with infinit capacity
+        ::
+        =.  u  +((snag j d))
+        ?:  =(v u)
+          ::  avoid self-loop
+          ::
+          %=($ j +(j))
+        =.  g  (set:edge g v u inf)
+        =.  g  (set:edge g u v inf)
+        %=  $
+          g  g
+          j  +(j)
+        ==
+      %=(^^$ i +(i))
+    =.  i  0
+    |-
+    ?.  =(i (lent d))
+      ::  source -> debitor edges
+      ::
+      =.  v  +((snag i d))
+      %=  $
+        g  (set:edge g 0 v (abs:si (snag (sub v 1) ~(val by net))))
+        i  +(i)
+      ==
+    =/  j  0
+    |-
+    ?.  =(j (lent d))
+      ::  creditor -> sink edges
       ::
       =.  u  +((snag j c))
       %=  $
-        g  (set:edge g v u inf)
+        g  (set:edge g u +(n) (abs:si (snag (sub u 1) ~(val by net))))
         j  +(j)
       ==
-    =.  j  0
-    |-
-    ?.  =(j (lent d))
-      :: debitor -> debitor edges
-      :: are connected by edges with infinit capacity
-      ::
-      =.  u  +((snag j d))
-      ?:  =(v u)
-        ::  avoid self-loop
-        ::
-        %=($ j +(j))
-      =.  g  (set:edge g v u inf)
-      =.  g  (set:edge g u v inf)
-      %=  $
-        g  g
-        j  +(j)
-      ==
-    %=(^^$ i +(i))
-  =.  i  0
-  |-
-  ?.  =(i (lent d))
-    ::  source -> debitor edges
-    ::
-    =.  v  +((snag i d))
-    %=  $
-      g  (set:edge g 0 v (abs:si (snag (sub v 1) ~(val by net))))
-      i  +(i)
-    ==
-  =/  j  0
-  |-
-  ?.  =(j (lent d))
-    ::  creditor -> sink edges
-    ::
-    =.  u  +((snag j c))
-    %=  $
-      g  (set:edge g u +(n) (abs:si (snag (sub u 1) ~(val by net))))
-      j  +(j)
-    ==
-  g
+    g
   ++  rei
     :: reimbursement
     ::

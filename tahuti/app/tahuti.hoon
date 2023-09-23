@@ -1,10 +1,13 @@
-/+  default-agent, dbug
+/-  *tahuti
+/+  default-agent
+/+  dbug
+::
 |%
 +$  versioned-state
   $%  state-0
   ==
 +$  state-0
-  $:  [%0 values=(list @)]
+  $:  [%0 =group]
   ==
 +$  card  card:agent:gall
 --
@@ -14,16 +17,43 @@
 ^-  agent:gall
 |_  =bowl:gall
 +*  this  .
-    default  ~(. (default-agent this %|) bowl)
+    default  ~(. (default-agent this %.n) bowl)
 ++  on-init
-  :: list of things this agent would like to do
-  ::
-  ^-  (quip card _this)  :: TODO: how can this be written as a list?
-  ~&  >  '%bravo initialized successfully'
-  =.  state  [%0 *(list @)]  [~ this]
-++  on-save   on-save:default
-++  on-load   on-load:default
-++  on-poke   on-poke:default
+  ^-  [(list card) _this]
+  ~&  >  '%tahuti initialized successfully'
+  :-  ^-  (list card)
+      ~
+  %=  this
+    group  ['title' ~zod (silt [~zod ~])]
+    :: val  43
+  ==
+++  on-save
+  ^-  vase
+  !>(state)
+++  on-load
+  |=  old=vase
+  ^-  [(list card) _this]
+  :-  ^-  (list card)
+      ~
+  %=  this
+    state  !<(state-0 old)
+  ==
+++  on-poke
+  |=  [=mark =vase]
+  ^-  [(list card) _this]
+  ?>  ?=(%tahuti-action mark)
+  =/  action  !<(action vase)
+  ?-    -.action
+      %add-group
+    :-  ^-  (list card)
+        ~
+    %=  this
+      group  group.action
+    ==
+  ==
+    :: if value changed notify subscriber
+    :: [%give %fact ~[/group] %tahuti-update !>(`update`act)]~
+    ::
 ++  on-arvo   on-arvo:default
 ++  on-watch  on-watch:default
 ++  on-leave  on-leave:default
@@ -31,7 +61,3 @@
 ++  on-agent  on-agent:default
 ++  on-fail   on-fail:default
 --
-:: TODO: does not work yet
-:: |%
-:: ++  helper-core  !!
-:: --

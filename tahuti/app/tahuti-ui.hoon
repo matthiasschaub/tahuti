@@ -21,8 +21,10 @@
     default  ~(. (default-agent this %.n) bowl)
 ::
 ++  on-init
-  ^-  (quip card _this)
+  ^-  [(list card) _this]
   :_  this(page 'Hello World')
+  ::  task for eyre
+  ::
   :~
     :*  %pass  /eyre/connect  %arvo  %e
         %connect  `/apps/tahuti  %tahuti-ui
@@ -35,26 +37,27 @@
 ::
 ++  on-load
   |=  old-state=vase
-  ^-  (quip card _this)
+  ^-  [(list card) _this]
   =/  old  !<(versioned-state old-state)
   ?-  -.old
     %0  [~ this(state old)]
   ==
 ::
-++  on-poke
+++  on-poke  :: one-off action
   |=  [=mark =vase]
-  ^-  (quip card _this)
+  ^-  [(list card) $_(this)]                  :: messages and new state
   |^
-  ?+    mark  (on-poke:default mark vase)
-      %handle-http-request
-    ?>  =(src.bowl our.bowl)
-    =^  cards  state
-      (handle-http !<([@ta =inbound-request:eyre] vase))
-    [cards this]
+  ?+  mark
+      (on-poke:default mark vase)
+    %handle-http-request
+      ?>  =(src.bowl our.bowl)                :: request is from our ship
+      =^  cards  state
+        (handle-http !<([@ta =inbound-request:eyre] vase))
+      [cards this]
   ==
   ++  handle-http
     |=  [eyre-id=@ta =inbound-request:eyre]
-    ^-  (quip card _state)
+    ^-  [(list card) $_(state)]
     =/  ,request-line:server  :: ^: switch parser into structure mode and produce a gate
       (parse-request-line:server url.request.inbound-request)
     =+  send=(cury response:schooner eyre-id)
@@ -64,48 +67,27 @@
     ?+  method.request.inbound-request
             [(send [405 ~ [%plain "405 - Method Not Allowed"]]) state]
       ::
-       %'PUT'
-        ?~  body.request.inbound-request
-            [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
-        ?+  site
-            [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
-          [%apps %tahuti %api %groups @t ~]
-            =/  group  (need (de-json:html q.u.body.request.inbound-request))
-            =/  uuid  (rear `(list @t)`site)
-            =/  response  (pairs:enjs:format [[uuid group] ~])
-            [(send [200 ~ [%json response]]) state]
-        ==
-      ::
       %'GET'
         ?+  site
             [(send [404 ~ [%plain "404 - Not Found"]]) state]
-          ::
-          ::    UI
-          ::
           [%apps %tahuti ~]
             [(send [200 ~ [%html tahuti-ui-html]]) state]
-          ::
           [%apps %tahuti %static %css %style ~]
             [(send [200 ~ [%css tahuti-ui-css]]) state]
-          ::
-          ::    API
-          ::
-          [%apps %tahuti %api %groups ~]
-            [(send [200 ~ [%json (ship:enjs:format ~zod)]]) state]
         ==
     ==
   --
 ++  on-arvo  on-arvo:default
-++  on-watch
+++  on-watch                    :: subscribe
   |=  =path
-  ^-  (quip card _this)
+  ^-  [(list card) _this]
   ?+    path  (on-watch:default path)
       [%http-response *]
     [~ this]
   ==
 ::
-++  on-leave  on-leave:default
-++  on-peek  on-peek:default
+++  on-leave  on-leave:default  :: unsubscribe
+++  on-peek  on-peek:default    :: one-off read-only action (scry)
 ++  on-agent  on-agent:default
 ++  on-fail  on-fail:default
 --

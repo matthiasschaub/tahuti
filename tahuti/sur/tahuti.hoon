@@ -1,25 +1,80 @@
-|%
-::  $ex:     a single expense
-::  $exes:   list of all expenses
-::  $fleet:  a list of all group members
+::    structure file (type definitions)
 ::
-:: +$  ex
-::   $:
-::     id=@ud
-::     title=@t
-::     payer=@p
-::     amount=@ud
-::     currency=[%usd]  :: three-letter ISO code
-::     involves=(list @p)
-::     involments=(map @p @ud)  :: how much am I involved: E.g. 0.2 * amount
-::     timestamp=@da
-::     what=@t
-::   ==
-+$  ex
+|%
+::
+::    group
+::
++$  gid  @tas
++$  host  @p
++$  title  @t
++$  members  (set @p)
++$  acl  (set @p)
++$  group
+  $:
+    =title
+    =host
+    =members
+  ==
++$  groups  (map gid group)
+::
+::    expense
+::
++$  eid  @ud
++$  ex                            :: expense
   $:  payer=@p
-      amount=@ud      :: in currency’s smallest unit
-      involves=(list @p)
+      amount=@ud                  :: in currency’s smallest unit
+      involves=(list @p)          :: TODO: should be a set
+      :: =id
+      :: =title
+      :: currency=[%usd]          :: three-letter ISO code
+      :: involves=(list @p)
+      :: involments=(map @p @ud)  :: how much am I involved: 0.2 * amount
+      :: timestamp=@da
+      :: description=@t
+      :: tags=(set @tas)
   ==
 +$  exes   (list ex)
-+$  fleet  (list @p)  :: TODO: this should be a set?
++$  expenses   (map eid ex)
++$  group-expenses  (map gid expenses)
+::
+::    input requests/actions
+::
++$  action
+  $%  :: group actions performed by host
+      ::
+      [%add-group =group]
+      ::[%del-group =gid]
+      ::[%edit-group =gid =title]  :: change title
+      ::[%list-groups]
+      ::[%join-group =gid =ship]  :: subscribe
+      ::[%leave-group =gid =ship]  :: unsubscribe
+      ::::
+      ::[%add-member =gid =ship]  :: allow to subscribe
+      ::[%del-member =gid =ship]  :: kick subscriber
+      :::: expense actions performed by members
+      ::::
+      ::[%add-expense =gid =ex]
+      ::[%del-expense =gid =eid]
+      ::[%edit-expense =gid =eid =ex]
+      ::[%list-expenses =gid]
+      ::[%list-balances =gid]
+      ::[%list-reimbursments =gid]
+  ==
+::
+::    output events/updater
+::
+::  these are all the possible events that can be sent to subscribers.
+::
+:: +$  update
+::   $%  [%init-all =groups =acl =members]
+::       [%init =gid =squad acl=ppl =ppl]
+::       [%del =gid]
+::       [%allow =gid =ship]
+::       [%kick =gid =ship]
+::       [%join =gid =ship]
+::       [%leave =gid =ship]
+::       [%pub =gid]
+::       [%priv =gid]
+::       [%title =gid =title]
+::     ==
 --

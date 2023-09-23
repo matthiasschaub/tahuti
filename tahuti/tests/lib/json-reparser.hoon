@@ -1,33 +1,34 @@
 /-  *tahuti
 /+  *test, *json-reparser
+/=  fixtures  /tests/fixtures
 ::
 |%
-++  fixtures
-  |%
-  ++  ex-single
-    ^-  ex
-    [~zod 0 (limo [~zod ~])]
-  ++  ex-multi
-    ^-  ex
-    [~zod 5 (limo [~zod ~nus ~])]
-  --
 ++  test-ex-to-js
   ;:  weld
     %+  expect-eq
       ::   trip - cord to tape
-      !>  (trip '{"amount":0,"involves":["~zod"],"payer":"~zod"}')
-      !>  (en-json:html (to-json ex-single:fixtures))
+      !>  (trip '{"amount":2,"involves":["~zod"],"payer":"~zod"}')
+      !>  (en-json:html (ex-to-js one:expenses:fixtures))
     %+  expect-eq
-      !>  (trip '{"amount":5,"involves":["~zod","~nus"],"payer":"~zod"}')
-      !>  (en-json:html (to-json ex-multi:fixtures))
+      !>  (trip '{"amount":2,"involves":["~zod","~nus"],"payer":"~zod"}')
+      !>  (en-json:html (ex-to-js two:expenses:fixtures))
   ==
 ++  test-ex-from-js
   ;:  weld
     %+  expect-eq
-      !>  ex-single:fixtures
-      !>  (from-json (to-json ex-single:fixtures))
+      !>  one:expenses:fixtures
+      !>  (ex-from-js (ex-to-js one:expenses:fixtures))
     %+  expect-eq
-      !>  ex-multi:fixtures
-      !>  (from-json (to-json ex-multi:fixtures))
+      !>  two:expenses:fixtures
+      !>  (ex-from-js (ex-to-js two:expenses:fixtures))
   ==
+++  test-group-to-js
+  %+  expect-eq
+    ::   trip - cord to tape
+    !>  (trip '{"title":"foo","host":"~zod","members":["~zod"]}')
+    !>  (en-json:html (group-to-js one:groups:fixtures))
+++  test-group-from-js
+  %+  expect-eq
+    !>  one:groups:fixtures
+    !>  (group-from-js (group-to-js one:groups:fixtures))
 --

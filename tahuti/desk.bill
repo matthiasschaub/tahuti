@@ -1,2 +1,4 @@
-:~  %tahuti-ui
+:~  %tahuti
+    %tahuti-ui
+    %tahuti-api
 ==
