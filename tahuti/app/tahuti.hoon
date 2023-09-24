@@ -7,7 +7,7 @@
   $%  state-0
   ==
 +$  state-0
-  $:  [%0 =group]
+  $:  [%0 =groups]
   ==
 +$  card  card:agent:gall
 --
@@ -24,8 +24,7 @@
   :-  ^-  (list card)
       ~
   %=  this
-    group  ['title' ~zod (silt [~zod ~])]
-    :: val  43
+    groups  (~(put by groups) %a ['title' ~zod (silt [~zod ~])])
   ==
 ++  on-save
   ^-  vase
@@ -43,13 +42,14 @@
   ^-  [(list card) _this]
   ?>  ?=(%tahuti-action mark)
   =/  action  !<(action vase)
-  ?-    -.action
-      %add-group
-    :-  ^-  (list card)
-        ~
-    %=  this
-      group  group.action
-    ==
+  ?-  -.action
+    %add-group
+      :-  ^-  (list card)
+          ~
+      %=  this
+        groups  group.action
+      groups  (~(put by groups) %b group.action)
+      ==
   ==
     :: if value changed notify subscriber
     :: [%give %fact ~[/group] %tahuti-update !>(`update`act)]~
