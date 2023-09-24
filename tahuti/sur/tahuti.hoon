@@ -7,13 +7,14 @@
 +$  gid  @tas
 +$  host  @p
 +$  title  @t
-+$  members  (set @p)
-+$  acl  (set @p)
++$  members  (set @p)  :: subscribers
++$  acl  (set @p)      :: access control list
 +$  group
   $:
     =title
     =host
     =members
+    =acl
   ==
 +$  groups  (map gid group)
 ::

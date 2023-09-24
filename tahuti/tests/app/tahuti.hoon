@@ -1,6 +1,7 @@
 /-  *tahuti
 /+  *test
-/=  agent  /app/tahuti
+/=  fixtures  /tests/fixtures
+/=  agent     /app/tahuti
 |%
 ::  build an example bowl
 ::
@@ -35,9 +36,9 @@
   =^  move  agent
     %-  %~  on-poke  agent
         (bowl run)
-    [%tahuti-action !>([%add-group group=['title' ~zod (silt [~zod ~])]])]
+    [%tahuti-action !>([%add-group one:groups:fixtures])]
   =+  !<(=state on-save:agent)
   %+  expect-eq
-    !>  (malt [[%b group=['title' ~zod (silt [~zod ~])]]~])
+    !>  (malt [[%b group=['foo' ~zod (silt [~nus ~]) *(set @p)]]~])
     !>  groups.state
 --

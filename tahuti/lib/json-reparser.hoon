@@ -37,6 +37,7 @@
     :-  'title'    [%s title.g]
     :-  'host'     [%s (scot %p host.g)]
     :-  'members'  (as-json-array ~(tap in members.g))
+    :-  'acl'      (as-json-array ~(tap in acl.g))
   ==
 ++  group-from-js
   ^-  $-(json group)
@@ -45,6 +46,7 @@
     :-  %title    so:dejs:format
     :-  %host     (se:dejs:format %p)
     :-  %members  (as:dejs:format (se:dejs:format %p))   :: arr as set
+    :-  %acl      (as:dejs:format (se:dejs:format %p))
   ==
 --
 |%

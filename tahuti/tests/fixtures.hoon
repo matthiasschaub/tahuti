@@ -24,7 +24,8 @@
     :*
       title='foo'
       host=~zod
-      members=(silt (limo [~zod ~]))
+      members=(silt (limo [~nus ~]))
+      acl=~
     ==
   --
 --

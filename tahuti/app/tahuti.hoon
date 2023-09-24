@@ -23,9 +23,7 @@
   ~&  >  '%tahuti initialized successfully'
   :-  ^-  (list card)
       ~
-  %=  this
-    groups  (~(put by groups) %a ['title' ~zod (silt [~zod ~])])
-  ==
+  this
 ++  on-save
   ^-  vase
   !>(state)

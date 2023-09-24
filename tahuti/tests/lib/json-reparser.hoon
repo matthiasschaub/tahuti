@@ -25,7 +25,7 @@
 ++  test-group-to-js
   %+  expect-eq
     ::   trip - cord to tape
-    !>  (trip '{"title":"foo","host":"~zod","members":["~zod"]}')
+    !>  (trip '{"title":"foo","acl":[],"host":"~zod","members":["~nus"]}')
     !>  (en-json:html (group-to-js one:groups:fixtures))
 ++  test-group-from-js
   %+  expect-eq
