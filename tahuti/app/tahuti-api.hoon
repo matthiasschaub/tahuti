@@ -75,14 +75,15 @@
         [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
         ::
           [%apps %tahuti %api %groups @t ~]
-        =/  content  (need (de-json:html q.u.body.request.inbound-request))
-        =/  group    (group-from-js content)
-        =/  gid      `@tas`(rear `(list @t)`site)
-        =/  act      [%add-group [gid group]]
+        =/  content   (need (de-json:html q.u.body.request.inbound-request))
+        =/  group     (group-from-js content)
+        =/  gid       `@tas`(rear `(list @t)`site)
+        =/  act       [%add-group [gid group]]
+        =/  response  (send [200 ~ [%plain "ok"]])
         :-  ^-  (list card)
-          :~
-            [%pass /add %agent [our.bowl %tahuti] %poke %tahuti-action !>(act)]
-          ==
+          %+  snoc
+            response
+          [%pass /add %agent [our.bowl %tahuti] %poke %tahuti-action !>(act)]
         state
         ::
           [%apps %tahuti %api %groups @t %expenses @t ~]
@@ -100,7 +101,8 @@
           [%apps %tahuti %api %groups ~]
         =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/groups/noun
         =/  groups    .^(groups %gx path)
-        [(send [200 ~ [%json (ship:enjs:format ~zod)]]) state]
+        =/  response  (groups-to-js groups)
+        [(send [200 ~ [%json response]]) state]
       ==
     ==
   --
