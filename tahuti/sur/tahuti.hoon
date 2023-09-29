@@ -4,7 +4,7 @@
 ::
 ::    group
 ::
-+$  gid  @tas
++$  gid  @tas                     ::  uuid
 +$  host  @p
 +$  title  @t
 +$  members  (set @p)  :: subscribers
@@ -20,7 +20,7 @@
 ::
 ::    expense
 ::
-+$  eid  @ud
++$  eid  @tas                     :: uuid
 +$  ex                            :: expense
   $:  payer=@p
       amount=@ud                  :: in currency’s smallest unit
@@ -35,7 +35,7 @@
       :: tags=(set @tas)
   ==
 +$  exes   (list ex)
-+$  expenses   (map eid ex)
++$  expenses        (map eid ex)
 +$  group-expenses  (map gid expenses)
 ::
 ::    input requests/actions
@@ -43,7 +43,7 @@
 +$  action
   $%  :: group actions performed by host
       ::
-      [%add-group =group]
+      [%add-group =gid =group]
       ::[%del-group =gid]
       ::[%edit-group =gid =title]  :: change title
       ::[%list-groups]

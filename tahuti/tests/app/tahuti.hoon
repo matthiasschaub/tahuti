@@ -31,14 +31,24 @@
   ==
 --
 |%
-++  test-add-group
+++  test-poke-add-group
   =|  run=@ud
   =^  move  agent
     %-  %~  on-poke  agent
         (bowl run)
-    [%tahuti-action !>([%add-group one:groups:fixtures])]
+    [%tahuti-action !>([%add-group %uuid one:group:fixtures])]
   =+  !<(=state on-save:agent)
   %+  expect-eq
-    !>  (malt [[%b group=['foo' ~zod (silt [~nus ~]) *(set @p)]]~])
+    !>  (malt [[%uuid group=['foo' ~zod (silt [~nus ~]) *(set @p)]]~])
     !>  groups.state
+++  test-peek-groups
+  =|  run=@ud
+  =^  move  agent
+    %-  %~  on-poke  agent
+        (bowl run)
+    [%tahuti-action !>([%add-group %uuid one:group:fixtures])]
+  =+  !<(=state on-save:agent)
+  %+  expect-eq
+    !>  (malt [[%uuid group=['foo' ~zod (silt [~nus ~]) *(set @p)]]~])
+    !>  .^(groups %gx /=tahuti=/groups/noun)
 --

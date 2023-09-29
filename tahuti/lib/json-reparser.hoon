@@ -48,6 +48,10 @@
     :-  %members  (as:dejs:format (se:dejs:format %p))   :: arr as set
     :-  %acl      (as:dejs:format (se:dejs:format %p))
   ==
+++  groups-to-js
+  |=  =groups
+  ^-  json
+  :-  %o  (~(run by groups) group-to-js)
 --
 |%
   ++  as-json-array
