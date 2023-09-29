@@ -9,6 +9,10 @@ For the front-end, see [this repository](https://git.sr.ht/~talfus-laddus/tahuti
 
 ### Setup
 
+Setup this project either by hand or by using *pilothouse*.
+
+#### Setup by Hand
+
 ```bash
 git clone https://git.sr.ht/~talfus-laddus/tahuti
 cd tahuti
@@ -31,6 +35,12 @@ watch "rsync -zr tahuti/* zod/tahuti"
 ```dojo
 |commit %tahuti
 |install our %tahuti
+```
+
+#### Setup by using Pilothouse (TBA)
+
+```bash
+pilothouse chain zod tahuti/
 ```
 
 ### Tests
