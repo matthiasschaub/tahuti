@@ -3,4 +3,4 @@ __pycache__/
 .pytest_cache/
 .peru/
 
-tahuti/app/website
+tahuti/app/ui

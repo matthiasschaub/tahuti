@@ -2,8 +2,8 @@
 /+  default-agent  :: agent arm defaults
 /+  server         :: HTTP request processing
 /+  schooner       :: HTTP response handling
-/*  tahuti-ui-html  %html  /app/tahuti-ui/html
-/*  tahuti-ui-css  %css  /app/static/css/style/css
+/*  tahuti-ui-html  %html  /app/ui/index/html
+/*  tahuti-ui-css  %css  /app/ui/static/css/style/min/css
 ::
 |%
 +$  versioned-state

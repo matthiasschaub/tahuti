@@ -1,7 +1,7 @@
 imports:
-    tahuti_website: ./tahuti/app/website
+    tahuti_ui: ./tahuti/app/ui
 
-git module tahuti_website:
+git module tahuti_ui:
     url: https://git.sr.ht/~talfus-laddus/tahuti-website
     pick:
       - site/static/css/print.min.css
