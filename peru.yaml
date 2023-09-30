@@ -1,0 +1,9 @@
+imports:
+    tahuti_website: ./tahuti/app/website
+
+git module tahuti_website:
+    url: https://git.sr.ht/~talfus-laddus/tahuti-website
+    pick:
+      - site/static/css/print.min.css
+      - site/static/css/style.min.css
+      - site/*.html

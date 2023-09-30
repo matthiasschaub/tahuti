@@ -14,11 +14,19 @@ Setup this project either by hand or by using *pilothouse*.
 #### Setup by Hand
 
 ```bash
+# Get source
 git clone https://git.sr.ht/~talfus-laddus/tahuti
 cd tahuti
+# Get Urbit binary
 curl -L https://urbit.org/install/linux-x86_64/latest | tar xzk --transform='s/.*/urbit/g'
 wget https://bootstrap.urbit.org/dev-latest.pill
 urbit -B dev-latest.pill -F zod
+# Setup Python environment for dependency management (peru) and tests (pytest)
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+# Install dependency (fetch website source)
+peru sync
 ```
 
 ```dojo
@@ -45,7 +53,7 @@ pilothouse chain zod tahuti/
 
 ### Tests
 
-#### Unit Tests in Hoon
+#### Unit Tests (Hoon)
 
 To run all tests files:
 
@@ -54,10 +62,16 @@ To run all tests files:
 -test /=tahuti=/tests
 ```
 
-#### Integration Tests in Python
+#### Integration Tests (Python)
 
 ```python
 pytest tests
+```
+
+### Update Dependency
+
+```python
+meru sync
 ```
 
 ### Agents
