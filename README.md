@@ -9,7 +9,15 @@ For the front-end, see [this repository](https://git.sr.ht/~talfus-laddus/tahuti
 
 ### Setup
 
-Setup this project either by hand or by using *pilothouse*.
+Setup this project either by using [pilothouse](https://git.sr.ht/~talfus-laddus/pilothouse) or by hand.
+
+#### Setup by using Pilothouse
+
+See [pilothouse](https://git.sr.ht/~talfus-laddus/pilothouse).
+
+```bash
+pilothouse chain zod tahuti/
+```
 
 #### Setup by Hand
 
@@ -21,12 +29,6 @@ cd tahuti
 curl -L https://urbit.org/install/linux-x86_64/latest | tar xzk --transform='s/.*/urbit/g'
 wget https://bootstrap.urbit.org/dev-latest.pill
 urbit -B dev-latest.pill -F zod
-# Setup Python environment for dependency management (peru) and tests (pytest)
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-# Install dependency (fetch website source)
-peru sync
 ```
 
 ```dojo
@@ -45,12 +47,6 @@ watch "rsync -zr tahuti/* zod/tahuti"
 |install our %tahuti
 ```
 
-#### Setup by using Pilothouse (TBA)
-
-```bash
-pilothouse chain zod tahuti/
-```
-
 ### Tests
 
 #### Unit Tests (Hoon)
@@ -64,14 +60,25 @@ To run all tests files:
 
 #### Integration Tests (Python)
 
-```python
+```bash
+# Setup Python environment for test framework (pytest)
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+# Run all tests
 pytest tests
 ```
 
 ### Update Dependency
 
 ```python
-meru sync
+# Setup Python environment for dependency management (peru)
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+# Install dependency
+peru reup --force
+peru sync --force
 ```
 
 ### Agents
@@ -85,7 +92,7 @@ There are three agents:
 #### %tahuti
 
 ```hoon
-:tahuti &tahuti-action [%add-group gid=%uuid group=['title' ~zod (silt [~nus ~]) (silt [~nus ~])]]
+:tahuti &tahuti-action [%add-group [%uuid 'title' ~zod (silt [~nus ~]) (silt [~nus ~])]]
 .^(@ %gx /=tahuti=/groups/noun)
 :tahuti +dbug
 ```
@@ -100,10 +107,10 @@ Inspired by [%feature](https://developers.urbit.org/guides/additional/app-workbo
 
 Endpoints:
 ```
-GET  /groups                         // Get all groups
-PUT  /groups/{uuid}                  // Add or edit a group
-GET  /groups/{uuid}/expenses         // Get all expenses of a group
-PUT  /groups/{uuid}/expenses/{uuid}  // Add or edit an expense
+GET  api/groups                         // Get all groups as JSON array
+PUT  api/groups/{uuid}                  // Add or edit a group
+GET  api/groups/{uuid}/expenses         // Get all expenses of a group
+PUT  api/groups/{uuid}/expenses/{uuid}  // Add or edit an expense
 ```
 
 
