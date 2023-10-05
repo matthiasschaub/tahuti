@@ -122,6 +122,13 @@ PUT  api/groups/{uuid}/expenses/{uuid}  // Add or edit an expense
 - eid: expense ID
 
 
+## Contributing
+
+You can contribute in various ways. Foremost, you can always reach out to me on the network (`~talfus-laddus`). Critic and praise are welcomed equally. You can also use the [issue/ticket tracker](https://todo.sr.ht/~talfus-laddus/tahuti) to report any bugs or request new features.
+For financial support, you can donate to my Ethereum Address:
+
+`0x Ee09 333c 1a33 2Ba8 dA96 4230 C71C 724A 2F48 aC56`
+
 ## Contact
 
-Reach out to me on the network: `~talfus-laddus`
+`~talfus-laddus`
