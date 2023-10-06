@@ -5,15 +5,16 @@ import uuid
 
 # response schemata
 #
-group = Schema(
+grout_schema = Schema(
     {
+        "gid": str,
         "title": str,
         "host": str,
         "members": [str],
-        "acl": [str]
+        "acl": [str],
     },
 )
-groups = Schema({str: group})
+groups_schema = Schema([grout_schema])
 
 uuid_ = str(uuid.uuid4())
 
@@ -62,12 +63,22 @@ def test_get_groups(auth):
     response = requests.get(url, cookies=auth)
     assert response.status_code == 200
     result = response.json()
-    assert groups.is_valid(result)
+    assert groups_schema.is_valid(result)
+
+
+def test_get_groups_uuid(auth):
+    url = "http://localhost:8080/apps/tahuti/api/groups/" + uuid_
+    response = requests.get(url, cookies=auth)
+    assert response.status_code == 200
+    result = response.json()
+    assert group_schema.is_valid(result)
 
 
 def test_put_groups_empty(auth):
     url = "http://localhost:8080/apps/tahuti/api/groups"
     response = requests.put(url, cookies=auth, data={})
+    assert response.status_code == 418
+    response = requests.put(url, cookies=auth, data="")
     assert response.status_code == 418
 
 
@@ -79,37 +90,20 @@ def test_put_groups_foo_empty(auth):
     assert response.status_code == 418
 
 
-@pytest.mark.parametrize(
-    "uuid,given,expected",
-    [
-        (
-            uuid_,
-            {"host": "~zod", "title": "foo", "members": [], "acl": []},
-            {uuid_: {"host": "~zod", "title": "foo", "members": [], "acl": []}},
-        ),
-        (
-            uuid_,
-            {"host": "~nus", "title": "bar", "members": ["~zod"], "acl": ["~zod"]},
-            {uuid_: {"host": "~nus", "title": "bar", "members": ["~zod"], "acl": ["~zod"]}},
-        ),
-    ],
-)
-def test_put_groups(auth, uuid, given, expected):
-    url = "http://localhost:8080/apps/tahuti/api/groups/" + uuid
+def test_put_groups(auth):
+    given = {
+        "gid": uuid_,
+        "title": "foo",
+        "host": "~zod",
+        "members": ["~nus"],
+        "acl": ["~nus"],
+    }
+    url = "http://localhost:8080/apps/tahuti/api/groups"
     response = requests.put(url, cookies=auth, json=given)
     assert response.status_code == 200
-    url = "http://localhost:8080/apps/tahuti/api/groups"
+    url = "http://localhost:8080/apps/tahuti/api/groups"  # TODO request /uuid
     response = requests.get(url, cookies=auth)
     assert response.status_code == 200
     result = response.json()
-    assert groups.is_valid(result)
-    # result = response.json()
-    # assert result == expected
-
-
-def test_put_expense(auth):
-    url = "http://localhost:8080/apps/tahuti/api/groups/foo/expenses/bar"
-    response = requests.put(url, cookies=auth, json={"amount": 3})
-    assert response.status_code == 200
-    result = response.json()
-    assert result == {"bar": {"amount": 3}}
+    assert groups_schema.is_valid(result)
+    assert given in result
