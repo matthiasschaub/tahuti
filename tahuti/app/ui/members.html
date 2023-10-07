@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+    <meta
+      name="description"
+      content="Tahuti - An Expense Sharing App for Urbit"
+    />
+    <title>Tahuti</title>
+    <link rel="stylesheet" href="static/css/min/style.css" />
+    <link
+      rel="stylesheet"
+      href="static/css/min/print.css"
+      media="print"
+    />
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/json-enc.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/debug.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/client-side-templates.js"></script>
+    <script src="https://unpkg.com/mustache@latest"></script>
+  </head>
+
+  <body>
+    <header>
+      <nav aria-label="Global">
+        <ul>
+          <li>
+            <a href="/groups.html">Groups</a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Expenses</a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Balances</a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Reimbursments</a>
+          </li>
+          <li>
+            <a href="/groups.html"><strong>Members</strong></a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Settings</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <h1>My Group Title</h1>
+    <h3>Add a member</h3>
+    <!-- TODO: Get host from cookie -->
+    <!-- TODO: Reload group list -->
+    <form
+      id="put-member"
+      hx-put="/member"
+      hx-ext="json-enc"
+    >
+      <input
+        type="text"
+        id="member"
+        name="member"
+        aria-label="member"
+        placeholder="~zod"
+      />
+      <button type="submit">Add ▸</button>
+    </form>
+
+    <h3>Members</h3>
+    <div hx-ext="client-side-templates">
+      <ul
+        id="get-members"
+        hx-get="/member"
+        hx-ext="path-deps"
+        hx-trigger="load,path-deps"
+        path-deps="/member"
+        mustache-template="members-template"
+      >
+        <emp>Loading …</emp>
+      </ul>
+
+      <template id="members-template">
+        <!-- iterate over top level array -->
+        {{#.}}
+        <li>{{.}}</li>
+        {{/.}}
+      </template>
+    </div>
+    <script type="text/javascript">
+
+        var parts = window.location.href.split('/');
+        // parts.pop() || parts.pop();  // handle potential trailing slash
+        var uuid = parts.pop() || parts.pop();  // handle potential trailing slash
+        document.body.addEventListener('htmx:configRequest', (event) => {
+            event.detail.path = `/api/groups/${uuid}${event.detail.path}`
+        })
+    </script>
+  </body>
+</html>

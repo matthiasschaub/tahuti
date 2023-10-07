@@ -1,0 +1,23 @@
+input {
+    margin-left: var(--vspace);
+    line-height: calc(0.9167 * var(--vspace));
+}
+
+button {
+    display: inline-block;
+    margin-left: var(--vspace);
+    padding: 0.1rem 0.75rem;
+    line-height: calc(0.9167 * var(--vspace));
+
+    background: var(--bg0_h);
+    color: var(--fg);
+
+    border: 1px solid var(--blue);
+    border-radius: 0;
+
+    cursor: pointer;
+}
+
+button:hover {
+    color: var(--blue);
+}

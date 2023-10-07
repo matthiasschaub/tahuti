@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Personal site of ~talfus-laddus" />
+        <link rel="stylesheet" href="/static/css/min/style.css" />
+        <link rel="stylesheet" href="/static/css/min/print.css" media="print" />
+        <title>Tahuti</title>
+    </head>
+
+    <body>
+        <header>
+            <nav aria-label="Global">
+                <ul>
+                    <li>
+                        <a href="/groups.html">↜ Groups</a>
+                    </li>
+                    <li>
+                        <a href="/expenses.html">Expenses</a>
+                    </li>
+                    <li>
+                        <a href="/balances.html">Balances</a>
+                    </li>
+                    <li>
+                        <a href="/groups.html">Reimbursments</a>
+                    </li>
+                    <li>
+                        <a href="/groups.html">Settings</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <h1>My Group Title</h1>
+
+        <input
+            type="text"
+            name="amount"
+            placeholder="How much?"
+            aria-label="Amount"
+            required
+        />
+
+        <br /><br />
+        <input
+            type="text"
+            name="who"
+            placeholder="Who Paid?"
+            aria-label="Who?"
+            required
+        />
+
+        <br /><br />
+        <input
+            type="text"
+            name="what"
+            placeholder="For What?"
+            aria-label="What?"
+            required
+        />
+
+        <br /><br />
+        <input type="date" id="date" name="date" aria-label="When?" />
+
+        <br /><br />
+        <button type="submit">Add Expense</button>
+        <button type="submit">Cancel</button>
+    </body>
+</html>

@@ -1,0 +1,45 @@
+/* CHART LISTS */
+.chartlist {
+    font-variant-numeric: slashed-zero tabular-nums;
+    /* margin-left: var(--vspace); */
+    /* margin-right: auto; */
+    float: left;
+    width: 15em;
+}
+.chartlist li {
+    position: relative;
+    display: block;
+    /* _zoom: 1; */
+}
+.chartlist li a {
+    display: block;
+    padding: 3px;  /* same as tabel */
+    position: relative;
+    z-index: 2;
+}
+.chartlist .count {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    /* margin: 0 0.3em; */
+    text-align: right;
+    /* color: ; */
+    /* font-weight: bold; */
+    /* font-size: 0.875em; */
+    /* line-height: 2em; */
+}
+.chartlist .index {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: var(--green);
+    text-indent: -9999px;
+    overflow: hidden;
+    /* line-height: 2em; */
+}
+.chartlist li:hover {
+    background: #efefef;
+}

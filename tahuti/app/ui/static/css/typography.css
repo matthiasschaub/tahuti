@@ -1,0 +1,91 @@
+p {
+    line-height: var(--vspace);
+    margin: var(--vspace) var(--vspace);
+}
+
+h1 {
+    /* /1* small caps *1/ */
+    /* font-feature-settings: "smcp"; */
+    line-height: calc(3.4583 / var(--space) * var(--vspace));
+    margin: var(--vspace-1) 0 var(--vspace-1) 0;
+    color: var(--red)
+}
+
+
+h2 {
+    font-style: italic;
+    line-height: 1em;
+    margin: var(--vspace-2) 0 var(--vspace-3) 0;
+}
+
+h3 {
+    font-style: italic;
+    line-height: 1em;
+    margin: var(--vspace-1) 0 var(--vspace-3) 0;
+}
+
+h4,
+h5,
+h6 {
+    font-style: italic;
+    line-height: var(--vspace);
+    margin: var(--vspace-2) 0 var(--vspace-3) 0;
+}
+
+a,
+a:visited {
+    font-style: italic;
+    color: var(--fg);
+}
+
+a:hover {
+    text-decoration: none;
+    color: var(--blue);
+}
+
+dt {
+    font-style: italic;
+}
+
+dd {
+    margin-bottom: var(--vspace-4);
+}
+
+dd:last-child {
+    margin-bottom: none;
+}
+
+code {
+    font-family: monospace;
+    font-size: 0.8125rem;
+    line-height: calc(0.9167 * var(--vspace));
+
+    /* if code is part of a definition list do not use italic */
+    font-style: normal !important;
+}
+
+pre {
+    /* expand code block over margin */
+    /* display: inline-block; */
+
+    font-family: monospace;
+    /* font-size: 0.9167em; */
+    font-size: 0.8125rem;
+    line-height: calc(0.9167 * var(--vspace));
+
+    color: var(--fg);
+    background-color: var(--bg0_s);
+
+    /* margin: var(--vspace-3) var(--vspace-3); */
+    /* padding: 1em; */
+}
+
+blockquote {
+    /* font-size: 1.0833em; */
+    font-style: italic;
+    /* line-height: calc(1.0833*var(--vspace)); */
+    line-height: var(--vspace);
+    text-align: center;
+
+    /* margin: var(--vspace-2) var(--vspace-2); */
+}

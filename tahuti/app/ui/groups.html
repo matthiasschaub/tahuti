@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+    <meta
+      name="description"
+      content="Tahuti - An Expense Sharing App for Urbit"
+    />
+    <title>Tahuti</title>
+    <link rel="stylesheet" href="static/css/min/style.css" />
+    <link
+      rel="stylesheet"
+      href="static/css/min/print.css"
+      media="print"
+    />
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/json-enc.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/debug.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/client-side-templates.js"></script>
+    <script src="https://unpkg.com/mustache@latest"></script>
+  </head>
+
+  <body>
+    <header>
+      <nav aria-label="Global">
+        <ul>
+          <li>
+            <a href="/groups.html"><strong>Groups</strong></a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Expenses</a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Balances</a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Reimbursments</a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Settings</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <h1>Tahuti</h1>
+    <h3>Join</h3>
+    <input
+      type="text"
+      name="join"
+      placeholder="~sampel-palnet/group-title"
+      aria-label="Join"
+      required
+    />
+    <button type="submit">Join ▸</button>
+    <h3>Create</h3>
+    <!-- TODO: Get host from cookie -->
+    <!-- TODO: Reload group list -->
+    <form
+      id="put-groups"
+      hx-put="api/groups"
+      hx-ext="debug,json-enc"
+      hx-vals='js:{gid: self.crypto.randomUUID(), host: "~zod", acl: Array("~nus"), members: Array("~nus")}'
+    >
+      <input
+        type="text"
+        id="group-title"
+        name="title"
+        aria-label="group-title"
+        placeholder="group-title"
+      />
+      <button type="submit">Create ▸</button>
+    </form>
+
+    <h3>Groups</h3>
+    <div hx-ext="client-side-templates">
+      <ul
+        hx-get="api/groups"
+        hx-ext="path-deps"
+        hx-trigger="load,path-deps"
+        path-deps="api/groups"
+        mustache-template="groups-template"
+      >
+        <emp>Loading …</emp>
+      </ul>
+
+      <template id="groups-template">
+        <!-- iterate over top level array -->
+        {{#.}}
+        <li><a href="{{gid}}/expenses.html">{{title}}</a></li>
+        {{/.}}
+      </template>
+    </div>
+  </body>
+</html>
