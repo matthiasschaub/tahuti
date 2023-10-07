@@ -69,17 +69,6 @@ pip install -r requirements.txt
 pytest tests
 ```
 
-### Update Dependency
-
-```python
-# Setup Python environment for dependency management (peru)
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-# Install dependency
-peru reup --force
-peru sync --force
-```
 
 ### Agents
 
@@ -101,7 +90,7 @@ There are three agents:
 
 Inspired by [%feature](https://developers.urbit.org/guides/additional/app-workbook/feature). Depends on [%schooner](https://github.com/dalten-collective/boat).
 
-#### %tahuti-api API
+#### %tahuti-api
 
 Inspired by [%feature](https://developers.urbit.org/guides/additional/app-workbook/feature). Depends on [%schooner](https://github.com/dalten-collective/boat).
 
