@@ -2,8 +2,11 @@
 /+  default-agent  :: agent arm defaults
 /+  server         :: HTTP request processing
 /+  schooner       :: HTTP response handling
-/*  tahuti-ui-html  %html  /app/ui/index/html
-/*  tahuti-ui-css  %css  /app/ui/static/css/style/min/css
+/*  tahuti-ui-groups-html    %html  /app/ui/groups/html
+/*  tahuti-ui-members-html   %html  /app/ui/members/html
+/*  tahuti-ui-expenses-html  %html  /app/ui/expenses/html
+/*  tahuti-ui-style-css  %css  /app/ui/static/css/min/style/css
+/*  tahuti-ui-print-css  %css  /app/ui/static/css/min/print/css
 ::
 |%
 +$  versioned-state
@@ -22,9 +25,8 @@
 ::
 ++  on-init
   ^-  [(list card) _this]
+  ~&  >  '%tahuti-ui: initialize'
   :_  this(page 'Hello World')
-  ::  task for eyre
-  ::
   :~
     :*  %pass  /eyre/connect  %arvo  %e
         %connect  `/apps/tahuti  %tahuti-ui
@@ -71,9 +73,18 @@
         ?+  site
             [(send [404 ~ [%plain "404 - Not Found"]]) state]
           [%apps %tahuti ~]
-            [(send [200 ~ [%html tahuti-ui-html]]) state]
-          [%apps %tahuti %static %css %style ~]
-            [(send [200 ~ [%css tahuti-ui-css]]) state]
+            ::  todo:  redirect to /groups
+            [(send [200 ~ [%html tahuti-ui-groups-html]]) state]
+          [%apps %tahuti %groups ~]
+            [(send [200 ~ [%html tahuti-ui-groups-html]]) state]
+          [%apps %tahuti %groups @t %expenses ~]
+            [(send [200 ~ [%html tahuti-ui-expenses-html]]) state]
+          [%apps %tahuti %groups @t %members ~]
+            [(send [200 ~ [%html tahuti-ui-members-html]]) state]
+          [%apps %tahuti %static %css %min %style ~]
+            [(send [200 ~ [%css tahuti-ui-style-css]]) state]
+          [%apps %tahuti %static %css %min %print ~]
+            [(send [200 ~ [%css tahuti-ui-print-css]]) state]
         ==
     ==
   --

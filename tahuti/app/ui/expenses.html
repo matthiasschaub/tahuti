@@ -1,125 +1,187 @@
 <!DOCTYPE html>
 <html class="dark" lang="en">
-
-<head>
+  <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Tahuti - An Expense Sharing App for Urbit" />
-    <link rel="stylesheet" href="/static/css/min/style.css" />
-    <link rel="stylesheet" href="/static/css/min/print.css" media="print" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+    <meta
+      name="description"
+      content="Tahuti - An Expense Sharing App for Urbit"
+    />
     <title>Tahuti</title>
-</head>
+    <link
+      rel="stylesheet"
+      href="/apps/tahuti/static/css/min/style.css"
+    />
+    <link
+      rel="stylesheet"
+      href="/apps/tahuti/static/css/min/print.css"
+      media="print"
+    />
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/json-enc.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/debug.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/client-side-templates.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/path-deps.js"></script>
+    <script src="https://unpkg.com/mustache@latest"></script>
+  </head>
 
-<body>
+  <body>
     <header>
-        <nav aria-label="Global">
-            <ul>
-                <li>
-                    <a href="/groups.html">↜ Groups</a>
-                </li>
-                <li>
-                    <a href="/expenses.html"><strong>Expenses</strong></a>
-                </li>
-                <li>
-                    <a href="/groups.html">Balances</a>
-                </li>
-                <li>
-                    <a href="/groups.html">Reimbursments</a>
-                </li>
-                <li>
-                    <a href="/groups.html">Settings</a>
-                </li>
-            </ul>
-        </nav>
+      <nav>
+        <ul>
+          <li>
+            <a href="/apps/tahuti/groups">Groups</a>
+          </li>
+          <li>
+            <a id="expenses-href" href=""><strong>Expenses</strong></a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Balances</a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Reimbursments</a>
+          </li>
+          <li>
+            <a id="members-href" href="">Members</a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Settings</a>
+          </li>
+        </ul>
+      </nav>
     </header>
-    <h1>My Group Title</h1>
-    <table id="expenses">
+
+    <div hx-ext="client-side-templates,path-deps">
+      <div
+        hx-get="/"
+        hx-trigger="load"
+        mustache-template="title-template"
+      >
+        <h1 style="opacity: 0">Loading ...</h1>
+      </div>
+      <template id="title-template">
+        <h1>{{title}}</h1>
+      </template>
+
+      <table id="expenses">
         <thead>
-            <tr>
-                <th>For What?</th>
-                <th>Paid By</th>
-                <th>Date</th>
-                <th>Involves</th>
-                <th>Amount</th>
-                <th></th>
-            </tr>
+          <tr>
+            <th>For What?</th>
+            <th>Paid By</th>
+            <th>Date</th>
+            <th>Involves</th>
+            <th>Amount</th>
+            <th></th>
+          </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Vino</td>
-                <td>Berta</td>
-                <td>27.08.22</td>
-                <td>all</td>
-                <td>47.90 €</td>
-                <td><a href="/expenses.html">edit</a></td>
-            </tr>
-            <tr>
-                <td>Haferdrink</td>
-                <td>Lars</td>
-                <td>03.08.22</td>
-                <td>all</td>
-                <td>5 €</td>
-                <td><a href="/expenses.html">edit</a></td>
-            </tr>
-            <tr>
-                <td>DM</td>
-                <td>Mona</td>
-                <td>04.07.22</td>
-                <td>all</td>
-                <td>47.90 €</td>
-                <td><a href="/expenses.html">edit</a></td>
-            </tr>
-            <tr>
-                <td>Vino</td>
-                <td>Berta</td>
-                <td>01.07.22</td>
-                <td>all</td>
-                <td>47.90 €</td>
-                <td><a href="/expenses.html">edit</a></td>
-            </tr>
-            <tr>
-                <td>Vino</td>
-                <td>Berta</td>
-                <td>27.08.22</td>
-                <td>all</td>
-                <td>47.90 €</td>
-                <td><a href="/expenses.html">edit</a></td>
-            </tr>
-            <tr>
-                <td>Haferdrink</td>
-                <td>Lars</td>
-                <td>03.08.22</td>
-                <td>all</td>
-                <td>05.00 €</td>
-                <td><a href="/expenses.html">edit</a></td>
-            </tr>
-            <tr>
-                <td>DM</td>
-                <td>Mona</td>
-                <td>04.07.22</td>
-                <td>all</td>
-                <td>47.90 €</td>
-                <td><a href="/expenses.html">edit</a></td>
-            </tr>
-            <tr>
-                <td>Vino</td>
-                <td>Berta</td>
-                <td>01.07.22</td>
-                <td>all</td>
-                <td>47.90 €</td>
-                <td><a href="/expenses.html">edit</a></td>
-            </tr>
+          <tr>
+            <td>Vino</td>
+            <td>Berta</td>
+            <td>27.08.22</td>
+            <td>all</td>
+            <td>47.90 €</td>
+            <td><a href="/expenses.html">edit</a></td>
+          </tr>
+          <tr>
+            <td>Haferdrink</td>
+            <td>Lars</td>
+            <td>03.08.22</td>
+            <td>all</td>
+            <td>5 €</td>
+            <td><a href="/expenses.html">edit</a></td>
+          </tr>
+          <tr>
+            <td>DM</td>
+            <td>Mona</td>
+            <td>04.07.22</td>
+            <td>all</td>
+            <td>47.90 €</td>
+            <td><a href="/expenses.html">edit</a></td>
+          </tr>
+          <tr>
+            <td>Vino</td>
+            <td>Berta</td>
+            <td>01.07.22</td>
+            <td>all</td>
+            <td>47.90 €</td>
+            <td><a href="/expenses.html">edit</a></td>
+          </tr>
+          <tr>
+            <td>Vino</td>
+            <td>Berta</td>
+            <td>27.08.22</td>
+            <td>all</td>
+            <td>47.90 €</td>
+            <td><a href="/expenses.html">edit</a></td>
+          </tr>
+          <tr>
+            <td>Haferdrink</td>
+            <td>Lars</td>
+            <td>03.08.22</td>
+            <td>all</td>
+            <td>05.00 €</td>
+            <td><a href="/expenses.html">edit</a></td>
+          </tr>
+          <tr>
+            <td>DM</td>
+            <td>Mona</td>
+            <td>04.07.22</td>
+            <td>all</td>
+            <td>47.90 €</td>
+            <td><a href="/expenses.html">edit</a></td>
+          </tr>
+          <tr>
+            <td>Vino</td>
+            <td>Berta</td>
+            <td>01.07.22</td>
+            <td>all</td>
+            <td>47.90 €</td>
+            <td><a href="/expenses.html">edit</a></td>
+          </tr>
         </tbody>
-    </table>
-</body>
-<footer>
-    <a href="/add.html">
-        <svg id="add-btn" width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24" fill="#fffff3"
-            xmlns="http://www.w3.org/2000/svg" color="#000000">
-            <path
-                d="M22 14V8.5M6 13V6a3 3 0 013-3h5M16.992 4h3m3 0h-3m0 0V1m0 3v3M12 21H6a4 4 0 010-8h12a4 4 0 104 4v-3"
-                stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-        </svg></a>
-</footer>
+      </table>
+    </div>
 
+    <script type="text/javascript">
+      var parts = window.location.href.split("/");
+      parts.pop() || parts.pop(); // handle potential trailing slash
+      var uuid = parts.pop() || parts.pop(); // handle potential trailing slash
+      document.body.addEventListener("htmx:configRequest", (event) => {
+        site = `/apps/tahuti/api/groups/${uuid}${event.detail.path}`;
+        event.detail.path = site.replace(/\/$/, ""); // without trailing slash
+      });
+
+      let endpoints = ["expenses", "members"];
+      for (let i = 0; i < endpoints.length; i++) {
+        let href = `/apps/tahuti/groups/${uuid}/${endpoints[i]}`;
+        let element = document.getElementById(`${endpoints[i]}-href`);
+        element.setAttribute("href", href);
+      }
+    </script>
+  </body>
+  <footer>
+    <a href="/add.html">
+      <svg
+        id="add-btn"
+        width="24px"
+        height="24px"
+        stroke-width="1.5"
+        viewBox="0 0 24 24"
+        fill="#fffff3"
+        xmlns="http://www.w3.org/2000/svg"
+        color="#000000"
+      >
+        <path
+          d="M22 14V8.5M6 13V6a3 3 0 013-3h5M16.992 4h3m3 0h-3m0 0V1m0 3v3M12 21H6a4 4 0 010-8h12a4 4 0 104 4v-3"
+          stroke="#000000"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        ></path></svg
+    ></a>
+  </footer>
 </html>
