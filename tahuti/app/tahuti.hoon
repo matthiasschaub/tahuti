@@ -21,7 +21,7 @@
 ::
 ++  on-init
   ^-  [(list card) $_(this)]
-  ~&  >  '%tahuti: initialized successfully'
+  ~&  >  '%tahuti: initialize'
   :-  ^-  (list card)
       ~
   this
@@ -41,14 +41,18 @@
 ++  on-poke
   |=  [=mark =vase]
   ^-  [(list card) $_(this)]
+  ~&  >  '%tahuti: handle poke'
   ?>  ?=(%tahuti-action mark)
   =/  action  !<(action vase)
   ?-  (head action)
     %add-group
+      ::  TODO:  assert group not in groups
+      ~&  >  '%tahuti: %add-group'
       :-  ^-  (list card)
           ~
       %=  this
-        groups  (~(put by groups) gid.action group.action)
+        groups  (~(put by groups) gid.group.action group.action)
+        :: groups  (snoc groups group.action)
       ==
   ==
     :: if value changed notify subscriber
@@ -57,7 +61,7 @@
 ++  on-arvo   on-arvo:default
 ++  on-watch  on-watch:default  :: subscribe
 ++  on-leave  on-leave:default  :: unsubscribe
-++  on-peek                   :: one-off read-only action (scry endpoint)
+++  on-peek                     :: one-off read-only action (scry endpoint)
   |=  =path
   ^-  (unit (unit [mark vase]))
   ?+  path  (on-peek:default path)

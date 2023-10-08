@@ -74,20 +74,25 @@
       ?+  site
         [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
         ::
-          [%apps %tahuti %api %groups @t ~]
-        =/  content   (need (de-json:html q.u.body.request.inbound-request))
-        =/  group     (group-from-js content)
-        =/  gid       `@tas`(rear `(list @t)`site)
-        =/  act       [%add-group [gid group]]
+          [%apps %tahuti %api %groups ~]
+        =/  content   (need (de:json:html q.u.body.request.inbound-request))
+        =/  group     (group:dejs content)
+        =/  action    [%add-group group]
         =/  response  (send [200 ~ [%plain "ok"]])
         :-  ^-  (list card)
           %+  snoc
             response
-          [%pass /add %agent [our.bowl %tahuti] %poke %tahuti-action !>(act)]
+          [%pass /add %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
         state
         ::
+          :: [%apps %tahuti %api %groups @t %members ~]
+        :: =/  content   (need (de:json:html q.u.body.request.inbound-request))
+        :: =/  gid       (snag 4 `(list @t)`site)
+        :: =/  response  (pairs:enjs:format [[gid content] ~])
+        :: [(send [200 ~ [%json response]]) state]
+        ::
           [%apps %tahuti %api %groups @t %expenses @t ~]
-        =/  content   (need (de-json:html q.u.body.request.inbound-request))
+        =/  content   (need (de:json:html q.u.body.request.inbound-request))
         =/  gid       (snag 4 `(list @t)`site)
         =/  eid       (rear `(list @t)`site)
         =/  response  (pairs:enjs:format [[eid content] ~])
@@ -101,8 +106,23 @@
           [%apps %tahuti %api %groups ~]
         =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/groups/noun
         =/  groups    .^(groups %gx path)
-        =/  response  (groups-to-js groups)
+        =/  response  (groups:enjs groups)
         [(send [200 ~ [%json response]]) state]
+        ::
+          [%apps %tahuti %api %groups @t ~]
+        =/  gid       (snag 4 `(list @t)`site)
+        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/groups/noun
+        =/  groups    .^(groups %gx path)
+        =/  group    (need (~(get by groups) gid))
+        =/  response  (group:enjs group)
+        [(send [200 ~ [%json response]]) state]
+        ::
+          :: [%apps %tahuti %api %groups @t %members ~]
+        :: =/  gid       (snag 4 `(list @t)`site)
+        :: =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/members/noun
+        :: =/  members  .^(members %gx path)
+        :: =/  response  (members:enjs member)
+        :: [(send [200 ~ [%json response]]) state]
       ==
     ==
   --

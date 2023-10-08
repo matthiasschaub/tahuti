@@ -11,12 +11,13 @@
 +$  acl  (set @p)      :: access control list
 +$  group
   $:
+    =gid
     =title
     =host
-    =members
-    =acl
   ==
 +$  groups  (map gid group)
+:: +$  members  (map gid (set @p))  :: subscribers
+:: +$  acl  (map gid (set @p))      :: access control list
 ::
 ::    expense
 ::
@@ -43,7 +44,7 @@
 +$  action
   $%  :: group actions performed by host
       ::
-      [%add-group =gid =group]
+      [%add-group =group]
       ::[%del-group =gid]
       ::[%edit-group =gid =title]  :: change title
       ::[%list-groups]
