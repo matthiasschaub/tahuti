@@ -10,56 +10,63 @@
 ::  This file implements the second processing step: The reparser.
 ::
 /-  *tahuti
-=<
 |%
-++  ex-to-js
-  |=  ex=ex
-  ^-  json
-  %-  pairs:enjs:format
-  :~
-    :-  'payer'     [%s (scot %p payer.ex)]
-    :-  'amount'    (numb:enjs:format amount.ex)
-    :-  'involves'  (as-json-array involves.ex)
-  ==
-++  ex-from-js
-  ^-  $-(json ex)
-  %-  ot:dejs:format                                     :: obj as tuple
-  :~
-    :-  %payer     (se:dejs:format %p)                   :: str as aura (@p)
-    :-  %amount    ni:dejs:format                        :: num as int
-    :-  %involves  (ar:dejs:format (se:dejs:format %p))  :: arr as list
-  ==
-++  group-to-js
-  |=  g=group
-  ^-  json
-  %-  pairs:enjs:format
-  :~
-    :-  'title'    [%s title.g]
-    :-  'host'     [%s (scot %p host.g)]
-    :-  'members'  (as-json-array ~(tap in members.g))
-    :-  'acl'      (as-json-array ~(tap in acl.g))
-  ==
-++  group-from-js
-  ^-  $-(json group)
-  %-  ot:dejs:format                                     :: obj as tuple
-  :~
-    :-  %title    so:dejs:format
-    :-  %host     (se:dejs:format %p)
-    :-  %members  (as:dejs:format (se:dejs:format %p))   :: arr as set
-    :-  %acl      (as:dejs:format (se:dejs:format %p))
-  ==
-++  groups-to-js
-  |=  =groups
-  ^-  json
-  :-  %o  (~(run by groups) group-to-js)
---
-|%
-  ++  as-json-array
-    |=  i=(list @p)
-    ^-  (pair %a (list (pair %s @t)))
-    [%a (turn i as-json-str)]
-  ++  as-json-str
-    |=  a=@p
-    ^-  (pair %s @t)
-    [%s (scot %p a)]
+++  enjs
+  |%
+    ++  ship
+      |=  s=@p
+      ^-  (pair %s @t)
+      [%s (scot %p s)]
+    ++  members
+      |=  m=^members
+      ^-  json
+      [%a (turn ~(tap in m) ship:enjs)]
+    ++  group
+    |=  g=^group
+    ^-  json
+    %-  pairs:enjs:format
+    :~
+      :-  'gid'     [%s gid.g]
+      :-  'title'    [%s title.g]
+      :-  'host'     [%s (scot %p host.g)]
+    ==
+    ::  (a list of groups, not a map of groups, to json array)
+    ::
+  ++  groups
+    |=  g=^groups
+    ^-  json
+    [%a (turn ~(val by g) group:enjs)]
+  ++  expense
+    |=  ex=ex
+    ^-  json
+    %-  pairs:enjs:format
+    :~
+      :-  'payer'     [%s (scot %p payer.ex)]
+      :-  'amount'    (numb:enjs:format amount.ex)
+      :-  'involves'  [%a (turn involves.ex ship:enjs)]
+    ==
+  --
+::
+++  dejs
+  |%
+  ++  member
+    ^-  $-(json @p)
+    (se:dejs:format %p)
+  ++  group
+    ^-  $-(json ^group)
+    %-  ot:dejs:format                                     :: obj as tuple
+    :~
+      :-  %gid      so:dejs:format
+      :-  %title    so:dejs:format
+      :-  %host     (se:dejs:format %p)
+    ==
+  ++  expense
+    ^-  $-(json ex)
+    %-  ot:dejs:format                                     :: obj as tuple
+    :~
+      :-  %payer     (se:dejs:format %p)                   :: str as aura (@p)
+      :-  %amount    ni:dejs:format                        :: num as int
+      :-  %involves  (ar:dejs:format (se:dejs:format %p))  :: arr as list
+    ==
+  --
 --

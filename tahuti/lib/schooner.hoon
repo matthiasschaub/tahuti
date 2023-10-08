@@ -13,7 +13,7 @@
 |%
 ::
 +$  eyre-id  @ta
-+$  header  [key=@t value=@t]
++$  header   [key=@t value=@t]
 +$  headers  (list header)
 ::
 +$  resource
@@ -38,11 +38,12 @@
     eyre-id
   ^-  simple-payload:http
   ?-  -.resource
+    ::
       %json
     :-  :-  http-status
         %+  weld  headers
         ['content-type'^'application/json']~
-    `(as-octt:mimes:html (en-json:html j.resource))
+    `(as-octs:mimes:html (en:json:html j.resource))
     ::
      %html
     :-  :-  http-status
