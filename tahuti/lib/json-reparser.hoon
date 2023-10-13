@@ -17,10 +17,10 @@
       |=  s=@p
       ^-  (pair %s @t)
       [%s (scot %p s)]
-    ++  members
-      |=  m=^members
+    ++  ships
+      |=  s=(set @p)
       ^-  json
-      [%a (turn ~(tap in m) ship:enjs)]
+      [%a (turn ~(tap in s) ship:enjs)]
     ++  group
     |=  g=^group
     ^-  json
@@ -50,11 +50,17 @@
 ++  dejs
   |%
   ++  member
+    ^-  $-(json member=@p)
+    %-  ot:dejs:format                                     :: obj as tuplejsonre
+    :~
+      :-  %member  (se:dejs:format %p)
+    ==
+  ++  ship
     ^-  $-(json @p)
     (se:dejs:format %p)
   ++  group
     ^-  $-(json ^group)
-    %-  ot:dejs:format                                     :: obj as tuple
+    %-  ot:dejs:format                                     :: obj as tuplejsonre
     :~
       :-  %gid      so:dejs:format
       :-  %title    so:dejs:format

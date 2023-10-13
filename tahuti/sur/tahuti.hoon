@@ -4,20 +4,19 @@
 ::
 ::    group
 ::
-+$  gid  @tas                     ::  uuid
-+$  host  @p
++$  gid    @tas                   ::  uuid
 +$  title  @t
-+$  members  (set @p)  :: subscribers
-+$  acl  (set @p)      :: access control list
++$  host   @p
 +$  group
   $:
     =gid
     =title
     =host
   ==
-+$  groups  (map gid group)
-:: +$  members  (map gid (set @p))  :: subscribers
-:: +$  acl  (map gid (set @p))      :: access control list
++$  member  @p
++$  groups   (map gid group)
++$  members  (map gid (set member))   :: subscribers
++$  acls     (map gid (set member))   :: access control lists
 ::
 ::    expense
 ::
@@ -44,14 +43,14 @@
 +$  action
   $%  :: group actions performed by host
       ::
-      [%add-group =group]
+      [%add-group =gid =group]
+      [%add-member =gid =member]    :: allow to subscribe (add to acl)
       ::[%del-group =gid]
       ::[%edit-group =gid =title]  :: change title
       ::[%list-groups]
       ::[%join-group =gid =ship]  :: subscribe
       ::[%leave-group =gid =ship]  :: unsubscribe
       ::::
-      ::[%add-member =gid =ship]  :: allow to subscribe
       ::[%del-member =gid =ship]  :: kick subscriber
       :::: expense actions performed by members
       ::::

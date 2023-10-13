@@ -36,19 +36,10 @@
   =^  move  agent
     %-  %~  on-poke  agent
         (bowl run)
-    [%tahuti-action !>([%add-group %uuid one:group:fixtures])]
+    [%tahuti-action !>([%add-group one:group:fixtures])]
+
   =+  !<(=state on-save:agent)
   %+  expect-eq
-    !>  (malt [[%uuid group=['foo' ~zod (silt [~nus ~]) *(set @p)]]~])
+    !>  ^-  groups  (malt [[%e7334af6-be91-426d-9109-11191c98acdc one:group:fixtures] ~])
     !>  groups.state
-++  test-peek-groups
-  =|  run=@ud
-  =^  move  agent
-    %-  %~  on-poke  agent
-        (bowl run)
-    [%tahuti-action !>([%add-group %uuid one:group:fixtures])]
-  =+  !<(=state on-save:agent)
-  %+  expect-eq
-    !>  (malt [[%uuid group=['foo' ~zod (silt [~nus ~]) *(set @p)]]~])
-    !>  .^(groups %gx /=tahuti=/groups/noun)
 --

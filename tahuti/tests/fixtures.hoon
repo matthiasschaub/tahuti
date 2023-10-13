@@ -1,9 +1,9 @@
 /-  *tahuti
 |%
-++  members
+++  ships
   |%
   ++  one
-    ^-  ^members
+    ^-  (set @p)
     (silt (limo [~nus ~]))
   --
 ++  group

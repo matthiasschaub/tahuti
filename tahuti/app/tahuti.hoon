@@ -7,13 +7,13 @@
   $%  state-0
   ==
 +$  state-0
-  $:  [%0 =groups]
+  $:  [%0 =groups =members =acls]
   ==
 +$  card  card:agent:gall
 --
 %-  agent:dbug
-=|  state-0   :: bunt value with name
-=*  state  -  :: refer to state 0
+=|  state-0                     :: bunt value with name
+=*  state  -                    :: refer to state 0
 ^-  agent:gall
 |_  =bowl:gall
 +*  this  .
@@ -44,16 +44,26 @@
   ~&  >  '%tahuti: handle poke'
   ?>  ?=(%tahuti-action mark)
   =/  action  !<(action vase)
-  ?-  (head action)
-    %add-group
-      ::  TODO:  assert group not in groups
-      ~&  >  '%tahuti: %add-group'
-      :-  ^-  (list card)
-          ~
-      %=  this
-        groups  (~(put by groups) gid.group.action group.action)
-        :: groups  (snoc groups group.action)
-      ==
+  ?-  -.action
+    ::
+      %add-group
+    ::  TODO:  assert group not in groups
+    ~&  >  '%tahuti: %add-group'
+    :-  ^-  (list card)
+        ~
+    %=  this
+      groups   (~(put by groups) gid.action group.action)
+    ==
+    ::
+      %add-member
+    ~&  >  '%tahuti: %add-member'
+    =/  acl  (~(gut by acls) gid.action ^*((set member)))
+    =.  acl  (~(put in acl) member.action)
+    :-  ^-  (list card)
+        ~
+    %=  this
+      acls  (~(put by acls) gid.action acl)
+    ==
   ==
     :: if value changed notify subscriber
     :: [%give %fact ~[/group] %tahuti-update !>(`update`act)]~
@@ -68,6 +78,12 @@
     ::
       [%x %groups ~]
     [~ ~ [%noun !>(groups.this)]]
+    ::
+      [%x %members ~]
+    [~ ~ [%noun !>(members.this)]]
+    ::
+      [%x %acls ~]
+    [~ ~ [%noun !>(acls.this)]]
   ==
 ++  on-agent  on-agent:default
 ++  on-fail   on-fail:default

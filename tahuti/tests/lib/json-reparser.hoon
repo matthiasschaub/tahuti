@@ -4,10 +4,10 @@
 /=  fixtures  /tests/fixtures
 ::
 |%
-++  test-members-enjs
+++  test-ships-enjs
   %+  expect-eq
     !>  '["~nus"]'
-    !>  (en:json:html (members:enjs one:members:fixtures))
+    !>  (en:json:html (ships:enjs one:ships:fixtures))
 ::
 ++  test-group-enjs
   %+  expect-eq

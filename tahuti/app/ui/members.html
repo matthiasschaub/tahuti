@@ -81,16 +81,16 @@
                 id="get-members"
                 hx-get="/members"
                 hx-trigger="load,path-deps"
-                path-deps="/members"
+                path-deps="/apps/tahuti/api/groups/*/members"
                 mustache-template="members-template"
             >
                 <emp>Loading …</emp>
             </ul>
             <template id="members-template">
                 <!-- iterate over array of members object -->
-                {{#members}} *
+                {{#.}}
                 <li>{{.}}</li>
-                {{/members}}
+                {{/.}}
             </template>
         </div>
 
