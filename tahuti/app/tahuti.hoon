@@ -1,6 +1,6 @@
 /-  *tahuti
-/+  default-agent
-/+  dbug
+/+  default-agent  :: agent arm defaults
+/+  dbug           :: debug wrapper for agent
 ::
 |%
 +$  versioned-state

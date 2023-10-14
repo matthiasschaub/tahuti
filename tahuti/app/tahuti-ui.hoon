@@ -1,5 +1,5 @@
-/+  dbug           :: debug wrapper for agent
-/+  default-agent  :: agent arm defaults
+/+  dbug
+/+  default-agent
 /+  server         :: HTTP request processing
 /+  schooner       :: HTTP response handling
 /*  tahuti-ui-groups-html    %html  /app/ui/groups/html
@@ -16,21 +16,24 @@
 +$  card  card:agent:gall
 --
 %-  agent:dbug
-^-  agent:gall
 =|  state-0
 =*  state  -
+^-  agent:gall
 |_  =bowl:gall
 +*  this  .
     default  ~(. (default-agent this %.n) bowl)
 ::
 ++  on-init
-  ^-  [(list card) _this]
+  ^-  [(list card) $_(this)]
   ~&  >  '%tahuti-ui: initialize'
-  :_  this(page 'Hello World')
-  :~
-    :*  %pass  /eyre/connect  %arvo  %e
-        %connect  `/apps/tahuti  %tahuti-ui
+  :-  ^-  (list card)
+    :~
+      :*  %pass  /eyre/connect  %arvo  %e
+          %connect  `/apps/tahuti  %tahuti-ui
+      ==
     ==
+  %=  this
+    page  'Hello World'
   ==
 ::
 ++  on-save
@@ -38,54 +41,55 @@
   !>(state)
 ::
 ++  on-load
-  |=  old-state=vase
-  ^-  [(list card) _this]
-  =/  old  !<(versioned-state old-state)
-  ?-  -.old
-    %0  [~ this(state old)]
+  |=  old=vase
+  ^-  [(list card) $_(this)]
+  :-  ^-  (list card)
+      ~
+  %=  this
+    state  !<(state-0 old)
   ==
 ::
-++  on-poke  :: one-off action
+++  on-poke                                   :: one-off action
   |=  [=mark =vase]
   ^-  [(list card) $_(this)]                  :: messages and new state
   |^
-  ?+  mark
-      (on-poke:default mark vase)
-    %handle-http-request
-      ?>  =(src.bowl our.bowl)                :: request is from our ship
-      =^  cards  state
-        (handle-http !<([@ta =inbound-request:eyre] vase))
-      [cards this]
+  ?+  mark  (on-poke:default mark vase)
+    ::
+      %handle-http-request
+    ?>  =(src.bowl our.bowl)                :: request is from our ship
+    =^  cards  state
+      (handle-http !<([@ta =inbound-request:eyre] vase))
+    [cards this]
   ==
   ++  handle-http
     |=  [eyre-id=@ta =inbound-request:eyre]
     ^-  [(list card) $_(state)]
-    =/  ,request-line:server  :: ^: switch parser into structure mode and produce a gate
+    =/  ,request-line:server
       (parse-request-line:server url.request.inbound-request)
     =+  send=(cury response:schooner eyre-id)
     ::
     ?.  authenticated.inbound-request
-            [(send [302 ~ [%login-redirect './apps/tahuti']]) state]
+      [(send [302 ~ [%login-redirect './apps/tahuti']]) state]
     ?+  method.request.inbound-request
-            [(send [405 ~ [%plain "405 - Method Not Allowed"]]) state]
+      [(send [405 ~ [%plain "405 - Method Not Allowed"]]) state]
       ::
-      %'GET'
-        ?+  site
-            [(send [404 ~ [%plain "404 - Not Found"]]) state]
-          [%apps %tahuti ~]
-            ::  todo:  redirect to /groups
-            [(send [200 ~ [%html tahuti-ui-groups-html]]) state]
-          [%apps %tahuti %groups ~]
-            [(send [200 ~ [%html tahuti-ui-groups-html]]) state]
-          [%apps %tahuti %groups @t %expenses ~]
-            [(send [200 ~ [%html tahuti-ui-expenses-html]]) state]
-          [%apps %tahuti %groups @t %members ~]
-            [(send [200 ~ [%html tahuti-ui-members-html]]) state]
-          [%apps %tahuti %static %css %min %style ~]
-            [(send [200 ~ [%css tahuti-ui-style-css]]) state]
-          [%apps %tahuti %static %css %min %print ~]
-            [(send [200 ~ [%css tahuti-ui-print-css]]) state]
-        ==
+        %'GET'
+      ?+  site
+          [(send [404 ~ [%plain "404 - Not Found"]]) state]
+        [%apps %tahuti ~]
+          ::  TODO:  redirect to /groups
+          [(send [200 ~ [%html tahuti-ui-groups-html]]) state]
+        [%apps %tahuti %groups ~]
+          [(send [200 ~ [%html tahuti-ui-groups-html]]) state]
+        [%apps %tahuti %groups @t %expenses ~]
+          [(send [200 ~ [%html tahuti-ui-expenses-html]]) state]
+        [%apps %tahuti %groups @t %members ~]
+          [(send [200 ~ [%html tahuti-ui-members-html]]) state]
+        [%apps %tahuti %static %css %min %style ~]
+          [(send [200 ~ [%css tahuti-ui-style-css]]) state]
+        [%apps %tahuti %static %css %min %print ~]
+          [(send [200 ~ [%css tahuti-ui-print-css]]) state]
+      ==
     ==
   --
 ++  on-arvo  on-arvo:default
@@ -97,8 +101,8 @@
     [~ this]
   ==
 ::
-++  on-leave  on-leave:default  :: unsubscribe
-++  on-peek  on-peek:default    :: one-off read-only action (scry)
+++  on-leave  on-leave:default
+++  on-peek  on-peek:default
 ++  on-agent  on-agent:default
 ++  on-fail  on-fail:default
 --

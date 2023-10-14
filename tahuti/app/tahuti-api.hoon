@@ -1,6 +1,6 @@
 /-  *tahuti
-/+  dbug           :: debug wrapper for agent
-/+  default-agent  :: agent arm defaults
+/+  dbug
+/+  default-agent
 /+  server         :: HTTP request processing
 /+  schooner       :: HTTP response handling
 /+  *json-reparser
@@ -13,8 +13,8 @@
 +$  card  card:agent:gall
 --
 %-  agent:dbug
-=|  state-0    :: bunt value with name
-=*  state  -   :: refer to state 0
+=|  state-0
+=*  state  -
 ^-  agent:gall
 |_  =bowl:gall
 +*  this  .
@@ -22,7 +22,7 @@
 ::
 ++  on-init
   ^-  [(list card) $_(this)]
-  ~&  >  '%tahuti-api: initialized successfully'
+  ~&  >  '%tahuti-api: initialize'
   :-  ^-  (list card)
     :~
       :*  %pass  /eyre/connect  %arvo  %e
@@ -63,6 +63,7 @@
     =/  ,request-line:server
       (parse-request-line:server url.request.inbound-request)
     =/  send  (cury response:schooner eyre-id)
+    ::
     ?.  authenticated.inbound-request
       [(send [302 ~ [%login-redirect './apps/tahuti']]) state]
     ?+  method.request.inbound-request
@@ -143,8 +144,8 @@
     [~ this]
   ==
 ::
-++  on-leave  on-leave:default        :: unsubscribe
-++  on-peek  on-peek:default          :: one-off read-only action (scry)
+++  on-leave  on-leave:default
+++  on-peek  on-peek:default
 ++  on-agent  on-agent:default
 ++  on-fail  on-fail:default
 --
