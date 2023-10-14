@@ -4,19 +4,16 @@
 ::
 ::    group
 ::
-+$  gid    @tas                   ::  uuid
-+$  title  @t
-+$  host   @p
-+$  group
-  $:
-    =gid
-    =title
-    =host
-  ==
-+$  member  @p
-+$  groups   (map gid group)
-+$  members  (map gid (set member))   :: subscribers
-+$  acls     (map gid (set member))   :: access control lists
++$  gid        @tas                   ::  uuid
++$  title      @t
++$  host       @p
++$  group      [=gid =title =host]
+::
+::    acls and members
+::
++$  groups    (map gid group)
++$  acls      (map gid (set @p))
++$  members   (map gid (set @p))
 ::
 ::    expense
 ::
@@ -35,8 +32,8 @@
       :: tags=(set @tas)
   ==
 +$  exes   (list ex)
-+$  expenses        (map eid ex)
-+$  group-expenses  (map gid expenses)
++$  expenses    (map eid ex)
++$  gexpenses  (map gid expenses)
 ::
 ::    input requests/actions
 ::
@@ -44,7 +41,8 @@
   $%  :: group actions performed by host
       ::
       [%add-group =gid =group]
-      [%add-member =gid =member]    :: allow to subscribe (add to acl)
+      [%add-member =gid member=@p]    :: allow to subscribe (add to acl)
+      [%subscribe =gid =host]    :: allow to subscribe (add to acl)
       ::[%del-group =gid]
       ::[%edit-group =gid =title]  :: change title
       ::[%list-groups]
@@ -66,9 +64,8 @@
 ::
 ::  these are all the possible events that can be sent to subscribers.
 ::
-:: +$  update
-::   $%  [%init-all =groups =acl =members]
-::       [%init =gid =squad acl=ppl =ppl]
++$  update
+  $%  [%init =gid =group acl=(set @p) members=(set @p)]
 ::       [%del =gid]
 ::       [%allow =gid =ship]
 ::       [%kick =gid =ship]
@@ -77,5 +74,5 @@
 ::       [%pub =gid]
 ::       [%priv =gid]
 ::       [%title =gid =title]
-::     ==
+    ==
 --
