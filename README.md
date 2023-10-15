@@ -2,8 +2,6 @@
 
 For details about this app, see the [proposal](./proposal.md).
 
-For the front-end, see [this repository](https://git.sr.ht/~talfus-laddus/tahuti-website).
-
 
 ## Development
 
@@ -27,8 +25,7 @@ git clone https://git.sr.ht/~talfus-laddus/tahuti
 cd tahuti
 # Get Urbit binary
 curl -L https://urbit.org/install/linux-x86_64/latest | tar xzk --transform='s/.*/urbit/g'
-wget https://bootstrap.urbit.org/dev-latest.pill
-urbit -B dev-latest.pill -F zod
+urbit -F zod
 ```
 
 ```dojo
@@ -74,46 +71,56 @@ pytest tests
 
 There are three agents:
 
+- `%tahuti-ui`: UI agent. Serves front-end (HTML, CSS and HTMX)
+- `%tahuti-api`: REST API agent. Interfaces with front-end via requests with JSON payload.
 - `%tahuti`: Core agent. Manages state (groups and expenses)
-- `%tahuti-ui`: UI agent. Serves front-end (HTML, CSS and JS)
-- `%tahuti-api`: REST API agent. Interfaces with front-end via JSON.
 
 #### %tahuti
 
-```hoon
-:tahuti &tahuti-action [%add-group [%uuid 'title' ~zod (silt [~nus ~]) (silt [~nus ~])]]
-.^(@ %gx /=tahuti=/groups/noun)
-:tahuti +dbug
-```
+...
 
 #### %tahuti-ui
 
-Inspired by [%feature](https://developers.urbit.org/guides/additional/app-workbook/feature). Depends on [%schooner](https://github.com/dalten-collective/boat).
+Inspired by [%feature](https://developers.urbit.org/guides/additional/app-workbook/feature).
+Depends on [%schooner](https://github.com/dalten-collective/boat).
+
+The front-end is build with HTML, CSS and HTMX.
+HTMX is used to interfaces with the API using JSON encoded request bodies (`json-enc` extension) and client side templates.
 
 #### %tahuti-api
 
-Inspired by [%feature](https://developers.urbit.org/guides/additional/app-workbook/feature). Depends on [%schooner](https://github.com/dalten-collective/boat).
+Inspired by [%feature](https://developers.urbit.org/guides/additional/app-workbook/feature).
+Depends on [%schooner](https://github.com/dalten-collective/boat).
 
 Endpoints:
 ```
-GET  api/groups                         // Get all groups as JSON array
-PUT  api/groups/{uuid}                  // Add or edit a group
-GET  api/groups/{uuid}/expenses         // Get all expenses of a group
-PUT  api/groups/{uuid}/expenses/{uuid}  // Add or edit an expense
+GET   api/groups                  // Get all groups               (JSON array)
+PUT   api/groups                  // Add or edit a group          (JSON object)
+
+GET   api/groups/{uuid}/members   // Get all members of a group   (JSON array)
+PUT   api/groups/{uuid}/members   // Add members                  (JSON object)
+
+GET   api/groups/{uuid}/expenses  // Get all expenses of a group  (JSON array)
+PUT   api/groups/{uuid}/expenses  // Add or edit an expense       (JSON object)
+
+POST  api/groups/action/join      // Join a group                 (JSON object)
 ```
 
 
 ### Abbreviations
 
 - ex: expense
-- exes: a list of expenses
 - gid: group ID
 - eid: expense ID
 
 
 ## Contributing
 
-You can contribute in various ways. Foremost, you can always reach out to me on the network (`~talfus-laddus`). Critic and praise are welcomed equally. You can also use the [issue/ticket tracker](https://todo.sr.ht/~talfus-laddus/tahuti) to report any bugs or request new features.
+You can contribute in various ways. Foremost, you can always reach out
+to me on the network (`~talfus-laddus`). Critic and praise are welcomed
+equally. You can also use the [issue/ticket
+tracker](https://todo.sr.ht/~talfus-laddus/tahuti) to report any bugs or
+request new features.
 For financial support, you can donate to my Ethereum Address:
 
 `0x Ee09 333c 1a33 2Ba8 dA96 4230 C71C 724A 2F48 aC56`
