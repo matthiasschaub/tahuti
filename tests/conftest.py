@@ -13,13 +13,23 @@ def auth():
 
 
 @pytest.fixture(scope="session")
-def commit():
-    url = "http://localhost:12321"
-    data = {
-        "source": {"dojo": "+hood/commit %tahuti"},
-        "sink": {"app": "hood"},
-    }
-    requests.post(url, json=data)
+def auth_nus():
+    url = "http://localhost:8081/~/login"
+    data = {"password": "bortem-pinwyl-macnyx-topdeg"}
+    with requests.Session() as session:
+        response = session.post(url, data=data)  # perform the login
+    return response.cookies
+
+
+# TODO
+# @pytest.fixture(scope="session")
+# def commit():
+#     url = "http://localhost:12321"
+#     data = {
+#         "source": {"dojo": "+hood/commit %tahuti"},
+#         "sink": {"app": "hood"},
+#     }
+#     requests.post(url, json=data)
 
 
 @pytest.fixture
@@ -28,12 +38,21 @@ def uuid():
 
 
 @pytest.fixture
-def group(auth, uuid):
+def group(auth, uuid) -> dict:
     group = {
         "gid": uuid,
-        "title": "foo",
+        "title": "assembly",
         "host": "~zod",
     }
     url = "http://localhost:8080/apps/tahuti/api/groups"
     requests.put(url, cookies=auth, json=group)
+    return group
+
+
+@pytest.fixture
+def members(auth, group) -> dict:
+    """Based on `group`. Adds members."""
+    uuid = group["gid"]
+    url = f"http://localhost:8080/apps/tahuti/api/groups/{uuid}/members"
+    requests.put(url, cookies=auth, json={"member": "~nus"})
     return group

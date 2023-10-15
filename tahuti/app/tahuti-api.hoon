@@ -69,6 +69,33 @@
     ?+  method.request.inbound-request
       [(send [405 ~ [%plain "405 - Method Not Allowed"]]) state]
       ::
+        %'GET'
+      ?+  site
+        [(send [404 ~ [%plain "404 - Not Found"]]) state]
+        ::
+          [%apps %tahuti %api %groups ~]
+        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/groups/noun
+        =/  groups    .^(groups %gx path)
+        =/  response  (groups:enjs groups)
+        [(send [200 ~ [%json response]]) state]
+        ::
+          [%apps %tahuti %api %groups @t ~]
+        =/  gid       (snag 4 `(list @t)`site)
+        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/groups/noun
+        =/  groups    .^(groups %gx path)
+        =/  group     (need (~(get by groups) gid))
+        =/  response  (group:enjs group)
+        [(send [200 ~ [%json response]]) state]
+        ::
+          [%apps %tahuti %api %groups @t %members ~]
+        =/  gid       (snag 4 `(list @t)`site)
+        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/acls/noun
+        =/  acls      .^(acls %gx path)
+        =/  acl       (need (~(get by acls) gid))
+        =/  response  (ships:enjs acl)
+        [(send [200 ~ [%json response]]) state]
+      ==
+      ::
         %'PUT'
       ?~  body.request.inbound-request
         [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
@@ -106,31 +133,22 @@
         [(send [200 ~ [%json response]]) state]
       ==
       ::
-        %'GET'
+        %'POST'
+      ?~  body.request.inbound-request
+        [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
       ?+  site
-        [(send [404 ~ [%plain "404 - Not Found"]]) state]
+        [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
         ::
-          [%apps %tahuti %api %groups ~]
-        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/groups/noun
-        =/  groups    .^(groups %gx path)
-        =/  response  (groups:enjs groups)
-        [(send [200 ~ [%json response]]) state]
-        ::
-          [%apps %tahuti %api %groups @t ~]
-        =/  gid       (snag 4 `(list @t)`site)
-        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/groups/noun
-        =/  groups    .^(groups %gx path)
-        =/  group     (need (~(get by groups) gid))
-        =/  response  (group:enjs group)
-        [(send [200 ~ [%json response]]) state]
-        ::
-          [%apps %tahuti %api %groups @t %members ~]
-        =/  gid       (snag 4 `(list @t)`site)
-        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/acls/noun
-        =/  acls      .^(acls %gx path)
-        =/  acl       (need (~(get by acls) gid))
-        =/  response  (ships:enjs acl)
-        [(send [200 ~ [%json response]]) state]
+          [%apps %tahuti %api %action %join ~]
+        =/  content   (need (de:json:html q.u.body.request.inbound-request))
+        =/  group     (group:dejs content)
+        =/  action    [%join gid.group host.group]
+        =/  response  (send [200 ~ [%plain "ok"]])
+        :-  ^-  (list card)
+          %+  snoc
+            response
+          [%pass /join %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
+        state
       ==
     ==
   --

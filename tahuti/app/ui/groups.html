@@ -1,97 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-            name="description"
-            content="Tahuti - An Expense Sharing App for Urbit"
-        />
-        <title>Tahuti</title>
-        <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
-        <link
-            rel="stylesheet"
-            href="/apps/tahuti/static/css/min/print.css"
-            media="print"
-        />
-        <script src="https://unpkg.com/htmx.org@1.9.6"></script>
-        <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/json-enc.js"></script>
-        <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/debug.js"></script>
-        <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/client-side-templates.js"></script>
-        <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/path-deps.js"></script>
-        <script src="https://unpkg.com/mustache@latest"></script>
-    </head>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+    <meta
+      name="description"
+      content="Tahuti - An Expense Sharing App for Urbit"
+    />
+    <title>Tahuti</title>
+    <link
+      rel="stylesheet"
+      href="/apps/tahuti/static/css/min/style.css"
+    />
+    <link
+      rel="stylesheet"
+      href="/apps/tahuti/static/css/min/print.css"
+      media="print"
+    />
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/json-enc.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/debug.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/client-side-templates.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/path-deps.js"></script>
+    <script src="https://unpkg.com/mustache@latest"></script>
+  </head>
 
-    <body>
-        <header>
-            <nav aria-label="Global">
-                <ul>
-                    <li>
-                        <a href="/apps/tahuti/groups"><strong>Groups</strong></a>
-                    </li>
-                    <li>
-                        <a style="opacity: 0.3">Expenses</a>
-                    </li>
-                    <li>
-                        <a style="opacity: 0.3">Balances</a>
-                    </li>
-                    <li>
-                        <a style="opacity: 0.3">Reimbursments</a>
-                    </li>
-                    <li>
-                        <a style="opacity: 0.3">Members</a>
-                    </li>
-                    <li>
-                        <a style="opacity: 0.3">Settings</a>
-                    </li>
-                </ul>
-            </nav>
-        </header>
-        <h1>Tahuti</h1>
-        <h3>Create a Group</h3>
-        <!-- TODO: Get host from cookie -->
-        <!-- TODO: Reload group list -->
-        <div hx-ext="path-deps">
-            <form
-                id="put-groups"
-                hx-put="/apps/tahuti/api/groups"
-                hx-ext="json-enc"
-                hx-swap="none"
-                hx-vals='js:{gid: self.crypto.randomUUID(), host: "~zod", acl: Array("~nus"), members: Array("~nus")}'
-                hx-on::after-request="if(event.detail.successful) this.reset()"
+  <body>
+    <header>
+      <nav aria-label="Global">
+        <ul>
+          <li>
+            <a href="/apps/tahuti/groups"><strong>Groups</strong></a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Expenses</a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Balances</a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Reimbursments</a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Members</a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Settings</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <h1>Tahuti</h1>
+    <!-- TODO: Get host from cookie -->
+    <!-- TODO: Reload group list -->
+    <div hx-ext="path-deps">
+      <h3>Create a Group</h3>
+      <form
+        id="put-groups"
+        hx-put="/apps/tahuti/api/groups"
+        hx-ext="json-enc"
+        hx-swap="none"
+        hx-vals='js:{gid: self.crypto.randomUUID(), host: "~zod", acl: Array("~nus"), members: Array("~nus")}'
+        hx-on::after-request="if(event.detail.successful) this.reset()"
+      >
+        <input
+          id="group-title"
+          type="text"
+          name="title"
+          aria-label="group-title"
+          placeholder="title"
+        />
+        <button type="submit">Create ▸</button>
+      </form>
+
+      <h3>Join a Group</h3>
+      <form
+        id="post-join"
+        hx-post="/apps/tahuti/api/action/join"
+        hx-ext="json-enc"
+        hx-swap="none"
+        hx-vals='{"title": ""}'
+        hx-on::after-request="if(event.detail.successful) this.reset()"
+      >
+        <input
+          type="text"
+          name="host"
+          aria-label="host"
+          placeholder="~zod"
+        />
+        <br> </br>
+        <input
+          type="text"
+          name="gid"
+          aria-label="group-id"
+          placeholder="14488cd0-f23f-4d21-862e-d79803d159e4"
+        />
+        <button type="submit">Join ▸</button>
+      </form>
+
+      <h3>Groups</h3>
+      <div hx-ext="client-side-templates">
+        <ul
+          hx-get="/apps/tahuti/api/groups"
+          hx-trigger="load,path-deps"
+          path-deps="/apps/tahuti/api/*"
+          mustache-template="groups-template"
+        >
+          <emp>Loading …</emp>
+        </ul>
+
+        <template id="groups-template">
+          <!-- iterate over top level array -->
+          {{#.}}
+          <li>
+            <a href="/apps/tahuti/groups/{{gid}}/expenses.html"
+              >{{title}}</a
             >
-                <input
-                    id="group-title"
-                    type="text"
-                    name="title"
-                    aria-label="group-title"
-                    placeholder="title"
-                />
-                <button type="submit">Create ▸</button>
-            </form>
-
-            <h3>Groups</h3>
-            <div hx-ext="client-side-templates">
-                <ul
-                    hx-get="/apps/tahuti/api/groups"
-                    hx-trigger="load,path-deps"
-                    path-deps="/apps/tahuti/api/groups"
-                    mustache-template="groups-template"
-                >
-                    <emp>Loading …</emp>
-                </ul>
-
-                <template id="groups-template">
-                    <!-- iterate over top level array -->
-                    {{#.}}
-                    <li>
-                        <a href="/apps/tahuti/groups/{{gid}}/expenses.html"
-                            >{{title}}</a
-                        >
-                    </li>
-                    {{/.}}
-                </template>
-            </div>
-        </div>
-    </body>
+          </li>
+          {{/.}}
+        </template>
+      </div>
+    </div>
+  </body>
 </html>

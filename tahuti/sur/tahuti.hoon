@@ -42,7 +42,7 @@
       ::
       [%add-group =gid =group]
       [%add-member =gid member=@p]    :: allow to subscribe (add to acl)
-      [%subscribe =gid =host]    :: allow to subscribe (add to acl)
+      [%join =gid =host]    :: allow to subscribe (add to acl)
       ::[%del-group =gid]
       ::[%edit-group =gid =title]  :: change title
       ::[%list-groups]
@@ -65,7 +65,8 @@
 ::  these are all the possible events that can be sent to subscribers.
 ::
 +$  update
-  $%  [%init =gid =group acl=(set @p) members=(set @p)]
+  $%  [%init =gid =group members=(set @p) acl=(set @p)]
+      [%group =gid =group members=(set @p) acl=(set @p)]
 ::       [%del =gid]
 ::       [%allow =gid =ship]
 ::       [%kick =gid =ship]
