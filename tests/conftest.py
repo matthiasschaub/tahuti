@@ -32,15 +32,19 @@ def auth_nus():
 #     requests.post(url, json=data)
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def uuid():
     return str(uuid4())
 
 
-@pytest.fixture
-def group(auth, uuid) -> dict:
+@pytest.fixture(scope="session")
+def gid(uuid):
+    return uuid
+
+@pytest.fixture(scope="session")
+def group(auth, gid) -> dict:
     group = {
-        "gid": uuid,
+        "gid": gid,
         "title": "assembly",
         "host": "~zod",
     }
@@ -49,10 +53,9 @@ def group(auth, uuid) -> dict:
     return group
 
 
-@pytest.fixture
-def members(auth, group) -> dict:
+@pytest.fixture(scope="session")
+def member(auth, gid, group) -> str:
     """Based on `group`. Adds members."""
-    uuid = group["gid"]
-    url = f"http://localhost:8080/apps/tahuti/api/groups/{uuid}/members"
+    url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/members"
     requests.put(url, cookies=auth, json={"member": "~nus"})
-    return group
+    return "~nus"

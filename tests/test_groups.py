@@ -32,7 +32,7 @@ def test_groups_invalid(auth):
     assert response.status_code == 418
 
 
-def test_groups_single(auth, uuid, group_schema, groups_schema):
+def test_groups(auth, uuid, group_schema, groups_schema):
     group = {
         "gid": uuid,
         "title": "foo",
