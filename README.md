@@ -8,7 +8,8 @@ For a short demo, see this [screencast](https://console.minio.mutualisten.de/api
 
 ### Setup
 
-Setup this project either by using [pilothouse](https://git.sr.ht/~talfus-laddus/pilothouse) or by hand.
+Setup this project either by using [pilothouse](https://git.sr.ht/~talfus-laddus/pilothouse) 
+or by hand.
 
 #### Setup by using Pilothouse
 
@@ -34,7 +35,8 @@ urbit -F zod
 |mount %tahuti
 ```
 
-Start continuous synchronisation between the git repository's `tahuti` directory (Earth) and the `tahuti` desk's directory (Mars):
+Start continuous synchronisation between the git repository's `tahuti`
+directory (Earth) and the `tahuti` desk's directory (Mars):
 
 ```bash
 watch "rsync -zr tahuti/* zod/tahuti"
@@ -86,7 +88,8 @@ Inspired by [%feature](https://developers.urbit.org/guides/additional/app-workbo
 Depends on [%schooner](https://github.com/dalten-collective/boat).
 
 The front-end is build with HTML, CSS and HTMX.
-HTMX is used to interfaces with the API using JSON encoded request bodies (`json-enc` extension) and client side templates.
+HTMX is used to interfaces with the API using JSON encoded request bodies
+(`json-enc` extension) and client side templates.
 
 #### %tahuti-api
 
@@ -98,8 +101,10 @@ Endpoints:
 GET   api/groups                  // Get all groups               (JSON array)
 PUT   api/groups                  // Add or edit a group          (JSON object)
 
+GET   api/groups/{uuid}/invitees  // Get all invitees of a group  (JSON array)
+PUT   api/groups/{uuid}/invitees  // Invite a ship                (JSON object)
+
 GET   api/groups/{uuid}/members   // Get all members of a group   (JSON array)
-PUT   api/groups/{uuid}/members   // Add members                  (JSON object)
 
 GET   api/groups/{uuid}/expenses  // Get all expenses of a group  (JSON array)
 PUT   api/groups/{uuid}/expenses  // Add or edit an expense       (JSON object)
