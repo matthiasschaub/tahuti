@@ -1,0 +1,10 @@
+:~  title+'Tahuti'
+    info+'An expense sharing app'
+    color+0xff.fff3
+    image+'https://console.minio.mutualisten.de/api/v1/buckets/public/objects/download?preview=true&prefix=aWNvbi5wbmc=&version_id=null'
+    base+'tahuti'
+    site+/apps/tahuti
+    version+[0 0 1]
+    website+'https://git.sr.ht/~talfus-laddus/tahuti'
+    license+'MIT'
+==
