@@ -2,6 +2,7 @@
 
 For details about this app, see the [proposal](./proposal.md).
 
+For a short demo, see this [screencast](https://console.minio.mutualisten.de/api/v1/buckets/public/objects/download?preview=true&prefix=c2NyZWVuLm1wNA==&version_id=null).
 
 ## Development
 
