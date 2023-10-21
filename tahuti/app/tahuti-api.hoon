@@ -89,10 +89,27 @@
         ::
           [%apps %tahuti %api %groups @t %members ~]
         =/  gid       (snag 4 `(list @t)`site)
+        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/members/noun
+        =/  members   .^(members %gx path)
+        =/  mem       (~(got by members) gid)
+        =/  response  (ships:enjs mem)
+        [(send [200 ~ [%json response]]) state]
+        ::
+          [%apps %tahuti %api %groups @t %invitees ~]
+        ::  todo: add and use scry path based on gid
+        ::
+        ~&  >  '%tahuti-api (handle-http): GET /invitees'
+        =/  gid       (snag 4 `(list @t)`site)
         =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/acls/noun
         =/  acls      .^(acls %gx path)
         =/  acl       (need (~(get by acls) gid))
-        =/  response  (ships:enjs acl)
+        =.  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/members/noun
+        =/  members   .^(members %gx path)
+        =/  mem       (~(got by members) gid)
+        ~&  mem
+        =/  invitees  (~(dif in acl) mem)
+        ~&  invitees
+        =/  response  (ships:enjs invitees)
         [(send [200 ~ [%json response]]) state]
       ==
       ::
@@ -113,11 +130,11 @@
           [%pass /group %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
         state
         ::
-          [%apps %tahuti %api %groups @t %members ~]
+          [%apps %tahuti %api %groups @t %invitees ~]
         =/  gid       (snag 4 `(list @t)`site)
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
-        =/  member    (member:dejs content)
-        =/  action    [%add-member gid member]
+        =/  invitee   (invitee:dejs content)
+        =/  action    [%invite gid invitee]
         =/  response  (send [200 ~ [%plain "ok"]])
         :-  ^-  (list card)
           %+  snoc

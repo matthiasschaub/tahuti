@@ -49,11 +49,11 @@
 ::
 ++  dejs
   |%
-  ++  member
-    ^-  $-(json member=@p)
+  ++  invitee
+    ^-  $-(json invitee=@p)
     %-  ot:dejs:format                                     :: obj as tuplejsonre
     :~
-      :-  %member  (se:dejs:format %p)
+      :-  %invitee  (se:dejs:format %p)
     ==
   ++  ship
     ^-  $-(json @p)

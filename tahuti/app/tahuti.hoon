@@ -59,13 +59,13 @@
       members  (~(put by acls) gid.action *(set @p))
     ==
     ::
-      %add-member
-    ~&  >  '%tahuti (on-poke): add member'
+      %invite
+    ~&  >  '%tahuti (on-poke): invite'
     =/  group  (~(got by groups) gid.action)
     ?>  =(our.bowl host.group)
-    ?<  =(our.bowl member.action)
-    =/  acl  (~(gut by acls) gid.action ^*((set @p)))
-    =.  acl  (~(put in acl) member.action)
+    ?<  =(our.bowl p.action)
+    =/  acl  (~(got by acls) gid.action)
+    =.  acl  (~(put in acl) p.action)
     :-  ^-  (list card)
       :~
         :*  %give  %fact  [/[gid.action] ~]  %tahuti-update
@@ -79,7 +79,7 @@
       :: (subscribe to a group hosted on another ship)
       ::
       %join
-    ~&  >  '%tahuti (on-poke): join group'
+    ~&  >  '%tahuti (on-poke): join'
     =/  path  /[gid.action]
     :-  ^-  (list card)
         :~  [%pass path %agent [host.action %tahuti] %watch path]
@@ -107,12 +107,18 @@
   ?>  ?=([@ ~] path)
   =/  =gid  `@tas`i.path
   ?>  (~(has by groups) gid)
-  =/  acl  (~(got by acls) gid)
-  =/  mem  (~(got by members) gid)
-  =.  mem  (~(put in mem) src.bowl)
+  =/  group  (~(got by groups) gid)
+  =/  acl    (~(got by acls) gid)
+  =/  mem     (~(got by members) gid)
   ?>  (~(has in acl) src.bowl)
+  =.  mem  (~(put in mem) src.bowl)
   :-  ^-  (list card)
-      [(init gid) ~]
+      :~
+        (init gid)
+        :*  %give  %fact  [/[gid] ~]  %tahuti-update
+            !>  ^-  update  [%group gid group mem acl]
+        ==
+      ==
   %=  this
     members  (~(put by members) gid mem)
   ==
@@ -133,6 +139,7 @@
 ++  on-peek                        ::  scry
   |=  =path
   ^-  (unit (unit [mark vase]))
+  ~&  >  '%tahuti (on-peek)'
   ?+  path  ~|('%tahuti (on-peek)' (on-peek:default path))
     ::
       [%x %groups ~]

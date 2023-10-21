@@ -58,19 +58,19 @@
                 <h1>{{title}}</h1>
             </template>
 
-            <h3>Add a Member</h3>
+            <h3>Invite</h3>
             <form
-                id="put-member"
-                hx-put="/members"
+                id="put-invitees"
+                hx-put="/invitees"
                 hx-ext="json-enc"
                 hx-swap="none"
                 hx-on::after-request="if(event.detail.successful) this.reset()"
             >
                 <input
-                    id="member"
+                    id="invitee"
                     type="text"
-                    name="member"
-                    aria-label="member"
+                    name="invitee"
+                    aria-label="invitee"
                     placeholder="~zod"
                 />
                 <button type="submit">Add ▸</button>
@@ -81,12 +81,29 @@
                 id="get-members"
                 hx-get="/members"
                 hx-trigger="load,path-deps"
-                path-deps="/apps/tahuti/api/groups/*/members"
+                path-deps="/apps/tahuti/api/groups/*/invitees"
                 mustache-template="members-template"
             >
                 <emp>Loading …</emp>
             </ul>
             <template id="members-template">
+                <!-- iterate over array of members object -->
+                {{#.}}
+                <li>{{.}}</li>
+                {{/.}}
+            </template>
+
+            <h3>Invitees</h3>
+            <ul
+                id="get-invitees"
+                hx-get="/invitees"
+                hx-trigger="load,path-deps"
+                path-deps="/apps/tahuti/api/groups/*/invitees"
+                mustache-template="invitees-template"
+            >
+                <emp>Loading …</emp>
+            </ul>
+            <template id="invitees-template">
                 <!-- iterate over array of members object -->
                 {{#.}}
                 <li>{{.}}</li>
@@ -104,7 +121,7 @@
                 event.detail.path = site.replace(/\/$/, ""); // without trailing slash
             });
 
-            let endpoints = ["expenses", "members"];
+            let endpoints = ["expenses", "members", "invitees"];
             for (let i = 0; i < endpoints.length; i++) {
                 href = `/apps/tahuti/groups/${uuid}/${endpoints[i]}`;
                 element = document.getElementById(`${endpoints[i]}-href`);

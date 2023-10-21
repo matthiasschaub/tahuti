@@ -12,6 +12,7 @@
 ::    acls and members
 ::
 +$  groups    (map gid group)
++$  acl       (set @p)
 +$  acls      (map gid (set @p))
 +$  members   (map gid (set @p))
 ::
@@ -31,9 +32,9 @@
       :: description=@t
       :: tags=(set @tas)
   ==
-+$  exes   (list ex)
-+$  expenses    (map eid ex)
-+$  gexpenses  (map gid expenses)
++$  exes       (list ex)
++$  expenses   (map eid ex)
+:: +$  expenses  (map gid exes)
 ::
 ::    input requests/actions
 ::
@@ -41,7 +42,7 @@
   $%  :: group actions performed by host
       ::
       [%add-group =gid =group]
-      [%add-member =gid member=@p]    :: allow to subscribe (add to acl)
+      [%invite =gid =@p]    :: allow to subscribe (add to acl)
       [%join =gid =host]    :: allow to subscribe (add to acl)
       ::[%del-group =gid]
       ::[%edit-group =gid =title]  :: change title
