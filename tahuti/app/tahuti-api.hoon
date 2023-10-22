@@ -21,8 +21,8 @@
     default  ~(. (default-agent this %.n) bowl)
 ::
 ++  on-init
-  ^-  [(list card) $_(this)]
   ~&  >  '%tahuti-api: initialize'
+  ^-  [(list card) $_(this)]
   :-  ^-  (list card)
     :~
       :*  %pass  /eyre/connect  %arvo  %e
@@ -106,9 +106,7 @@
         =.  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/members/noun
         =/  members   .^(members %gx path)
         =/  mem       (~(got by members) gid)
-        ~&  mem
         =/  invitees  (~(dif in acl) mem)
-        ~&  invitees
         =/  response  (ships:enjs invitees)
         [(send [200 ~ [%json response]]) state]
       ==
