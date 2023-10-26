@@ -21,35 +21,34 @@ def groups_schema(group_schema):
     return Schema([group_schema])
 
 
-def test_groups_invalid(auth):
+def test_groups_invalid(zod):
     # TODO: change status code to expected status code not just internal server error
-    url = "http://localhost:8080/apps/tahuti/api/groups"
-    response = requests.put(url, cookies=auth, json={})
+    url = "/apps/tahuti/api/groups"
+    response = zod.put(url, json={})
     assert response.status_code == 500
-    response = requests.put(url, cookies=auth, json="")
+    response = zod.put(url, json="")
     assert response.status_code == 500
-    response = requests.put(url, cookies=auth, json=None)
+    response = zod.put(url, json=None)
     assert response.status_code == 418
 
 
-def test_groups(auth, uuid, group_schema, groups_schema):
+def test_groups(zod, auth, uuid, group_schema, groups_schema):
     group = {
         "gid": uuid,
         "title": "foo",
         "host": "~zod",
     }
+    url = "/apps/tahuti/api/groups"
 
     # PUT
-    url = "http://localhost:8080/apps/tahuti/api/groups"
-    response = requests.put(url, cookies=auth, json=group)
+    response = zod.put(url, json=group)
     assert response.status_code == 200
     # Test idempotent
-    response = requests.put(url, cookies=auth, json=group)
+    response = zod.put(url, json=group)
     assert response.status_code == 200
 
     # GET /groups
-    url = "http://localhost:8080/apps/tahuti/api/groups"
-    response = requests.get(url, cookies=auth)
+    response = zod.get(url)
     assert response.status_code == 200
     result = response.json()
     assert groups_schema.is_valid(result)
@@ -57,8 +56,8 @@ def test_groups(auth, uuid, group_schema, groups_schema):
     assert result.count(group) == 1  # idempotent
 
     # GET /groups/{uuid}
-    url = f"http://localhost:8080/apps/tahuti/api/groups/{uuid}"
-    response = requests.get(url, cookies=auth)
+    url = f"/apps/tahuti/api/groups/{uuid}"
+    response = zod.get(url)
     assert response.status_code == 200
     result = response.json()
     assert group_schema.is_valid(result)

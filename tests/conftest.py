@@ -1,5 +1,6 @@
 import pytest
 import requests
+from .utils import BaseUrlSession
 from uuid import uuid4
 
 
@@ -21,6 +22,26 @@ def auth_nus():
     return response.cookies
 
 
+@pytest.fixture(scope="session")
+def zod():
+    """Request session for ~zod which is authenticated"""
+    baseUrl = "http://localhost:8080"
+    data = {"password": "lidlut-tabwed-pillex-ridrup"}
+    with BaseUrlSession(baseUrl) as session:
+        session.post("/~/login", data=data)  # perform the login
+        yield session
+
+
+@pytest.fixture(scope="session")
+def nus():
+    """Request session for ~nus which is authenticated"""
+    baseUrl = "http://localhost:8081"
+    data = {"password": "bortem-pinwyl-macnyx-topdeg"}
+    with BaseUrlSession(baseUrl) as session:
+        session.post("/~/login", data=data)  # perform the login
+        yield session
+
+
 # TODO
 # @pytest.fixture(scope="session")
 # def commit():
@@ -40,6 +61,7 @@ def uuid():
 @pytest.fixture(scope="module")
 def gid(uuid):
     return uuid
+
 
 @pytest.fixture(scope="module")
 def group(auth, gid) -> dict:
