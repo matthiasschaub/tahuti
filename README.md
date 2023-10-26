@@ -22,15 +22,10 @@ pilothouse chain zod tahuti/
 #### Setup by Hand
 
 ```bash
-# Get source
-git clone https://git.sr.ht/~talfus-laddus/tahuti
-cd tahuti
-# Get Urbit binary
-curl -L https://urbit.org/install/linux-x86_64/latest | tar xzk --transform='s/.*/urbit/g'
 urbit -F zod
 ```
 
-```dojo
+```hoon
 |merge %tahuti our %base
 |mount %tahuti
 ```
@@ -47,6 +42,15 @@ watch "rsync -zr tahuti/* zod/tahuti"
 |install our %tahuti
 ```
 
+### Debugging
+
+`%dbug` agent wrapper is in use: 
+
+```
+|start %dbug
+http://localhost:8080/~debug
+```
+
 ### Tests
 
 #### Unit Tests (Hoon)
@@ -59,6 +63,8 @@ To run all tests files:
 ```
 
 #### Integration Tests (Python)
+
+Integration tests are written in Python and are utilizing the `pytest` framework. The tests run against tahutis API on fake ships.
 
 ```bash
 # Setup Python environment for test framework (pytest)
@@ -74,9 +80,9 @@ pytest tests
 
 There are three agents:
 
-- `%tahuti-ui`: UI agent. Serves front-end (HTML, CSS and HTMX)
+- `%tahuti-ui`: UI agent. Serves front-end (HTML, CSS and HTMX).
 - `%tahuti-api`: REST API agent. Interfaces with front-end via requests with JSON payload.
-- `%tahuti`: Core agent. Manages state (groups and expenses)
+- `%tahuti`: Core agent. Manages state (groups and expenses).
 
 #### %tahuti
 
