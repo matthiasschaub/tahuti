@@ -11,15 +11,14 @@ h1 {
     color: var(--red)
 }
 
-
 h2 {
-    font-style: italic;
+    /* font-style: italic; */
     line-height: 1em;
     margin: var(--vspace-2) 0 var(--vspace-3) 0;
 }
 
 h3 {
-    font-style: italic;
+    /* font-style: italic; */
     line-height: 1em;
     margin: var(--vspace-1) 0 var(--vspace-3) 0;
 }

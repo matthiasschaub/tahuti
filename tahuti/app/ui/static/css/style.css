@@ -45,13 +45,12 @@
     /* --blue-accent: #2b1dcc; */
 
     --purple: #b16286;
-    --purple-accent: #d3869b;
     /* --gray: #928374; */
     --yellow: #d79921;
 }
 
 ::selection {
-    background: var(--purple-accent);
+    background: var(--grey);
 }
 
 html {
