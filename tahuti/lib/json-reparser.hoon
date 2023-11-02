@@ -41,9 +41,12 @@
     ^-  json
     %-  pairs:enjs:format
     :~
-      :: :-  'payer'     [%s (scot %p payer.ex)]
       :-  'id'        [%s id.e]
+      :-  'title'     [%s title.e]
       :-  'amount'    (numb:enjs:format amount.e)
+      :-  'currency'  [%s currency.e]
+      :-  'payer'     [%s (scot %p payer.e)]
+      :: :-  'date'     [%s (scot %p payer.e)]
       :: :-  'involves'  [%a (turn involves.ex ship:enjs)]
     ==
   ++  ledger
@@ -67,17 +70,20 @@
     ^-  $-(json ^group)
     %-  ot:dejs:format                                     :: obj as tuplejsonre
     :~
-      :-  %id      so:dejs:format
-      :-  %title    so:dejs:format
-      :-  %host     (se:dejs:format %p)
+      :-  %id        so:dejs:format
+      :-  %title     so:dejs:format
+      :-  %host      (se:dejs:format %p)
     ==
   ++  expense
     ^-  $-(json ^expense)
     %-  ot:dejs:format                                     :: obj as tuple
     :~
-      :-  %id       so:dejs:format
-      :: :-  %amount    ni:dejs:format                        :: num as int
+      :-  %id        so:dejs:format
+      :-  %title     so:dejs:format
       :-  %amount    (su:dejs:format dem)
+      :-  %currency  so:dejs:format
+      :-  %payer     (se:dejs:format %p)
+      :: :-  %date      so:dejs:format
       :: :-  %involves  (ar:dejs:format (se:dejs:format %p))  :: arr as list
     ==
   --

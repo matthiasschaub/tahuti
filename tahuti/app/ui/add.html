@@ -67,48 +67,71 @@
             hx-vals="js:{id: self.crypto.randomUUID()}"
             hx-on::after-request="if(event.detail.successful) this.reset()"
         >
+            <label for="title">What for?</label>
+            <br />
+            <input
+                id="title"
+                type="text"
+                inputmode="text"
+                autocomplete="on"
+                name="Title"
+                aria-label="Title"
+                placeholder="Title"
+            />
+            <br />
+            <label for="amount">How much?</label>
+            <br />
             <input
                 id="amount"
-                type="number"
+                type="text"
+                inputmode="decimal"
+                autocomplete="transaction-amount"
                 name="amount"
-                aria-label="amount"
-                placeholder="2300"
+                aria-label="Amount"
+                placeholder="23.00"
             />
+            <br />
+            <label for="currency">Which currency? (optional)</label>
+            <br />
+            <input
+                id="currency"
+                type="text"
+                inputmode="text"
+                autocomplete="transaction-currency"
+                name="currency"
+                aria-label="Currency"
+                placeholder="EUR"
+                value="EUR"
+            />
+            <br />
+            <label for="payer">Who paid?</label>
+            <br />
+            <!-- TODO: add datalist with members and host -->
+            <!-- TODO: add current ship as default value -->
+            <input
+                id="payer"
+                type="text"
+                inputmode="text"
+                name="Payer"
+                aria-label="Payer"
+                placeholder="~zod"
+            />
+            <!-- <br /> -->
+            <!-- <label for="date">When?</label> -->
+            <!-- <br /> -->
+            <!-- <!-1- TODO: add current date as default value -1-> -->
+            <!-- <input -->
+            <!--     id="date" -->
+            <!--     type="date" -->
+            <!--     inputmode="text" -->
+            <!--     name="Date" -->
+            <!--     aria-label="Date" -->
+            <!-- /> -->
+            <br />
+            <br />
             <button type="submit">Add ▸</button>
+            <button>Cancel</button>
         </form>
-
-        <!-- <input -->
-        <!--     type="text" -->
-        <!--     name="amount" -->
-        <!--     placeholder="How much?" -->
-        <!--     aria-label="Amount" -->
-        <!--     required -->
-        <!-- /> -->
-
-        <!-- <br /><br /> -->
-        <!-- <input -->
-        <!--     type="text" -->
-        <!--     name="who" -->
-        <!--     placeholder="Who Paid?" -->
-        <!--     aria-label="Who?" -->
-        <!--     required -->
-        <!-- /> -->
-
-        <!-- <br /><br /> -->
-        <!-- <input -->
-        <!--     type="text" -->
-        <!--     name="what" -->
-        <!--     placeholder="For What?" -->
-        <!--     aria-label="What?" -->
-        <!--     required -->
-        <!-- /> -->
-
-        <!-- <br /><br /> -->
-        <!-- <input type="date" id="date" name="date" aria-label="When?" /> -->
-
-        <!-- <br /><br /> -->
-        <!-- <button type="submit">Add Expense</button> -->
-        <!-- <button type="submit">Cancel</button> -->
     </body>
     <script type="text/javascript">
         var parts = window.location.href.split("/");

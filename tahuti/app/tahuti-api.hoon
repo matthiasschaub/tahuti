@@ -86,6 +86,7 @@
       [(send [405 ~ [%plain "405 - Method Not Allowed"]]) state]
       ::
         %'GET'
+      ~&  >  '%tahuti-api: GET'
       ?+  site
         [(send [404 ~ [%plain "404 - Not Found"]]) state]
         ::
@@ -133,6 +134,7 @@
       ==
       ::
         %'PUT'
+      ~&  >  '%tahuti-api: PUT'
       ?~  body.request.inbound-request
         [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
       ?+  site
@@ -150,7 +152,7 @@
         state
         ::
           [%apps %tahuti %api %groups @t %invitees ~]
-        =/  id       (snag 4 `(list @t)`site)
+        =/  id        (snag 4 `(list @t)`site)
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
         =/  invitee   (invitee:dejs content)
         =/  action    [%invite id invitee]
@@ -162,9 +164,9 @@
         state
         ::
           [%apps %tahuti %api %groups @t %expenses ~]
-        ~&  >  '%tahuti-api: add expense'
+        ~&  >  '%tahuti-api: /expenses'
+        =/  id        (snag 4 `(list @t)`site)
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
-        =/  id       (snag 4 `(list @t)`site)
         =/  expense   (expense:dejs content)
         =/  action    [%add-expense id expense]
         =/  response  (send [200 ~ [%plain "ok"]])
@@ -176,12 +178,14 @@
       ==
       ::
         %'POST'
+      ~&  >  '%tahuti-api: POST'
       ?~  body.request.inbound-request
         [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
       ?+  site
         [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
         ::
           [%apps %tahuti %api %action %join ~]
+        ~&  >  '%tahuti-api: /action/join'
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
         =/  group     (group:dejs content)
         =/  action    [%join id.group host.group]

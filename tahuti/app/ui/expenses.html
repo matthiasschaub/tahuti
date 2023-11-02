@@ -66,11 +66,11 @@
             <table id="expenses">
                 <thead>
                     <tr>
-                        <!-- <th>For What?</th> -->
-                        <!-- <th>Paid By</th> -->
-                        <!-- <th>Date</th> -->
-                        <!-- <th>Involves</th> -->
+                        <th>For What?</th>
                         <th>Amount</th>
+                        <th>Currency</th>
+                        <th>Paid By</th>
+                        <!-- <th>Date</th> -->
                     </tr>
                 </thead>
                 <tbody
@@ -84,7 +84,11 @@
                 <!-- iterate over array of members object -->
                 {{#.}}
                 <tr>
+                    <td>{{title}}</td>
                     <td>{{amount}}</td>
+                    <td>{{currency}}</td>
+                    <td>{{payer}}</td>
+                    <!-- <td>{{date}}</td> -->
                 </tr>
                 {{/.}}
             </template>

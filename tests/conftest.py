@@ -53,17 +53,17 @@ def nus():
 #     requests.post(url, json=data)
 
 
-@pytest.fixture()
+@pytest.fixture
 def eid():
     return str(uuid4())
 
 
-@pytest.fixture()
+@pytest.fixture
 def gid():
     return str(uuid4())
 
 
-@pytest.fixture()
+@pytest.fixture
 def group(zod, gid) -> dict:
     group = {
         "id": gid,
@@ -75,7 +75,7 @@ def group(zod, gid) -> dict:
     return group
 
 
-@pytest.fixture()
+@pytest.fixture
 def invitee(zod, gid, group) -> str:
     """Based on `group`. Adds invitee."""
     url = f"/apps/tahuti/api/groups/{gid}/invitees"
@@ -83,13 +83,14 @@ def invitee(zod, gid, group) -> str:
     return "~nus"
 
 
-@pytest.fixture(scope="module")
-def member(nus, group, invitee, gid) -> str:
+@pytest.fixture
+def member(nus, gid, group, invitee) -> str:
     """Based on `group`. Adds invitee."""
     join = {
         "host": group["host"],
         "title": "",  # always left empty for /join request
-        "gid": gid,
+        "id": gid,
     }
     url = "/apps/tahuti/api/action/join"
     response = nus.post(url, json=join)
+    return "~nus"

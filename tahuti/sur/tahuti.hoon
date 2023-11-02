@@ -4,7 +4,7 @@
 ::
 ::    group
 ::
-+$  id        @tas                   ::  uuid
++$  id         @tas                   ::  uuid
 +$  title      @t
 +$  host       @p
 +$  group      [=id =title =host]
@@ -26,20 +26,19 @@
 +$  expense
   $:
     id=@tas
-    amount=@ud
+    title=@tas
+    amount=@ud             :: in currency’s smallest unit
+    currency=@tas          :: three-letter ISO code
+    payer=@p
+    :: date=@da
   ==
 +$  ledger   (map id expense)     :: map expense-id to expense
 +$  leds     (map id ledger)      :: map group-id to ledger
 +$  ex                            :: expense
   $:  payer=@p
-      amount=@ud                  :: in currency’s smallest unit
+      amount=@ud
       involves=(list @p)          :: TODO: should be a set
-      :: =id
-      :: =title
-      :: currency=[%usd]          :: three-letter ISO code
-      :: involves=(list @p)
       :: involments=(map @p @ud)  :: how much am I involved: 0.2 * amount
-      :: timestamp=@da
       :: description=@t
       :: tags=(set @tas)
   ==
@@ -63,7 +62,7 @@
       ::[%del-member =gid =ship]  :: kick subscriber
       :::: expense actions performed by members
       ::::
-      [%add-expense id=id =expense]
+      [%add-expense =id =expense]
       ::[%del-expense =gid =eid]
       ::[%edit-expense =gid =eid =ex]
       ::[%list-expenses =gid]

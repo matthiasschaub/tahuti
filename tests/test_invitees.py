@@ -1,5 +1,4 @@
 import requests
-from time import sleep
 
 
 def test_invitee_invalid(auth, gid):

@@ -1,9 +1,8 @@
 /-  *tahuti
-/+  default-agent    :: agent arm defaults
-/+  agentio          :: agent input/output helper
+/+  default-agent  :: agent arm defaults
+/+  agentio        :: agent input/output helper
 /+  dbug
 /+  verb
-::
 ::  types
 ::
 |%
@@ -14,22 +13,19 @@
 +$  state-0
   $:  %0
       =groups
-      =regs          :: registers
-      =acls          :: access-control list
-      =leds          :: ledgers
+      =regs        :: registers
+      =acls        :: access-control lists
+      =leds        :: ledgers
   ==
 --
-::
 ::  state
 ::
 =|  state-0
 =*  state  -
-::
 ::  debug wrap
 ::
 %+  verb  %.n
 %-  agent:dbug
-::
 ::  agent core
 ::
 ^-  agent:gall
@@ -93,8 +89,7 @@
     %=  this
       leds  (~(put by leds) id.action ledger)
     ==
-    ::
-      ::  (add ship to access-control list)
+    ::  (add ship to access-control list)
       ::
       %invite
     ~&  >  '%tahuti (on-poke): invite'
@@ -114,8 +109,7 @@
     %=  this
       acls    (~(put by acls) id.action acl)
     ==
-    ::
-      ::  (subscribe to a group hosted on another ship)
+    ::  (subscribe to a group hosted on another ship)
       ::
       %join
     ~&  >  '%tahuti (on-poke): join'
@@ -126,8 +120,7 @@
     this
   ==
 ++  on-arvo  on-arvo:default
-++  on-watch    ::  subscribe
-  ::
+++  on-watch
   ::  (send a %fact back with an empty path,
   ::  which will only go to the new subscriber.)
   ::
@@ -151,8 +144,8 @@
   %=  this
     regs  (~(put by regs) id register)
   ==
-++  on-leave  on-leave:default     ::  unsubscribe
-++  on-peek                        ::  scry
+++  on-leave  on-leave:default
+++  on-peek
   ~&  >  '%tahuti (on-peek)'
   |=  =path
   ^-  (unit (unit [mark vase]))
@@ -190,7 +183,7 @@
     ~&  >  '%tahuti (on-agent): update from publisher'
     =/  =update  !<(update q.cage.sign)
     ?>  =(id id.update)
-    ?>  =(our.bowl host.group.update)
+    :: ?>  =(our.bowl host.group.update)
     ?-  -.update
       ::
         %group
@@ -200,8 +193,8 @@
           ==
       %=  this
         groups   (~(put by groups) id group.update)
-        acls     (~(put by acls) id acl.update)
         regs     (~(put by regs) id register.update)
+        acls     (~(put by acls) id acl.update)
       ==
     ==
   ==

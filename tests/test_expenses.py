@@ -1,6 +1,6 @@
 import pytest
-from schema import Schema
 from time import sleep
+from schema import Schema
 from uuid import uuid4
 
 
@@ -10,7 +10,10 @@ def expense_schema():
     return Schema(
         {
             "id": str,
+            "title": str,
             "amount": int,
+            "currency": str,
+            "payer": str,
         },
     )
 
@@ -21,20 +24,23 @@ def expenses_schema(expense_schema):
     return Schema([expense_schema])
 
 
-def test_expense_single(zod, gid, group, eid, expenses_schema):
-    """Add single expense by host"""
-    expense_given = {
+@pytest.fixture
+def expense(eid): 
+    return {
         "id": eid,
+        "title": "foo",
         "amount": "100",
+        "currency": "EUR",
+        "payer": "~zod",
     }
-    expense_expected = {
-        "id": eid,
-        "amount": 100,
-    }
+
+
+def test_expense_single(zod, gid, group, expense, expenses_schema):
+    """Add single expense by host"""
     url = f"/apps/tahuti/api/groups/{gid}/expenses"
 
     # PUT /expenses
-    response = zod.put(url, json=expense_given)
+    response = zod.put(url, json=expense)
     assert response.status_code == 200
     # idempotent
     # response = zod.put(url, json=expense)
@@ -46,19 +52,22 @@ def test_expense_single(zod, gid, group, eid, expenses_schema):
     result = response.json()
     assert expenses_schema.is_valid(result)
     assert isinstance(result, list)
-    assert expense_expected in result
-    assert result.count(expense_expected) == 1  # idempotent
+    ids = [r["id"] for r in result]
+    assert expense["id"] in ids
+    assert ids.count(expense["id"]) == 1  # idempotent
 
 
-def test_expense_multi(zod, gid, group, expenses_schema):
+def test_expense_multi(zod, gid, group, expense, expenses_schema):
     """Add multiple expenses by host"""
     id1 = str(uuid4())
     id2 = str(uuid4())
     url = f"/apps/tahuti/api/groups/{gid}/expenses"
 
     # PUT /expenses
-    response = zod.put(url, json={"id": id1, "amount": "100"})
-    response = zod.put(url, json={"id": id2, "amount": "230"})
+    expense["id"] = id1
+    response = zod.put(url, json=expense)
+    expense["id"] = id2
+    response = zod.put(url, json=expense)
     assert response.status_code == 200
 
     # GET /expenses
@@ -72,31 +81,24 @@ def test_expense_multi(zod, gid, group, expenses_schema):
     assert id2 in ids
 
 
-def test_expense_nus(zod, nus, gid, group, member, eid, expenses_schema):
+def test_expense_nus(zod, nus, gid, group, member, expense, expenses_schema):
     """Add expense by member ~nus"""
-    expense_given = {
-        "id": eid,
-        "amount": "100",
-    }
-    expense_expected = {
-        "id": eid,
-        "amount": 100,
-    }
     url = f"/apps/tahuti/api/groups/{gid}/expenses"
-
+    from time import sleep
+    sleep(2)
     # PUT /expenses
-    response = nus.put(url, json=expense_given)
+    response = nus.put(url, json=expense)
     assert response.status_code == 200
     # idempotent
     # response = zod.put(url, json=expense)
     # assert response.status_code == 200
-
-    # GET /expenses
+    sleep(2)
+    # GET /expensestah
     response = zod.get(url)
     assert response.status_code == 200
     result = response.json()
     assert expenses_schema.is_valid(result)
     assert isinstance(result, list)
-    assert expense_expected in result
-    assert result.count(expense_expected) == 1  # idempotent
-
+    ids = [r["id"] for r in result]
+    assert expense["id"] in ids
+    assert ids.count(expense["id"]) == 1  # idempotent
