@@ -53,31 +53,43 @@ def nus():
 #     requests.post(url, json=data)
 
 
-@pytest.fixture(scope="module")
-def uuid():
+@pytest.fixture()
+def eid():
     return str(uuid4())
 
 
-@pytest.fixture(scope="module")
-def gid(uuid):
-    return uuid
+@pytest.fixture()
+def gid():
+    return str(uuid4())
 
 
-@pytest.fixture(scope="module")
-def group(auth, gid) -> dict:
+@pytest.fixture()
+def group(zod, gid) -> dict:
     group = {
-        "gid": gid,
+        "id": gid,
         "title": "assembly",
         "host": "~zod",
     }
-    url = "http://localhost:8080/apps/tahuti/api/groups"
-    requests.put(url, cookies=auth, json=group)
+    url = "/apps/tahuti/api/groups"
+    zod.put(url, json=group)
     return group
 
 
-@pytest.fixture(scope="module")
-def invitee(auth, gid, group) -> str:
+@pytest.fixture()
+def invitee(zod, gid, group) -> str:
     """Based on `group`. Adds invitee."""
-    url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/invitees"
-    requests.put(url, cookies=auth, json={"invitee": "~nus"})
+    url = f"/apps/tahuti/api/groups/{gid}/invitees"
+    zod.put(url, json={"invitee": "~nus"})
     return "~nus"
+
+
+@pytest.fixture(scope="module")
+def member(nus, group, invitee, gid) -> str:
+    """Based on `group`. Adds invitee."""
+    join = {
+        "host": group["host"],
+        "title": "",  # always left empty for /join request
+        "gid": gid,
+    }
+    url = "/apps/tahuti/api/action/join"
+    response = nus.post(url, json=join)

@@ -5,6 +5,7 @@
 /*  tahuti-ui-groups-html    %html  /app/ui/groups/html
 /*  tahuti-ui-members-html   %html  /app/ui/members/html
 /*  tahuti-ui-expenses-html  %html  /app/ui/expenses/html
+/*  tahuti-ui-add-html       %html  /app/ui/add/html
 /*  tahuti-ui-style-css  %css  /app/ui/static/css/min/style/css
 /*  tahuti-ui-print-css  %css  /app/ui/static/css/min/print/css
 ::
@@ -85,6 +86,8 @@
           [(send [200 ~ [%html tahuti-ui-expenses-html]]) state]
         [%apps %tahuti %groups @t %members ~]
           [(send [200 ~ [%html tahuti-ui-members-html]]) state]
+        [%apps %tahuti %groups @t %add ~]
+          [(send [200 ~ [%html tahuti-ui-add-html]]) state]
         [%apps %tahuti %static %css %min %style ~]
           [(send [200 ~ [%css tahuti-ui-style-css]]) state]
         [%apps %tahuti %static %css %min %print ~]

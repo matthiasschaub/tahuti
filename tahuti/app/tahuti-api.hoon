@@ -1,20 +1,33 @@
 /-  *tahuti
 /+  dbug
+/+  verb
 /+  default-agent
 /+  server         :: HTTP request processing
 /+  schooner       :: HTTP response handling
 /+  *json-reparser
 ::
+::  types
+::
 |%
++$  card  card:agent:gall
 +$  versioned-state
   $%  state-0
   ==
 +$  state-0  [%0 ~]
-+$  card  card:agent:gall
 --
-%-  agent:dbug
+::
+::  state
+::
 =|  state-0
 =*  state  -
+::
+::  debug wrap
+::
+%+  verb  %.n
+%-  agent:dbug
+::
+::  agent core
+::
 ^-  agent:gall
 |_  =bowl:gall
 +*  this  .
@@ -44,20 +57,23 @@
     state  !<(state-0 old)
   ==
 ::
-++  on-poke                                ::  one-off action
+++  on-poke
   |=  [=mark =vase]
-  ^-  [(list card) $_(this)]               ::  messages and new state
+  ^-  [(list card) $_(this)]
   |^
   ?+  mark  (on-poke:default mark vase)
     ::
       %handle-http-request
     ~&  >  '%tahuti-api: handle http request'
-    ?>  =(src.bowl our.bowl)             ::  allow only requests from our ship
+    ?>  =(src.bowl our.bowl)
     =^  cards  state
       (handle-http !<([@ta =inbound-request:eyre] vase))
     [cards this]
   ==
   ++  handle-http
+    ::  TODO: add HTTP response card to state and listen (on-arvo)
+    ::  for OK from %tahuti. Then send out the HTTP response card.
+    ::
     |=  [eyre-id=@ta =inbound-request:eyre]
     ^-  [(list card) $_(state)]
     =/  ,request-line:server
@@ -80,34 +96,39 @@
         [(send [200 ~ [%json response]]) state]
         ::
           [%apps %tahuti %api %groups @t ~]
-        =/  gid       (snag 4 `(list @t)`site)
+        =/  id       (snag 4 `(list @t)`site)
         =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/groups/noun
         =/  groups    .^(groups %gx path)
-        =/  group     (need (~(get by groups) gid))
+        =/  group     (need (~(get by groups) id))
         =/  response  (group:enjs group)
         [(send [200 ~ [%json response]]) state]
         ::
-          [%apps %tahuti %api %groups @t %members ~]
-        =/  gid       (snag 4 `(list @t)`site)
-        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/members/noun
-        =/  members   .^(members %gx path)
-        =/  mem       (~(got by members) gid)
-        =/  response  (ships:enjs mem)
+          [%apps %tahuti %api %groups @t %register ~]
+        =/  id       (snag 4 `(list @t)`site)
+        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/regs/noun
+        =/  regs      .^(regs %gx path)
+        =/  reg       (~(got by regs) id)
+        =/  response  (ships:enjs reg)
         [(send [200 ~ [%json response]]) state]
         ::
           [%apps %tahuti %api %groups @t %invitees ~]
-        ::  todo: add and use scry path based on gid
-        ::
-        ~&  >  '%tahuti-api (handle-http): GET /invitees'
-        =/  gid       (snag 4 `(list @t)`site)
+        =/  id       (snag 4 `(list @t)`site)
         =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/acls/noun
         =/  acls      .^(acls %gx path)
-        =/  acl       (need (~(get by acls) gid))
-        =.  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/members/noun
-        =/  members   .^(members %gx path)
-        =/  mem       (~(got by members) gid)
-        =/  invitees  (~(dif in acl) mem)
+        =/  acl       (need (~(get by acls) id))
+        =.  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/regs/noun
+        =/  regs      .^(regs %gx path)
+        =/  reg       (~(got by regs) id)
+        =/  invitees  (~(dif in acl) reg)
         =/  response  (ships:enjs invitees)
+        [(send [200 ~ [%json response]]) state]
+        ::
+          [%apps %tahuti %api %groups @t %expenses ~]
+        =/  id       (snag 4 `(list @t)`site)
+        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/leds/noun
+        =/  leds      .^(leds %gx path)
+        =/  led       (~(got by leds) id)
+        =/  response  (ledger:enjs led)
         [(send [200 ~ [%json response]]) state]
       ==
       ::
@@ -120,32 +141,38 @@
           [%apps %tahuti %api %groups ~]
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
         =/  group     (group:dejs content)
-        =/  action    [%add-group gid.group group]
+        =/  action    [%add-group group]
         =/  response  (send [200 ~ [%plain "ok"]])
         :-  ^-  (list card)
           %+  snoc
             response
-          [%pass /group %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
+          [%pass ~ %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
         state
         ::
           [%apps %tahuti %api %groups @t %invitees ~]
-        =/  gid       (snag 4 `(list @t)`site)
+        =/  id       (snag 4 `(list @t)`site)
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
         =/  invitee   (invitee:dejs content)
-        =/  action    [%invite gid invitee]
+        =/  action    [%invite id invitee]
         =/  response  (send [200 ~ [%plain "ok"]])
         :-  ^-  (list card)
           %+  snoc
             response
-          [%pass /member %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
+          [%pass ~ %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
         state
         ::
-          [%apps %tahuti %api %groups @t %expenses @t ~]
+          [%apps %tahuti %api %groups @t %expenses ~]
+        ~&  >  '%tahuti-api: add expense'
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
-        =/  gid       (snag 4 `(list @t)`site)
-        =/  eid       (rear `(list @t)`site)
-        =/  response  (pairs:enjs:format [[eid content] ~])
-        [(send [200 ~ [%json response]]) state]
+        =/  id       (snag 4 `(list @t)`site)
+        =/  expense   (expense:dejs content)
+        =/  action    [%add-expense id expense]
+        =/  response  (send [200 ~ [%plain "ok"]])
+        :-  ^-  (list card)
+          %+  snoc
+            response
+          [%pass ~ %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
+        state
       ==
       ::
         %'POST'
@@ -157,17 +184,28 @@
           [%apps %tahuti %api %action %join ~]
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
         =/  group     (group:dejs content)
-        =/  action    [%join gid.group host.group]
+        =/  action    [%join id.group host.group]
         =/  response  (send [200 ~ [%plain "ok"]])
         :-  ^-  (list card)
           %+  snoc
             response
-          [%pass /join %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
+          [%pass ~ %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
         state
       ==
     ==
   --
 ++  on-arvo  on-arvo:default
+  :: |=  [=wire =sign-arvo]
+  :: ^-  [(list card) $_(this)]
+  :: ?.  ?=([%bind ~] wire)
+  ::   (on-arvo:default [wire sign-arvo])
+  :: ?.  ?=([%eyre %bound *] sign-arvo)
+  ::   (on-arvo:default [wire sign-arvo])
+  :: ~?  !accepted.sign-arvo                 :: error if not accepted
+  ::   %eyre-rejected-tahuti-binding
+  :: :-  ^-  (list card)
+  ::     ~
+  :: this
 ++  on-watch                          :: subscribe
   |=  =path
   ^-  [(list card) $_(this)]

@@ -24,7 +24,7 @@ def test_join(auth, auth_nus, gid, group, invitee):
     assert result == []
 
     # GET /members
-    url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/members"
+    url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/register"
     response = requests.get(url, cookies=auth)
     assert response.status_code == 200
     result = response.json()
@@ -46,8 +46,8 @@ def test_join(auth, auth_nus, gid, group, invitee):
     result = response.json()
     assert result == []
 
-    # GET /members
-    url = f"http://localhost:8081/apps/tahuti/api/groups/{gid}/members"
+    # GET /register
+    url = f"http://localhost:8081/apps/tahuti/api/groups/{gid}/register"
     response = requests.get(url, cookies=auth_nus)
     assert response.status_code == 200
     result = response.json()

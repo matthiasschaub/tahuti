@@ -26,7 +26,7 @@
     ^-  json
     %-  pairs:enjs:format
     :~
-      :-  'gid'     [%s gid.g]
+      :-  'id'       [%s id.g]
       :-  'title'    [%s title.g]
       :-  'host'     [%s (scot %p host.g)]
     ==
@@ -37,42 +37,48 @@
     ^-  json
     [%a (turn ~(val by g) group:enjs)]
   ++  expense
-    |=  ex=ex
+    |=  e=^expense
     ^-  json
     %-  pairs:enjs:format
     :~
-      :-  'payer'     [%s (scot %p payer.ex)]
-      :-  'amount'    (numb:enjs:format amount.ex)
-      :-  'involves'  [%a (turn involves.ex ship:enjs)]
+      :: :-  'payer'     [%s (scot %p payer.ex)]
+      :-  'id'        [%s id.e]
+      :-  'amount'    (numb:enjs:format amount.e)
+      :: :-  'involves'  [%a (turn involves.ex ship:enjs)]
     ==
+  ++  ledger
+    |=  l=^ledger
+    ^-  json
+    [%a (turn ~(val by l) expense:enjs)]
   --
 ::
 ++  dejs
   |%
+  ++  ship
+    ^-  $-(json @p)
+    (se:dejs:format %p)
   ++  invitee
     ^-  $-(json invitee=@p)
     %-  ot:dejs:format                                     :: obj as tuplejsonre
     :~
       :-  %invitee  (se:dejs:format %p)
     ==
-  ++  ship
-    ^-  $-(json @p)
-    (se:dejs:format %p)
   ++  group
     ^-  $-(json ^group)
     %-  ot:dejs:format                                     :: obj as tuplejsonre
     :~
-      :-  %gid      so:dejs:format
+      :-  %id      so:dejs:format
       :-  %title    so:dejs:format
       :-  %host     (se:dejs:format %p)
     ==
   ++  expense
-    ^-  $-(json ex)
+    ^-  $-(json ^expense)
     %-  ot:dejs:format                                     :: obj as tuple
     :~
-      :-  %payer     (se:dejs:format %p)                   :: str as aura (@p)
-      :-  %amount    ni:dejs:format                        :: num as int
-      :-  %involves  (ar:dejs:format (se:dejs:format %p))  :: arr as list
+      :-  %id       so:dejs:format
+      :: :-  %amount    ni:dejs:format                        :: num as int
+      :-  %amount    (su:dejs:format dem)
+      :: :-  %involves  (ar:dejs:format (se:dejs:format %p))  :: arr as list
     ==
   --
 --

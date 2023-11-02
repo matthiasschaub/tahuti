@@ -39,8 +39,8 @@ def test_invitees_single(auth, gid, group):
     assert "~nus" in result
     assert result.count("~nus") == 1  # idempotent
 
-    # GET /members
-    url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/members"
+    # GET /register
+    url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/register"
     response = requests.get(url, cookies=auth)
     assert response.status_code == 200
     result = response.json()
@@ -49,7 +49,6 @@ def test_invitees_single(auth, gid, group):
 
 
 def test_invitees_multi(auth, gid, group):
-    """Test PUT and GET requests of multiple members."""
     # PUT
     url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/invitees"
     response = requests.put(url, cookies=auth, json={"invitee": "~nus"})

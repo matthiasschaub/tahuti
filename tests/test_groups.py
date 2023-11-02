@@ -1,4 +1,3 @@
-import requests
 from schema import Schema
 import pytest
 
@@ -8,7 +7,7 @@ def group_schema():
     """Response schema"""
     return Schema(
         {
-            "gid": str,
+            "id": str,
             "title": str,
             "host": str,
         },
@@ -32,9 +31,9 @@ def test_groups_invalid(zod):
     assert response.status_code == 418
 
 
-def test_groups(zod, auth, uuid, group_schema, groups_schema):
+def test_groups(zod, gid, group_schema, groups_schema):
     group = {
-        "gid": uuid,
+        "id": gid,
         "title": "foo",
         "host": "~zod",
     }
@@ -56,7 +55,7 @@ def test_groups(zod, auth, uuid, group_schema, groups_schema):
     assert result.count(group) == 1  # idempotent
 
     # GET /groups/{uuid}
-    url = f"/apps/tahuti/api/groups/{uuid}"
+    url = f"/apps/tahuti/api/groups/{gid}"
     response = zod.get(url)
     assert response.status_code == 200
     result = response.json()

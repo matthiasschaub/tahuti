@@ -4,21 +4,32 @@
 ::
 ::    group
 ::
-+$  gid        @tas                   ::  uuid
++$  id        @tas                   ::  uuid
 +$  title      @t
 +$  host       @p
-+$  group      [=gid =title =host]
++$  group      [=id =title =host]
 ::
-::    acls and members
+::    register of members (reg) and access-control-group (acl)
 ::
-+$  groups    (map gid group)
++$  register  (set @p)
 +$  acl       (set @p)
-+$  acls      (map gid (set @p))
-+$  members   (map gid (set @p))
+::
+::    maps
+::
++$  groups    (map id group)
++$  regs      (map id register)
++$  acls      (map id acl)
 ::
 ::    expense
 ::
 +$  eid  @tas                     :: uuid
++$  expense
+  $:
+    id=@tas
+    amount=@ud
+  ==
++$  ledger   (map id expense)     :: map expense-id to expense
++$  leds     (map id ledger)      :: map group-id to ledger
 +$  ex                            :: expense
   $:  payer=@p
       amount=@ud                  :: in currency’s smallest unit
@@ -33,7 +44,6 @@
       :: tags=(set @tas)
   ==
 +$  exes       (list ex)
-+$  expenses   (map eid ex)
 :: +$  expenses  (map gid exes)
 ::
 ::    input requests/actions
@@ -41,9 +51,9 @@
 +$  action
   $%  :: group actions performed by host
       ::
-      [%add-group =gid =group]
-      [%invite =gid =@p]    :: allow to subscribe (add to acl)
-      [%join =gid =host]    :: allow to subscribe (add to acl)
+      [%add-group =group]
+      [%invite =id =@p]    :: allow to subscribe (add to acl)
+      [%join =id =host]    :: allow to subscribe (add to acl)
       ::[%del-group =gid]
       ::[%edit-group =gid =title]  :: change title
       ::[%list-groups]
@@ -53,7 +63,7 @@
       ::[%del-member =gid =ship]  :: kick subscriber
       :::: expense actions performed by members
       ::::
-      ::[%add-expense =gid =ex]
+      [%add-expense id=id =expense]
       ::[%del-expense =gid =eid]
       ::[%edit-expense =gid =eid =ex]
       ::[%list-expenses =gid]
@@ -66,8 +76,7 @@
 ::  these are all the possible events that can be sent to subscribers.
 ::
 +$  update
-  $%  [%init =gid =group members=(set @p) acl=(set @p)]
-      [%group =gid =group members=(set @p) acl=(set @p)]
+  $%  [%group =id =group =register =acl]
 ::       [%del =gid]
 ::       [%allow =gid =ship]
 ::       [%kick =gid =ship]
