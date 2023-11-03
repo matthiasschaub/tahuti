@@ -74,7 +74,7 @@ def test_groups_get_single(zod, gid, group, group_schema):
 def test_groups_delete(zod, gid, group):
     # PUT
     url = f"/apps/tahuti/api/groups/{gid}"
-    response = zod.delete(url, json=group)
+    response = zod.delete(url)
     assert response.status_code == 200
 
     # GET /groups

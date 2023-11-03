@@ -24,19 +24,16 @@ def expenses_schema(expense_schema):
     return Schema([expense_schema])
 
 
-@pytest.fixture
-def expense(eid): 
-    return {
+
+def test_expense_single(zod, gid, group, eid, expenses_schema):
+    """Add single expense by host"""
+    expense = {
         "id": eid,
         "title": "foo",
         "amount": "100",
         "currency": "EUR",
         "payer": "~zod",
     }
-
-
-def test_expense_single(zod, gid, group, expense, expenses_schema):
-    """Add single expense by host"""
     url = f"/apps/tahuti/api/groups/{gid}/expenses"
 
     # PUT /expenses
@@ -57,8 +54,15 @@ def test_expense_single(zod, gid, group, expense, expenses_schema):
     assert ids.count(expense["id"]) == 1  # idempotent
 
 
-def test_expense_multi(zod, gid, group, expense, expenses_schema):
+def test_expense_multi(zod, gid, group, expenses_schema):
     """Add multiple expenses by host"""
+    expense = {
+        "id": "",
+        "title": "foo",
+        "amount": "100",
+        "currency": "EUR",
+        "payer": "~zod",
+    }
     id1 = str(uuid4())
     id2 = str(uuid4())
     url = f"/apps/tahuti/api/groups/{gid}/expenses"
@@ -81,8 +85,15 @@ def test_expense_multi(zod, gid, group, expense, expenses_schema):
     assert id2 in ids
 
 
-def test_expense_nus(zod, nus, gid, group, member, expense, expenses_schema):
+def test_expense_nus(zod, nus, gid, group, eid, member, expenses_schema):
     """Add expense by member ~nus"""
+    expense = {
+        "id": eid,
+        "title": "foo",
+        "amount": "100",
+        "currency": "EUR",
+        "payer": "~zod",
+    }
     url = f"/apps/tahuti/api/groups/{gid}/expenses"
     sleep(1)
     # PUT /expenses
@@ -101,3 +112,19 @@ def test_expense_nus(zod, nus, gid, group, member, expense, expenses_schema):
     ids = [r["id"] for r in result]
     assert expense["id"] in ids
     assert ids.count(expense["id"]) == 1  # idempotent
+
+
+def test_expense_delete(zod, gid, group, eid, expense):
+    """Add single expense by host"""
+    # DELETE /expenses/{eid}
+    url = f"/apps/tahuti/api/groups/{gid}/expenses/{eid}"
+    response = zod.delete(url)
+    assert response.status_code == 200
+
+    # GET /expenses
+    url = f"/apps/tahuti/api/groups/{gid}/expenses"
+    response = zod.get(url)
+    assert response.status_code == 200
+    result = response.json()
+    ids = [r["id"] for r in result]
+    assert eid not in ids

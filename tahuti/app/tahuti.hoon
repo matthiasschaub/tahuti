@@ -64,6 +64,7 @@
     ~&  >  '%tahuti (on-poke): add group'
     ?<  (~(has by groups) id.group.action)
     ?>  =(our.bowl src.bowl)
+    ?>  =(our.bowl host.group.action)
     :-  ^-  (list card)
         ~
     %=  this
@@ -111,8 +112,7 @@
     ~&  >  '%tahuti (on-poke): del expense'
     =/  group  (~(got by groups) gid.action)
     ?>  =(our.bowl host.group)
-    =/  ledger  (~(got by leds) eid.action)
-    ?>  (~(has by ledger) eid.action)
+    =/  ledger  (~(got by leds) gid.action)
     =.  ledger  (~(del by ledger) eid.action)
     :-  ^-  (list card)
       :~

@@ -94,3 +94,19 @@ def member(nus, gid, group, invitee) -> str:
     url = "/apps/tahuti/api/action/join"
     response = nus.post(url, json=join)
     return "~nus"
+
+@pytest.fixture
+def expense(zod, gid, group, eid): 
+    """Add single expense by host"""
+    expense = {
+        "id": eid,
+        "title": "foo",
+        "amount": "100",
+        "currency": "EUR",
+        "payer": "~zod",
+    }
+    url = f"/apps/tahuti/api/groups/{gid}/expenses"
+    zod.put(url, json=expense)
+    return expense
+
+

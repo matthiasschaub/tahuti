@@ -121,11 +121,21 @@
         [(send [200 ~ [%json response]]) state]
         ::
           [%apps %tahuti %api %groups @t %expenses ~]
-        =/  id       (snag 4 `(list @t)`site)
+        =/  id        (snag 4 `(list @t)`site)
         =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/leds/noun
         =/  leds      .^(leds %gx path)
         =/  led       (~(got by leds) id)
         =/  response  (ledger:enjs led)
+        [(send [200 ~ [%json response]]) state]
+        ::
+          [%apps %tahuti %api %groups @t %expenses @t ~]
+        =/  gid       (snag 4 `(list @t)`site)
+        =/  eid       (snag 6 `(list @t)`site)
+        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/leds/noun
+        =/  leds      .^(leds %gx path)
+        =/  ledger    (~(got by leds) gid)
+        =/  expense   (~(got by ledger) eid)
+        =/  response  (ledger:enjs ledger)  :: TODO: change to expense:enjs
         [(send [200 ~ [%json response]]) state]
       ==
       ::
@@ -174,13 +184,11 @@
       ::
         %'DELETE'
       ~&  >  '%tahuti-api: DELETE'
-      ?~  body.request.inbound-request
-        [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
       ?+  site
         [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
         ::
           [%apps %tahuti %api %groups @t ~]
-        =/  id       (snag 4 `(list @t)`site)
+        =/  id        (snag 4 `(list @t)`site)
         =/  action    [%del-group id]
         =/  response  (send [200 ~ [%plain "ok"]])
         :-  ^-  (list card)
@@ -189,6 +197,16 @@
           [%pass ~ %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
         state
       ::
+          [%apps %tahuti %api %groups @t %expenses @t ~]
+        =/  gid       (snag 4 `(list @t)`site)
+        =/  eid       (snag 6 `(list @t)`site)
+        =/  action    [%del-expense gid eid]
+        =/  response  (send [200 ~ [%plain "ok"]])
+        :-  ^-  (list card)
+          %+  snoc
+            response
+          [%pass ~ %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
+        state
       ==
       ::
         %'POST'
