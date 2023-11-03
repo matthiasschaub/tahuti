@@ -1,25 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <title>Tahuti</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-            name="description"
-            content="Tahuti - An Expense Sharing App for Urbit"
-        />
-        <title>Tahuti</title>
+        <meta name="description" content="An Expense Sharing App for Urbit" />
         <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
         <link
             rel="stylesheet"
             href="/apps/tahuti/static/css/min/print.css"
             media="print"
         />
-        <script src="https://unpkg.com/htmx.org@1.9.6"></script>
-        <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/json-enc.js"></script>
-        <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/debug.js"></script>
-        <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/client-side-templates.js"></script>
-        <script src="https://unpkg.com/htmx.org@1.9.6/dist/ext/path-deps.js"></script>
-        <script src="https://unpkg.com/mustache@latest"></script>
+        <script src="/apps/tahuti/assets/htmx.js"></script>
+        <script src="/apps/tahuti/assets/json-enc.js"></script>
+        <script src="/apps/tahuti/assets/path-deps.js"></script>
+        <script src="/apps/tahuti/assets/client-side-templates.js"></script>
+        <script src="/apps/tahuti/assets/mustache.js"></script>
     </head>
 
     <body>
@@ -51,7 +47,6 @@
         </header>
         <h1>Tahuti</h1>
         <!-- TODO: Get host from cookie -->
-        <!-- TODO: Reload group list -->
         <div hx-ext="path-deps">
             <h2>Create a Group</h2>
             <form
@@ -66,9 +61,9 @@
                     id="group-title"
                     type="text"
                     name="title"
-                    required="required"
                     aria-label="group-title"
                     placeholder="title"
+                    required="required"
                 />
                 <button type="submit">Create ▸</button>
             </form>
@@ -82,19 +77,22 @@
                 hx-vals='{"title": ""}'
                 hx-on::after-request="if(event.detail.successful) this.reset()"
             >
+                <!-- TODO: add validation (valid @p) -->
                 <input
                     type="text"
                     name="host"
                     aria-label="host"
                     placeholder="~zod"
+                    required="required"
                 />
                 <br />
-                <br />
+                <!-- TODO: add validation (valid uuid) -->
                 <input
                     type="text"
                     name="id"
                     aria-label="group-id"
                     placeholder="14488cd0-f23f-4d21-862e-d79803d159e4"
+                    required="required"
                 />
                 <button type="submit">Join ▸</button>
             </form>
@@ -107,7 +105,7 @@
                     path-deps="/apps/tahuti/api/*"
                     mustache-template="groups-template"
                 >
-                    <emp>Loading …</emp>
+                    <emp style="opacity: 0">Loading ...</emp>
                 </ul>
 
                 <template id="groups-template">
@@ -123,4 +121,5 @@
             </div>
         </div>
     </body>
+    <script src="/apps/tahuti/assets/validation.js"></script>
 </html>

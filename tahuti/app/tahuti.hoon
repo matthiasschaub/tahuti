@@ -72,6 +72,18 @@
       regs    (~(put by regs) id.group.action ~)
       leds    (~(put by leds) id.group.action ~)
     ==
+      %del-group
+    ~&  >  '%tahuti (on-poke): del group'
+    ?>  (~(has by groups) id.action)
+    ?>  =(our.bowl src.bowl)
+    :-  ^-  (list card)
+        ~
+    %=  this
+      groups  (~(del by groups) id.action)
+      acls    (~(del by acls) id.action)
+      regs    (~(del by regs) id.action)
+      leds    (~(del by leds) id.action)
+    ==
     ::
       %add-expense
     ~&  >  '%tahuti (on-poke): add expense'
@@ -83,11 +95,33 @@
       this
     =/  ledger  (~(got by leds) id.action)
     ?<  (~(has by ledger) id.expense.action)
-    =/  ledger  (~(put by ledger) id.expense.action expense.action)
+    =.  ledger  (~(put by ledger) id.expense.action expense.action)
     :-  ^-  (list card)
-        ~
+      :~
+        :*  %give  %fact  [/[id.action] ~]  %tahuti-update
+            !>  ^-  update  [%ledger id.action ledger]
+        ==
+      ==
     %=  this
       leds  (~(put by leds) id.action ledger)
+    ==
+    ::
+      ::
+      %del-expense
+    ~&  >  '%tahuti (on-poke): del expense'
+    =/  group  (~(got by groups) gid.action)
+    ?>  =(our.bowl host.group)
+    =/  ledger  (~(got by leds) eid.action)
+    ?>  (~(has by ledger) eid.action)
+    =.  ledger  (~(del by ledger) eid.action)
+    :-  ^-  (list card)
+      :~
+        :*  %give  %fact  [/[gid.action] ~]  %tahuti-update
+            !>  ^-  update  [%ledger gid.action ledger]
+        ==
+      ==
+    %=  this
+      leds  (~(put by leds) gid.action ledger)
     ==
     ::  (add ship to access-control list)
       ::
@@ -97,13 +131,12 @@
     ?>  =(our.bowl src.bowl)
     ?>  =(our.bowl host.group)
     ?<  =(our.bowl p.action)
-    =/  register  (~(got by regs) id.action)
     =/  acl  (~(got by acls) id.action)
     =.  acl  (~(put in acl) p.action)
     :-  ^-  (list card)
       :~
         :*  %give  %fact  [/[id.action] ~]  %tahuti-update
-            !>  ^-  update  [%group id.action group register acl]
+            !>  ^-  update  [%acl id.action acl]
         ==
       ==
     %=  this
@@ -113,6 +146,7 @@
       ::
       %join
     ~&  >  '%tahuti (on-poke): join'
+    ?>  =(our.bowl src.bowl)
     =/  path  /[id.action]
     :-  ^-  (list card)
         :~  [%pass path %agent [host.action %tahuti] %watch path]
@@ -130,15 +164,16 @@
   ?>  ?=([@ ~] path)
   =/  =id  `@tas`i.path
   ?>  (~(has by groups) id)
-  =/  group  (~(got by groups) id)
-  =/  acl    (~(got by acls) id)
-  =/  register    (~(got by regs) id)
+  =/  group     (~(got by groups) id)
+  =/  register  (~(got by regs) id)
+  =/  acl       (~(got by acls) id)
+  =/  ledger    (~(got by leds) id)
   ?>  (~(has in acl) src.bowl)
   =.  register    (~(put in register) src.bowl)
   :-  ^-  (list card)
       :~
         :*  %give  %fact  [/[id] ~]  %tahuti-update
-            !>  ^-  update  [%group id group register acl]
+            !>  ^-  update  [%group id group register acl ledger]
         ==
       ==
   %=  this
@@ -195,6 +230,24 @@
         groups   (~(put by groups) id group.update)
         regs     (~(put by regs) id register.update)
         acls     (~(put by acls) id acl.update)
+        leds     (~(put by leds) id ledger.update)
+      ==
+      ::
+        %acl
+      ~&  >  '%tahuti (on-agent): update acl'
+      :-  ^-  (list card)
+          :~  (fact:agentio cage.sign [/[id] ~])
+          ==
+      %=  this
+        acls     (~(put by acls) id acl.update)
+      ==
+        %ledger
+      ~&  >  '%tahuti (on-agent): update ledger'
+      :-  ^-  (list card)
+          :~  (fact:agentio cage.sign [/[id] ~])
+          ==
+      %=  this
+        leds     (~(put by leds) id ledger.update)
       ==
     ==
   ==

@@ -5,7 +5,6 @@
 /+  server         :: HTTP request processing
 /+  schooner       :: HTTP response handling
 /+  *json-reparser
-::
 ::  types
 ::
 |%
@@ -15,17 +14,14 @@
   ==
 +$  state-0  [%0 ~]
 --
-::
 ::  state
 ::
 =|  state-0
 =*  state  -
-::
 ::  debug wrap
 ::
 %+  verb  %.n
 %-  agent:dbug
-::
 ::  agent core
 ::
 ^-  agent:gall
@@ -97,7 +93,7 @@
         [(send [200 ~ [%json response]]) state]
         ::
           [%apps %tahuti %api %groups @t ~]
-        =/  id       (snag 4 `(list @t)`site)
+        =/  id        (snag 4 `(list @t)`site)
         =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/groups/noun
         =/  groups    .^(groups %gx path)
         =/  group     (need (~(get by groups) id))
@@ -105,7 +101,7 @@
         [(send [200 ~ [%json response]]) state]
         ::
           [%apps %tahuti %api %groups @t %register ~]
-        =/  id       (snag 4 `(list @t)`site)
+        =/  id        (snag 4 `(list @t)`site)
         =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/regs/noun
         =/  regs      .^(regs %gx path)
         =/  reg       (~(got by regs) id)
@@ -113,7 +109,7 @@
         [(send [200 ~ [%json response]]) state]
         ::
           [%apps %tahuti %api %groups @t %invitees ~]
-        =/  id       (snag 4 `(list @t)`site)
+        =/  id        (snag 4 `(list @t)`site)
         =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/acls/noun
         =/  acls      .^(acls %gx path)
         =/  acl       (need (~(get by acls) id))
@@ -164,7 +160,6 @@
         state
         ::
           [%apps %tahuti %api %groups @t %expenses ~]
-        ~&  >  '%tahuti-api: /expenses'
         =/  id        (snag 4 `(list @t)`site)
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
         =/  expense   (expense:dejs content)
@@ -175,6 +170,25 @@
             response
           [%pass ~ %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
         state
+      ==
+      ::
+        %'DELETE'
+      ~&  >  '%tahuti-api: DELETE'
+      ?~  body.request.inbound-request
+        [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
+      ?+  site
+        [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
+        ::
+          [%apps %tahuti %api %groups @t ~]
+        =/  id       (snag 4 `(list @t)`site)
+        =/  action    [%del-group id]
+        =/  response  (send [200 ~ [%plain "ok"]])
+        :-  ^-  (list card)
+          %+  snoc
+            response
+          [%pass ~ %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
+        state
+      ::
       ==
       ::
         %'POST'
@@ -198,23 +212,22 @@
       ==
     ==
   --
-++  on-arvo  on-arvo:default
-  :: |=  [=wire =sign-arvo]
-  :: ^-  [(list card) $_(this)]
-  :: ?.  ?=([%bind ~] wire)
-  ::   (on-arvo:default [wire sign-arvo])
-  :: ?.  ?=([%eyre %bound *] sign-arvo)
-  ::   (on-arvo:default [wire sign-arvo])
-  :: ~?  !accepted.sign-arvo                 :: error if not accepted
-  ::   %eyre-rejected-tahuti-binding
-  :: :-  ^-  (list card)
-  ::     ~
-  :: this
+++  on-arvo
+  |=  [=wire =sign-arvo]
+  ^-  [(list card) $_(this)]
+  ?.  ?=([%bind ~] wire)
+    (on-arvo:default [wire sign-arvo])
+  ?.  ?=([%eyre %bound *] sign-arvo)
+    (on-arvo:default [wire sign-arvo])
+  ~?  !accepted.sign-arvo                 :: error if not accepted
+    %eyre-rejected-tahuti-binding
+  :-  ^-  (list card)
+      ~
+  this
 ++  on-watch                          :: subscribe
   |=  =path
   ^-  [(list card) $_(this)]
   ?+    path  (on-watch:default path)
-    ::
       [%http-response *]
     [~ this]
   ==

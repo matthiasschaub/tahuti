@@ -2,12 +2,19 @@
 /+  default-agent
 /+  server         :: HTTP request processing
 /+  schooner       :: HTTP response handling
-/*  tahuti-ui-groups-html    %html  /app/ui/groups/html
-/*  tahuti-ui-members-html   %html  /app/ui/members/html
-/*  tahuti-ui-expenses-html  %html  /app/ui/expenses/html
-/*  tahuti-ui-add-html       %html  /app/ui/add/html
-/*  tahuti-ui-style-css  %css  /app/ui/static/css/min/style/css
-/*  tahuti-ui-print-css  %css  /app/ui/static/css/min/print/css
+/*  groups                 %html  /app/ui/groups/html
+/*  members                %html  /app/ui/members/html
+/*  expenses               %html  /app/ui/expenses/html
+/*  add                    %html  /app/ui/add/html
+/*  style                  %css   /app/ui/static/css/min/style/css
+/*  print                  %css   /app/ui/static/css/min/print/css
+/*  htmx                   %js    /app/ui/assets/htmx/js
+/*  json-enc               %js    /app/ui/assets/json-enc/js
+/*  path-deps              %js    /app/ui/assets/path-deps/js
+/*  client-side-templates  %js    /app/ui/assets/client-side-templates/js
+/*  mustache               %js    /app/ui/assets/mustache/js
+/*  currency               %js    /app/ui/assets/currency/js
+/*  validation             %js    /app/ui/assets/validation/js
 ::
 |%
 +$  versioned-state
@@ -79,19 +86,33 @@
           [(send [404 ~ [%plain "404 - Not Found"]]) state]
         [%apps %tahuti ~]
           ::  TODO:  redirect to /groups
-          [(send [200 ~ [%html tahuti-ui-groups-html]]) state]
+          [(send [200 ~ [%html groups]]) state]
         [%apps %tahuti %groups ~]
-          [(send [200 ~ [%html tahuti-ui-groups-html]]) state]
+          [(send [200 ~ [%html groups]]) state]
         [%apps %tahuti %groups @t %expenses ~]
-          [(send [200 ~ [%html tahuti-ui-expenses-html]]) state]
+          [(send [200 ~ [%html expenses]]) state]
         [%apps %tahuti %groups @t %members ~]
-          [(send [200 ~ [%html tahuti-ui-members-html]]) state]
+          [(send [200 ~ [%html members]]) state]
         [%apps %tahuti %groups @t %add ~]
-          [(send [200 ~ [%html tahuti-ui-add-html]]) state]
+          [(send [200 ~ [%html add]]) state]
         [%apps %tahuti %static %css %min %style ~]
-          [(send [200 ~ [%css tahuti-ui-style-css]]) state]
+          [(send [200 ~ [%css style]]) state]
         [%apps %tahuti %static %css %min %print ~]
-          [(send [200 ~ [%css tahuti-ui-print-css]]) state]
+          [(send [200 ~ [%css print]]) state]
+        [%apps %tahuti %assets %htmx ~]
+          [(send [200 ~ [%js htmx]]) state]
+        [%apps %tahuti %assets %json-enc ~]
+          [(send [200 ~ [%js json-enc]]) state]
+        [%apps %tahuti %assets %path-deps ~]
+          [(send [200 ~ [%js path-deps]]) state]
+        [%apps %tahuti %assets %client-side-templates ~]
+          [(send [200 ~ [%js client-side-templates]]) state]
+        [%apps %tahuti %assets %mustache ~]
+          [(send [200 ~ [%js mustache]]) state]
+        [%apps %tahuti %assets %currency ~]
+          [(send [200 ~ [%js currency]]) state]
+        [%apps %tahuti %assets %validation ~]
+          [(send [200 ~ [%js validation]]) state]
       ==
     ==
   --

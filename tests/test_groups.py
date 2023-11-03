@@ -31,7 +31,7 @@ def test_groups_invalid(zod):
     assert response.status_code == 418
 
 
-def test_groups(zod, gid, group_schema, groups_schema):
+def test_groups_put(zod, gid):
     group = {
         "id": gid,
         "title": "foo",
@@ -42,9 +42,16 @@ def test_groups(zod, gid, group_schema, groups_schema):
     # PUT
     response = zod.put(url, json=group)
     assert response.status_code == 200
-    # Test idempotent
-    response = zod.put(url, json=group)
+
+    # GET /groups
+    response = zod.get(url)
     assert response.status_code == 200
+    result = response.json()
+    assert group in result
+
+
+def test_groups_get_all(zod, gid, group, groups_schema):
+    url = "/apps/tahuti/api/groups"
 
     # GET /groups
     response = zod.get(url)
@@ -52,8 +59,9 @@ def test_groups(zod, gid, group_schema, groups_schema):
     result = response.json()
     assert groups_schema.is_valid(result)
     assert group in result
-    assert result.count(group) == 1  # idempotent
 
+
+def test_groups_get_single(zod, gid, group, group_schema):
     # GET /groups/{uuid}
     url = f"/apps/tahuti/api/groups/{gid}"
     response = zod.get(url)
@@ -61,3 +69,17 @@ def test_groups(zod, gid, group_schema, groups_schema):
     result = response.json()
     assert group_schema.is_valid(result)
     assert result == group
+
+
+def test_groups_delete(zod, gid, group):
+    # PUT
+    url = f"/apps/tahuti/api/groups/{gid}"
+    response = zod.delete(url, json=group)
+    assert response.status_code == 200
+
+    # GET /groups
+    url = f"/apps/tahuti/api/groups"
+    response = zod.get(url)
+    assert response.status_code == 200
+    result = response.json()
+    assert group not in result

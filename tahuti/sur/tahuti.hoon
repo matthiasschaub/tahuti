@@ -4,25 +4,20 @@
 ::
 ::    group
 ::
-+$  id         @tas                   ::  uuid
++$  id         @tas                ::  uuid
 +$  title      @t
 +$  host       @p
 +$  group      [=id =title =host]
 ::
-::    register of members (reg) and access-control-group (acl)
+::    register of members (reg)
+::    access-control-group (acl)
 ::
 +$  register  (set @p)
 +$  acl       (set @p)
 ::
-::    maps
-::
-+$  groups    (map id group)
-+$  regs      (map id register)
-+$  acls      (map id acl)
-::
 ::    expense
 ::
-+$  eid  @tas                     :: uuid
++$  eid  @tas                      :: uuid
 +$  expense
   $:
     id=@tas
@@ -33,7 +28,16 @@
     :: date=@da
   ==
 +$  ledger   (map id expense)     :: map expense-id to expense
+::
+::    maps
+::
++$  groups   (map id group)
++$  regs     (map id register)
++$  acls     (map id acl)
 +$  leds     (map id ledger)      :: map group-id to ledger
+::
+::    legacy
+::
 +$  ex                            :: expense
   $:  payer=@p
       amount=@ud
@@ -43,7 +47,6 @@
       :: tags=(set @tas)
   ==
 +$  exes       (list ex)
-:: +$  expenses  (map gid exes)
 ::
 ::    input requests/actions
 ::
@@ -53,7 +56,7 @@
       [%add-group =group]
       [%invite =id =@p]    :: allow to subscribe (add to acl)
       [%join =id =host]    :: allow to subscribe (add to acl)
-      ::[%del-group =gid]
+      [%del-group =id]
       ::[%edit-group =gid =title]  :: change title
       ::[%list-groups]
       ::[%join-group =gid =ship]  :: subscribe
@@ -63,7 +66,7 @@
       :::: expense actions performed by members
       ::::
       [%add-expense =id =expense]
-      ::[%del-expense =gid =eid]
+      [%del-expense gid=id eid=id]
       ::[%edit-expense =gid =eid =ex]
       ::[%list-expenses =gid]
       ::[%list-balances =gid]
@@ -75,7 +78,9 @@
 ::  these are all the possible events that can be sent to subscribers.
 ::
 +$  update
-  $%  [%group =id =group =register =acl]
+  $%  [%group =id =group =register =acl =ledger]
+      [%ledger =id =ledger]
+      [%acl =id =acl]
 ::       [%del =gid]
 ::       [%allow =gid =ship]
 ::       [%kick =gid =ship]

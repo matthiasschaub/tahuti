@@ -1,7 +1,7 @@
 input {
     margin-left: var(--vspace);
+    margin-bottom: var(--vspace);
     line-height: calc(0.9167 * var(--vspace));
-    width: 
 }
 
 button {

@@ -84,16 +84,15 @@ def test_expense_multi(zod, gid, group, expense, expenses_schema):
 def test_expense_nus(zod, nus, gid, group, member, expense, expenses_schema):
     """Add expense by member ~nus"""
     url = f"/apps/tahuti/api/groups/{gid}/expenses"
-    from time import sleep
-    sleep(2)
+    sleep(1)
     # PUT /expenses
     response = nus.put(url, json=expense)
     assert response.status_code == 200
     # idempotent
     # response = zod.put(url, json=expense)
     # assert response.status_code == 200
-    sleep(2)
-    # GET /expensestah
+    sleep(1)
+    # GET /expenses
     response = zod.get(url)
     assert response.status_code == 200
     result = response.json()

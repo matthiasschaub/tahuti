@@ -1,6 +1,7 @@
 p {
     line-height: var(--vspace);
-    margin: var(--vspace) var(--vspace);
+    /* margin: var(--vspace) var(--vspace); */
+    margin-left: var(--vspace);
 }
 
 h1 {
@@ -87,4 +88,8 @@ blockquote {
     text-align: center;
 
     /* margin: var(--vspace-2) var(--vspace-2); */
+}
+
+ul {
+    margin-left: var(--vspace);
 }
