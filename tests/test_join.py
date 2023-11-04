@@ -6,7 +6,7 @@ def test_join(auth, auth_nus, gid, group, invitee):
     join = {
         "host": group["host"],
         "title": "",  # always left empty for /join request
-        "id": gid,
+        "gid": gid,
     }
     url = "http://localhost:8081/apps/tahuti/api/action/join"
     response = requests.post(url, cookies=auth_nus, json=join)

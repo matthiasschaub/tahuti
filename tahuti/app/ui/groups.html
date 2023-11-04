@@ -54,7 +54,7 @@
                 hx-put="/apps/tahuti/api/groups"
                 hx-ext="json-enc"
                 hx-swap="none"
-                hx-vals='js:{id: self.crypto.randomUUID(), host: "~zod", acl: Array("~nus"), members: Array("~nus")}'
+                hx-vals='js:{gid: self.crypto.randomUUID(), host: "~zod", acl: Array("~nus"), members: Array("~nus")}'
                 hx-on::after-request="if(event.detail.successful) this.reset()"
             >
                 <input
@@ -89,7 +89,7 @@
                 <!-- TODO: add validation (valid uuid) -->
                 <input
                     type="text"
-                    name="id"
+                    name="gid"
                     aria-label="group-id"
                     placeholder="14488cd0-f23f-4d21-862e-d79803d159e4"
                     required="required"
@@ -112,7 +112,7 @@
                     <!-- iterate over top level array -->
                     {{#.}}
                     <li>
-                        <a href="/apps/tahuti/groups/{{id}}/expenses.html"
+                        <a href="/apps/tahuti/groups/{{gid}}/expenses.html"
                             >{{title}}</a
                         >
                     </li>

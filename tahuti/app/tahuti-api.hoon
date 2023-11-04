@@ -93,38 +93,42 @@
         [(send [200 ~ [%json response]]) state]
         ::
           [%apps %tahuti %api %groups @t ~]
-        =/  id        (snag 4 `(list @t)`site)
+        =/  gid       (snag 4 `(list @t)`site)
         =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/groups/noun
         =/  groups    .^(groups %gx path)
-        =/  group     (need (~(get by groups) id))
+        =/  group     (need (~(get by groups) gid))
         =/  response  (group:enjs group)
         [(send [200 ~ [%json response]]) state]
         ::
           [%apps %tahuti %api %groups @t %register ~]
-        =/  id        (snag 4 `(list @t)`site)
-        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/regs/noun
+        =/  gid       (snag 4 `(list @t)`site)
+        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/groups/noun
+        =/  groups    .^(groups %gx path)
+        =/  group     (~(got by groups) gid)
+        =.  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/regs/noun
         =/  regs      .^(regs %gx path)
-        =/  reg       (~(got by regs) id)
+        =/  reg       (~(got by regs) gid)
+        =.  reg       (~(put in reg) host.group)
         =/  response  (ships:enjs reg)
         [(send [200 ~ [%json response]]) state]
         ::
           [%apps %tahuti %api %groups @t %invitees ~]
-        =/  id        (snag 4 `(list @t)`site)
+        =/  gid       (snag 4 `(list @t)`site)
         =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/acls/noun
         =/  acls      .^(acls %gx path)
-        =/  acl       (need (~(get by acls) id))
+        =/  acl       (need (~(get by acls) gid))
         =.  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/regs/noun
         =/  regs      .^(regs %gx path)
-        =/  reg       (~(got by regs) id)
+        =/  reg       (~(got by regs) gid)
         =/  invitees  (~(dif in acl) reg)
         =/  response  (ships:enjs invitees)
         [(send [200 ~ [%json response]]) state]
         ::
           [%apps %tahuti %api %groups @t %expenses ~]
-        =/  id        (snag 4 `(list @t)`site)
+        =/  gid       (snag 4 `(list @t)`site)
         =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/leds/noun
         =/  leds      .^(leds %gx path)
-        =/  led       (~(got by leds) id)
+        =/  led       (~(got by leds) gid)
         =/  response  (ledger:enjs led)
         [(send [200 ~ [%json response]]) state]
         ::
@@ -158,10 +162,10 @@
         state
         ::
           [%apps %tahuti %api %groups @t %invitees ~]
-        =/  id        (snag 4 `(list @t)`site)
+        =/  gid       (snag 4 `(list @t)`site)
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
         =/  invitee   (invitee:dejs content)
-        =/  action    [%invite id invitee]
+        =/  action    [%invite gid invitee]
         =/  response  (send [200 ~ [%plain "ok"]])
         :-  ^-  (list card)
           %+  snoc
@@ -170,10 +174,11 @@
         state
         ::
           [%apps %tahuti %api %groups @t %expenses ~]
-        =/  id        (snag 4 `(list @t)`site)
+        =/  gid       (snag 4 `(list @t)`site)
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
+        ~&  content
         =/  expense   (expense:dejs content)
-        =/  action    [%add-expense id expense]
+        =/  action    [%add-expense gid expense]
         =/  response  (send [200 ~ [%plain "ok"]])
         :-  ^-  (list card)
           %+  snoc
@@ -188,8 +193,8 @@
         [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
         ::
           [%apps %tahuti %api %groups @t ~]
-        =/  id        (snag 4 `(list @t)`site)
-        =/  action    [%del-group id]
+        =/  gid        (snag 4 `(list @t)`site)
+        =/  action    [%del-group gid]
         =/  response  (send [200 ~ [%plain "ok"]])
         :-  ^-  (list card)
           %+  snoc
@@ -220,7 +225,7 @@
         ~&  >  '%tahuti-api: /action/join'
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
         =/  group     (group:dejs content)
-        =/  action    [%join id.group host.group]
+        =/  action    [%join gid.group host.group]
         =/  response  (send [200 ~ [%plain "ok"]])
         :-  ^-  (list card)
           %+  snoc

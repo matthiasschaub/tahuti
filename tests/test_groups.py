@@ -7,7 +7,7 @@ def group_schema():
     """Response schema"""
     return Schema(
         {
-            "id": str,
+            "gid": str,
             "title": str,
             "host": str,
         },
@@ -33,7 +33,7 @@ def test_groups_invalid(zod):
 
 def test_groups_put(zod, gid):
     group = {
-        "id": gid,
+        "gid": gid,
         "title": "foo",
         "host": "~zod",
     }

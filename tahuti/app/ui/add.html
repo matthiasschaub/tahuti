@@ -55,115 +55,111 @@
             <template id="title-template">
                 <h1>{{title}}</h1>
             </template>
-        </div>
 
-        <h2>Add an Expense</h2>
-        <!-- TODO: redirect to /expenses -->
-        <form
-            id="put-expenses"
-            hx-put="/expenses"
-            hx-ext="json-enc"
-            hx-swap="none"
-            hx-vals="js:{id: self.crypto.randomUUID()}"
-            hx-on::after-request="if(event.detail.successful) this.reset()"
-        >
-        <!-- titel -->
-            <label for="title">What for?</label>
-            <br />
-            <input
-                id="title"
-                type="text"
-                inputmode="text"
-                autocomplete="on"
-                name="title"
-                aria-label="Title"
-                placeholder="Title"
-                required
-            />
-            <br />
-        <!-- amount -->
-            <label for="amount">How much?</label>
-            <br />
-            <input
-                id="amount"
-                type="text"
-                inputmode="decimal"
-                autocomplete="transaction-amount"
-                name="amount"
-                aria-label="Amount"
-                placeholder="23.00"
-                required
-            />
-            <br />
-        <!-- currency -->
-            <label for="currency">Which currency? (optional)</label>
-            <datalist id="currency-list">
-                <option>EUR</option>
-                <option>USD</option></datalist
-            >>
-            <br />
-            <input
-                id="currency"
-                type="text"
-                inputmode="text"
-                autocomplete="transaction-currency"
-                name="currency"
-                aria-label="Currency"
-                placeholder="EUR"
-                value="EUR"
-                list="currency-list"
-                required
-            />
-            <br />
-        <!-- payer -->
-            <label for="payer">Who paid?</label>
-            <div hx-ext="client-side-templates">
-                <div
-                    id="get-register"
+            <h2>Add an Expense</h2>
+            <!-- TODO: redirect to /expenses -->
+            <form
+                id="put-expenses"
+                hx-put="/expenses"
+                hx-ext="json-enc"
+                hx-swap="none"
+                hx-vals="js:{eid: self.crypto.randomUUID(), gid: currentGID()}"
+                hx-on::after-request="if(event.detail.successful) this.reset()"
+            >
+                <!-- titel -->
+                <label for="title">What for?</label>
+                <br />
+                <input
+                    id="title"
+                    type="text"
+                    inputmode="text"
+                    autocomplete="on"
+                    name="title"
+                    aria-label="Title"
+                    placeholder="Title"
+                    required
+                />
+                <br />
+                <!-- amount -->
+                <label for="amount">How much?</label>
+                <br />
+                <input
+                    id="amount"
+                    type="text"
+                    inputmode="decimal"
+                    autocomplete="transaction-amount"
+                    name="amount"
+                    aria-label="Amount"
+                    placeholder="23.00"
+                    required
+                />
+                <br />
+                <!-- currency -->
+                <label for="currency">Which currency? (optional)</label>
+                <datalist id="currency-list">
+                    <option>EUR</option>
+                    <option>USD</option>
+                </datalist>
+                <br />
+                <input
+                    id="currency"
+                    type="text"
+                    inputmode="text"
+                    autocomplete="off"
+                    name="currency"
+                    aria-label="Currency"
+                    placeholder="EUR"
+                    value="EUR"
+                    list="currency-list"
+                    required
+                />
+                <br />
+                <!-- payer -->
+                <label for="payer">Who paid?</label>
+                <datalist
+                    id="payer-list"
                     hx-get="/register"
                     hx-trigger="load"
-                    mustache-template="datalist-template"
-                ></div>
-                <template id="datalist-template">
-                    <!-- TODO: add host to datalist -->
-                    <datalist id="payer-list">
-                        {{#.}}
-                        <option>{{.}}</option>
-                        {{/.}}
-                    </datalist>
+                    mustache-template="datalist-temp"
+                >
+                </datalist>
+                <template id="datalist-temp">
+                    {{#.}}
+                    <option>{{.}}</option>
+                    {{/.}}
                 </template>
-            </div>
-            <br />
-            <!-- TODO: make current ship the default/placeholder -->
-            <!-- TODO: add current ship as default value -->
-            <input
-                id="payer"
-                type="text"
-                inputmode="text"
-                name="payer"
-                aria-label="Payer"
-                placeholder="~zod"
-                list="payer-list"
-                required
-            />
-            <br />
-        <!-- date -->
-            <!-- <label for="date">When?</label> -->
-            <!-- <br /> -->
-            <!-- <!-1- TODO: add current date as default value -1-> -->
-            <!-- <input -->
-            <!--     id="date" -->
-            <!--     type="date" -->
-            <!--     inputmode="text" -->
-            <!--     name="Date" -->
-            <!--     aria-label="Date" -->
-            <!-- /> -->
-            <br />
-            <br />
-            <button type="submit">Add ▸</button>
-            <button>Cancel</button>
-        </form>
+                <br />
+                <!-- TODO: make current ship the default/placeholder -->
+                <!-- TODO: add current ship as default value -->
+                <input
+                    id="payer"
+                    type="text"
+                    inputmode="text"
+                    autocomplete="off"
+                    name="payer"
+                    aria-label="Payer"
+                    placeholder="~zod"
+                    list="payer-list"
+                    required
+                />
+                <br />
+                <!-- date -->
+                <label for="date">When?</label>
+                <br />
+                <input
+                    id="date"
+                    type="date"
+                    inputmode="text"
+                    name="date"
+                    aria-label="Date"
+                />
+                <br />
+                <br />
+                <button type="submit">Add ▸</button>
+                <button>Cancel</button>
+            </form>
+        </div>
     </body>
     <script src="/apps/tahuti/assets/request.js"></script>
-    <script src="/apps/tahuti/assets/validation.js"></script>
+    <script src="/apps/tahuti/assets/validation-add.js"></script>
 </html>

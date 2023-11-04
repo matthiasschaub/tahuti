@@ -66,7 +66,7 @@ def gid():
 @pytest.fixture
 def group(zod, gid) -> dict:
     group = {
-        "id": gid,
+        "gid": gid,
         "title": "assembly",
         "host": "~zod",
     }
@@ -89,7 +89,7 @@ def member(nus, gid, group, invitee) -> str:
     join = {
         "host": group["host"],
         "title": "",  # always left empty for /join request
-        "id": gid,
+        "gid": gid,
     }
     url = "/apps/tahuti/api/action/join"
     response = nus.post(url, json=join)
@@ -99,7 +99,8 @@ def member(nus, gid, group, invitee) -> str:
 def expense(zod, gid, group, eid): 
     """Add single expense by host"""
     expense = {
-        "id": eid,
+        "gid": gid,
+        "eid": eid,
         "title": "foo",
         "amount": "100",
         "currency": "EUR",

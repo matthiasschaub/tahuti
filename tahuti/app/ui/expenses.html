@@ -1,116 +1,133 @@
 <!DOCTYPE html>
 <html class="dark" lang="en">
-    <head>
-        <title>Tahuti</title>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="An Expense Sharing App for Urbit" />
-        <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
-        <link
-            rel="stylesheet"
-            href="/apps/tahuti/static/css/min/print.css"
-            media="print"
-        />
-        <script src="/apps/tahuti/assets/htmx.js"></script>
-        <script src="/apps/tahuti/assets/json-enc.js"></script>
-        <script src="/apps/tahuti/assets/path-deps.js"></script>
-        <script src="/apps/tahuti/assets/client-side-templates.js"></script>
-        <script src="/apps/tahuti/assets/mustache.js"></script>
-    </head>
+  <head>
+    <title>Tahuti</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+    <meta
+      name="description"
+      content="An Expense Sharing App for Urbit"
+    />
+    <link
+      rel="stylesheet"
+      href="/apps/tahuti/static/css/min/style.css"
+    />
+    <link
+      rel="stylesheet"
+      href="/apps/tahuti/static/css/min/print.css"
+      media="print"
+    />
+    <script src="/apps/tahuti/assets/htmx.js"></script>
+    <script src="/apps/tahuti/assets/json-enc.js"></script>
+    <script src="/apps/tahuti/assets/path-deps.js"></script>
+    <script src="/apps/tahuti/assets/client-side-templates.js"></script>
+    <script src="/apps/tahuti/assets/mustache.js"></script>
+  </head>
 
-    <body>
-        <header>
-            <nav>
-                <ul>
-                    <!-- hrefs is set by request.js -->
-                    <li>
-                        <a href="/apps/tahuti/groups">Groups</a>
-                    </li>
-                    <li>
-                        <a id="expenses-href" href=""
-                            ><strong>Expenses</strong></a
-                        >
-                    </li>
-                    <li>
-                        <a style="opacity: 0.3">Balances</a>
-                    </li>
-                    <li>
-                        <a style="opacity: 0.3">Reimbursments</a>
-                    </li>
-                    <li>
-                        <a id="members-href" href="">Members</a>
-                    </li>
-                    <li>
-                        <a style="opacity: 0.3">Settings</a>
-                    </li>
-                </ul>
-            </nav>
-        </header>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <!-- hrefs is set by request.js -->
+          <li>
+            <a href="/apps/tahuti/groups">Groups</a>
+          </li>
+          <li>
+            <a id="expenses-href" href=""><strong>Expenses</strong></a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Balances</a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Reimbursments</a>
+          </li>
+          <li>
+            <a id="members-href" href="">Members</a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Settings</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
 
-        <div hx-ext="client-side-templates,path-deps">
-            <div
-                hx-get="/"
-                hx-trigger="load"
-                mustache-template="title-template"
+    <div hx-ext="client-side-templates,path-deps">
+      <div
+        hx-get="/"
+        hx-trigger="load"
+        mustache-template="title-template"
+      >
+        <h1 style="opacity: 0">Loading ...</h1>
+      </div>
+      <template id="title-template">
+        <h1>{{title}}</h1>
+      </template>
+
+      <h2>Expenses</h2>
+      <table id="expenses">
+        <thead>
+          <tr>
+            <th>For What?</th>
+            <th>Amount</th>
+            <th>Paid By</th>
+            <th>Date</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody
+          id="get-expenses"
+          hx-get="/expenses"
+          hx-trigger="load,path-deps"
+          path-deps="/apps/tahuti/api/groups/*/expenses"
+          mustache-template="expenses-template"
+        ></tbody>
+      </table>
+      <template id="expenses-template">
+        <!-- iterate over array of members object -->
+        {{#.}}
+        <tr>
+          <td>{{title}}</td>
+          <td>{{amount}}</td>
+          <td>{{payer}}</td>
+          <td>{{date}}</td>
+          <td>
+            <a
+              hx-delete="/expenses/{{eid}}"
+              hx-trigger="click"
+              hx-swap="none"
+              >delete</a
             >
-                <h1 style="opacity: 0">Loading ...</h1>
-            </div>
-            <template id="title-template">
-                <h1>{{title}}</h1>
-            </template>
-
-            <h2>Expenses</h2>
-            <table id="expenses">
-                <thead>
-                    <tr>
-                        <th>For What?</th>
-                        <th>Amount</th>
-                        <th>Paid By</th>
-                        <!-- <th>Date</th> -->
-                    </tr>
-                </thead>
-                <tbody
-                    id="get-expenses"
-                    hx-get="/expenses"
-                    hx-trigger="load"
-                    mustache-template="expenses-template"
-                ></tbody>
-            </table>
-            <template id="expenses-template">
-                <!-- iterate over array of members object -->
-                {{#.}}
-                <tr>
-                    <td>{{title}}</td>
-                    <td>{{amount}} {{currency}}</td>
-                    <td>{{payer}}</td>
-                    <!-- <td>{{date}}</td> -->
-                </tr>
-                {{/.}}
-            </template>
-        </div>
-    </body>
-    <footer>
-        <!-- href is set by request.js -->
-        <a id="add-href" href="">
-            <svg
-                id="add-btn"
-                width="24px"
-                height="24px"
-                stroke-width="1.5"
-                viewBox="0 0 24 24"
-                fill="#fffff3"
-                xmlns="http://www.w3.org/2000/svg"
-                color="#000000"
-            >
-                <path
-                    d="M22 14V8.5M6 13V6a3 3 0 013-3h5M16.992 4h3m3 0h-3m0 0V1m0 3v3M12 21H6a4 4 0 010-8h12a4 4 0 104 4v-3"
-                    stroke="#000000"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                ></path></svg
-        ></a>
-    </footer>
-    <script src="/apps/tahuti/assets/request.js"></script>
-    <script src="/apps/tahuti/assets/validation.js"></script>
+          </td>
+        </tr>
+        {{/.}}
+      </template>
+    </div>
+  </body>
+  <footer>
+    <!-- href is set by request.js -->
+    <a id="add-href" href="">
+      <svg
+        id="add-btn"
+        width="24px"
+        height="24px"
+        stroke-width="1.5"
+        viewBox="0 0 24 24"
+        fill="#fffff3"
+        xmlns="http://www.w3.org/2000/svg"
+        color="#000000"
+      >
+        <path
+          d="M22 14V8.5M6 13V6a3 3 0 013-3h5M16.992 4h3m3 0h-3m0 0V1m0 3v3M12 21H6a4 4 0 010-8h12a4 4 0 104 4v-3"
+          stroke="#000000"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        ></path></svg
+    ></a>
+  </footer>
+  <script src="/apps/tahuti/assets/request.js"></script>
+  <script src="/apps/tahuti/assets/validation.js"></script>
 </html>

@@ -48,12 +48,8 @@
         </header>
 
         <div hx-ext="client-side-templates,path-deps">
-            <div hx-get="/" hx-trigger="load" mustache-template="nav-template">
-                <h1 style="opacity: 0">Loading ...</h1>
-            </div>
-            <template id="nav-template">
-                <h1>{{title}}</h1>
-            </template>
+            <h1 hx-get="/" hx-trigger="load" mustache-template="h1-temp"></h1>
+            <template id="h1-temp"> {{title}} </template>
 
             <h2>Invite</h2>
             <form
@@ -81,14 +77,12 @@
                 hx-get="/register"
                 hx-trigger="load,path-deps"
                 path-deps="/apps/tahuti/api/groups/*/invitees"
-                mustache-template="register-template"
-            >
-                <emp>Loading …</emp>
-            </ul>
-            <template id="register-template">
+                mustache-template="register-temp"
+            ></ul>
+            <template id="register-temp">
                 <!-- iterate over array of register list -->
                 {{#.}}
-                    <li>{{.}}</li>
+                <li>{{.}}</li>
                 {{/.}}
             </template>
 
@@ -98,11 +92,9 @@
                 hx-get="/invitees"
                 hx-trigger="load,path-deps"
                 path-deps="/apps/tahuti/api/groups/*/invitees"
-                mustache-template="invitees-template"
-            >
-                <emp>Loading …</emp>
-            </ul>
-            <template id="invitees-template">
+                mustache-template="invitees-temp"
+            ></ul>
+            <template id="invitees-temp">
                 <!-- iterate over array of invitees list -->
                 {{#.}}
                 <li>{{.}}</li>

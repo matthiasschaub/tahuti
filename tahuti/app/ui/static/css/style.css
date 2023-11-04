@@ -35,7 +35,7 @@
     --bg0_h: #fffff3;
     --bg0_s: #f2e5bc;
     --fg: #000000;
-    --green: #87B595;
+    --green: #87b595;
 
     --red: #cc241d;
     /* --blue: #2185D0; */
@@ -83,7 +83,7 @@ svg {
 }
 
 .svg-btn {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 #add-btn {

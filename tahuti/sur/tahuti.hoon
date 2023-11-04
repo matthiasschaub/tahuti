@@ -4,10 +4,10 @@
 ::
 ::    group
 ::
-+$  id         @tas                ::  uuid
++$  gid         @tas                ::  uuid
 +$  title      @t
 +$  host       @p
-+$  group      [=id =title =host]
++$  group      [=gid =title =host]
 ::
 ::    register of members (reg)
 ::    access-control-group (acl)
@@ -20,21 +20,22 @@
 +$  eid  @tas                      :: uuid
 +$  expense
   $:
-    id=@tas
+    =gid
+    =eid
     title=@tas
     amount=@ud             :: in currency’s smallest unit
     currency=@tas          :: three-letter ISO code
     payer=@p
-    :: date=@da
+    date=@da
   ==
-+$  ledger   (map id expense)     :: map expense-id to expense
++$  ledger   (map eid expense)     :: map expense-id to expense
 ::
 ::    maps
 ::
-+$  groups   (map id group)
-+$  regs     (map id register)
-+$  acls     (map id acl)
-+$  leds     (map id ledger)      :: map group-id to ledger
++$  groups   (map gid group)
++$  regs     (map gid register)
++$  acls     (map gid acl)
++$  leds     (map gid ledger)      :: map group-id to ledger
 ::
 ::    legacy
 ::
@@ -54,9 +55,9 @@
   $%  :: group actions performed by host
       ::
       [%add-group =group]
-      [%invite =id =@p]    :: allow to subscribe (add to acl)
-      [%join =id =host]    :: allow to subscribe (add to acl)
-      [%del-group =id]
+      [%invite =gid =@p]    :: allow to subscribe (add to acl)
+      [%join =gid =host]    :: allow to subscribe (add to acl)
+      [%del-group =gid]
       ::[%edit-group =gid =title]  :: change title
       ::[%list-groups]
       ::[%join-group =gid =ship]  :: subscribe
@@ -65,8 +66,8 @@
       ::[%del-member =gid =ship]  :: kick subscriber
       :::: expense actions performed by members
       ::::
-      [%add-expense =id =expense]
-      [%del-expense gid=id eid=id]
+      [%add-expense =gid =expense]
+      [%del-expense =gid =eid]
       ::[%edit-expense =gid =eid =ex]
       ::[%list-expenses =gid]
       ::[%list-balances =gid]
@@ -78,9 +79,9 @@
 ::  these are all the possible events that can be sent to subscribers.
 ::
 +$  update
-  $%  [%group =id =group =register =acl =ledger]
-      [%ledger =id =ledger]
-      [%acl =id =acl]
+  $%  [%group =gid =group =register =acl =ledger]
+      [%ledger =gid =ledger]
+      [%acl =gid =acl]
 ::       [%del =gid]
 ::       [%allow =gid =ship]
 ::       [%kick =gid =ship]

@@ -14,7 +14,8 @@
 /*  client-side-templates  %js    /app/ui/assets/client-side-templates/js
 /*  mustache               %js    /app/ui/assets/mustache/js
 /*  currency               %js    /app/ui/assets/currency/js
-/*  validation             %js    /app/ui/assets/validation/js
+/*  request                %js    /app/ui/assets/request/js
+/*  validation-add         %js    /app/ui/assets/validation-add/js
 ::
 |%
 +$  versioned-state
@@ -111,8 +112,10 @@
           [(send [200 ~ [%js mustache]]) state]
         [%apps %tahuti %assets %currency ~]
           [(send [200 ~ [%js currency]]) state]
-        [%apps %tahuti %assets %validation ~]
-          [(send [200 ~ [%js validation]]) state]
+        [%apps %tahuti %assets %request ~]
+          [(send [200 ~ [%js request]]) state]
+        [%apps %tahuti %assets %validation-add ~]
+          [(send [200 ~ [%js validation-add]]) state]
       ==
     ==
   --

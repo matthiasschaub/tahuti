@@ -4,12 +4,17 @@ p {
     margin-left: var(--vspace);
 }
 
+.htmx-settling h1 {
+    opacity: 0;
+}
+
 h1 {
+    transition: opacity 300ms ease-in;
     /* /1* small caps *1/ */
     /* font-feature-settings: "smcp"; */
     line-height: calc(3.4583 / var(--space) * var(--vspace));
     margin: var(--vspace-1) 0 var(--vspace-1) 0;
-    color: var(--red)
+    color: var(--red);
 }
 
 h2 {
