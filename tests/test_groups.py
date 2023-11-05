@@ -10,6 +10,7 @@ def group_schema():
             "gid": str,
             "title": str,
             "host": str,
+            "currency": str,
         },
     )
 
@@ -36,6 +37,7 @@ def test_groups_put(zod, gid):
         "gid": gid,
         "title": "foo",
         "host": "~zod",
+        "currency": "EUR"
     }
     url = "/apps/tahuti/api/groups"
 

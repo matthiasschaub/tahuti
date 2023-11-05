@@ -26,9 +26,10 @@
     ^-  json
     %-  pairs:enjs:format
     :~
-      :-  'gid'      [%s gid.g]
-      :-  'title'    [%s title.g]
-      :-  'host'     [%s (scot %p host.g)]
+      :-  'gid'       [%s gid.g]
+      :-  'title'     [%s title.g]
+      :-  'host'      [%s (scot %p host.g)]
+      :-  'currency'  [%s currency.g]
     ==
     ::  (a list of groups, not a map of groups, to json array)
     ::
@@ -48,7 +49,7 @@
       :-  'currency'  [%s currency.e]
       :-  'payer'     [%s (scot %p payer.e)]
       :-  'date'      (sect:enjs:format date.e)
-      :: :-  'involves'  [%a (turn involves.ex ship:enjs)]
+      :-  'involves'  [%a (turn involves.e ship:enjs)]
     ==
   ++  ledger
     |=  l=^ledger
@@ -65,28 +66,36 @@
     ^-  $-(json invitee=@p)
     %-  ot:dejs:format                                     :: obj as tuplejsonre
     :~
-      :-  %invitee  (se:dejs:format %p)
+      :-  %invitee    (se:dejs:format %p)
+    ==
+  ++  join
+    ^-  $-(json [gid=@tas host=@p])
+    %-  ot:dejs:format
+    :~
+      :-  %gid        so:dejs:format
+      :-  %host       (se:dejs:format %p)
     ==
   ++  group
     ^-  $-(json ^group)
     %-  ot:dejs:format                                     :: obj as tuplejsonre
     :~
-      :-  %gid       so:dejs:format
-      :-  %title     so:dejs:format
-      :-  %host      (se:dejs:format %p)
+      :-  %gid        so:dejs:format
+      :-  %title      so:dejs:format
+      :-  %host       (se:dejs:format %p)
+      :-  %currency   so:dejs:format
     ==
   ++  expense
     ^-  $-(json ^expense)
     %-  ot:dejs:format                                     :: obj as tuple
     :~
-      :-  %gid       so:dejs:format
-      :-  %eid       so:dejs:format
-      :-  %title     so:dejs:format
-      :-  %amount    (su:dejs:format dem)
-      :-  %currency  so:dejs:format
-      :-  %payer     (se:dejs:format %p)
-      :-  %date      du:dejs:format
-      :: :-  %involves  (ar:dejs:format (se:dejs:format %p))  :: arr as list
+      :-  %gid        so:dejs:format
+      :-  %eid        so:dejs:format
+      :-  %title      so:dejs:format
+      :-  %amount     (su:dejs:format dem)
+      :-  %currency   so:dejs:format
+      :-  %payer      (se:dejs:format %p)
+      :-  %date       du:dejs:format
+      :-  %involves   (ar:dejs:format (se:dejs:format %p)):dejs:format
     ==
   --
 --

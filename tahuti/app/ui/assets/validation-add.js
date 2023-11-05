@@ -13,9 +13,7 @@ const date = document.getElementById("date");
 
 // set defaults
 //
-form.addEventListener("htmx:afterSettle", (event) => {
-  date.valueAsDate = new Date();
-});
+date.valueAsDate = new Date();
 
 // validate inputs
 //

@@ -69,6 +69,7 @@ def group(zod, gid) -> dict:
         "gid": gid,
         "title": "assembly",
         "host": "~zod",
+        "currency": "EUR"
     }
     url = "/apps/tahuti/api/groups"
     zod.put(url, json=group)
@@ -105,6 +106,8 @@ def expense(zod, gid, group, eid):
         "amount": "100",
         "currency": "EUR",
         "payer": "~zod",
+        "date": 1699182124,
+        "involves": ["~zod"],
     }
     url = f"/apps/tahuti/api/groups/{gid}/expenses"
     zod.put(url, json=expense)

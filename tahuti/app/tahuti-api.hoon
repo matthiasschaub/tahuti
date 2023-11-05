@@ -178,6 +178,7 @@
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
         ~&  content
         =/  expense   (expense:dejs content)
+        ~&  expense
         =/  action    [%add-expense gid expense]
         =/  response  (send [200 ~ [%plain "ok"]])
         :-  ^-  (list card)
@@ -224,8 +225,8 @@
           [%apps %tahuti %api %action %join ~]
         ~&  >  '%tahuti-api: /action/join'
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
-        =/  group     (group:dejs content)
-        =/  action    [%join gid.group host.group]
+        =/  join      (join:dejs content)
+        =/  action    [%join gid.join host.join]
         =/  response  (send [200 ~ [%plain "ok"]])
         :-  ^-  (list card)
           %+  snoc

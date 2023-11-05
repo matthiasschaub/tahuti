@@ -4,42 +4,54 @@
 ::
 ::    group
 ::
-+$  gid         @tas                ::  uuid
-+$  title      @t
-+$  host       @p
-+$  group      [=gid =title =host]
++$  gid       @tas     ::  group uuid
++$  title     @t
++$  host      @p
++$  currency  @tas
++$  group
+  $:
+    =gid
+    =title
+    =host
+    =currency          ::  three-letter ISO code
+  ==
 ::
 ::    register of members (reg)
-::    access-control-group (acl)
+::    access-control list (acl)
 ::
 +$  register  (set @p)
 +$  acl       (set @p)
 ::
 ::    expense
 ::
-+$  eid  @tas                      :: uuid
++$  eid       @tas     ::  expense uuid
++$  amount    @ud      ::  in currency’s smallest unit
++$  payer     @p
++$  date      @da
++$  involves  (list @p)
 +$  expense
   $:
     =gid
     =eid
-    title=@tas
-    amount=@ud             :: in currency’s smallest unit
-    currency=@tas          :: three-letter ISO code
-    payer=@p
-    date=@da
+    =title
+    =amount
+    =currency
+    =payer
+    =date
+    =involves
   ==
-+$  ledger   (map eid expense)     :: map expense-id to expense
 ::
 ::    maps
 ::
-+$  groups   (map gid group)
-+$  regs     (map gid register)
-+$  acls     (map gid acl)
-+$  leds     (map gid ledger)      :: map group-id to ledger
++$  groups    (map gid group)
++$  ledger    (map eid expense)
++$  regs      (map gid register)
++$  acls      (map gid acl)
++$  leds      (map gid ledger)
 ::
 ::    legacy
 ::
-+$  ex                            :: expense
++$  ex
   $:  payer=@p
       amount=@ud
       involves=(list @p)          :: TODO: should be a set
@@ -55,8 +67,8 @@
   $%  :: group actions performed by host
       ::
       [%add-group =group]
-      [%invite =gid =@p]    :: allow to subscribe (add to acl)
-      [%join =gid =host]    :: allow to subscribe (add to acl)
+      [%invite =gid =@p]    :: allow to subscribe
+      [%join =gid =host]    :: subscribe
       [%del-group =gid]
       ::[%edit-group =gid =title]  :: change title
       ::[%list-groups]

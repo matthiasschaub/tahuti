@@ -48,8 +48,16 @@
         </header>
 
         <div hx-ext="client-side-templates,path-deps">
-            <h1 hx-get="/" hx-trigger="load" mustache-template="h1-temp"></h1>
-            <template id="h1-temp"> {{title}} </template>
+            <div
+                hx-get="/"
+                hx-trigger="load"
+                mustache-template="title-template"
+            >
+                <h1 style="opacity: 0">Loading ...</h1>
+            </div>
+            <template id="title-template">
+                <h1>{{title}}</h1>
+            </template>
 
             <h2>Invite</h2>
             <form
@@ -71,35 +79,41 @@
                 <button type="submit">Add ▸</button>
             </form>
 
-            <h2>Members</h2>
-            <ul
-                id="get-register"
-                hx-get="/register"
-                hx-trigger="load,path-deps"
-                path-deps="/apps/tahuti/api/groups/*/invitees"
-                mustache-template="register-temp"
-            ></ul>
-            <template id="register-temp">
-                <!-- iterate over array of register list -->
-                {{#.}}
-                <li>{{.}}</li>
-                {{/.}}
-            </template>
+            <div class="columns">
+                <div>
+                    <h2>Members</h2>
+                    <ul
+                        id="get-register"
+                        hx-get="/register"
+                        hx-trigger="load,path-deps"
+                        path-deps="/apps/tahuti/api/groups/*/invitees"
+                        mustache-template="register-temp"
+                    ></ul>
+                    <template id="register-temp">
+                        <!-- iterate over array of register list -->
+                        {{#.}}
+                        <li>{{.}}</li>
+                        {{/.}}
+                    </template>
+                </div>
 
-            <h2>Invitees</h2>
-            <ul
-                id="get-invitees"
-                hx-get="/invitees"
-                hx-trigger="load,path-deps"
-                path-deps="/apps/tahuti/api/groups/*/invitees"
-                mustache-template="invitees-temp"
-            ></ul>
-            <template id="invitees-temp">
-                <!-- iterate over array of invitees list -->
-                {{#.}}
-                <li>{{.}}</li>
-                {{/.}}
-            </template>
+                <div>
+                    <h2>Invitees</h2>
+                    <ul
+                        id="get-invitees"
+                        hx-get="/invitees"
+                        hx-trigger="load,path-deps"
+                        path-deps="/apps/tahuti/api/groups/*/invitees"
+                        mustache-template="invitees-temp"
+                    ></ul>
+                    <template id="invitees-temp">
+                        <!-- iterate over array of invitees list -->
+                        {{#.}}
+                        <li>{{.}}</li>
+                        {{/.}}
+                    </template>
+                </div>
+            </div>
         </div>
     </body>
     <script src="/apps/tahuti/assets/request.js"></script>

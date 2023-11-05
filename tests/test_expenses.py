@@ -15,6 +15,8 @@ def expense_schema():
             "amount": int,
             "currency": str,
             "payer": str,
+            "date": int,
+            "involves": list
         },
     )
 
@@ -23,7 +25,6 @@ def expense_schema():
 def expenses_schema(expense_schema):
     """Response schema"""
     return Schema([expense_schema])
-
 
 
 def test_expense_single(zod, gid, group, eid, expenses_schema):
@@ -35,9 +36,10 @@ def test_expense_single(zod, gid, group, eid, expenses_schema):
         "amount": "100",
         "currency": "EUR",
         "payer": "~zod",
+        "date": 1699182124,
+        "involves": ["~zod"],
     }
     url = f"/apps/tahuti/api/groups/{gid}/expenses"
-
     # PUT /expenses
     response = zod.put(url, json=expense)
     assert response.status_code == 200
@@ -65,6 +67,8 @@ def test_expense_multi(zod, gid, group, expenses_schema):
         "amount": "100",
         "currency": "EUR",
         "payer": "~zod",
+        "date": 1699182124,
+        "involves": ["~zod"],
     }
     id1 = str(uuid4())
     id2 = str(uuid4())
@@ -97,6 +101,8 @@ def test_expense_nus(zod, nus, gid, group, eid, member, expenses_schema):
         "amount": "100",
         "currency": "EUR",
         "payer": "~zod",
+        "date": 1699182124,
+        "involves": ["~zod"],
     }
     url = f"/apps/tahuti/api/groups/{gid}/expenses"
     sleep(1)
@@ -115,7 +121,7 @@ def test_expense_nus(zod, nus, gid, group, eid, member, expenses_schema):
     assert isinstance(result, list)
     ids = [r["eid"] for r in result]
     assert expense["eid"] in ids
-    assert ids.count(expense["id"]) == 1  # idempotent
+    assert ids.count(expense["eid"]) == 1  # idempotent
 
 
 def test_expense_delete(zod, gid, group, eid, expense):

@@ -47,23 +47,38 @@
         </header>
         <h1>Tahuti</h1>
         <!-- TODO: Get host from cookie -->
-        <div hx-ext="path-deps">
+        <div hx-ext="path-deps" hx-request="noHeaders">
             <h2>Create a Group</h2>
             <form
                 id="put-groups"
                 hx-put="/apps/tahuti/api/groups"
                 hx-ext="json-enc"
                 hx-swap="none"
-                hx-vals='js:{gid: self.crypto.randomUUID(), host: "~zod", acl: Array("~nus"), members: Array("~nus")}'
+                hx-vals='js:{gid: self.crypto.randomUUID(), host: "~zod"}'
                 hx-on::after-request="if(event.detail.successful) this.reset()"
             >
                 <input
                     id="group-title"
                     type="text"
                     name="title"
-                    aria-label="group-title"
+                    aria-label="Group Title"
                     placeholder="title"
-                    required="required"
+                    required
+                />
+                <br />
+                <datalist id="currency-list">
+                    <option>EUR</option>
+                </datalist>
+                <input
+                    id="currency"
+                    type="text"
+                    inputmode="text"
+                    autocomplete="off"
+                    name="currency"
+                    aria-label="Currency"
+                    placeholder="EUR"
+                    list="currency-list"
+                    required
                 />
                 <button type="submit">Create ▸</button>
             </form>
@@ -83,16 +98,16 @@
                     name="host"
                     aria-label="host"
                     placeholder="~zod"
-                    required="required"
+                    required
                 />
                 <br />
                 <!-- TODO: add validation (valid uuid) -->
                 <input
                     type="text"
                     name="gid"
-                    aria-label="group-id"
+                    aria-label="Group ID"
                     placeholder="14488cd0-f23f-4d21-862e-d79803d159e4"
-                    required="required"
+                    required
                 />
                 <button type="submit">Join ▸</button>
             </form>
