@@ -14,8 +14,8 @@
 /*  client-side-templates  %js    /app/ui/assets/client-side-templates/js
 /*  mustache               %js    /app/ui/assets/mustache/js
 /*  currency               %js    /app/ui/assets/currency/js
+/*  table-sort             %js    /app/ui/assets/table-sort/js
 /*  request                %js    /app/ui/assets/request/js
-/*  validation-add         %js    /app/ui/assets/validation-add/js
 ::
 |%
 +$  versioned-state
@@ -114,8 +114,8 @@
           [(send [200 ~ [%js currency]]) state]
         [%apps %tahuti %assets %request ~]
           [(send [200 ~ [%js request]]) state]
-        [%apps %tahuti %assets %validation-add ~]
-          [(send [200 ~ [%js validation-add]]) state]
+        [%apps %tahuti %assets %table-sort ~]
+          [(send [200 ~ [%js table-sort]]) state]
       ==
     ==
   --

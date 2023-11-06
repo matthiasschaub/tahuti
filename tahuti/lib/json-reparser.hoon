@@ -47,8 +47,12 @@
       :-  'title'     [%s title.e]
       :-  'amount'    (numb:enjs:format amount.e)
       :-  'currency'  [%s currency.e]
+      ::  TODO
+      ::  :-  'currency-format' ...
       :-  'payer'     [%s (scot %p payer.e)]
       :-  'date'      (sect:enjs:format date.e)
+      ::  TODO.
+      ::  :-  'date-format'  (dust:chrono:userlib (yore date.e))
       :-  'involves'  [%a (turn involves.e ship:enjs)]
     ==
   ++  ledger

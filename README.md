@@ -2,14 +2,12 @@
 
 For details about this app, see the [proposal](./proposal.md).
 
-For a short demo, see this [screencast](https://console.minio.mutualisten.de/api/v1/buckets/public/objects/download?preview=true&prefix=c2NyZWVuLm1wNA==&version_id=null).
-
 ## Development
 
 ### Setup
 
-Setup this project either by using [pilothouse](https://git.sr.ht/~talfus-laddus/pilothouse) 
-or by hand.
+Setup this project either by using
+[pilothouse](https://git.sr.ht/~talfus-laddus/pilothouse) or by hand.
 
 #### Setup by using Pilothouse
 
@@ -64,7 +62,8 @@ To run all tests files:
 
 #### Integration Tests (Python)
 
-Integration tests are written in Python and are utilizing the `pytest` framework. The tests run against tahutis API on fake ships.
+Integration tests are written in Python and are utilizing the `pytest`
+framework. The tests run against tahutis API on fake ships.
 
 ```bash
 # Setup Python environment for test framework (pytest)
@@ -104,24 +103,25 @@ Depends on [%schooner](https://github.com/dalten-collective/boat).
 
 Endpoints:
 ```
-GET   api/groups                  // Get all groups               (JSON array)
-PUT   api/groups                  // Add or edit a group          (JSON object)
+GET   api/groups                         // Get all groups               (JSON array)
+PUT   api/groups                         // Add or edit a group          (JSON object)
+GET   api/groups/{uuid}                  // Get a group                  (JSON object)
 
-GET   api/groups/{uuid}/invitees  // Get all invitees of a group  (JSON array)
-PUT   api/groups/{uuid}/invitees  // Invite a ship                (JSON object)
+GET   api/groups/{uuid}/invitees         // Get all invitees of a group  (JSON array)
+PUT   api/groups/{uuid}/invitees         // Invite a ship                (JSON object)
 
-GET   api/groups/{uuid}/members   // Get all members of a group   (JSON array)
+GET   api/groups/{uuid}/register         // Get all members of a group   (JSON array)
 
-GET   api/groups/{uuid}/expenses  // Get all expenses of a group  (JSON array)
-PUT   api/groups/{uuid}/expenses  // Add or edit an expense       (JSON object)
+GET   api/groups/{uuid}/expenses         // Get all expenses of a group  (JSON array)
+PUT   api/groups/{uuid}/expenses         // Add or edit an expense       (JSON object)
+GET   api/groups/{uuid}/expenses/{uuid}  // Get an expense               (JSON object)
 
-POST  api/groups/action/join      // Join a group                 (JSON object)
+POST  api/groups/action/join             // Join a group                 (JSON object)
 ```
 
 
 ### Abbreviations
 
-- ex: expense
 - gid: group ID
 - eid: expense ID
 

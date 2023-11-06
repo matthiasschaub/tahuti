@@ -77,6 +77,7 @@
                     name="currency"
                     aria-label="Currency"
                     placeholder="EUR"
+                    value="EUR"
                     list="currency-list"
                     required
                 />
@@ -89,7 +90,6 @@
                 hx-post="/apps/tahuti/api/action/join"
                 hx-ext="json-enc"
                 hx-swap="none"
-                hx-vals='{"title": ""}'
                 hx-on::after-request="if(event.detail.successful) this.reset()"
             >
                 <!-- TODO: add validation (valid @p) -->

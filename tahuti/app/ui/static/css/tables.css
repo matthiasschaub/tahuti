@@ -44,17 +44,15 @@ table > tbody > tr:last-child > :is(th, td) {
     border-bottom: 2px solid;
 }
 
-/* table > tbody > tr td:nth-last-child(2) { */
-/*   text-align: right; */
-/* } */
+table > tbody > tr td:nth-child(2) {
+    text-align: right;
+}
 
 @media (max-width: 640px) {
     #expenses > tbody > tr td:nth-child(3),
     #expenses > tbody > tr td:nth-child(4),
-    #expenses > tbody > tr td:nth-child(6),
     #expenses > thead > tr th:nth-child(3),
-    #expenses > thead > tr th:nth-child(4),
-    #expenses > thead > tr th:nth-child(6) {
+    #expenses > thead > tr th:nth-child(4) {
         display: none;
     }
 }
