@@ -86,6 +86,9 @@
       ?+  site
         [(send [404 ~ [%plain "404 - Not Found"]]) state]
         ::
+          [%apps %tahuti %api %our ~]
+        [(send [200 ~ [%json (ship:enjs our.bowl)]]) state]
+        ::
           [%apps %tahuti %api %groups ~]
         =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/groups/noun
         =/  groups    .^(groups %gx path)
@@ -128,8 +131,10 @@
         =/  gid       (snag 4 `(list @t)`site)
         =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/leds/noun
         =/  leds      .^(leds %gx path)
-        =/  led       (~(got by leds) gid)
-        =/  response  (ledger:enjs led)
+        =/  ledger    (~(got by leds) gid)
+        =/  vals      ~(val by ledger)
+        =.  vals      (sort vals |=([a=expense b=expense] (gth date.a date.b)))
+        =/  response  (ledger:enjs vals)
         [(send [200 ~ [%json response]]) state]
         ::
           [%apps %tahuti %api %groups @t %expenses @t ~]
@@ -139,7 +144,7 @@
         =/  leds      .^(leds %gx path)
         =/  ledger    (~(got by leds) gid)
         =/  expense   (~(got by ledger) eid)
-        =/  response  (ledger:enjs ledger)  :: TODO: change to expense:enjs
+        =/  response  (expense:enjs expense)
         [(send [200 ~ [%json response]]) state]
       ==
       ::
@@ -176,9 +181,7 @@
           [%apps %tahuti %api %groups @t %expenses ~]
         =/  gid       (snag 4 `(list @t)`site)
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
-        ~&  content
         =/  expense   (expense:dejs content)
-        ~&  expense
         =/  action    [%add-expense gid expense]
         =/  response  (send [200 ~ [%plain "ok"]])
         :-  ^-  (list card)

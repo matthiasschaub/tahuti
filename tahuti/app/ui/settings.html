@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Tahuti</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="An Expense Sharing App for Urbit" />
+        <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
+        <link
+            rel="stylesheet"
+            href="/apps/tahuti/static/css/min/print.css"
+            media="print"
+        />
+        <script src="/apps/tahuti/assets/htmx.js"></script>
+        <script src="/apps/tahuti/assets/json-enc.js"></script>
+        <script src="/apps/tahuti/assets/client-side-templates.js"></script>
+        <script src="/apps/tahuti/assets/mustache.js"></script>
+    </head>
+
+    <body>
+        <header>
+            <nav aria-label="Global">
+                <ul>
+                    <li>
+                        <a href="/apps/tahuti/groups">↜ Groups</a>
+                    </li>
+                    <li>
+                        <a id="expenses-href" href="">Expenses</a>
+                    </li>
+                    <li>
+                        <a style="opacity: 0.3">Balances</a>
+                    </li>
+                    <li>
+                        <a style="opacity: 0.3">Reimbursments</a>
+                    </li>
+                    <li>
+                        <a id="members-href" href="">Members</a>
+                    </li>
+                    <li>
+                        <a id="settings-href" href=""
+                            ><strong>Settings</strong></a
+                        >
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <div hx-ext="client-side-templates">
+            <div
+                hx-get="/"
+                hx-trigger="load"
+                hx-request="noHeaders"
+                mustache-template="title-temp"
+            >
+                <h1 style="opacity: 0">Loading ...</h1>
+            </div>
+            <template id="title-temp">
+                <h1>{{title}}</h1>
+            </template>
+        </div>
+        <h2>Delete Group</h2>
+        <form
+            id="delete-groups"
+            hx-delete="/"
+            hx-confirm="Are you sure?"
+            hx-ext="json-enc"
+            hx-swap="none"
+            hx-request="noHeaders"
+            hx-vals="js:{gid: currentGID()}"
+            hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'"
+        >
+            <button type="submit">Delete ❌</button>
+        </form>
+    </body>
+    <script src="/apps/tahuti/assets/request.js"></script>
+</html>

@@ -17,7 +17,6 @@
         <script src="/apps/tahuti/assets/client-side-templates.js"></script>
         <script src="/apps/tahuti/assets/mustache.js"></script>
         <script src="/apps/tahuti/assets/currency.js"></script>
-        <script src="/apps/tahuti/assets/table-sort.js"></script>
     </head>
 
     <body>
@@ -43,7 +42,7 @@
                         <a id="members-href" href="">Members</a>
                     </li>
                     <li>
-                        <a style="opacity: 0.3">Settings</a>
+                        <a id="settings-href" href="">Settings</a>
                     </li>
                 </ul>
             </nav>
@@ -62,14 +61,14 @@
             </template>
 
             <h2>Expenses</h2>
-            <table id="expenses" class="sortierbar">
+            <table id="expenses">
                 <thead>
                     <tr>
                         <th>For What?</th>
                         <th id="amount">Amount</th>
                         <th>Paid By</th>
-                        <th id="date" class="sortierbar">Date</th>
-                        <th>delete</th>
+                        <th id="date">Date</th>
+                        <th style="opacity: 0">delete</th>
                     </tr>
                 </thead>
                 <tbody

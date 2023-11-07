@@ -6,6 +6,7 @@
 /*  members                %html  /app/ui/members/html
 /*  expenses               %html  /app/ui/expenses/html
 /*  add                    %html  /app/ui/add/html
+/*  settings               %html  /app/ui/settings/html
 /*  style                  %css   /app/ui/static/css/min/style/css
 /*  print                  %css   /app/ui/static/css/min/print/css
 /*  htmx                   %js    /app/ui/assets/htmx/js
@@ -14,7 +15,6 @@
 /*  client-side-templates  %js    /app/ui/assets/client-side-templates/js
 /*  mustache               %js    /app/ui/assets/mustache/js
 /*  currency               %js    /app/ui/assets/currency/js
-/*  table-sort             %js    /app/ui/assets/table-sort/js
 /*  request                %js    /app/ui/assets/request/js
 ::
 |%
@@ -37,7 +37,7 @@
   ~&  >  '%tahuti-ui: initialize'
   :-  ^-  (list card)
     :~
-      :*  %pass  /eyre/connect  %arvo  %e
+      :*  %pass  /bind  %arvo  %e
           %connect  `/apps/tahuti  %tahuti-ui
       ==
     ==
@@ -65,7 +65,6 @@
   ?+  mark  (on-poke:default mark vase)
     ::
       %handle-http-request
-    ?>  =(src.bowl our.bowl)                :: request is from our ship
     =^  cards  state
       (handle-http !<([@ta =inbound-request:eyre] vase))
     [cards this]
@@ -76,9 +75,13 @@
     =/  ,request-line:server
       (parse-request-line:server url.request.inbound-request)
     =+  send=(cury response:schooner eyre-id)
+    ::  redirect if not authenticated
     ::
     ?.  authenticated.inbound-request
       [(send [302 ~ [%login-redirect './apps/tahuti']]) state]
+    ::  crash if request is not from our ship
+    ::
+    ?>  =(src.bowl our.bowl)
     ?+  method.request.inbound-request
       [(send [405 ~ [%plain "405 - Method Not Allowed"]]) state]
       ::
@@ -96,6 +99,8 @@
           [(send [200 ~ [%html members]]) state]
         [%apps %tahuti %groups @t %add ~]
           [(send [200 ~ [%html add]]) state]
+        [%apps %tahuti %groups @t %settings ~]
+          [(send [200 ~ [%html settings]]) state]
         [%apps %tahuti %static %css %min %style ~]
           [(send [200 ~ [%css style]]) state]
         [%apps %tahuti %static %css %min %print ~]
@@ -114,12 +119,19 @@
           [(send [200 ~ [%js currency]]) state]
         [%apps %tahuti %assets %request ~]
           [(send [200 ~ [%js request]]) state]
-        [%apps %tahuti %assets %table-sort ~]
-          [(send [200 ~ [%js table-sort]]) state]
       ==
     ==
   --
-++  on-arvo  on-arvo:default
+++  on-arvo
+  |=  [=wire =sign-arvo]
+  ^-  (quip card _this)
+  ?.  ?=([%bind ~] wire)
+    (on-arvo:default [wire sign-arvo])
+  ?.  ?=([%eyre %bound *] sign-arvo)
+    (on-arvo:default [wire sign-arvo])
+  ~?  !accepted.sign-arvo
+    %eyre-rejected-tahuti-ui-bind
+  `this
 ++  on-watch                    :: subscribe
   |=  =path
   ^-  [(list card) _this]

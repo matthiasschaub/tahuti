@@ -56,9 +56,9 @@
       :-  'involves'  [%a (turn involves.e ship:enjs)]
     ==
   ++  ledger
-    |=  l=^ledger
+    |=  vals=(list ^expense)
     ^-  json
-    [%a (turn ~(val by l) expense:enjs)]
+    [%a (turn vals expense:enjs)]
   --
 ::
 ++  dejs

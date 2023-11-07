@@ -74,7 +74,6 @@
                 hx-put="/expenses"
                 hx-ext="json-enc"
                 hx-vals="js:{eid: self.crypto.randomUUID(), gid: currentGID(), involves: []}"
-                hx-on::after-request="if(event.detail.successful) this.reset()"
             >
                 <!-- titel -->
                 <label for="title">What for?</label>
@@ -133,9 +132,14 @@
                 </template>
                 <!-- payer -->
                 <label for="payer">Who paid?</label>
-                <br />
                 <!-- TODO: make current ship the default/placeholder -->
                 <!-- TODO: add current ship as default value -->
+                <div
+                    hx-get="/register"
+                    hx-trigger="load"
+                    mustache-template="payer-input-temp"
+                ></div>
+                <template id="payer-input-temp">
                 <input
                     id="payer"
                     type="text"
@@ -143,11 +147,11 @@
                     autocomplete="off"
                     name="payer"
                     aria-label="Payer"
-                    placeholder="~zod"
+                    value="{{.}}"
                     list="member-list"
                     required
                 />
-                <br />
+                </template>
 
                 <!-- involved -->
                 <label>Who is involved?</label>
@@ -231,6 +235,16 @@
             // send date as unix timestamp
             if ("date" in event.detail.parameters) {
                 event.detail.parameters.date = new Date(date.value).valueOf();
+            }
+        });
+
+        form.addEventListener("htmx:afterRequest", (event) => {
+            if (
+                event.detail.successful &&
+                event.detail.elt.id == "put-expenses"
+            ) {
+                window.location.pathname =
+                    "/apps/tahuti/groups/" + currentGID() + "/expenses";
             }
         });
     </script>
