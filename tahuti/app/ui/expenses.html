@@ -52,15 +52,16 @@
             <div
                 hx-get="/"
                 hx-trigger="load"
+                hx-swap="outerHTML"
                 mustache-template="title-template"
             >
-                <h1 style="opacity: 0">Loading ...</h1>
+                <h2 style="opacity: 0">Loading ...</h2>
             </div>
             <template id="title-template">
-                <h1>{{title}}</h1>
+                <h2>{{title}}</h2>
             </template>
 
-            <h2>Expenses</h2>
+            <h3>Expenses</h3>
             <table id="expenses">
                 <thead>
                     <tr>
@@ -90,6 +91,7 @@
                     <td>
                         <a
                             hx-delete="/expenses/{{eid}}"
+                            hx-confirm="Are you sure?"
                             hx-trigger="click"
                             hx-swap="none"
                             >delete</a
@@ -151,7 +153,5 @@
                 }
             }
         });
-        // https://www.j-berkemeier.de/TableSort.html
-        tableSort();
     </script>
 </html>

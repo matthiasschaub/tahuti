@@ -47,146 +47,136 @@
         </header>
 
         <div hx-ext="client-side-templates">
-            <div hx-get="/" hx-trigger="load" mustache-template="title-temp">
-                <h1 style="opacity: 0">Loading ...</h1>
+            <div
+                hx-get="/"
+                hx-trigger="load"
+                hx-swap="outerHTML"
+                mustache-template="title-temp"
+            >
+                <h2 style="opacity: 0">Loading ...</h2>
             </div>
             <template id="title-temp">
-                <h1>{{title}}</h1>
+                <h2>{{title}}</h2>
             </template>
 
-            <datalist
-                id="member-list"
-                hx-get="/register"
-                hx-trigger="load"
-                mustache-template="member-temp"
-            >
-            </datalist>
-            <template id="member-temp">
-                {{#.}}
-                <option>{{.}}</option>
-                {{/.}}
-            </template>
-
-            <h2>Add an Expense</h2>
+            <h3>Add an Expense</h3>
             <!-- TODO: redirect to /expenses -->
-            <form
-                id="put-expenses"
-                hx-put="/expenses"
-                hx-ext="json-enc"
-                hx-vals="js:{eid: self.crypto.randomUUID(), gid: currentGID(), involves: []}"
-            >
-                <!-- titel -->
-                <label for="title">What for?</label>
-                <br />
-                <input
-                    id="title"
-                    type="text"
-                    inputmode="text"
-                    autocomplete="on"
-                    name="title"
-                    aria-label="Title"
-                    placeholder="Title"
-                    required
-                />
-                <br />
-                <!-- amount -->
-                <label for="amount">How much?</label>
-                <br />
-                <input
-                    id="amount"
-                    type="text"
-                    inputmode="text"
-                    autocomplete="transaction-amount"
-                    name="amount"
-                    aria-label="Amount"
-                    placeholder="amount"
-                    required
-                />
-                <br />
-                <!-- currency -->
-                <label for="currency">Which currency?</label>
-                <br />
-                <div
-                    hx-get="/"
-                    hx-trigger="load"
-                    mustache-template="currency-input-temp"
+            <fieldset>
+                <form
+                    id="put-expenses"
+                    hx-put="/expenses"
+                    hx-ext="json-enc"
+                    hx-vals="js:{eid: self.crypto.randomUUID(), gid: currentGID(), involves: []}"
                 >
-                    <input style="opacity: 0" />
-                </div>
-                <template id="currency-input-temp">
-                    <datalist id="currency-list">
-                        <option>{{currency}}</option>
-                    </datalist>
+                    <!-- amount -->
+                    <label for="amount">How much?</label>
+                    <br />
                     <input
-                        id="currency"
+                        id="amount"
                         type="text"
                         inputmode="text"
-                        autocomplete="off"
-                        name="currency"
-                        aria-label="Currency"
-                        placeholder="EUR"
-                        value="{{currency}}"
-                        list="currency-list"
+                        autocomplete="transaction-amount"
+                        name="amount"
+                        aria-label="Amount"
+                        placeholder="amount"
                         required
                     />
-                </template>
-                <!-- payer -->
-                <label for="payer">Who paid?</label>
-                <!-- TODO: make current ship the default/placeholder -->
-                <!-- TODO: add current ship as default value -->
-                <div
-                    hx-get="/register"
-                    hx-trigger="load"
-                    mustache-template="payer-input-temp"
-                ></div>
-                <template id="payer-input-temp">
-                <input
-                    id="payer"
-                    type="text"
-                    inputmode="text"
-                    autocomplete="off"
-                    name="payer"
-                    aria-label="Payer"
-                    value="{{.}}"
-                    list="member-list"
-                    required
-                />
-                </template>
-
-                <!-- involved -->
-                <label>Who is involved?</label>
-                <br />
-
-                <div
-                    hx-get="/register"
-                    hx-trigger="load"
-                    mustache-template="involved-input-temp"
-                ></div>
-                <template id="involved-input-temp">
-                    {{#.}}
+                    <br />
+                    <!-- titel -->
+                    <label for="title">What for?</label>
+                    <br />
                     <input
-                        id="check-{{.}}"
-                        type="checkbox"
-                        name="involved"
-                        value="{{.}}"
-                        checked
+                        id="title"
+                        type="text"
+                        inputmode="text"
+                        autocomplete="on"
+                        name="title"
+                        aria-label="Title"
+                        placeholder="Title"
+                        required
                     />
-                    <label for="check-{{.}}">{{.}}</label>
-                    {{/.}}
-                </template>
-                <label for="date">When?</label>
-                <br />
-                <input
-                    id="date"
-                    type="date"
-                    inputmode="text"
-                    name="date"
-                    aria-label="Date"
-                />
-                <br />
-                <button type="submit">Add ▸</button>
-                <button>Cancel</button>
-            </form>
+                    <br />
+                    <!-- currency -->
+                    <label for="currency">Which currency?</label>
+                    <br />
+                    <div
+                        hx-get="/"
+                        hx-trigger="load"
+                        mustache-template="currency-input-temp"
+                    >
+                        <input style="opacity: 0" />
+                    </div>
+                    <template id="currency-input-temp">
+                        <select
+                            id="currency"
+                            type="text"
+                            name="currency"
+                            aria-label="Currency"
+                            required
+                        >
+                            <option value="{{currency}}">{{currency}}</option>
+                        </select>
+                    </template>
+                    <!-- payer -->
+                    <label for="payer">Who paid?</label>
+                    <!-- TODO: make current ship the default/placeholder -->
+                    <!-- TODO: add current ship as default value -->
+                    <div
+                        hx-get="/register"
+                        hx-trigger="load"
+                        mustache-template="payer-input-temp"
+                    ></div>
+                    <template id="payer-input-temp">
+                        <select
+                            id="payer"
+                            type="text"
+                            name="payer"
+                            aria-label="Payer"
+                            required
+                        >
+                            {{#.}}
+                            <option value="{{.}}">{{.}}</option>
+                            {{/.}}
+                        </select>
+                    </template>
+
+                    <!-- involved -->
+                    <label>Who is involved?</label>
+                    <br />
+
+                    <div
+                        hx-get="/register"
+                        hx-trigger="load"
+                        mustache-template="involved-input-temp"
+                    ></div>
+                    <template id="involved-input-temp">
+                        {{#.}}
+                        <input
+                            id="check-{{.}}"
+                            type="checkbox"
+                            name="involved"
+                            value="{{.}}"
+                            checked
+                        />
+                        <label for="check-{{.}}">{{.}}</label>
+                        {{/.}}
+                    </template>
+                    <label for="date">When?</label>
+                    <br />
+                    <input
+                        id="date"
+                        type="date"
+                        inputmode="text"
+                        name="date"
+                        aria-label="Date"
+                    />
+                    <br />
+                    <button class="button-primary" type="submit">Add expense ▸</button>
+                    <button class="button-cancel" onclick="window.location.href='/apps/tahuti/groups/' + currentGID() + '/expenses';
+">Cancel</button>
+                    <!-- <button class="button-cancel">Cancel</button> -->
+                </form>
+            </fieldset>
         </div>
     </body>
     <script src="/apps/tahuti/assets/request.js"></script>

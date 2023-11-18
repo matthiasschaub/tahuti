@@ -27,7 +27,6 @@
     --vspace-1: calc(2 * var(--space) * 1rem);
     --vspace-2: calc(1.5 * var(--space) * 1rem);
     --vspace-3: calc(0.5 * var(--space) * 1rem);
-    --vspace-4: calc(0.25 * var(--space) * 1rem);
 
     --max-width: calc(25 * var(--vspace));
 
@@ -42,7 +41,7 @@
     /* --blue: #007bff; */
     --blue: #0062cc;
     --grey: #767676;
-    /* --blue-accent: #2b1dcc; */
+    --blue-accent: #2b1dcc;
 
     --purple: #b16286;
     /* --gray: #928374; */
@@ -61,13 +60,13 @@ html {
 }
 
 body {
+    /* font-size: 1.0833em; */
     font-size: 1em;
+    max-width: var(--max-width);
+    margin: 0 auto;
 
     color: var(--fg);
     background: var(--bg0_h);
-
-    max-width: var(--max-width);
-    margin: 0 auto;
 
     /* make room for fixed/sticky footer */
     padding-bottom: var(--vspace-1);
@@ -100,14 +99,24 @@ aside {
     float: right;
 }
 
-@media (max-width: 640px) {
+/* small devices (less then 1036.78px) */
+@media (max-width: calc(var(--max-width) - 0.02px)) {
+    :root {
+        --max-width: 100%;
+    }
     body {
-        padding: 1em;
+        padding: var(--vspace-3) var(--vspace-3);
+        margin: var(--vspace-3) var(--vspace-3);
     }
 
     header > nav ul,
     header > nav ol {
         display: block;
+    }
+
+    /* TODO: make responsive */
+    input {
+        width: 100%;
     }
 }
 

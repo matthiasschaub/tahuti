@@ -80,12 +80,13 @@
       :-  %host       (se:dejs:format %p)
     ==
   ++  group
-    ^-  $-(json ^group)
+    ::  input same as group but without host
+    ::
+    ^-  $-(json [=gid =title =currency])
     %-  ot:dejs:format                                     :: obj as tuplejsonre
     :~
       :-  %gid        so:dejs:format
       :-  %title      so:dejs:format
-      :-  %host       (se:dejs:format %p)
       :-  %currency   so:dejs:format
     ==
   ++  expense

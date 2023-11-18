@@ -3,13 +3,23 @@
     <head>
         <title>Tahuti</title>
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta
+            name="apple-mobile-web-app-status-bar-style"
+            content="black-translucent"
+        />
+        <meta name="apple-mobile-web-app-title" content="Tahuti" />
         <meta name="description" content="An Expense Sharing App for Urbit" />
         <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
         <link
             rel="stylesheet"
             href="/apps/tahuti/static/css/min/print.css"
             media="print"
+        />
+        <link
+            rel="apple-touch-icon"
+            href="https://console.minio.mutualisten.de/api/v1/buckets/public/objects/download?preview=true&prefix=aWNvbi5wbmc=&version_id=null"
         />
         <script src="/apps/tahuti/assets/htmx.js"></script>
         <script src="/apps/tahuti/assets/json-enc.js"></script>
@@ -45,95 +55,108 @@
                 </ul>
             </nav>
         </header>
-        <h1>Tahuti</h1>
-        <!-- TODO: Get host from cookie -->
+        <h2>Tahuti</h2>
+
+        <h3>Groups</h3>
+        <!-- TODO: add default message: no groups yet -->
+        <div hx-ext="client-side-templates">
+            <ul
+                hx-get="/apps/tahuti/api/groups"
+                hx-trigger="load,path-deps"
+                path-deps="/apps/tahuti/api/*"
+                mustache-template="groups-template"
+            >
+                <emp style="opacity: 0">Loading ...</emp>
+            </ul>
+
+            <template id="groups-template">
+                <!-- iterate over top level array -->
+                {{#.}}
+                <li>
+                    <a href="/apps/tahuti/groups/{{gid}}/expenses.html"
+                        >{{title}}</a
+                    >
+                </li>
+                {{/.}}
+            </template>
+        </div>
+        <h3>Create new group</h3>
+        <!-- TODO: Move to separate page -->
         <div hx-ext="path-deps" hx-request="noHeaders">
-            <h2>Create a Group</h2>
-            <form
-                id="put-groups"
-                hx-put="/apps/tahuti/api/groups"
-                hx-ext="json-enc"
-                hx-swap="none"
-                hx-vals='js:{gid: self.crypto.randomUUID(), host: "~zod"}'
-                hx-on::after-request="if(event.detail.successful) this.reset()"
-            >
-                <input
-                    id="group-title"
-                    type="text"
-                    name="title"
-                    aria-label="Group Title"
-                    placeholder="title"
-                    required
-                />
-                <br />
-                <datalist id="currency-list">
-                    <option>EUR</option>
-                </datalist>
-                <input
-                    id="currency"
-                    type="text"
-                    inputmode="text"
-                    autocomplete="off"
-                    name="currency"
-                    aria-label="Currency"
-                    placeholder="EUR"
-                    value="EUR"
-                    list="currency-list"
-                    required
-                />
-                <button type="submit">Create ▸</button>
-            </form>
-
-            <h2>Join a Group</h2>
-            <form
-                id="post-join"
-                hx-post="/apps/tahuti/api/action/join"
-                hx-ext="json-enc"
-                hx-swap="none"
-                hx-on::after-request="if(event.detail.successful) this.reset()"
-            >
-                <!-- TODO: add validation (valid @p) -->
-                <input
-                    type="text"
-                    name="host"
-                    aria-label="host"
-                    placeholder="~zod"
-                    required
-                />
-                <br />
-                <!-- TODO: add validation (valid uuid) -->
-                <input
-                    type="text"
-                    name="gid"
-                    aria-label="Group ID"
-                    placeholder="14488cd0-f23f-4d21-862e-d79803d159e4"
-                    required
-                />
-                <button type="submit">Join ▸</button>
-            </form>
-
-            <h2>Groups</h2>
-            <div hx-ext="client-side-templates">
-                <ul
-                    hx-get="/apps/tahuti/api/groups"
-                    hx-trigger="load,path-deps"
-                    path-deps="/apps/tahuti/api/*"
-                    mustache-template="groups-template"
+            <fieldset>
+                <form
+                    id="put-groups"
+                    hx-put="/apps/tahuti/api/groups"
+                    hx-ext="json-enc"
+                    hx-swap="none"
+                    hx-vals="js:{gid: self.crypto.randomUUID()}"
+                    hx-on::after-request="if(event.detail.successful) this.reset()"
                 >
-                    <emp style="opacity: 0">Loading ...</emp>
-                </ul>
+                    <label>Titel</label>
+                    <br />
+                    <input
+                        id="group-title"
+                        type="text"
+                        name="title"
+                        aria-label="Group Title"
+                        required
+                    />
+                    <br />
+                    <label>Currency</label>
+                    <br />
+                    <select
+                        id="currency"
+                        type="text"
+                        name="currency"
+                        aria-label="Currency"
+                        required
+                    >
+                        <option value="EUR">EUR</option>
+                    </select>
+                    <br />
+                    <button class="button-primary" type="submit">
+                        Create group ▸
+                    </button>
+                </form>
+            </fieldset>
 
-                <template id="groups-template">
-                    <!-- iterate over top level array -->
-                    {{#.}}
-                    <li>
-                        <a href="/apps/tahuti/groups/{{gid}}/expenses.html"
-                            >{{title}}</a
-                        >
-                    </li>
-                    {{/.}}
-                </template>
-            </div>
+            <!-- TODO: Move to separate page -->
+            <h3>Join existing group</h3>
+            <fieldset>
+                <form
+                    id="post-join"
+                    hx-post="/apps/tahuti/api/action/join"
+                    hx-ext="json-enc"
+                    hx-swap="none"
+                    hx-on::after-request="if(event.detail.successful) this.reset()"
+                >
+                    <!-- TODO: add validation (valid @p) -->
+                    <label>Titel</label>
+                    <br />
+                    <input
+                        type="text"
+                        name="host"
+                        aria-label="host"
+                        placeholder="~zod"
+                        required
+                    />
+                    <br />
+                    <label>Group ID</label>
+                    <br />
+                    <!-- TODO: add validation (valid uuid) -->
+                    <input
+                        type="text"
+                        name="gid"
+                        aria-label="Group ID"
+                        placeholder="14488cd0-f23f-4d21-862e-d79803d159e4"
+                        required
+                    />
+                    <br />
+                    <button class="button-primary" type="submit">
+                        Join group ▸
+                    </button>
+                </form>
+            </fieldset>
         </div>
     </body>
 </html>

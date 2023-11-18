@@ -53,33 +53,36 @@
                 hx-trigger="load"
                 mustache-template="title-template"
             >
-                <h1 style="opacity: 0">Loading ...</h1>
+                <h2 style="opacity: 0">Loading ...</h2>
             </div>
             <template id="title-template">
-                <h1>{{title}}</h1>
+                <h2>{{title}}</h2>
             </template>
 
-            <h2>Invite</h2>
-            <form
-                id="put-invitees"
-                hx-put="/invitees"
-                hx-ext="json-enc"
-                hx-swap="none"
-                hx-on::after-request="if(event.detail.successful) this.reset()"
-            >
-                <!-- TODO: add validation for valid @p -->
-                <input
-                    id="invitee"
-                    type="text"
-                    name="invitee"
-                    aria-label="invitee"
-                    placeholder="~zod"
-                    required="required"
-                />
-                <button type="submit">Add ▸</button>
-            </form>
+            <h3>Invite</h3>
+            <fieldset>
+                <form
+                    id="put-invitees"
+                    hx-put="/invitees"
+                    hx-ext="json-enc"
+                    hx-swap="none"
+                    hx-on::after-request="if(event.detail.successful) this.reset()"
+                >
+                    <!-- TODO: add validation for valid @p -->
+                    <input
+                        id="invitee"
+                        type="text"
+                        name="invitee"
+                        aria-label="invitee"
+                        placeholder="~zod"
+                        required="required"
+                    />
+                    <br />
+                    <button class="button-primary" type="submit">Add ▸</button>
+                </form>
+            </fieldset>
 
-            <h2>Members</h2>
+            <h3>Members</h3>
             <ul
                 id="get-register"
                 hx-get="/register"
@@ -94,7 +97,7 @@
                 {{/.}}
             </template>
 
-            <h2>Invitees</h2>
+            <h3>Invitees</h3>
             <ul
                 id="get-invitees"
                 hx-get="/invitees"

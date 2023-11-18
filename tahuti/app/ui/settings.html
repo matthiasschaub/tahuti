@@ -51,13 +51,13 @@
                 hx-request="noHeaders"
                 mustache-template="title-temp"
             >
-                <h1 style="opacity: 0">Loading ...</h1>
+                <h2 style="opacity: 0">Loading ...</h2>
             </div>
             <template id="title-temp">
-                <h1>{{title}}</h1>
+                <h2>{{title}}</h2>
             </template>
         </div>
-        <h2>Delete Group</h2>
+        <h3>Delete Group</h3>
         <form
             id="delete-groups"
             hx-delete="/"
@@ -68,7 +68,9 @@
             hx-vals="js:{gid: currentGID()}"
             hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'"
         >
-            <button type="submit">Delete ❌</button>
+            <button class="button-cancel" type="submit">
+                Delete this group
+            </button>
         </form>
     </body>
     <script src="/apps/tahuti/assets/request.js"></script>

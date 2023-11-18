@@ -1,24 +1,78 @@
+/* reset fieldset style */
+legend {
+    padding: 0;
+    display: table;
+}
+fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+}
+body:not(:-moz-handler-blocked) fieldset {
+    display: table-cell;
+}
+
+fieldset {
+    /* top right bottom left */
+    margin: var(--vspace) var(--vspace) var(--vspace-3) var(--vspace);
+}
+
+select,
+input,
+button {
+    display: inline-block;
+    margin-bottom: var(--vspace-3);
+
+    font-size: 1.0833em;
+    line-height: calc(1.0833 * var(--vspace));
+}
+
 input {
-    margin-left: var(--vspace);
-    margin-bottom: var(--vspace);
-    line-height: calc(0.9167 * var(--vspace));
+    /* put label close to form */
+    margin-top: 0;
+}
+
+select {
+    /* put label close to form */
+    margin-top: 0;
+
+    background: white;
+
+    border: var(--fg) 1px solid;
+    border-radius: 0;
+
+    height: calc(1.0833 * var(--vspace));
 }
 
 button {
-    display: inline-block;
-    margin-left: var(--vspace);
-    padding: 0.1rem 0.75rem;
-    line-height: calc(0.9167 * var(--vspace));
+    margin-top: var(--vspace-3);
+    margin-right: var(--vspace);
 
-    background: var(--bg0_h);
+    padding-left: var(--vspace-3);
+    padding-right: var(--vspace-3);
+
+    background: var(--bg);
     color: var(--fg);
 
-    border: 1px solid var(--blue);
+    /* border: 1px solid var(--blue); */
     border-radius: 0;
 
     cursor: pointer;
 }
 
+.button-primary {
+    background: var(--blue);
+    color: white;
+    border: var(--fg) 1px solid;
+}
+
+.button-cancel {
+    background: var(--red);
+    color: white;
+    border: var(--fg) 1px solid;
+}
+
 button:hover {
-    color: var(--blue);
+    border: var(--fg) 2px solid;
 }
