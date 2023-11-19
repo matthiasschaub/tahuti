@@ -185,6 +185,18 @@
           [%pass ~ %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
         state
         ::
+          [%apps %tahuti %api %groups @t %kick ~]
+        =/  gid       (snag 4 `(list @t)`site)
+        =/  content   (need (de:json:html q.u.body.request.inbound-request))
+        =/  p         (ship:dejs content)
+        =/  action    [%kick gid p]
+        =/  response  (send [200 ~ [%plain "ok"]])
+        :-  ^-  (list card)
+          %+  snoc
+            response
+          [%pass ~ %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
+        state
+        ::
           [%apps %tahuti %api %groups @t %expenses ~]
         =/  gid       (snag 4 `(list @t)`site)
         =/  content   (need (de:json:html q.u.body.request.inbound-request))

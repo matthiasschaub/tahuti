@@ -150,6 +150,30 @@
     %=  this
       acls    (~(put by acls) gid.action acl)
     ==
+    ::
+      %kick
+    ~&  >  '%tahuti (on-poke): kick'
+    =/  group  (~(got by groups) gid.action)
+    ?>  =(our.bowl src.bowl)
+    ?>  =(our.bowl host.group)
+    ?<  =(our.bowl p.action)
+    =/  acl  (~(got by acls) gid.action)
+    =.  acl  (~(del in acl) p.action)
+    =/  reg  (~(got by regs) gid.action)
+    =.  reg  (~(del in reg) p.action)
+    :-  ^-  (list card)
+      :~
+        :*  %give  %fact  [/[gid.action] ~]  %tahuti-update
+            !>  ^-  update  [%acl gid.action acl]
+        ==
+        :*  %give  %fact  [/[gid.action] ~]  %tahuti-update
+            !>  ^-  update  [%reg gid.action reg]
+        ==
+      ==
+    %=  this
+      acls    (~(put by acls) gid.action acl)
+      regs    (~(put by regs) gid.action reg)
+    ==
     ::  (subscribe to a group hosted on another ship)
       ::
       %join
@@ -248,6 +272,15 @@
           ==
       %=  this
         acls     (~(put by acls) gid acl.update)
+      ==
+      ::
+        %reg
+      ~&  >  '%tahuti (on-agent): update register'
+      :-  ^-  (list card)
+          :~  (fact:agentio cage.sign [/[gid] ~])
+          ==
+      %=  this
+        regs  (~(put by regs) gid reg.update)
       ==
         %ledger
       ~&  >  '%tahuti (on-agent): update ledger'

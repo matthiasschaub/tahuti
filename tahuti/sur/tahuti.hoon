@@ -20,6 +20,7 @@
 ::    access-control list (acl)
 ::
 +$  register  (set @p)
++$  reg       (set @p)
 +$  acl       (set @p)
 ::
 ::    expense
@@ -68,6 +69,7 @@
       ::
       [%add-group =group]
       [%invite =gid =@p]    :: allow to subscribe
+      [%kick =gid =@p]  :: kick subscriber
       [%join =gid =host]    :: subscribe
       [%del-group =gid]
       ::[%edit-group =gid =title]  :: change title
@@ -75,7 +77,6 @@
       ::[%join-group =gid =ship]  :: subscribe
       ::[%leave-group =gid =ship]  :: unsubscribe
       ::::
-      ::[%del-member =gid =ship]  :: kick subscriber
       :::: expense actions performed by members
       ::::
       [%add-expense =gid =expense]
@@ -94,6 +95,7 @@
   $%  [%group =gid =group =register =acl =ledger]
       [%ledger =gid =ledger]
       [%acl =gid =acl]
+      [%reg =gid =reg]
 ::       [%del =gid]
 ::       [%allow =gid =ship]
 ::       [%kick =gid =ship]
