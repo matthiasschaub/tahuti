@@ -114,6 +114,11 @@
       %del-expense
     ~&  >  '%tahuti (on-poke): del expense'
     =/  group  (~(got by groups) gid.action)
+    ?.  =(our.bowl host.group)
+      :-  ^-  (list card)
+        :~  [%pass ~ %agent [host.group %tahuti] %poke %tahuti-action !>(action)]
+        ==
+      this
     ?>  =(our.bowl host.group)
     =/  ledger  (~(got by leds) gid.action)
     =.  ledger  (~(del by ledger) eid.action)

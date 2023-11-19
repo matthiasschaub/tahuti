@@ -146,7 +146,7 @@
         =/  expense   (~(got by ledger) eid)
         =/  response  (expense:enjs expense)
         [(send [200 ~ [%json response]]) state]
-          [%apps %tahuti %api %groups @t %balance ~]
+          :: [%apps %tahuti %api %groups @t %balance ~]
         :: TODO
         :: =/  gid       (snag 4 `(list @t)`site)
         :: =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/nets/noun
