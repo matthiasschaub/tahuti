@@ -1,10 +1,12 @@
 import pytest
+from hypothesis import given, strategies
+from datetime import datetime, timezone
 from time import sleep
 from schema import Schema
 from uuid import uuid4
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def expense_schema():
     """Response schema"""
     return Schema(
@@ -16,36 +18,56 @@ def expense_schema():
             "currency": str,
             "payer": str,
             "date": int,
-            "involves": list
+            "involves": list,
         },
     )
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def expenses_schema(expense_schema):
     """Response schema"""
     return Schema([expense_schema])
 
 
-def test_expense_single(zod, gid, group, eid, expenses_schema):
+@given(
+    uuid=strategies.uuids(),
+    amount=strategies.integers(min_value=0),
+    title=strategies.text(),
+    dt=strategies.datetimes(
+        min_value=datetime(1970, 1, 1, 0, 0),
+        allow_imaginary=False,
+    ),
+)
+@pytest.mark.usefixtures("group_module")
+def test_expense_put(
+    uuid,
+    amount,
+    title,
+    dt,
+    zod,
+    gid_module,
+    expenses_schema,
+):
     """Add single expense by host"""
+    # convert datetime to unix timestamp in seconds
+    dt_utc_aware = dt.replace(tzinfo=timezone.utc)
+    ts = int(dt_utc_aware.timestamp())
+
     expense = {
-        "gid": gid,
-        "eid": eid,
-        "title": "foo",
-        "amount": "100",
+        "gid": gid_module,
+        "eid": str(uuid),
+        "title": title,
+        "amount": str(amount),
         "currency": "EUR",
         "payer": "~zod",
-        "date": 1699182124,
+        "date": ts,
         "involves": ["~zod"],
     }
-    url = f"/apps/tahuti/api/groups/{gid}/expenses"
+    url = f"/apps/tahuti/api/groups/{gid_module}/expenses"
+
     # PUT /expenses
     response = zod.put(url, json=expense)
     assert response.status_code == 200
-    # idempotent
-    # response = zod.put(url, json=expense)
-    # assert response.status_code == 200
 
     # GET /expenses
     response = zod.get(url)
@@ -55,10 +77,10 @@ def test_expense_single(zod, gid, group, eid, expenses_schema):
     assert isinstance(result, list)
     ids = [r["eid"] for r in result]
     assert expense["eid"] in ids
-    assert ids.count(expense["eid"]) == 1  # idempotent
 
 
-def test_expense_multi(zod, gid, group, expenses_schema):
+@pytest.mark.usefixtures("group")
+def test_expense_put_multi(zod, gid, expenses_schema):
     """Add multiple expenses by host"""
     expense = {
         "gid": gid,
@@ -92,11 +114,12 @@ def test_expense_multi(zod, gid, group, expenses_schema):
     assert id2 in ids
 
 
-def test_expense_nus(zod, nus, gid, group, eid, member, expenses_schema):
+@pytest.mark.usefixtures("group", "member")
+def test_expense_put_by_nus(zod, nus, gid, uuid, expenses_schema):
     """Add expense by member ~nus"""
     expense = {
         "gid": gid,
-        "eid": eid,
+        "eid": uuid,
         "title": "foo",
         "amount": "100",
         "currency": "EUR",
@@ -105,15 +128,14 @@ def test_expense_nus(zod, nus, gid, group, eid, member, expenses_schema):
         "involves": ["~zod"],
     }
     url = f"/apps/tahuti/api/groups/{gid}/expenses"
-    sleep(1)
-    # PUT /expenses
+
+    # PUT /expenses by nus
+    sleep(5)  # wait for successful join
     response = nus.put(url, json=expense)
     assert response.status_code == 200
-    # idempotent
-    # response = zod.put(url, json=expense)
-    # assert response.status_code == 200
-    sleep(1)
-    # GET /expenses
+
+    # GET /expenses for zod
+    sleep(1)  # wait for successful poke
     response = zod.get(url)
     assert response.status_code == 200
     result = response.json()
@@ -123,8 +145,19 @@ def test_expense_nus(zod, nus, gid, group, eid, member, expenses_schema):
     assert expense["eid"] in ids
     assert ids.count(expense["eid"]) == 1  # idempotent
 
+    # GET /expenses for nus
+    response = nus.get(url)
+    assert response.status_code == 200
+    result = response.json()
+    assert expenses_schema.is_valid(result)
+    assert isinstance(result, list)
+    ids = [r["eid"] for r in result]
+    assert expense["eid"] in ids
+    assert ids.count(expense["eid"]) == 1  # idempotent
 
-def test_expense_delete(zod, gid, group, eid, expense):
+
+@pytest.mark.usefixtures("group", "expense")
+def test_expense_delete(zod, gid, eid):
     """Add single expense by host"""
     # DELETE /expenses/{eid}
     url = f"/apps/tahuti/api/groups/{gid}/expenses/{eid}"
@@ -134,6 +167,33 @@ def test_expense_delete(zod, gid, group, eid, expense):
     # GET /expenses
     url = f"/apps/tahuti/api/groups/{gid}/expenses"
     response = zod.get(url)
+    assert response.status_code == 200
+    result = response.json()
+    ids = [r["eid"] for r in result]
+    assert eid not in ids
+
+
+@pytest.mark.usefixtures("group", "member", "expense")
+def test_expense_delete_by_nus(zod, nus, gid, eid):
+    """Add single expense by host"""
+    # DELETE /expenses/{eid} by nus
+    sleep(1)  # wait for successful join
+    url = f"/apps/tahuti/api/groups/{gid}/expenses/{eid}"
+    response = nus.delete(url)
+    assert response.status_code == 200
+
+    # GET /expenses for zod
+    sleep(1)  # wait for successful poke
+    url = f"/apps/tahuti/api/groups/{gid}/expenses"
+    response = zod.get(url)
+    assert response.status_code == 200
+    result = response.json()
+    ids = [r["eid"] for r in result]
+    assert eid not in ids
+
+    # GET /expenses for nus
+    url = f"/apps/tahuti/api/groups/{gid}/expenses"
+    response = nus.get(url)
     assert response.status_code == 200
     result = response.json()
     ids = [r["eid"] for r in result]

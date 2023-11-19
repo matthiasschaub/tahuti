@@ -10,6 +10,7 @@ def test_join(zod, nus, gid, group, invitee):
     response = nus.post(url, json=join)
     assert response.status_code == 200
 
+    # wait for join
     sleep(1)
 
     # ~zod

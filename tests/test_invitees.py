@@ -1,24 +1,26 @@
 import requests
+import pytest
 
 
-def test_invitee_invalid(auth, gid):
-    # TODO: change status code to expected status code not just internal server error
-    url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/invitees"
-    response = requests.put(url, cookies=auth, json={})
-    assert response.status_code == 500
-    response = requests.put(url, cookies=auth, json="")
-    assert response.status_code == 500
-    response = requests.put(url, cookies=auth, json=None)
-    assert response.status_code == 418
-    response = requests.put(url, cookies=auth, json="~zod")
-    assert response.status_code == 500
-    response = requests.put(url, cookies=auth, json={"invitee": ""})
-    assert response.status_code == 500
-    response = requests.put(url, cookies=auth, json={"invitee": "zod"})
-    assert response.status_code == 500
+@pytest.mark.parametrize(
+    "json", ({}, "", "~zod", {"invitee": ""}, {"invitee": None}, {"invitee": "zod"})
+)
+@pytest.mark.usefixtures("group")
+def test_invitee_invalid(json, zod, gid):
+    url = f"/apps/tahuti/api/groups/{gid}/invitees"
+    resp = zod.put(url, json=json)
+    assert resp.status_code == 500
 
 
-def test_invitees_single(auth, gid, group):
+@pytest.mark.usefixtures("group")
+def test_invitee_empty_body(zod, gid):
+    url = f"/apps/tahuti/api/groups/{gid}/invitees"
+    resp = zod.put(url, json=None)
+    assert resp.status_code == 418
+
+
+@pytest.mark.usefixtures("group")
+def test_invitees_single(auth, gid):
     """Test PUT and GET requests."""
 
     # PUT /invitees
@@ -47,7 +49,8 @@ def test_invitees_single(auth, gid, group):
     assert "~nus" not in result
 
 
-def test_invitees_multi(auth, gid, group):
+@pytest.mark.usefixtures("group")
+def test_invitees_multi(auth, gid):
     # PUT
     url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/invitees"
     response = requests.put(url, cookies=auth, json={"invitee": "~nus"})

@@ -1,4 +1,5 @@
 import pytest
+import time
 import requests
 from .utils import BaseUrlSession
 from uuid import uuid4
@@ -42,6 +43,21 @@ def nus():
         yield session
 
 
+# fixtures are module scoped because of hypothesis not working with
+# function scoped fixtures
+@pytest.fixture(scope="module")
+def gid_module():
+    return str(uuid4())
+
+
+@pytest.fixture(scope="module")
+def group_module(zod, gid_module) -> dict:
+    group = {"gid": gid_module, "title": "assembly", "host": "~zod", "currency": "EUR"}
+    url = "/apps/tahuti/api/groups"
+    zod.put(url, json=group)
+    return group
+
+
 # TODO
 # @pytest.fixture(scope="session")
 # def commit():
@@ -51,6 +67,11 @@ def nus():
 #         "sink": {"app": "hood"},
 #     }
 #     requests.post(url, json=data)
+#
+#
+@pytest.fixture
+def uuid():
+    return str(uuid4())
 
 
 @pytest.fixture
@@ -65,12 +86,7 @@ def gid():
 
 @pytest.fixture
 def group(zod, gid) -> dict:
-    group = {
-        "gid": gid,
-        "title": "assembly",
-        "host": "~zod",
-        "currency": "EUR"
-    }
+    group = {"gid": gid, "title": "assembly", "host": "~zod", "currency": "EUR"}
     url = "/apps/tahuti/api/groups"
     zod.put(url, json=group)
     return group
@@ -89,15 +105,15 @@ def member(nus, gid, group, invitee) -> str:
     """Based on `group`. Adds invitee."""
     join = {
         "host": group["host"],
-        "title": "",  # always left empty for /join request
         "gid": gid,
     }
     url = "/apps/tahuti/api/action/join"
-    response = nus.post(url, json=join)
+    nus.post(url, json=join)
     return "~nus"
 
+
 @pytest.fixture
-def expense(zod, gid, group, eid): 
+def expense(zod, gid, eid, group):
     """Add single expense by host"""
     expense = {
         "gid": gid,
@@ -112,5 +128,3 @@ def expense(zod, gid, group, eid):
     url = f"/apps/tahuti/api/groups/{gid}/expenses"
     zod.put(url, json=expense)
     return expense
-
-
