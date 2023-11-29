@@ -31,9 +31,11 @@
       :-  'host'      [%s (scot %p host.g)]
       :-  'currency'  [%s currency.g]
     ==
-    ::  (a list of groups, not a map of groups, to json array)
-    ::
+  ::  (groups as json array)
+  ::
   ++  groups
+    ::  turn map of groups into list
+    ::
     |=  g=^groups
     ^-  json
     [%a (turn ~(val by g) group:enjs)]
@@ -59,6 +61,30 @@
     |=  vals=(list ^expense)
     ^-  json
     [%a (turn vals expense:enjs)]
+  ::  (net amounts as json array)
+  ::
+  ++  net
+    ::  turn net amounts map into list
+    ::
+    |=  n=^net
+    ^-  json
+    :-  %a
+    %+  turn  ~(tap by n)
+    |=  [member=@p amount=@s]
+    =/  [syn=? abs=@]  (old:si amount)
+    ?:  syn
+      =/  fmt  "{<abs>}"
+      %-  pairs:enjs:format
+      :~
+        :-  'member'  [%s (scot %p member)]
+        :-  'amount'  [%s (crip fmt)]
+      ==
+    =/  fmt  "-{<abs>}"
+    %-  pairs:enjs:format
+    :~
+      :-  'member'  [%s (scot %p member)]
+      :-  'amount'  [%s (crip fmt)]
+    ==
   --
 ::
 ++  dejs

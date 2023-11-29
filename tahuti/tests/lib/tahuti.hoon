@@ -6,50 +6,154 @@
   ::
   |%
   ++  single-zero
-    ^-  (pair (list [@p @ud (list @p)]) (list @p))
+    ^-  [(list expense) (list @p)]
+    :: (pair (list [@p @ud (list @p)]) (list @p))
     :-
       :~
-        :*  ~zod  0  (limo [~zod ~])  ==
+        :*
+          %gid
+          %eid
+          "foo"
+          0
+          %eur
+          ~zod
+          ~2018.5.14..22.31.46..1435
+          `(set @p)`(silt [~zod ~])
+        ==
       ==
     :~  ~zod  ==
   ++  single-single
-    ^-  (pair (list [@p @ud (list @p)]) (list @p))
+    :: ^-  (pair (list [@p @ud (list @p)]) (list @p))
+    ^-  [(list expense) (list @p)]
     :-
       :~
-        :*  ~zod  1  (limo [~zod ~])  ==
+        :*
+          %gid
+          %eid
+          "foo"
+          1
+          %eur
+          ~zod
+          ~2018.5.14..22.31.46..1435
+          `(set @p)`(silt [~zod ~])
+        ==
       ==
     :~  ~zod  ==
   ++  multi-single
     ::  multiple expenses single ship
     ::
-    ^-  (pair (list [@p @ud (list @p)]) (list @p))
+    :: ^-  (pair (list [@p @ud (list @p)]) (list @p))
+    ^-  [(list expense) (list @p)]
     :-
       :~
-        :*  ~zod  1  (limo [~zod ~])  ==
-        :*  ~zod  2  (limo [~zod ~])  ==
-        :*  ~zod  3  (limo [~zod ~])  ==
+        :*
+          %gid
+          %eid1
+          "foo"
+          1
+          %eur
+          ~zod
+          ~2018.5.14..22.31.46..1435
+          `(set @p)`(silt [~zod ~])
+        ==
+        :*
+          %gid
+          %eid2
+          "foo"
+          2
+          %eur
+          ~zod
+          ~2018.5.14..22.31.46..1435
+          `(set @p)`(silt [~zod ~])
+        ==
+        :*
+          %gid
+          %eid3
+          "foo"
+          3
+          %eur
+          ~zod
+          ~2018.5.14..22.31.46..1435
+          `(set @p)`(silt [~zod ~])
+        ==
       ==
     :~  ~zod  ==
   ++  multi-multi-equal
     ::  multiple expenses multiple ships with equal involvement
     ::
-    ^-  (pair (list [@p @ud (list @p)]) (list @p))
+    :: ^-  (pair (list [@p @ud (list @p)]) (list @p))
+    ^-  [(list expense) (list @p)]
     :-
       :~
-        :*  ~zod  1  (limo [~zod ~nus ~])  ==  :: TODO should be cents
-        :*  ~nus  2  (limo [~zod ~nus ~])  ==
-        :*  ~nus  3  (limo [~zod ~nus ~])  ==
+        :*
+          %gid
+          %eid1
+          "foo"
+          1
+          %eur
+          ~zod
+          ~2018.5.14..22.31.46..1435
+          `(set @p)`(silt [~zod ~nus ~])
+        ==
+        :*
+          %gid
+          %eid2
+          "foo"
+          2
+          %eur
+          ~nus
+          ~2018.5.14..22.31.46..1435
+          `(set @p)`(silt [~zod ~nus ~])
+        ==
+        :*
+          %gid
+          %eid3
+          "foo"
+          3
+          %eur
+          ~nus
+          ~2018.5.14..22.31.46..1435
+          `(set @p)`(silt [~zod ~nus ~])
+        ==
       ==
     :~  ~zod  ~nus  ==
   ++  multi-multi-diff
     ::  multiple expenses multiple ships with different involvement
     ::
-    ^-  (pair (list [@p @ud (list @p)]) (list @p))
+    :: ^-  (pair (list [@p @ud (list @p)]) (list @p))
+    ^-  [(list expense) (list @p)]
     :-
       :~
-        :*  ~zod  1  (limo [~nus ~])  ==
-        :*  ~nus  2  (limo [~zod ~nus ~])  ==
-        :*  ~nus  3  (limo [~zod ~])  ==
+        :*
+          %gid
+          %eid1
+          "foo"
+          1
+          %eur
+          ~zod
+          ~2018.5.14..22.31.46..1435
+          `(set @p)`(silt [~nus ~])
+        ==
+        :*
+          %gid
+          %eid2
+          "foo"
+          2
+          %eur
+          ~nus
+          ~2018.5.14..22.31.46..1435
+          `(set @p)`(silt [~zod ~nus ~])
+        ==
+        :*
+          %gid
+          %eid3
+          "foo"
+          3
+          %eur
+          ~nus
+          ~2018.5.14..22.31.46..1435
+          `(set @p)`(silt [~zod ~])
+        ==
       ==
     :~  ~zod  ~nus  ==
   --

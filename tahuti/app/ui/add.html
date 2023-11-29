@@ -5,11 +5,21 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content="An Expense Sharing App for Urbit" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta
+            name="apple-mobile-web-app-status-bar-style"
+            content="black-translucent"
+        />
+        <meta name="apple-mobile-web-app-title" content="Tahuti" />
         <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
         <link
             rel="stylesheet"
             href="/apps/tahuti/static/css/min/print.css"
             media="print"
+        />
+        <link
+            rel="apple-touch-icon"
+            href="https://console.minio.mutualisten.de/api/v1/buckets/public/objects/download?preview=true&prefix=aWNvbi5wbmc=&version_id=null"
         />
         <script src="/apps/tahuti/assets/htmx.js"></script>
         <script src="/apps/tahuti/assets/json-enc.js"></script>
@@ -174,7 +184,6 @@
                     <button class="button-primary" type="submit">Add expense ▸</button>
                     <button class="button-cancel" onclick="window.location.href='/apps/tahuti/groups/' + currentGID() + '/expenses';
 ">Cancel</button>
-                    <!-- <button class="button-cancel">Cancel</button> -->
                 </form>
             </fieldset>
         </div>

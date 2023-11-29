@@ -146,13 +146,12 @@
         =/  expense   (~(got by ledger) eid)
         =/  response  (expense:enjs expense)
         [(send [200 ~ [%json response]]) state]
-          :: [%apps %tahuti %api %groups @t %balance ~]
-        :: TODO
-        :: =/  gid       (snag 4 `(list @t)`site)
-        :: =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/nets/noun
-        :: =/  nets      .^(nets %gx path)
-        :: =/  response  (nets:enjs nets)
-        :: [(send [200 ~ [%json response]]) state]
+          [%apps %tahuti %api %groups @t %balances ~]
+        =/  gid   (snag 4 `(list @t)`site)
+        =/  path  /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/stat/net/[gid]/noun
+        =/  net   .^(net %gx path)
+        =/  resp  (net:enjs net)
+        [(send [200 ~ [%json resp]]) state]
       ==
       ::
         %'PUT'
@@ -201,6 +200,7 @@
         =/  gid       (snag 4 `(list @t)`site)
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
         =/  expense   (expense:dejs content)
+        ~&  expense
         =/  action    [%add-expense gid expense]
         =/  response  (send [200 ~ [%plain "ok"]])
         :-  ^-  (list card)

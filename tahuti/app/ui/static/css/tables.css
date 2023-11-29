@@ -8,14 +8,16 @@ table {
     margin-right: auto;
 
     border-collapse: collapse;
+
+    white-space: nowrap;
     /* border-spacing: 0; */
 
-    /* make table scrollable */
-    /* border-collapse: seperate; */
-    /* display: block; */
-    /* display: inline-block; */
-    /* overflow-y: auto; */
-    /* height: 200px; */
+    /* make table scrollable (horizontal) */
+    border-collapse: seperate;
+    display: block;
+    display: inline-block;
+    overflow-y: auto;
+    /* height: 200px; (vertical) */
 }
 
 table > :is(thead, tbody) > tr > :is(th, td) {
@@ -48,11 +50,11 @@ table > tbody > tr td:nth-child(2) {
     text-align: right;
 }
 
-@media (max-width: 640px) {
-    #expenses > tbody > tr td:nth-child(3),
-    #expenses > tbody > tr td:nth-child(4),
-    #expenses > thead > tr th:nth-child(3),
-    #expenses > thead > tr th:nth-child(4) {
-        display: none;
-    }
-}
+/* @media (max-width: 640px) { */
+/*     #expenses > tbody > tr td:nth-child(3), */
+/*     #expenses > tbody > tr td:nth-child(4), */
+/*     #expenses > thead > tr th:nth-child(3), */
+/*     #expenses > thead > tr th:nth-child(4) { */
+/*         display: none; */
+/*     } */
+/* } */

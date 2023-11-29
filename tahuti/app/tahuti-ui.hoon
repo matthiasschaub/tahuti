@@ -3,6 +3,7 @@
 /+  server         :: HTTP request processing
 /+  schooner       :: HTTP response handling
 /*  groups                 %html  /app/ui/groups/html
+/*  balances               %html  /app/ui/balances/html
 /*  members                %html  /app/ui/members/html
 /*  expenses               %html  /app/ui/expenses/html
 /*  add                    %html  /app/ui/add/html
@@ -95,6 +96,8 @@
           [(send [200 ~ [%html groups]]) state]
         [%apps %tahuti %groups @t %expenses ~]
           [(send [200 ~ [%html expenses]]) state]
+        [%apps %tahuti %groups @t %balances ~]
+          [(send [200 ~ [%html balances]]) state]
         [%apps %tahuti %groups @t %members ~]
           [(send [200 ~ [%html members]]) state]
         [%apps %tahuti %groups @t %add ~]

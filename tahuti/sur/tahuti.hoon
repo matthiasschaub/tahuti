@@ -62,6 +62,10 @@
   ==
 +$  exes       (list ex)
 ::
+::    statistics
+::
++$  net  (map @p @s)
+::
 ::    input requests/actions
 ::
 +$  action

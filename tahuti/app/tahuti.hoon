@@ -3,6 +3,7 @@
 /+  agentio        :: agent input/output helper
 /+  dbug
 /+  verb
+/+  stat           :: tahuti statistics library
 ::  types
 ::
 |%
@@ -157,6 +158,7 @@
     ?>  =(our.bowl src.bowl)
     ?>  =(our.bowl host.group)
     ?<  =(our.bowl p.action)
+    ?<  =(host.group p.action)
     =/  acl  (~(got by acls) gid.action)
     =.  acl  (~(del in acl) p.action)
     =/  reg  (~(got by regs) gid.action)
@@ -214,7 +216,7 @@
 ++  on-leave  on-leave:default
 ++  on-peek
   ~&  >  '%tahuti (on-peek)'
-  |=  =path
+  |=  path=(pole knot)
   ^-  (unit (unit [mark vase]))
   ?+  path  ~|('%tahuti (on-peek)' (on-peek:default path))
     ::
@@ -229,6 +231,16 @@
     ::
       [%x %leds ~]
     [~ ~ [%noun !>(leds.this)]]
+    ::
+      [%x %stat %net =gid ~]
+    ?>  (~(has by groups) gid.path)
+    =/  group  (~(got by groups) gid.path)
+    =/  reg    (~(got by regs) gid.path)
+    =.  reg    (~(put in reg) host.group)
+    =/  led    (~(got by leds) gid.path)
+    =/  net    ~(net stat [~(val by led) ~(tap in reg)])
+    ~&  net
+    [~ ~ [%noun !>(net)]]
   ==
 ++  on-agent
   ~&  >  '%tahuti (on-agent)'

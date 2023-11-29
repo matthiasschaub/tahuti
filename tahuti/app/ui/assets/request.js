@@ -15,7 +15,7 @@ document.body.addEventListener("htmx:configRequest", (event) => {
 
 // set HTML href URLs
 //
-const endpoints = ["add", "expenses", "members", "settings"];
+const endpoints = ["add", "expenses", "balances", "members", "settings"];
 for (let i = 0; i < endpoints.length; i++) {
     const href = `/apps/tahuti/groups/${uuid}/${endpoints[i]}`;
     const element = document.getElementById(`${endpoints[i]}-href`);

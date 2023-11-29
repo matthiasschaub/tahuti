@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+    <head>
+        <title>Tahuti</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="An Expense Sharing App for Urbit" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta
+            name="apple-mobile-web-app-status-bar-style"
+            content="black-translucent"
+        />
+        <meta name="apple-mobile-web-app-title" content="Tahuti" />
+        <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
+        <link
+            rel="stylesheet"
+            href="/apps/tahuti/static/css/min/print.css"
+            media="print"
+        />
+        <link
+            rel="apple-touch-icon"
+            href="https://console.minio.mutualisten.de/api/v1/buckets/public/objects/download?preview=true&prefix=aWNvbi5wbmc=&version_id=null"
+        />
+        <script src="/apps/tahuti/assets/htmx.js"></script>
+        <script src="/apps/tahuti/assets/json-enc.js"></script>
+        <script src="/apps/tahuti/assets/path-deps.js"></script>
+        <script src="/apps/tahuti/assets/client-side-templates.js"></script>
+        <script src="/apps/tahuti/assets/mustache.js"></script>
+        <script src="/apps/tahuti/assets/currency.js"></script>
+    </head>
+
+    <body>
+        <header>
+            <nav>
+                <ul>
+                    <!-- hrefs is set by request.js -->
+                    <li>
+                        <a href="/apps/tahuti/groups">↜ Groups</a>
+                    </li>
+                    <li>
+                        <a id="expenses-href" href="">Expenses</a>
+                    </li>
+                    <li>
+                        <a id="balances-href" href=""
+                            ><strong>Balances</strong></a
+                        >
+                    </li>
+                    <li>
+                        <a style="opacity: 0.3">Reimbursments</a>
+                    </li>
+                    <li>
+                        <a id="members-href" href="">Members</a>
+                    </li>
+                    <li>
+                        <a id="settings-href" href="">Settings</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <div hx-ext="client-side-templates">
+            <div
+                hx-get="/"
+                hx-trigger="load"
+                hx-swap="outerHTML"
+                mustache-template="title-temp"
+            >
+                <h2 style="opacity: 0">Loading ...</h2>
+            </div>
+            <template id="title-temp">
+                <h2>{{title}}</h2>
+            </template>
+
+            <h3>Balances</h3>
+            <div style="overflow-x: auto">
+                <table id="balances">
+                    <thead>
+                        <tr>
+                            <th>Member</th>
+                            <th id="amount">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody
+                        id="get-balances"
+                        hx-get="/balances"
+                        hx-trigger="load"
+                        mustache-template="balances-temp"
+                    ></tbody>
+                </table>
+            </div>
+            <template id="balances-temp">
+                <!-- iterate over array of balances object -->
+                {{#.}}
+                <tr>
+                    <td>{{member}}</td>
+                    <td headers="amount">{{amount}}</td>
+                </tr>
+                {{/.}}
+            </template>
+        </div>
+    </body>
+    <script src="/apps/tahuti/assets/request.js"></script>
+    <script>
+        const USD = (value) => currency(value); // defaults
+        const EUR = (value) =>
+            currency(value, {
+                symbol: "€",
+                decimal: ",",
+                separator: ".",
+                pattern: `# !`,
+                fromCents: true,
+            });
+
+        const tableBody = document.getElementById("get-balances");
+
+        // transform values
+        //
+        tableBody.addEventListener("htmx:afterRequest", (event) => {
+            for (const row of tableBody.rows) {
+                for (const cell of row.cells) {
+                    if (cell.headers == "amount") {
+                        cell.innerText = EUR(cell.innerText).format();
+                    }
+                }
+            }
+        });
+    </script>
+</html>
