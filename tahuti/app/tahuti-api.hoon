@@ -200,7 +200,6 @@
         =/  gid       (snag 4 `(list @t)`site)
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
         =/  expense   (expense:dejs content)
-        ~&  expense
         =/  action    [%add-expense gid expense]
         =/  response  (send [200 ~ [%plain "ok"]])
         :-  ^-  (list card)

@@ -98,6 +98,7 @@
       this
     =/  register  (~(got by regs) gid.action)
     ?>  (~(has in (~(put in register) host.group)) payer.expense.action)
+    ?>  (~(has in (~(put in register) host.group)) src.bowl)
     =/  ledger  (~(got by leds) gid.action)
     ?<  (~(has by ledger) eid.expense.action)
     =.  ledger  (~(put by ledger) eid.expense.action expense.action)
@@ -236,10 +237,9 @@
     ?>  (~(has by groups) gid.path)
     =/  group  (~(got by groups) gid.path)
     =/  reg    (~(got by regs) gid.path)
-    =.  reg    (~(put in reg) host.group)
     =/  led    (~(got by leds) gid.path)
+    =.  reg    (~(put in reg) host.group)
     =/  net    ~(net stat [~(val by led) ~(tap in reg)])
-    ~&  net
     [~ ~ [%noun !>(net)]]
   ==
 ++  on-agent

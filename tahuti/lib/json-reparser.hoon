@@ -72,14 +72,7 @@
     %+  turn  ~(tap by n)
     |=  [member=@p amount=@s]
     =/  [syn=? abs=@]  (old:si amount)
-    ?:  syn
-      =/  fmt  "{<abs>}"
-      %-  pairs:enjs:format
-      :~
-        :-  'member'  [%s (scot %p member)]
-        :-  'amount'  [%s (crip fmt)]
-      ==
-    =/  fmt  "-{<abs>}"
+    =/  fmt  ?.(syn "-{<abs>}" "{<abs>}")
     %-  pairs:enjs:format
     :~
       :-  'member'  [%s (scot %p member)]
