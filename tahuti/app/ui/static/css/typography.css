@@ -8,7 +8,7 @@ h1 {
     /* /1* small caps *1/ */
     /* font-feature-settings: "smcp"; */
     /* top right bottom left */
-    margin: var(--vspace-1) 0 var(--vspace-1) 0;
+    margin: var(--vspace-1) var(--vspace-3) var(--vspace-1) var(--vspace-3);
     line-height: calc(3.1875 / var(--space) * var(--vspace));
     font-size: 3.1875em;
     word-break: break-word;
@@ -26,7 +26,7 @@ h2 {
     /* font-weight: lighter; */
     word-break: break-word;
     /* top right bottom left */
-    margin: var(--vspace-2) 0 var(--vspace-3) 0;
+    margin: var(--vspace-2) var(--vspace-3) var(--vspace-3) var(--vspace-3);
     line-height: 1em;
     text-align: center;
 
@@ -46,7 +46,7 @@ h3 {
     /* text-transform: uppercase; */
     /* letter-spacing: 0.1em; */
     /* top right bottom left */
-    margin: var(--vspace-1) 0 var(--vspace-3) 0;
+    margin: var(--vspace-1) var(--vspace-3) var(--vspace-3) var(--vspace-3);
     line-height: 1em;
 }
 
@@ -62,7 +62,7 @@ a:hover {
 }
 
 ul {
-    margin-left: var(--vspace);
+    margin-left: 0;
 }
 
 dt {
