@@ -1,250 +1,307 @@
 <!DOCTYPE html>
 <html class="dark" lang="en">
-    <head>
-        <title>Tahuti</title>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="An Expense Sharing App for Urbit" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta
-            name="apple-mobile-web-app-status-bar-style"
-            content="black-translucent"
-        />
-        <meta name="apple-mobile-web-app-title" content="Tahuti" />
-        <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
-        <link
-            rel="stylesheet"
-            href="/apps/tahuti/static/css/min/print.css"
-            media="print"
-        />
-        <link
-            rel="apple-touch-icon"
-            href="https://console.minio.mutualisten.de/api/v1/buckets/public/objects/download?preview=true&prefix=aWNvbi5wbmc=&version_id=null"
-        />
-        <script src="/apps/tahuti/assets/htmx.js"></script>
-        <script src="/apps/tahuti/assets/json-enc.js"></script>
-        <script src="/apps/tahuti/assets/client-side-templates.js"></script>
-        <script src="/apps/tahuti/assets/mustache.js"></script>
-        <script src="/apps/tahuti/assets/currency.js"></script>
-        <script src="https://unpkg.com/htmx.org/dist/ext/debug.js"></script>
-    </head>
+  <head>
+    <title>Tahuti</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+    <meta
+      name="description"
+      content="An Expense Sharing App for Urbit"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Tahuti" />
+    <link
+      rel="stylesheet"
+      href="/apps/tahuti/static/css/min/style.css"
+    />
+    <link
+      rel="stylesheet"
+      href="/apps/tahuti/static/css/min/print.css"
+      media="print"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="https://console.minio.mutualisten.de/api/v1/buckets/public/objects/download?preview=true&prefix=aWNvbi5wbmc=&version_id=null"
+    />
+    <script src="/apps/tahuti/assets/htmx.js"></script>
+    <script src="/apps/tahuti/assets/json-enc.js"></script>
+    <script src="/apps/tahuti/assets/client-side-templates.js"></script>
+    <script src="/apps/tahuti/assets/mustache.js"></script>
+    <script src="/apps/tahuti/assets/currency.js"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/debug.js"></script>
+  </head>
 
-    <body>
-        <header>
-            <nav>
-                <ul>
-                    <!-- hrefs is set by request.js -->
-                    <li>
-                        <a href="/apps/tahuti/groups">↜ Groups</a>
-                    </li>
-                    <li>
-                        <a id="expenses-href" href="">Expenses</a>
-                    </li>
-                    <li>
-                        <a style="opacity: 0.3">Balances</a>
-                    </li>
-                    <li>
-                        <a style="opacity: 0.3">Reimbursments</a>
-                    </li>
-                    <li>
-                        <a id="members-href" href="">Members</a>
-                    </li>
-                    <li>
-                        <a style="opacity: 0.3">Settings</a>
-                    </li>
-                </ul>
-            </nav>
-        </header>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <!-- hrefs is set by request.js -->
+          <li>
+            <a href="/apps/tahuti/groups">↜ Groups</a>
+          </li>
+          <li>
+            <a id="expenses-href" href="">Expenses</a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Balances</a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Reimbursments</a>
+          </li>
+          <li>
+            <a id="members-href" href="">Members</a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Settings</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
 
-        <div hx-ext="client-side-templates">
-            <div
-                hx-get="/"
-                hx-trigger="load"
-                hx-swap="outerHTML"
-                mustache-template="title-temp"
+    <div hx-ext="client-side-templates">
+      <div
+        hx-get="/"
+        hx-trigger="load"
+        hx-swap="outerHTML"
+        mustache-template="title-temp"
+      >
+        <h2 style="opacity: 0">Loading ...</h2>
+      </div>
+      <template id="title-temp">
+        <h2>{{title}}</h2>
+      </template>
+
+      <h3>Add an Expense</h3>
+      <!-- TODO: redirect to /expenses -->
+      <fieldset>
+        <form
+          id="put-expenses"
+          hx-put="/expenses"
+          hx-ext="json-enc"
+          hx-vals="js:{eid: self.crypto.randomUUID(), gid: currentGID()}"
+        >
+          <!-- amount -->
+          <label for="amount">How much?</label>
+          <br />
+          <input
+            id="amount"
+            type="text"
+            inputmode="text"
+            autocomplete="transaction-amount"
+            name="amount"
+            aria-label="Amount"
+            placeholder="amount"
+            required
+          />
+          <br />
+          <!-- titel -->
+          <label for="title">What for?</label>
+          <br />
+          <input
+            id="title"
+            type="text"
+            inputmode="text"
+            autocomplete="on"
+            name="title"
+            aria-label="Title"
+            placeholder="Title"
+            required
+          />
+          <br />
+          <!-- currency -->
+          <label for="currency">Which currency?</label>
+          <br />
+          <div
+            hx-get="/"
+            hx-trigger="load"
+            mustache-template="currency-input-temp"
+          >
+            <input style="opacity: 0" />
+          </div>
+          <template id="currency-input-temp">
+            <select
+              id="currency"
+              type="text"
+              name="currency"
+              aria-label="Currency"
+              required
             >
-                <h2 style="opacity: 0">Loading ...</h2>
-            </div>
-            <template id="title-temp">
-                <h2>{{title}}</h2>
-            </template>
+              <option value="{{currency}}">{{currency}}</option>
+            </select>
+          </template>
+          <!-- payer -->
+          <label for="payer">Who paid?</label>
+          <!-- TODO: make current ship the default/placeholder -->
+          <!-- TODO: add current ship as default value -->
+          <div
+            hx-get="/register"
+            hx-trigger="load"
+            mustache-template="payer-input-temp"
+          ></div>
+          <template id="payer-input-temp">
+            <select
+              id="payer"
+              type="text"
+              name="payer"
+              aria-label="Payer"
+              required
+            >
+              {{#.}}
+              <option value="{{.}}">{{.}}</option>
+              {{/.}}
+            </select>
+          </template>
 
-            <h3>Add an Expense</h3>
-            <!-- TODO: redirect to /expenses -->
-            <fieldset>
-                <form
-                    id="put-expenses"
-                    hx-put="/expenses"
-                    hx-ext="json-enc"
-                    hx-vals="js:{eid: self.crypto.randomUUID(), gid: currentGID(), involves: []}"
-                >
-                    <!-- amount -->
-                    <label for="amount">How much?</label>
-                    <br />
-                    <input
-                        id="amount"
-                        type="text"
-                        inputmode="text"
-                        autocomplete="transaction-amount"
-                        name="amount"
-                        aria-label="Amount"
-                        placeholder="amount"
-                        required
-                    />
-                    <br />
-                    <!-- titel -->
-                    <label for="title">What for?</label>
-                    <br />
-                    <input
-                        id="title"
-                        type="text"
-                        inputmode="text"
-                        autocomplete="on"
-                        name="title"
-                        aria-label="Title"
-                        placeholder="Title"
-                        required
-                    />
-                    <br />
-                    <!-- currency -->
-                    <label for="currency">Which currency?</label>
-                    <br />
-                    <div
-                        hx-get="/"
-                        hx-trigger="load"
-                        mustache-template="currency-input-temp"
-                    >
-                        <input style="opacity: 0" />
-                    </div>
-                    <template id="currency-input-temp">
-                        <select
-                            id="currency"
-                            type="text"
-                            name="currency"
-                            aria-label="Currency"
-                            required
-                        >
-                            <option value="{{currency}}">{{currency}}</option>
-                        </select>
-                    </template>
-                    <!-- payer -->
-                    <label for="payer">Who paid?</label>
-                    <!-- TODO: make current ship the default/placeholder -->
-                    <!-- TODO: add current ship as default value -->
-                    <div
-                        hx-get="/register"
-                        hx-trigger="load"
-                        mustache-template="payer-input-temp"
-                    ></div>
-                    <template id="payer-input-temp">
-                        <select
-                            id="payer"
-                            type="text"
-                            name="payer"
-                            aria-label="Payer"
-                            required
-                        >
-                            {{#.}}
-                            <option value="{{.}}">{{.}}</option>
-                            {{/.}}
-                        </select>
-                    </template>
+          <!-- involved -->
+          <label>Who is involved?</label>
+          <br />
 
-                    <!-- involved -->
-                    <label>Who is involved?</label>
-                    <br />
+          <div
+            hx-get="/register"
+            hx-trigger="load"
+            mustache-template="involved-input-temp"
+          ></div>
+          <template id="involved-input-temp">
+            {{#.}}
+            <input
+              class="checkbox"
+              id="check-{{.}}"
+              type="checkbox"
+              name="involves"
+              value="{{.}}"
+              checked
+            />
+            <label for="check-{{.}}">{{.}}</label>
+            {{/.}}
+          </template>
+          <label for="date">When?</label>
+          <br />
+          <input
+            id="date"
+            type="date"
+            inputmode="text"
+            name="date"
+            aria-label="Date"
+          />
+          <br />
+          <button class="button-primary" type="submit">
+            Add expense ▸
+          </button>
+          <button
+            class="button-cancel"
+            onclick="window.location.href='/apps/tahuti/groups/' + currentGID() + '/expenses';
+"
+          >
+            Cancel
+          </button>
+        </form>
+      </fieldset>
+    </div>
+  </body>
+  <script src="/apps/tahuti/assets/request.js"></script>
+  <script>
+    const USD = (value) => currency(value); // defaults
+    const EUR = (value) =>
+      currency(value, {
+        symbol: "€",
+        decimal: ",",
+        separator: ".",
+        pattern: `# !`,
+        negativePattern: `# !`,
+      });
 
-                    <div
-                        hx-get="/register"
-                        hx-trigger="load"
-                        mustache-template="involved-input-temp"
-                    ></div>
-                    <template id="involved-input-temp">
-                        {{#.}}
-                        <input
-                            id="check-{{.}}"
-                            type="checkbox"
-                            name="involved"
-                            value="{{.}}"
-                            checked
-                        />
-                        <label for="check-{{.}}">{{.}}</label>
-                        {{/.}}
-                    </template>
-                    <label for="date">When?</label>
-                    <br />
-                    <input
-                        id="date"
-                        type="date"
-                        inputmode="text"
-                        name="date"
-                        aria-label="Date"
-                    />
-                    <br />
-                    <button class="button-primary" type="submit">Add expense ▸</button>
-                    <button class="button-cancel" onclick="window.location.href='/apps/tahuti/groups/' + currentGID() + '/expenses';
-">Cancel</button>
-                </form>
-            </fieldset>
-        </div>
-    </body>
-    <script src="/apps/tahuti/assets/request.js"></script>
-    <script>
-        const USD = (value) => currency(value); // defaults
-        const EUR = (value) =>
-            currency(value, {
-                symbol: "€",
-                decimal: ",",
-                separator: ".",
-                pattern: `# !`,
-            });
+    const form = document.getElementById("put-expenses");
+    const amount = document.getElementById("amount");
+    const date = document.getElementById("date");
 
-        const form = document.getElementById("put-expenses");
-        const amount = document.getElementById("amount");
-        const date = document.getElementById("date");
+    // set defaults
+    //
+    date.valueAsDate = new Date();
 
-        // set defaults
-        //
-        date.valueAsDate = new Date();
+    // validate inputs
+    //
+    amount.addEventListener("input", (event) => {
+      // amount must be a number
+      let val = amount.value;
+      val = val.replace(",", "");
+      val = val.replace(".", "");
+      val = Number(val);
+      if (Number.isNaN(parseFloat(val)) && !Number.isFinite(val)) {
+        amount.setCustomValidity("Please enter a valid amount.");
+      } else {
+        amount.setCustomValidity("");
+      }
+    });
+    // involves: validate that at least one checkbox (involved member) is selected
+    form.addEventListener("htmx:afterSettle", (event) => {
+      <!-- TODO: more elegant way? -->
+      <!-- function validateCheckboxes() { -->
+      <!--     var checkboxes = document.querySelectorAll( -->
+      <!--         'input[name="involves"]:checked' -->
+      <!--     ); -->
+      <!--     console.log(checkboxes); -->
+      <!--     if (checkboxes.length === 0) { -->
+      <!--         alert("Please check at least one checkbox"); -->
+      <!--         return false; // Prevent the form from submitting -->
+      <!--     } -->
+      <!--     return true; // Allow form submission if at least one checkbox is checked -->
+      <!-- } -->
 
-        // validate inputs
-        //
-        amount.addEventListener("input", (event) => {
-            // amount must be a number
-            let val = amount.value;
-            val = val.replace(",", "");
-            val = val.replace(".", "");
-            val = Number(val);
-            if (Number.isNaN(parseFloat(val)) && !Number.isFinite(val)) {
-                amount.setCustomValidity("Please enter a valid amount.");
-            } else {
-                amount.setCustomValidity("");
-            }
+      const checkboxes = Array.from(
+        document.querySelectorAll(".checkbox")
+      );
+      checkboxes.forEach((item) => {
+        item.addEventListener("click", (event) => {
+          if (
+            checkboxes.reduce((acc, curr) => acc || curr.checked, false)
+          ) {
+            <!-- valid -->
+            checkboxes.at(-1).setCustomValidity("");
+          } else {
+            <!-- invalid -->
+            checkboxes.at(-1).setCustomValidity("Select at least one.");
+          }
         });
+      });
+    });
 
-        // transform values
-        //
-        form.addEventListener("htmx:configRequest", (event) => {
-            // send amount in cents
-            if ("amount" in event.detail.parameters) {
-                event.detail.parameters.amount = EUR(
-                    amount.value
-                ).intValue.toString();
-            }
-            // send date as unix timestamp
-            if ("date" in event.detail.parameters) {
-                event.detail.parameters.date = new Date(date.value).valueOf();
-            }
-        });
+    // transform values
+    //
+    form.addEventListener("htmx:configRequest", (event) => {
+      // send amount in cents
+      if ("amount" in event.detail.parameters) {
+        event.detail.parameters.amount = EUR(
+          amount.value
+        ).intValue.toString();
+      }
+      // send date as unix timestamp
+      if ("date" in event.detail.parameters) {
+        event.detail.parameters.date = new Date(date.value).valueOf();
+      }
+      // always send checkbox checks as array
+      if ("involves" in event.detail.parameters) {
+        if (!Array.isArray(event.detail.parameters.involves)) {
+          // only one checkbox is selected
+          event.detail.parameters.involves = [event.detail.parameters.involves];
+        }
+      }
+    });
 
-        form.addEventListener("htmx:afterRequest", (event) => {
-            if (
-                event.detail.successful &&
-                event.detail.elt.id == "put-expenses"
-            ) {
-                window.location.pathname =
-                    "/apps/tahuti/groups/" + currentGID() + "/expenses";
-            }
-        });
-    </script>
+    form.addEventListener("htmx:afterRequest", (event) => {
+      if (
+        event.detail.successful &&
+        event.detail.elt.id == "put-expenses"
+      ) {
+        window.location.pathname =
+          "/apps/tahuti/groups/" + currentGID() + "/expenses";
+      }
+    });
+  </script>
 </html>
