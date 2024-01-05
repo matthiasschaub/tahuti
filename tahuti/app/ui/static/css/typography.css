@@ -61,6 +61,11 @@ a:hover {
     color: var(--blue);
 }
 
+a#delete:hover {
+    text-decoration: none;
+    color: var(--red);
+}
+
 ul {
     margin-left: 0;
 }
