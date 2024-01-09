@@ -1,7 +1,6 @@
 p {
     line-height: var(--vspace);
     margin: var(--vspace) var(--vspace);
-    /* margin-left: var(--vspace); */
 }
 
 h1 {
@@ -29,7 +28,6 @@ h2 {
     margin: var(--vspace-2) var(--vspace-3) var(--vspace-3) var(--vspace-3);
     line-height: 1em;
     text-align: center;
-
     color: var(--red);
 }
 
@@ -71,6 +69,7 @@ ul {
 }
 
 dt {
+    margin-left: var(--vspace);
     font-style: italic;
 }
 

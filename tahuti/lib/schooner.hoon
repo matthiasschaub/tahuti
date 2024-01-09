@@ -23,6 +23,7 @@
     [%js h=cord]
     [%json j=json]
     [%plain p=tape]
+    [%image-svg p=@]
     ::
     [%login-redirect l=cord]
     [%none ~]
@@ -64,6 +65,11 @@
     :_  `(as-octt:mimes:html p.resource)
     :-  http-status
     (weld headers ['content-type'^'text/plain']~)
+    ::
+      %image-svg
+    :_  `(as-octs:mimes:html p.resource)
+    :-  http-status
+    (weld headers ['content-type'^'image/svg+xml']~)
     ::
       %login-redirect
     =+  %^  cat  3

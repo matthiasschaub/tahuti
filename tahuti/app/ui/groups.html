@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Tahuti</title>
+        <title>Group Expenses</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content="An Expense Sharing App for Urbit" />
@@ -10,7 +10,7 @@
             name="apple-mobile-web-app-status-bar-style"
             content="black-translucent"
         />
-        <meta name="apple-mobile-web-app-title" content="Tahuti" />
+        <meta name="apple-mobile-web-app-title" content="Group Expenses" />
         <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
         <link
             rel="stylesheet"
@@ -19,11 +19,9 @@
         />
         <link
             rel="apple-touch-icon"
-            href="https://console.minio.mutualisten.de/api/v1/buckets/public/objects/download?preview=true&prefix=aWNvbi5wbmc=&version_id=null"
+            href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
         />
         <script src="/apps/tahuti/assets/htmx.js"></script>
-        <script src="/apps/tahuti/assets/json-enc.js"></script>
-        <script src="/apps/tahuti/assets/path-deps.js"></script>
         <script src="/apps/tahuti/assets/client-side-templates.js"></script>
         <script src="/apps/tahuti/assets/mustache.js"></script>
     </head>
@@ -33,134 +31,125 @@
             <nav aria-label="Global">
                 <ul>
                     <li>
-                        <a href="/apps/tahuti/groups"
-                            ><strong>Groups</strong></a
+                        <svg
+                            class="svg-ico"
+                            width="512"
+                            height="512"
+                            viewBox="0 0 135.46667 135.46667"
+                            version="1.1"
+                            id="svg5"
+                            xml:space="preserve"
+                            sodipodi:docname="icon-2.svg"
+                            inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+                            inkscape:export-filename="icon-2.png"
+                            inkscape:export-xdpi="96"
+                            inkscape:export-ydpi="96"
+                            xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+                            xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:svg="http://www.w3.org/2000/svg"
                         >
-                    </li>
-                    <li>
-                        <a style="opacity: 0.3">Expenses</a>
-                    </li>
-                    <li>
-                        <a style="opacity: 0.3">Balances</a>
-                    </li>
-                    <li>
-                        <a style="opacity: 0.3">Reimbursments</a>
-                    </li>
-                    <li>
-                        <a style="opacity: 0.3">Members</a>
-                    </li>
-                    <li>
-                        <a style="opacity: 0.3">Settings</a>
+                            <sodipodi:namedview
+                                id="namedview7"
+                                pagecolor="#fffff3"
+                                bordercolor="#000000"
+                                borderopacity="0.25"
+                                inkscape:showpageshadow="2"
+                                inkscape:pageopacity="0.98039216"
+                                inkscape:pagecheckerboard="0"
+                                inkscape:deskcolor="#d1d1d1"
+                                inkscape:document-units="px"
+                                showgrid="false"
+                                inkscape:zoom="0.60015598"
+                                inkscape:cx="221.60906"
+                                inkscape:cy="630.66938"
+                                inkscape:window-width="1920"
+                                inkscape:window-height="1200"
+                                inkscape:window-x="0"
+                                inkscape:window-y="0"
+                                inkscape:window-maximized="1"
+                                inkscape:current-layer="g6072"
+                            />
+                            <defs id="defs2" />
+                            <g
+                                inkscape:label="Layer 1"
+                                inkscape:groupmode="layer"
+                                id="layer1"
+                            >
+                                <g id="g6072">
+                                    <path
+                                        style="
+                                            fill: #cc241d;
+                                            fill-opacity: 1;
+                                            stroke-width: 2.5009;
+                                        "
+                                        d="m 57.673087,102.1277 c -5.972785,-7.57682 -5.824781,-19.283714 0.404462,-31.986978 7.735273,-15.774587 18.544409,-13.077385 24.277496,6.05795 4.07085,13.58724 3.623626,18.688148 -2.298628,26.217038 -6.772457,8.60977 -15.457359,8.49805 -22.383281,-0.2883 z m 17.062797,-1.12539 c 5.031171,-5.03113 3.411819,-7.0025 -5.752085,-7.0025 -4.814251,0 -8.753187,0.89985 -8.753187,2.00077 0,2.920919 5.558333,8.00283 8.753187,8.00283 1.513041,0 4.101484,-1.35045 5.752085,-3.0011 z m 5.502007,-14.454648 c 0,-5.855671 -8.332825,-22.558753 -11.254092,-22.558753 -2.921276,0 -11.254102,16.703082 -11.254102,22.558753 0,1.34771 5.064349,2.45031 11.254102,2.45031 6.189742,0 11.254092,-1.1026 11.254092,-2.45031 z M 42.724241,40.816895 c 0,-9.403482 14.098541,-21.554547 25.0091,-21.554547 10.910548,0 25.009089,12.151065 25.009089,21.554547 0,5.876374 -0.332341,5.955488 -25.009089,5.955488 -24.676788,0 -25.009101,-0.07563 -25.0091,-5.955488 z m 45.016377,-1.666621 c 0,-5.008563 -13.275693,-14.886074 -20.007277,-14.886074 -6.731585,0 -20.007279,9.877511 -20.007279,14.886074 0,1.608111 7.728506,2.620259 20.007279,2.620259 12.278772,0 20.007277,-1.012148 20.007277,-2.620259 z"
+                                        id="path302"
+                                        sodipodi:nodetypes="ccsscccssscsssssssssssssss"
+                                    />
+                                </g>
+                            </g>
+                        </svg>
                     </li>
                 </ul>
             </nav>
         </header>
-        <h2>Tahuti</h2>
 
-        <h3>Groups</h3>
-        <!-- TODO: add default message: no groups yet -->
+        <h2>Group Expenses</h2>
+
         <div hx-ext="client-side-templates">
-            <ul
-                hx-get="/apps/tahuti/api/groups"
-                hx-trigger="load,path-deps"
-                path-deps="/apps/tahuti/api/*"
-                mustache-template="groups-template"
-            >
-                <li>
-                    <emp style="opacity: 0">Loading ...</emp>
-                </li>
-            </ul>
-
+            <table id="groups">
+                <thead>
+                    <tr>
+                        <th>Group</th>
+                        <th>Host</th>
+                    </tr>
+                </thead>
+                <!-- TODO: add default message: no groups yet -->
+                <tbody
+                    id="groups"
+                    hx-get="/apps/tahuti/api/groups"
+                    hx-trigger="load"
+                    path-deps="/apps/tahuti/api/*"
+                    mustache-template="groups-template"
+                ></tbody>
+            </table>
             <template id="groups-template">
-                <!-- iterate over top level array -->
+                <!-- iterate over array of members object -->
                 {{#.}}
-                <li>
-                    <a href="/apps/tahuti/groups/{{gid}}/expenses.html"
-                        >{{title}}</a
-                    >
-                </li>
+                <tr>
+                    <td>
+                        <a href="/apps/tahuti/groups/{{gid}}/expenses.html">
+                            {{title}}</a
+                        >
+                    </td>
+
+                    <td>{{host}}</td>
+                </tr>
                 {{/.}}
             </template>
         </div>
-        <h3>Create new group</h3>
-        <!-- TODO: Move to separate page -->
-        <div hx-ext="path-deps" hx-request="noHeaders">
-            <fieldset>
-                <form
-                    id="put-groups"
-                    hx-put="/apps/tahuti/api/groups"
-                    hx-ext="json-enc"
-                    hx-swap="none"
-                    hx-vals="js:{gid: self.crypto.randomUUID()}"
-                    hx-on::after-request="if(event.detail.successful) this.reset()"
-                >
-                    <label>Titel</label>
-                    <br />
-                    <input
-                        id="group-title"
-                        type="text"
-                        name="title"
-                        aria-label="Group Title"
-                        required
-                    />
-                    <br />
-                    <label>Currency</label>
-                    <br />
-                    <select
-                        id="currency"
-                        type="text"
-                        name="currency"
-                        aria-label="Currency"
-                        required
-                    >
-                        <option value="EUR">EUR</option>
-                    </select>
-                    <br />
-                    <button class="button-primary" type="submit">
-                        Create Group ▸
-                    </button>
-                </form>
-            </fieldset>
-
-            <!-- TODO: Move to separate page -->
-            <h3>Join Existing Group</h3>
-
-            <p>If you are invited to join a group, as well as knowing the host and group ID of a group, you can enter it here to join.</p>
-            <fieldset>
-                <form
-                    id="post-join"
-                    hx-post="/apps/tahuti/api/action/join"
-                    hx-ext="json-enc"
-                    hx-swap="none"
-                    hx-on::after-request="if(event.detail.successful) this.reset()"
-                >
-                    <!-- TODO: add validation (valid @p) -->
-                    <label>Host</label>
-                    <br />
-                    <input
-                        type="text"
-                        name="host"
-                        aria-label="host"
-                        placeholder="~zod"
-                        required
-                    />
-                    <br />
-                    <label>Group ID</label>
-                    <br />
-                    <!-- TODO: add validation (valid uuid) -->
-                    <input
-                        type="text"
-                        name="gid"
-                        aria-label="Group ID"
-                        placeholder="14488cd0-f23f-4d21-862e-d79803d159e4"
-                        required
-                    />
-                    <br />
-                    <button class="button-primary" type="submit">
-                        Join Group ▸
-                    </button>
-                </form>
-            </fieldset>
-        </div>
     </body>
+
+    <footer>
+        <a id="add-href" href="/apps/tahuti/groups/create">
+            <svg
+                id="add-btn"
+                width="24px"
+                height="24px"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+                fill="#fffff3"
+                xmlns="http://www.w3.org/2000/svg"
+                color="#000000"
+            >
+                <path
+                    d="M22 14V8.5M6 13V6a3 3 0 013-3h5M16.992 4h3m3 0h-3m0 0V1m0 3v3M12 21H6a4 4 0 010-8h12a4 4 0 104 4v-3"
+                    stroke="#000000"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                ></path></svg
+        ></a>
+    </footer>
 </html>

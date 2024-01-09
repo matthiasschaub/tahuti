@@ -3,11 +3,14 @@
 /+  server         :: HTTP request processing
 /+  schooner       :: HTTP response handling
 /*  groups                 %html  /app/ui/groups/html
+/*  create                 %html  /app/ui/create/html
 /*  balances               %html  /app/ui/balances/html
 /*  members                %html  /app/ui/members/html
 /*  expenses               %html  /app/ui/expenses/html
 /*  add                    %html  /app/ui/add/html
+/*  details                %html  /app/ui/details/html
 /*  settings               %html  /app/ui/settings/html
+/*  invite                 %html  /app/ui/invite/html
 /*  style                  %css   /app/ui/static/css/min/style/css
 /*  print                  %css   /app/ui/static/css/min/print/css
 /*  htmx                   %js    /app/ui/assets/htmx/js
@@ -16,7 +19,8 @@
 /*  client-side-templates  %js    /app/ui/assets/client-side-templates/js
 /*  mustache               %js    /app/ui/assets/mustache/js
 /*  currency               %js    /app/ui/assets/currency/js
-/*  request                %js    /app/ui/assets/request/js
+/*  request-group          %js    /app/ui/assets/request-group/js
+/*  request-expense        %js    /app/ui/assets/request-expense/js
 ::
 |%
 +$  versioned-state
@@ -94,8 +98,12 @@
           [(send [200 ~ [%html groups]]) state]
         [%apps %tahuti %groups ~]
           [(send [200 ~ [%html groups]]) state]
+        [%apps %tahuti %groups %create ~]
+          [(send [200 ~ [%html create]]) state]
         [%apps %tahuti %groups @t %expenses ~]
           [(send [200 ~ [%html expenses]]) state]
+        [%apps %tahuti %groups @t %expenses @t ~]
+          [(send [200 ~ [%html details]]) state]
         [%apps %tahuti %groups @t %balances ~]
           [(send [200 ~ [%html balances]]) state]
         [%apps %tahuti %groups @t %members ~]
@@ -104,6 +112,8 @@
           [(send [200 ~ [%html add]]) state]
         [%apps %tahuti %groups @t %settings ~]
           [(send [200 ~ [%html settings]]) state]
+        [%apps %tahuti %groups @t %invite ~]
+          [(send [200 ~ [%html invite]]) state]
         [%apps %tahuti %static %css %min %style ~]
           [(send [200 ~ [%css style]]) state]
         [%apps %tahuti %static %css %min %print ~]
@@ -120,8 +130,10 @@
           [(send [200 ~ [%js mustache]]) state]
         [%apps %tahuti %assets %currency ~]
           [(send [200 ~ [%js currency]]) state]
-        [%apps %tahuti %assets %request ~]
-          [(send [200 ~ [%js request]]) state]
+        [%apps %tahuti %assets %request-group ~]
+          [(send [200 ~ [%js request-group]]) state]
+        [%apps %tahuti %assets %request-expense ~]
+          [(send [200 ~ [%js request-expense]]) state]
       ==
     ==
   --

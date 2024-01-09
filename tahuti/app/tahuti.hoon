@@ -138,7 +138,11 @@
       %invite
     ~&  >  '%tahuti (on-poke): invite'
     =/  group  (~(got by groups) gid.action)
-    ?>  =(our.bowl src.bowl)
+    ?.  =(our.bowl host.group)
+      :-  ^-  (list card)
+        :~  [%pass ~ %agent [host.group %tahuti] %poke %tahuti-action !>(action)]
+        ==
+      this
     ?>  =(our.bowl host.group)
     ?<  =(our.bowl p.action)
     =/  acl  (~(got by acls) gid.action)
@@ -152,6 +156,9 @@
     %=  this
       acls    (~(put by acls) gid.action acl)
     ==
+    ::
+    ::  TODO: do not remove from reg.
+    ::    kick also from subscriber list (bowl).
     ::
       %kick
     ~&  >  '%tahuti (on-poke): kick'

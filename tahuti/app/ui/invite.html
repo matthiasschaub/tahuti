@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="en">
   <head>
     <title>Group Expenses</title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0"
+      content="width=device-width, initial-scale=1"
     />
     <meta
       name="description"
@@ -31,16 +31,15 @@
       href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
     />
     <script src="/apps/tahuti/assets/htmx.js"></script>
+    <script src="/apps/tahuti/assets/json-enc.js"></script>
     <script src="/apps/tahuti/assets/client-side-templates.js"></script>
     <script src="/apps/tahuti/assets/mustache.js"></script>
-    <script src="/apps/tahuti/assets/currency.js"></script>
   </head>
 
   <body>
     <header>
-      <nav>
+      <nav aria-label="Global">
         <ul>
-          <!-- hrefs is set by request.js -->
           <li>
             <a href="/apps/tahuti/groups">↜ Groups</a>
           </li>
@@ -48,13 +47,13 @@
             <a id="expenses-href" href="">Expenses</a>
           </li>
           <li>
-            <a id="balances-href" href=""><strong>Balances</strong></a>
+            <a id="balances-href" href="">Balances</a>
           </li>
           <li>
             <a style="opacity: 0.3">Reimbursments</a>
           </li>
           <li>
-            <a id="settings-href" href="">Settings</a>
+            <a id="settings-href" href=""><strong>Settings</strong></a>
           </li>
         </ul>
       </nav>
@@ -64,7 +63,6 @@
       <div
         hx-get="/"
         hx-trigger="load"
-        hx-swap="outerHTML"
         mustache-template="title-template"
       >
         <h2 style="opacity: 0">Loading ...</h2>
@@ -73,57 +71,57 @@
         <h2>{{title}}</h2>
       </template>
 
-      <table id="balances">
-        <thead>
-          <tr>
-            <th>Member</th>
-            <th id="amount">Amount</th>
-          </tr>
-        </thead>
-        <tbody
-          id="get-balances"
-          hx-get="/balances"
-          hx-trigger="load"
-          mustache-template="balances-temp"
-        ></tbody>
-      </table>
-      <template id="balances-temp">
-        <!-- iterate over array of balances object -->
-        {{#.}}
-        <tr>
-          <td>{{member}}</td>
-          <td headers="amount">{{amount}}</td>
-        </tr>
-        {{/.}}
-      </template>
+      <h3>Invite people</h3>
+      <fieldset>
+        <form
+          id="put-invitees"
+          hx-put="/invitees"
+          hx-ext="json-enc"
+          hx-swap="none"
+          hx-on::after-request="if(event.detail.successful) this.reset()"
+        >
+          <!-- TODO: add validation for valid @p -->
+          <label><em>First</em> invite via Urbit ID,</label>
+          <br />
+          <input
+            id="invitee"
+            type="text"
+            name="invitee"
+            aria-label="invitee"
+            placeholder="~zod"
+            required="required"
+          />
+          <br />
+        </form>
+
+        <label><em>then</em> share the Group ID with them.</label>
+        <br />
+        <input
+          <input
+          id="gid"
+          type="text"
+          name="Group ID"
+          aria-label="Group ID"
+          readonly
+        />
+        <br />
+        <button
+          class="button-primary"
+          type="submit"
+          form="put-invitees"
+          onclick="copyGidToClipboard()"
+        >
+          Send invite & copy group ID ▸
+        </button>
+      </fieldset>
     </div>
   </body>
 
   <script src="/apps/tahuti/assets/request-group.js"></script>
   <script>
-    const USD = (value) => currency(value); // defaults
-    const EUR = (value) =>
-      currency(value, {
-        symbol: "€",
-        decimal: ",",
-        separator: ".",
-        pattern: `# !`,
-        negativePattern: `-# !`,
-        fromCents: true,
-      });
-
-    const tableBody = document.getElementById("get-balances");
-
-    // format values
-    //
-    tableBody.addEventListener("htmx:afterRequest", (event) => {
-      for (const row of tableBody.rows) {
-        for (const cell of row.cells) {
-          if (cell.headers == "amount") {
-            cell.innerText = EUR(cell.innerText).format();
-          }
-        }
-      }
-    });
+    document.getElementById("gid").value = gid();
+    function copyGidToClipboard() {
+      navigator.clipboard.writeText(gid());
+    }
   </script>
 </html>

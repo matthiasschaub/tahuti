@@ -1,4 +1,4 @@
-::    split expenses
+::    statistics
 ::
 /-  *tahuti, *graph
 /+  *graph, *edmonds-karp
@@ -97,7 +97,7 @@
       ==
   :: else, continue
   ::
-  %=($ i +(i))
+  %=($ j +(j))
 ++  ind
   ::  creditor and debitor indices
   ::

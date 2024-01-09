@@ -46,107 +46,17 @@
                         <a style="opacity: 0.3">Reimbursments</a>
                     </li>
                     <li>
-                        <a id="members-href" href=""
-                            ><strong>Members</strong></a
-                        >
-                    </li>
-                    <li>
                         <a id="settings-href" href="">Settings</a>
                     </li>
                 </ul>
             </nav>
         </header>
-
-        <div hx-ext="client-side-templates,path-deps">
-            <div
-                hx-get="/"
-                hx-trigger="load"
-                mustache-template="title-template"
-            >
-                <h2 style="opacity: 0">Loading ...</h2>
-            </div>
-            <template id="title-template">
-                <h2>{{title}}</h2>
-            </template>
-
-            <h3>Invited</h3>
-            <ul
-                id="get-invitees"
-                hx-get="/invitees"
-                hx-trigger="load,path-deps"
-                path-deps="/apps/tahuti/api/groups/*/invitees"
-                mustache-template="invitees-temp"
-            ></ul>
-            <template id="invitees-temp">
-                <!-- iterate over array of invitees list -->
-                {{#.}}
-                <li>{{.}}</li>
-                {{/.}}
-            </template>
-
-            <h3>Members</h3>
-            <ul
-                id="get-register"
-                hx-get="/register"
-                hx-trigger="load,path-deps"
-                path-deps="/apps/tahuti/api/groups/*/invitees"
-                mustache-template="register-temp"
-            ></ul>
-            <template id="register-temp">
-                <!-- iterate over array of register list -->
-                {{#.}}
-                <li>{{.}}</li>
-                {{/.}}
-            </template>
-
-            <h3>Invite People</h3>
-            <fieldset>
-                <form
-                    id="put-invitees"
-                    hx-put="/invitees"
-                    hx-ext="json-enc"
-                    hx-swap="none"
-                    hx-on::after-request="if(event.detail.successful) this.reset()"
-                >
-                    <!-- TODO: add validation for valid @p -->
-                    <label><em>First</em> invite via Urbit ID,</label>
-                    <br />
-                    <input
-                        id="invitee"
-                        type="text"
-                        name="invitee"
-                        aria-label="invitee"
-                        placeholder="~zod"
-                        required="required"
-                    />
-                    <br />
-                    <button class="button-primary" type="submit">
-                        Send Invite ▸
-                    </button>
-                </form>
-                <br />
-                <label><em>then</em> share the Group ID with them.</label>
-                <br />
-                <input
-                    <input
-                    id="gid"
-                    type="text"
-                    name="Group ID"
-                    aria-label="Group ID"
-                    readonly
-                />
-                <br />
-                <button class="button-primary" onclick="copyGidToClipboard()">
-                    Copy Group ID ▸
-                </button>
-            </fieldset>
-        </div>
     </body>
-    <script src="/apps/tahuti/assets/request.js"></script>
+    <script src="/apps/tahuti/assets/request-group.js"></script>
     <script>
-        document.getElementById("gid").value = currentGID();
+        document.getElementById("gid").value = gid();
         function copyGidToClipboard() {
-            navigator.clipboard.writeText(currentGID());
+            navigator.clipboard.writeText(gid());
         }
     </script>
 </html>

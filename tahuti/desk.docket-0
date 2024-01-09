@@ -1,7 +1,7 @@
-:~  title+'Tahuti (alpha)'
+:~  title+'Group Expenses (alpha)'
     info+'An expense sharing app'
     color+0xff.fff3
-    image+'https://console.minio.mutualisten.de/api/v1/buckets/public/objects/download?preview=true&prefix=aWNvbi5wbmc=&version_id=null'
+    image+'https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg'
     base+'tahuti'
     site+/apps/tahuti
     version+[0 0 1]

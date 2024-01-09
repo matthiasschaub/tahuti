@@ -6,16 +6,12 @@ legend {
 fieldset {
     border: 0;
     padding: 0;
-    margin: 0;
+    /* top right bottom left */
+    margin: var(--vspace) var(--vspace) var(--vspace-3) var(--vspace);
     min-width: 0;
 }
 body:not(:-moz-handler-blocked) fieldset {
     display: table-cell;
-}
-
-fieldset {
-    /* top right bottom left */
-    margin: var(--vspace) var(--vspace) var(--vspace-3) var(--vspace);
 }
 
 select,
