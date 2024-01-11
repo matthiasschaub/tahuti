@@ -30,6 +30,7 @@ for (let i = 0; i < endpoints.length; i++) {
         element.setAttribute("href", href);
     }
 }
-document.getElementById(
-    "btn-invite"
-).action = `/apps/tahuti/groups/${gid()}/invite`;
+const btnInvite = document.getElementById("btn-invite");
+if (btnInvite != null) {
+    btnInvite.action = `/apps/tahuti/groups/${gid()}/invite`;
+}

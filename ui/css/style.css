@@ -1,0 +1,122 @@
+@charset "utf-8";
+
+@import url("typography.css");
+@import url("header.css");
+@import url("footer.css");
+@import url("tables.css");
+@import url("form.css");
+
+:root {
+    /* https://www.layoutgridcalculator.com/typographic-scale */
+    /* Base (pt): 13 */
+    /* Scale Ratio: Golden Ratio */
+    /* No. of sizes in the scale: Pentatonic Scale (x5) */
+    /* Composition: Fibonacci Series */
+
+    /* increase or decrease the number to change the vertical spacing */
+    /* globally */
+
+    /* base vertical spacing */
+    --space: 1.62;
+
+    /* vertical spacing multiplier */
+    --vspace: calc(var(--space) * 1rem);
+    --vspace-0: calc(3 * var(--space) * 1rem);
+    --vspace-1: calc(2 * var(--space) * 1rem);
+    --vspace-2: calc(1.5 * var(--space) * 1rem);
+    --vspace-3: calc(0.5 * var(--space) * 1rem);
+
+    --max-width: calc(25 * var(--vspace));
+
+    /* colors for light and dark color schemes */
+    --bg0_h: #fffff3;
+    --bg0_s: #f2e5bc;
+    --fg: #000000;
+
+    --red: #cc241d;
+    --blue: #0062cc;
+    --grey: #767676;
+    /* --gray: #928374; */
+    --blue-accent: #2b1dcc;
+
+    --purple: #b16286;
+    --yellow: #d79921;
+}
+
+::selection {
+    background: var(--grey);
+}
+
+html {
+    /* 12pt */
+    font-size: 16px;
+    /* font-family: sans-serif; */
+    /* font-family: ui-serif; */
+    font-family: system-ui;
+    font-variant-numeric: oldstyle-nums;
+}
+
+body {
+    /* font-size: 1.0833em; */
+    font-size: 1em;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    /* margin-left: var(--vspace); */
+
+    color: var(--fg);
+    background: var(--bg0_h);
+
+    /* make room for fixed/sticky footer */
+    padding-bottom: var(--vspace-1);
+}
+
+.svg-ico {
+    display: inline;
+    vertical-align: middle;
+    height: 4em;
+    width: 4em;
+}
+
+.svg-btn {
+    cursor: pointer;
+}
+
+#add-btn {
+    margin-top: var(--vspace);
+    margin-bottom: var(--vspace);
+}
+
+img {
+    max-width: var(--max-width);
+}
+
+aside {
+    width: 30%;
+    float: right;
+}
+
+/* small devices (less then 1036.78px) */
+@media (max-width: calc(var(--max-width) - 0.02px)) {
+    :root {
+        --max-width: 100%;
+    }
+    body {
+        padding: var(--vspace-3) var(--vspace-3);
+        margin: var(--vspace-3) var(--vspace-3);
+    }
+
+    header > nav ul,
+    header > nav ol {
+        display: block;
+    }
+
+    /* TODO: make responsive */
+    input {
+        width: 100%;
+    }
+}
+
+.columns {
+    display: grid;
+    grid-template-columns: calc(var(--max-width) / 2) calc(var(--max-width) / 2);
+}

@@ -1,0 +1,35 @@
+{
+    "lang": "en-us",
+    "name": "Group Expenses",
+    "description": "An expense sharing app for Urbit",
+    "start_url": "/apps/tahuti/",
+    "scope": "/apps/tahuti/",
+    "background_color": "#cc241d",
+    "theme_color": "#cc241d",
+    "orientation": "any",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/512.svg",
+            "type": "image/svg+xml",
+            "sizes": "any",
+            "purpose": "any"
+        },
+        {
+            "src": "https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/512.svg",
+            "type": "image/svg+xml",
+            "sizes": "any",
+            "purpose": "maskable"
+        },
+        {
+            "src": "https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ]
+}

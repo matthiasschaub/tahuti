@@ -1,7 +1,7 @@
 :~  title+'Group Expenses (alpha)'
     info+'An expense sharing app'
     color+0xff.fff3
-    image+'https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg'
+    image+'https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/512.svg'
     base+'tahuti'
     site+/apps/tahuti
     version+[0 0 1]

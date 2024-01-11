@@ -13,6 +13,7 @@
 /*  invite                 %html  /app/ui/invite/html
 /*  style                  %css   /app/ui/static/css/min/style/css
 /*  print                  %css   /app/ui/static/css/min/print/css
+/*  manifest               %json  /app/ui/manifest/json
 /*  htmx                   %js    /app/ui/assets/htmx/js
 /*  json-enc               %js    /app/ui/assets/json-enc/js
 /*  path-deps              %js    /app/ui/assets/path-deps/js
@@ -118,6 +119,8 @@
           [(send [200 ~ [%css style]]) state]
         [%apps %tahuti %static %css %min %print ~]
           [(send [200 ~ [%css print]]) state]
+        [%apps %tahuti %manifest ~]
+          [(send [200 ~ [%json manifest]]) state]
         [%apps %tahuti %assets %htmx ~]
           [(send [200 ~ [%js htmx]]) state]
         [%apps %tahuti %assets %json-enc ~]

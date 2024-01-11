@@ -58,23 +58,22 @@
                 hx-get="/"
                 hx-trigger="load"
                 hx-swap="outerHTML"
-                mustache-template="title-temp"
+                mustache-template="title-template"
             >
                 <h2 style="opacity: 0">Loading ...</h2>
             </div>
 
-            <template id="title-temp">
+            <template id="title-template">
                 <h2>{{title}}</h2>
             </template>
 
-            <h3>Details</h3>
             <table
                 id="expense"
                 hx-get="/"
                 hx-trigger="load"
-                mustache-template="expense-temp"
+                mustache-template="expense-template"
             ></table>
-            <template id="expense-temp">
+            <template id="expense-template">
                 <!-- iterate over array of members object -->
                 <thead>
                 </thead>
