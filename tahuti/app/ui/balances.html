@@ -3,24 +3,33 @@
   <head>
     <title>Group Expenses</title>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
-    <meta
-      name="description"
-      content="An Expense Sharing App for Urbit"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="An Expense Sharing App for Urbit" />
+    <!-- PWA -->
+    <meta name="theme-color" content="#cc241d" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Group Expenses" />
     <meta
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
-    <meta name="apple-mobile-web-app-title" content="Group Expenses" />
+    <!-- TODO does SVG work for apple? -->
     <link
-      rel="stylesheet"
-      href="/apps/tahuti/static/css/min/style.css"
+      rel="apple-touch-icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
     />
+    <link
+      rel="icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/512.svg"
+      type="image/svg+xml"
+      sizes="any"
+    />
+    <link
+      rel="manifest"
+      href="/apps/tahuti/manifest.json"
+      crossorigin="use-credentials"
+    />
+    <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
     <link
       rel="stylesheet"
       href="/apps/tahuti/static/css/min/print.css"
@@ -65,12 +74,13 @@
         hx-get="/"
         hx-trigger="load"
         hx-swap="outerHTML"
-        mustache-template="title-template"
+        mustache-template="group-template"
       >
         <h2 style="opacity: 0">Loading ...</h2>
       </div>
-      <template id="title-template">
+      <template id="group-template">
         <h2>{{title}}</h2>
+        <div id="currency" hidden>{{currency}}</div>
       </template>
 
       <table id="balances">
@@ -84,10 +94,10 @@
           id="get-balances"
           hx-get="/balances"
           hx-trigger="load"
-          mustache-template="balances-temp"
+          mustache-template="balances-template"
         ></tbody>
       </table>
-      <template id="balances-temp">
+      <template id="balances-template">
         <!-- iterate over array of balances object -->
         {{#.}}
         <tr>
@@ -101,26 +111,44 @@
 
   <script src="/apps/tahuti/assets/request-group.js"></script>
   <script>
-    const USD = (value) => currency(value); // defaults
-    const EUR = (value) =>
-      currency(value, {
-        symbol: "€",
-        decimal: ",",
-        separator: ".",
-        pattern: `# !`,
-        negativePattern: `-# !`,
-        fromCents: true,
-      });
-
-    const tableBody = document.getElementById("get-balances");
-
     // format values
     //
+    const tableBody = document.getElementById("get-balances");
     tableBody.addEventListener("htmx:afterRequest", (event) => {
+      const code = document.getElementById("currency").innerText;
+      const USD = (value) =>
+        currency(value, {
+          symbol: "$",
+          fromCents: true,
+        });
+      const EUR = (value) =>
+        currency(value, {
+          symbol: "€",
+          decimal: ",",
+          separator: ".",
+          pattern: `# !`,
+          negativePattern: `# !`,
+          fromCents: true,
+        });
+      const BTC = (value) =>
+        currency(value, {
+          symbol: "₿",
+          fromCents: true,
+          precision: 8,
+        });
       for (const row of tableBody.rows) {
         for (const cell of row.cells) {
           if (cell.headers == "amount") {
-            cell.innerText = EUR(cell.innerText).format();
+            if (code == "EUR") {
+              cell.innerText = EUR(cell.innerText).format();
+            } else if (code == "USD") {
+              cell.innerText = USD(cell.innerText).format();
+            } else if (code == "BTC") {
+              cell.innerText = BTC(cell.innerText).format();
+            } else {
+              <!-- TODO: what to do in this case?-->
+              console.log("currency code not supported.");
+            }
           }
         }
       }

@@ -1,178 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Group Expenses</title>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="An Expense Sharing App for Urbit" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta
-            name="apple-mobile-web-app-status-bar-style"
-            content="black-translucent"
-        />
-        <meta name="apple-mobile-web-app-title" content="Group Expenses" />
-        <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
-        <link
-            rel="stylesheet"
-            href="/apps/tahuti/static/css/min/print.css"
-            media="print"
-        />
-        <link
-            rel="apple-touch-icon"
-            href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
-        />
-        <script src="/apps/tahuti/assets/htmx.js"></script>
-        <script src="/apps/tahuti/assets/client-side-templates.js"></script>
-        <script src="/apps/tahuti/assets/path-deps.js"></script>
-        <script src="/apps/tahuti/assets/mustache.js"></script>
-        <script src="/apps/tahuti/assets/currency.js"></script>
-    </head>
+  <head>
+    <title>Group Expenses</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="An Expense Sharing App for Urbit" />
+    <!-- PWA -->
+    <meta name="theme-color" content="#cc241d" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Group Expenses" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <!-- TODO does SVG work for apple? -->
+    <link
+      rel="apple-touch-icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
+    />
+    <link
+      rel="icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/512.svg"
+      type="image/svg+xml"
+      sizes="any"
+    />
+    <link
+      rel="manifest"
+      href="/apps/tahuti/manifest.json"
+      crossorigin="use-credentials"
+    />
+    <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
+    <link
+      rel="stylesheet"
+      href="/apps/tahuti/static/css/min/print.css"
+      media="print"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
+    />
+    <script src="/apps/tahuti/assets/htmx.js"></script>
+    <script src="/apps/tahuti/assets/client-side-templates.js"></script>
+    <script src="/apps/tahuti/assets/path-deps.js"></script>
+    <script src="/apps/tahuti/assets/mustache.js"></script>
+    <script src="/apps/tahuti/assets/currency.js"></script>
+  </head>
 
-    <body>
-        <header>
-            <nav>
-                <ul>
-                    <!-- hrefs are set by request.js -->
-                    <li>
-                        <a href="/apps/tahuti/groups">↜ Groups</a>
-                    </li>
-                    <li>
-                        <a id="expenses-href" href=""
-                            ><strong>Expenses</strong></a
-                        >
-                    </li>
-                    <li>
-                        <a id="balances-href" href="">Balances</a>
-                    </li>
-                    <li>
-                        <a style="opacity: 0.3">Reimbursments</a>
-                    </li>
-                    <li>
-                        <a id="settings-href" href="">Settings</a>
-                    </li>
-                </ul>
-            </nav>
-        </header>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <!-- hrefs are set by request.js -->
+          <li>
+            <a href="/apps/tahuti/groups">↜ Groups</a>
+          </li>
+          <li>
+            <a id="expenses-href" href=""><strong>Expenses</strong></a>
+          </li>
+          <li>
+            <a id="balances-href" href="">Balances</a>
+          </li>
+          <li>
+            <a style="opacity: 0.3">Reimbursments</a>
+          </li>
+          <li>
+            <a id="settings-href" href="">Settings</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
 
-        <div hx-ext="client-side-templates,path-deps">
-            <div
-                hx-get="/"
-                hx-trigger="load"
-                hx-swap="outerHTML"
-                mustache-template="title-template"
+    <div hx-ext="client-side-templates,path-deps">
+      <div
+        hx-get="/"
+        hx-trigger="load"
+        hx-swap="outerHTML"
+        mustache-template="group-template"
+      >
+        <h2 style="opacity: 0">Loading ...</h2>
+        <div id="currency" hidden></div>
+      </div>
+      <template id="group-template">
+        <h2>{{title}}</h2>
+        <div id="currency" hidden>{{currency}}</div>
+      </template>
+
+      <table id="expenses">
+        <thead>
+          <tr>
+            <th>For what?</th>
+            <th id="amount">Amount</th>
+            <th>Paid by</th>
+            <th id="date">Date</th>
+            <th style="opacity: 0">details/delete</th>
+          </tr>
+        </thead>
+        <!-- TODO: path-deps delay:5s does not work. Only first path-deps is triggered.-->
+        <tbody
+          id="expenses"
+          hx-get="/expenses"
+          hx-trigger="load,path-deps"
+          path-deps="/apps/tahuti/api/groups/*/expenses"
+          mustache-template="expenses-template"
+        ></tbody>
+      </table>
+      <template id="expenses-template">
+        <!-- iterate over array of members object -->
+        {{#.}}
+        <tr>
+          <td>{{title}}</td>
+          <td headers="amount">{{amount}}</td>
+          <td>{{payer}}</td>
+          <td headers="date">{{date}}</td>
+          <td>
+            <a href="/apps/tahuti/groups/{{gid}}/expenses/{{eid}}">details</a>
+            /
+            <a
+              id="delete"
+              hx-delete="/expenses/{{eid}}"
+              hx-confirm="Are you sure?"
+              hx-trigger="click"
+              hx-swap="none"
+              >delete</a
             >
-                <h2 style="opacity: 0">Loading ...</h2>
-            </div>
-            <template id="title-template">
-                <h2>{{title}}</h2>
-            </template>
+          </td>
+        </tr>
+        {{/.}}
+      </template>
+    </div>
+  </body>
 
-            <table id="expenses">
-                <thead>
-                    <tr>
-                        <th>For what?</th>
-                        <th id="amount">Amount</th>
-                        <th>Paid by</th>
-                        <th id="date">Date</th>
-                        <th style="opacity: 0">details/delete</th>
-                    </tr>
-                </thead>
-                <!-- TODO: path-deps delay:5s does not work. Only first path-deps is triggered.-->
-                <tbody
-                    id="expenses"
-                    hx-get="/expenses"
-                    hx-trigger="load,path-deps"
-                    path-deps="/apps/tahuti/api/groups/*/expenses"
-                    mustache-template="expenses-template"
-                ></tbody>
-            </table>
-            <template id="expenses-template">
-                <!-- iterate over array of members object -->
-                {{#.}}
-                <tr>
-                    <td>{{title}}</td>
-                    <td headers="amount">{{amount}}</td>
-                    <td>{{payer}}</td>
-                    <td headers="date">{{date}}</td>
-                    <td>
-                        <a href="/apps/tahuti/groups/{{gid}}/expenses/{{eid}}"
-                            >details</a
-                        >
-                        /
-                        <a
-                            id="delete"
-                            hx-delete="/expenses/{{eid}}"
-                            hx-confirm="Are you sure?"
-                            hx-trigger="click"
-                            hx-swap="none"
-                            >delete</a
-                        >
-                    </td>
-                </tr>
-                {{/.}}
-            </template>
-        </div>
-    </body>
+  <footer>
+    <!-- href is set by request.js -->
+    <a id="add-href" aria-label="Add expense" href="">
+      <svg
+        id="add-btn"
+        width="24px"
+        height="24px"
+        stroke-width="1.5"
+        viewBox="0 0 24 24"
+        fill="#fffff3"
+        xmlns="http://www.w3.org/2000/svg"
+        color="#000000"
+      >
+        <path
+          d="M22 14V8.5M6 13V6a3 3 0 013-3h5M16.992 4h3m3 0h-3m0 0V1m0 3v3M12 21H6a4 4 0 010-8h12a4 4 0 104 4v-3"
+          stroke="#000000"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        ></path></svg
+    ></a>
+  </footer>
 
-    <footer>
-        <!-- href is set by request.js -->
-        <a id="add-href" aria-label="Add expense" href="">
-            <svg
-                id="add-btn"
-                width="24px"
-                height="24px"
-                stroke-width="1.5"
-                viewBox="0 0 24 24"
-                fill="#fffff3"
-                xmlns="http://www.w3.org/2000/svg"
-                color="#000000"
-            >
-                <path
-                    d="M22 14V8.5M6 13V6a3 3 0 013-3h5M16.992 4h3m3 0h-3m0 0V1m0 3v3M12 21H6a4 4 0 010-8h12a4 4 0 104 4v-3"
-                    stroke="#000000"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                ></path></svg
-        ></a>
-    </footer>
-
-    <script src="/apps/tahuti/assets/request-group.js"></script>
-    <script>
-        const USD = (value) => currency(value); // defaults
-        const EUR = (value) =>
-            currency(value, {
-                symbol: "€",
-                decimal: ",",
-                separator: ".",
-                pattern: `# !`,
-                negativePattern: `# !`,
-                fromCents: true,
-            });
-
-        const tableBody = document.getElementById("expenses");
-
-        // format values
-        //
-        tableBody.addEventListener("htmx:afterRequest", (event) => {
-            for (const row of tableBody.rows) {
-                for (const cell of row.cells) {
-                    if (cell.headers == "date") {
-                        const date = new Date(Number(cell.innerText));
-                        const options = {
-                            month: "short",
-                            day: "numeric",
-                        };
-                        cell.innerText = date.toLocaleDateString(
-                            undefined,
-                            options
-                        );
-                    }
-                    if (cell.headers == "amount") {
-                        cell.innerText = EUR(cell.innerText).format();
-                    }
-                }
-            }
+  <script src="/apps/tahuti/assets/request-group.js"></script>
+  <script>
+    // format values
+    //
+    const tableBody = document.getElementById("expenses");
+    tableBody.addEventListener("htmx:afterRequest", (event) => {
+      const code = document.getElementById("currency").innerText;
+      const USD = (value) =>
+        currency(value, {
+          symbol: "$",
+          fromCents: true,
         });
-    </script>
+      const EUR = (value) =>
+        currency(value, {
+          symbol: "€",
+          decimal: ",",
+          separator: ".",
+          pattern: `# !`,
+          negativePattern: `# !`,
+          fromCents: true,
+        });
+      const BTC = (value) =>
+        currency(value, {
+          symbol: "₿",
+          decimal: ".",
+          fromCents: true,
+          precision: 8,
+        });
+      for (const row of tableBody.rows) {
+        for (const cell of row.cells) {
+          if (cell.headers == "date") {
+            const date = new Date(Number(cell.innerText));
+            const options = {
+              month: "short",
+              day: "numeric",
+            };
+            cell.innerText = date.toLocaleDateString(undefined, options);
+          }
+          if (cell.headers == "amount") {
+            if (code == "EUR") {
+              cell.innerText = EUR(cell.innerText).format();
+            } else if (code == "USD") {
+              cell.innerText = USD(cell.innerText).format();
+            } else if (code == "BTC") {
+              cell.innerText = BTC(cell.innerText).format();
+            } else {
+              <!-- TODO: what to do in this case?-->
+              console.log("currency code not supported.");
+            }
+          }
+        }
+      }
+    });
+  </script>
 </html>

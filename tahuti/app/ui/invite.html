@@ -3,24 +3,33 @@
   <head>
     <title>Group Expenses</title>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1"
-    />
-    <meta
-      name="description"
-      content="An Expense Sharing App for Urbit"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="An Expense Sharing App for Urbit" />
+    <!-- PWA -->
+    <meta name="theme-color" content="#cc241d" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Group Expenses" />
     <meta
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
-    <meta name="apple-mobile-web-app-title" content="Group Expenses" />
+    <!-- TODO does SVG work for apple? -->
     <link
-      rel="stylesheet"
-      href="/apps/tahuti/static/css/min/style.css"
+      rel="apple-touch-icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
     />
+    <link
+      rel="icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/512.svg"
+      type="image/svg+xml"
+      sizes="any"
+    />
+    <link
+      rel="manifest"
+      href="/apps/tahuti/manifest.json"
+      crossorigin="use-credentials"
+    />
+    <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
     <link
       rel="stylesheet"
       href="/apps/tahuti/static/css/min/print.css"
@@ -60,11 +69,7 @@
     </header>
 
     <div hx-ext="client-side-templates">
-      <div
-        hx-get="/"
-        hx-trigger="load"
-        mustache-template="title-template"
-      >
+      <div hx-get="/" hx-trigger="load" mustache-template="title-template">
         <h2 style="opacity: 0">Loading ...</h2>
       </div>
       <template id="title-template">

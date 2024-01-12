@@ -3,24 +3,33 @@
   <head>
     <title>Group Expenses</title>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1"
-    />
-    <meta
-      name="description"
-      content="An Expense Sharing App for Urbit"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="An Expense Sharing App for Urbit" />
+    <!-- PWA -->
+    <meta name="theme-color" content="#cc241d" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Group Expenses" />
     <meta
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
-    <meta name="apple-mobile-web-app-title" content="Group Expenses" />
+    <!-- TODO does SVG work for apple? -->
     <link
-      rel="stylesheet"
-      href="/apps/tahuti/static/css/min/style.css"
+      rel="apple-touch-icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
     />
+    <link
+      rel="icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/512.svg"
+      type="image/svg+xml"
+      sizes="any"
+    />
+    <link
+      rel="manifest"
+      href="/apps/tahuti/manifest.json"
+      crossorigin="use-credentials"
+    />
+    <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
     <link
       rel="stylesheet"
       href="/apps/tahuti/static/css/min/print.css"
@@ -129,10 +138,12 @@
           <template id="currency-template">
             <option value="{{currency}}">{{currency}}</option>
           </template>
+          <br />
 
           <!-- payer -->
-          <label for="payer">Who paid?</label>
           <!-- TODO: add current ship as default value -->
+          <label for="payer">Who paid?</label>
+          <br />
           <select
             hx-get="/register"
             hx-trigger="load"
@@ -148,6 +159,7 @@
             <option value="{{.}}">{{.}}</option>
             {{/.}}
           </template>
+          <br />
 
           <!-- involved -->
           <label>Who is involved?</label>
@@ -184,9 +196,7 @@
           <br />
 
           <!-- Submit -->
-          <button class="button-primary" type="submit">
-            Add expense ▸
-          </button>
+          <button class="button-primary" type="submit">Add expense ▸</button>
           <button
             class="button-cancel"
             onclick="window.location.href='/apps/tahuti/groups/' + gid() + '/expenses';
@@ -201,16 +211,6 @@
 
   <script src="/apps/tahuti/assets/request-group.js"></script>
   <script>
-    const USD = (value) => currency(value); // defaults
-    const EUR = (value) =>
-      currency(value, {
-        symbol: "€",
-        decimal: ",",
-        separator: ".",
-        pattern: `# !`,
-        negativePattern: `# !`,
-      });
-
     const form = document.getElementById("put-expenses");
     const amount = document.getElementById("amount");
     const date = document.getElementById("date");
@@ -248,14 +248,10 @@
       <!--     return true; // Allow form submission if at least one checkbox is checked -->
       <!-- } -->
 
-      const checkboxes = Array.from(
-        document.querySelectorAll(".checkbox")
-      );
+      const checkboxes = Array.from(document.querySelectorAll(".checkbox"));
       checkboxes.forEach((item) => {
         item.addEventListener("click", (event) => {
-          if (
-            checkboxes.reduce((acc, curr) => acc || curr.checked, false)
-          ) {
+          if (checkboxes.reduce((acc, curr) => acc || curr.checked, false)) {
             <!-- valid -->
             checkboxes.at(-1).setCustomValidity("");
           } else {
@@ -270,10 +266,33 @@
     //
     form.addEventListener("htmx:configRequest", (event) => {
       // send amount in cents
+      const USD = (value) => currency(value);
+      const EUR = (value) =>
+        currency(value, {
+          decimal: ",",
+          separator: ".",
+        });
+      const BTC = (value) =>
+        currency(value, {
+          precision: 8,
+        });
       if ("amount" in event.detail.parameters) {
-        event.detail.parameters.amount = EUR(
-          amount.value
-        ).intValue.toString();
+        if (event.detail.parameters.currency == "EUR") {
+          event.detail.parameters.amount = EUR(
+            amount.value
+          ).intValue.toString();
+        } else if (event.detail.parameters.currency == "USD") {
+          event.detail.parameters.amount = USD(
+            amount.value
+          ).intValue.toString();
+        } else if (event.detail.parameters.currency == "BTC") {
+          event.detail.parameters.amount = BTC(
+            amount.value
+          ).intValue.toString();
+        } else {
+          <!-- TODO: what to do in this case?-->
+          console.log("currency code not supported.");
+        }
       }
       // send date as unix timestamp
       if ("date" in event.detail.parameters) {
@@ -283,20 +302,14 @@
       if ("involves" in event.detail.parameters) {
         if (!Array.isArray(event.detail.parameters.involves)) {
           // only one checkbox is selected
-          event.detail.parameters.involves = [
-            event.detail.parameters.involves,
-          ];
+          event.detail.parameters.involves = [event.detail.parameters.involves];
         }
       }
     });
 
     form.addEventListener("htmx:afterRequest", (event) => {
-      if (
-        event.detail.successful &&
-        event.detail.elt.id == "put-expenses"
-      ) {
-        window.location.pathname =
-          "/apps/tahuti/groups/" + gid() + "/expenses";
+      if (event.detail.successful && event.detail.elt.id == "put-expenses") {
+        window.location.pathname = "/apps/tahuti/groups/" + gid() + "/expenses";
       }
     });
   </script>

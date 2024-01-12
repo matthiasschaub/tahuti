@@ -1,127 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Group Expenses</title>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="An Expense Sharing App for Urbit" />
-        <meta name="theme-color" content="#cc241d" />
-        <!-- <meta name="apple-mobile-web-app-capable" content="yes" /> -->
-        <!-- <meta -->
-        <!--     name="apple-mobile-web-app-status-bar-style" -->
-        <!--     content="black-translucent" -->
-        <!-- /> -->
-        <!-- <meta name="apple-mobile-web-app-title" content="Group Expenses" /> -->
-        <!-- TODO does SVG work for apple? -->
-        <link
-            rel="apple-touch-icon"
-            href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
-        />
-        <link
-            rel="icon"
-            href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/512.svg"
-            type="image/svg+xml"
-            sizes="any"
-        />
-        <link
-            rel="manifest"
-            href="/apps/tahuti/manifest.json"
-            crossorigin="use-credentials"
-        />
-        <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
-        <link
-            rel="stylesheet"
-            href="/apps/tahuti/static/css/min/print.css"
-            media="print"
-        />
-        <script src="/apps/tahuti/assets/htmx.js"></script>
-        <script src="/apps/tahuti/assets/client-side-templates.js"></script>
-        <script src="/apps/tahuti/assets/mustache.js"></script>
-    </head>
+  <head>
+    <title>Group Expenses</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="An Expense Sharing App for Urbit" />
+    <!-- PWA -->
+    <meta name="theme-color" content="#cc241d" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Group Expenses" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <!-- TODO does SVG work for apple? -->
+    <link
+      rel="apple-touch-icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
+    />
+    <link
+      rel="icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/512.svg"
+      type="image/svg+xml"
+      sizes="any"
+    />
+    <link
+      rel="manifest"
+      href="/apps/tahuti/manifest.json"
+      crossorigin="use-credentials"
+    />
+    <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
+    <link
+      rel="stylesheet"
+      href="/apps/tahuti/static/css/min/print.css"
+      media="print"
+    />
+    <script src="/apps/tahuti/assets/htmx.js"></script>
+    <script src="/apps/tahuti/assets/client-side-templates.js"></script>
+    <script src="/apps/tahuti/assets/mustache.js"></script>
+  </head>
 
-    <body>
-        <header>
-            <nav aria-label="Global">
-                <ul>
-                    <li>
-                        <svg
-                            class="svg-ico"
-                            width="512"
-                            height="512"
-                            version="1.1"
-                            viewBox="0 0 135.47 135.47"
-                            xml:space="preserve"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                d="m58.855 101.36c-5.2711-6.6867-5.1405-17.018 0.35694-28.229 6.8265-13.921 16.366-11.541 21.425 5.3462 3.5926 11.991 3.1979 16.493-2.0286 23.137-5.9768 7.5982-13.641 7.4996-19.754-0.25443zm15.058-0.99317c4.4401-4.4401 3.011-6.1798-5.0763-6.1798-4.2486 0-7.7248 0.79413-7.7248 1.7657 0 2.5778 4.9053 7.0626 7.7248 7.0626 1.3353 0 3.6196-1.1918 5.0763-2.6485zm4.8556-12.756c0-5.1677-7.3538-19.908-9.9319-19.908-2.5781 0-9.9319 14.741-9.9319 19.908 0 1.1894 4.4694 2.1624 9.9319 2.1624 5.4625 0 9.9319-0.97306 9.9319-2.1624zm-33.106-40.358c0-8.2987 12.442-19.022 22.071-19.022 9.6287 0 22.071 10.723 22.071 19.022 0 5.186-0.2933 5.2558-22.071 5.2558-21.778 0-22.071-0.06675-22.071-5.2558zm39.728-1.4708c0-4.4201-11.716-13.137-17.657-13.137s-17.657 8.717-17.657 13.137c0 1.4192 6.8205 2.3124 17.657 2.3124s17.657-0.89324 17.657-2.3124z"
-                                style="
-                                    fill: #cc241d;
-                                    stroke-width: 2.2072;
-                                    stroke: #cc241d;
-                                "
-                            />
-                        </svg>
-                    </li>
-                </ul>
-            </nav>
-        </header>
-
-        <h2>Group Expenses</h2>
-
-        <div hx-ext="client-side-templates">
-            <table id="groups">
-                <thead>
-                    <tr>
-                        <th>Group</th>
-                        <th>Host</th>
-                    </tr>
-                </thead>
-                <!-- TODO: add default message: no groups yet -->
-                <tbody
-                    id="groups"
-                    hx-get="/apps/tahuti/api/groups"
-                    hx-trigger="load"
-                    path-deps="/apps/tahuti/api/*"
-                    mustache-template="groups-template"
-                ></tbody>
-            </table>
-            <template id="groups-template">
-                <!-- iterate over array of members object -->
-                {{#.}}
-                <tr>
-                    <td>
-                        <a href="/apps/tahuti/groups/{{gid}}/expenses.html">
-                            {{title}}</a
-                        >
-                    </td>
-
-                    <td>{{host}}</td>
-                </tr>
-                {{/.}}
-            </template>
-        </div>
-    </body>
-
-    <footer>
-        <a id="add-href" href="/apps/tahuti/groups/create">
+  <body>
+    <header>
+      <nav aria-label="Global">
+        <ul>
+          <li>
             <svg
-                id="add-btn"
-                width="24px"
-                height="24px"
-                stroke-width="1.5"
-                viewBox="0 0 24 24"
-                fill="#fffff3"
-                xmlns="http://www.w3.org/2000/svg"
-                color="#000000"
+              class="svg-ico"
+              width="512"
+              height="512"
+              version="1.1"
+              viewBox="0 0 135.47 135.47"
+              xml:space="preserve"
+              xmlns="http://www.w3.org/2000/svg"
             >
-                <path
-                    d="M22 14V8.5M6 13V6a3 3 0 013-3h5M16.992 4h3m3 0h-3m0 0V1m0 3v3M12 21H6a4 4 0 010-8h12a4 4 0 104 4v-3"
-                    stroke="#000000"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                ></path></svg
-        ></a>
-    </footer>
+              <path
+                d="m58.855 101.36c-5.2711-6.6867-5.1405-17.018 0.35694-28.229 6.8265-13.921 16.366-11.541 21.425 5.3462 3.5926 11.991 3.1979 16.493-2.0286 23.137-5.9768 7.5982-13.641 7.4996-19.754-0.25443zm15.058-0.99317c4.4401-4.4401 3.011-6.1798-5.0763-6.1798-4.2486 0-7.7248 0.79413-7.7248 1.7657 0 2.5778 4.9053 7.0626 7.7248 7.0626 1.3353 0 3.6196-1.1918 5.0763-2.6485zm4.8556-12.756c0-5.1677-7.3538-19.908-9.9319-19.908-2.5781 0-9.9319 14.741-9.9319 19.908 0 1.1894 4.4694 2.1624 9.9319 2.1624 5.4625 0 9.9319-0.97306 9.9319-2.1624zm-33.106-40.358c0-8.2987 12.442-19.022 22.071-19.022 9.6287 0 22.071 10.723 22.071 19.022 0 5.186-0.2933 5.2558-22.071 5.2558-21.778 0-22.071-0.06675-22.071-5.2558zm39.728-1.4708c0-4.4201-11.716-13.137-17.657-13.137s-17.657 8.717-17.657 13.137c0 1.4192 6.8205 2.3124 17.657 2.3124s17.657-0.89324 17.657-2.3124z"
+                style="fill: #cc241d; stroke-width: 2.2072; stroke: #cc241d"
+              />
+            </svg>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <h2>Group Expenses</h2>
+
+    <div hx-ext="client-side-templates">
+      <table id="groups">
+        <thead>
+          <tr>
+            <th>Group</th>
+            <th>Host</th>
+          </tr>
+        </thead>
+        <!-- TODO: add default message: no groups yet -->
+        <tbody
+          id="groups"
+          hx-get="/apps/tahuti/api/groups"
+          hx-trigger="load"
+          path-deps="/apps/tahuti/api/*"
+          mustache-template="groups-template"
+        ></tbody>
+      </table>
+      <template id="groups-template">
+        <!-- iterate over array of members object -->
+        {{#.}}
+        <tr>
+          <td>
+            <a href="/apps/tahuti/groups/{{gid}}/expenses.html"> {{title}}</a>
+          </td>
+
+          <td>{{host}}</td>
+        </tr>
+        {{/.}}
+      </template>
+    </div>
+  </body>
+
+  <footer>
+    <a id="add-href" href="/apps/tahuti/groups/create">
+      <svg
+        id="add-btn"
+        width="24px"
+        height="24px"
+        stroke-width="1.5"
+        viewBox="0 0 24 24"
+        fill="#fffff3"
+        xmlns="http://www.w3.org/2000/svg"
+        color="#000000"
+      >
+        <path
+          d="M22 14V8.5M6 13V6a3 3 0 013-3h5M16.992 4h3m3 0h-3m0 0V1m0 3v3M12 21H6a4 4 0 010-8h12a4 4 0 104 4v-3"
+          stroke="#000000"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        ></path></svg
+    ></a>
+  </footer>
 </html>
