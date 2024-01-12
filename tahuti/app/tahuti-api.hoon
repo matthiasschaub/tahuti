@@ -14,13 +14,11 @@
   ==
 +$  state-0  [%0 ~]
 --
-::  state
-::
 =|  state-0
 =*  state  -
 ::  debug wrap
 ::
-%+  verb  %.n
+:: %+  verb  %.n
 %-  agent:dbug
 ::  agent core
 ::
@@ -30,8 +28,8 @@
     default  ~(. (default-agent this %.n) bowl)
 ::
 ++  on-init
-  ~&  >  '%tahuti-api: initialize'
   ^-  [(list card) $_(this)]
+  ~&  >  '%tahuti-api: initialize'
   :-  ^-  (list card)
     :~
       :*  %pass  /eyre/connect  %arvo  %e
@@ -67,9 +65,6 @@
     [cards this]
   ==
   ++  handle-http
-    ::  TODO: add HTTP response card to state and listen (on-arvo)
-    ::  for OK from %tahuti. Then send out the HTTP response card.
-    ::
     |=  [eyre-id=@ta =inbound-request:eyre]
     ^-  [(list card) $_(state)]
     =/  ,request-line:server
@@ -264,12 +259,14 @@
     (on-arvo:default [wire sign-arvo])
   ?.  ?=([%eyre %bound *] sign-arvo)
     (on-arvo:default [wire sign-arvo])
-  ~?  !accepted.sign-arvo                 :: error if not accepted
-    %eyre-rejected-tahuti-binding
+  :: error if not accepted
+  ::
+  ~?  !accepted.sign-arvo
+    %eyre-rejected-tahuti-api-binding
   :-  ^-  (list card)
       ~
   this
-++  on-watch                          :: subscribe
+++  on-watch
   |=  =path
   ^-  [(list card) $_(this)]
   ?+    path  (on-watch:default path)

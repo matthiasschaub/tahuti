@@ -19,8 +19,6 @@
       =leds        :: ledgers
   ==
 --
-::  state
-::
 =|  state-0
 =*  state  -
 ::  debug wrap

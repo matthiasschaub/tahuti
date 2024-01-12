@@ -1,11 +1,11 @@
 /+  dbug
+/+  verb
 /+  default-agent
-/+  server         :: HTTP request processing
-/+  schooner       :: HTTP response handling
+/+  server                 :: HTTP request processing
+/+  schooner               :: HTTP response handling
 /*  groups                 %html  /app/ui/groups/html
 /*  create                 %html  /app/ui/create/html
 /*  balances               %html  /app/ui/balances/html
-/*  members                %html  /app/ui/members/html
 /*  expenses               %html  /app/ui/expenses/html
 /*  add                    %html  /app/ui/add/html
 /*  details                %html  /app/ui/details/html
@@ -24,15 +24,20 @@
 /*  request-expense        %js    /app/ui/assets/request-expense/js
 ::
 |%
++$  card  card:agent:gall
 +$  versioned-state
   $%  state-0
   ==
 +$  state-0  [%0 page=@t]
-+$  card  card:agent:gall
 --
-%-  agent:dbug
 =|  state-0
 =*  state  -
+::  debug wrap
+::
+%+  verb  %.n
+%-  agent:dbug
+::  agent core
+::
 ^-  agent:gall
 |_  =bowl:gall
 +*  this  .
@@ -64,9 +69,9 @@
     state  !<(state-0 old)
   ==
 ::
-++  on-poke                                   :: one-off action
+++  on-poke
   |=  [=mark =vase]
-  ^-  [(list card) $_(this)]                  :: messages and new state
+  ^-  [(list card) $_(this)]
   |^
   ?+  mark  (on-poke:default mark vase)
     ::
@@ -95,7 +100,6 @@
       ?+  site
           [(send [404 ~ [%plain "404 - Not Found"]]) state]
         [%apps %tahuti ~]
-          ::  TODO:  redirect to /groups
           [(send [200 ~ [%html groups]]) state]
         [%apps %tahuti %groups ~]
           [(send [200 ~ [%html groups]]) state]
@@ -107,8 +111,6 @@
           [(send [200 ~ [%html details]]) state]
         [%apps %tahuti %groups @t %balances ~]
           [(send [200 ~ [%html balances]]) state]
-        [%apps %tahuti %groups @t %members ~]
-          [(send [200 ~ [%html members]]) state]
         [%apps %tahuti %groups @t %add ~]
           [(send [200 ~ [%html add]]) state]
         [%apps %tahuti %groups @t %settings ~]
@@ -142,17 +144,21 @@
   --
 ++  on-arvo
   |=  [=wire =sign-arvo]
-  ^-  (quip card _this)
+  ^-  [(list card) $_(this)]
   ?.  ?=([%bind ~] wire)
     (on-arvo:default [wire sign-arvo])
   ?.  ?=([%eyre %bound *] sign-arvo)
     (on-arvo:default [wire sign-arvo])
+  :: error if not accepted
+  ::
   ~?  !accepted.sign-arvo
     %eyre-rejected-tahuti-ui-bind
-  `this
-++  on-watch                    :: subscribe
+  :-  ^-  (list card)
+      ~
+  this
+++  on-watch
   |=  =path
-  ^-  [(list card) _this]
+  ^-  [(list card) $_(this)]
   ?+    path  (on-watch:default path)
       [%http-response *]
     [~ this]

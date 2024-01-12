@@ -55,12 +55,9 @@
 +$  ex
   $:  payer=@p
       amount=@ud
-      involves=(list @p)          :: TODO: should be a set
-      :: involments=(map @p @ud)  :: how much am I involved: 0.2 * amount
-      :: description=@t
-      :: tags=(set @tas)
+      involves=(list @p)
   ==
-+$  exes       (list ex)
++$  exes      (list ex)
 ::
 ::    statistics
 ::
@@ -73,22 +70,17 @@
       ::
       [%add-group =group]
       [%invite =gid =@p]    :: allow to subscribe
-      [%kick =gid =@p]  :: kick subscriber
+      :: [%allow =gid =ship]
+      [%kick =gid =@p]      :: kick subscriber
       [%join =gid =host]    :: subscribe
       [%del-group =gid]
-      ::[%edit-group =gid =title]  :: change title
-      ::[%list-groups]
-      ::[%join-group =gid =ship]  :: subscribe
-      ::[%leave-group =gid =ship]  :: unsubscribe
+      ::[%edit-group =gid =group]
       ::::
       :::: expense actions performed by members
       ::::
       [%add-expense =gid =expense]
       [%del-expense =gid =eid]
-      ::[%edit-expense =gid =eid =ex]
-      ::[%list-expenses =gid]
-      ::[%list-balances =gid]
-      ::[%list-reimbursments =gid]
+      ::[%edit-group =gid =eid =expense]
   ==
 ::
 ::    output events/updater
@@ -100,13 +92,5 @@
       [%ledger =gid =ledger]
       [%acl =gid =acl]
       [%reg =gid =reg]
-::       [%del =gid]
-::       [%allow =gid =ship]
-::       [%kick =gid =ship]
-::       [%join =gid =ship]
-::       [%leave =gid =ship]
-::       [%pub =gid]
-::       [%priv =gid]
-::       [%title =gid =title]
     ==
 --
