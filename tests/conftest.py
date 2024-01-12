@@ -58,6 +58,26 @@ def group_module(zod, gid_module) -> dict:
     return group
 
 
+@pytest.fixture(scope="module")
+def invitee_module(zod, gid_module, group_module) -> str:
+    """Based on `group`. Adds invitee."""
+    url = f"/apps/tahuti/api/groups/{gid_module}/invitees"
+    zod.put(url, json={"invitee": "~nus"})
+    return "~nus"
+
+
+@pytest.fixture(scope="module")
+def member_module(nus, gid_module, group_module, invitee_module) -> str:
+    """Based on `group`. Adds invitee."""
+    join = {
+        "host": group_module["host"],
+        "gid": gid_module,
+    }
+    url = "/apps/tahuti/api/action/join"
+    nus.post(url, json=join)
+    return "~nus"
+
+
 # TODO
 # @pytest.fixture(scope="session")
 # def commit():

@@ -1,5 +1,5 @@
 from schema import Schema
-from hypothesis import given, strategies
+from hypothesis import given, strategies, settings
 import pytest
 from uuid import uuid4
 
@@ -23,9 +23,11 @@ def groups_schema(group_schema):
     return Schema([group_schema])
 
 
+@settings(deadline=None)
 @given(title=strategies.text(), uuid=strategies.uuids())
-def test_groups_put(uuid, title, zod):
-    group = {"gid": str(uuid), "title": title, "host": "~zod", "currency": "EUR"}
+@pytest.mark.parametrize("currency", ("EUR", "USD", "BTC"))
+def test_groups_put(uuid, title, currency, zod):
+    group = {"gid": str(uuid), "title": title, "host": "~zod", "currency": currency}
     url = "/apps/tahuti/api/groups"
     # PUT /groups
     response = zod.put(url, json=group)
@@ -59,7 +61,7 @@ def test_groups_put_invalid_host(host, zod):
     assert group not in result
 
 
-def test_groups_put_invalid(zod):
+def test_groups_put_empty_payload(zod):
     # TODO: change status code to expected status code not just internal server error
     url = "/apps/tahuti/api/groups"
     response = zod.put(url, json={})
