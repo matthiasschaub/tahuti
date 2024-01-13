@@ -1,8 +1,12 @@
-# Tahuti - An Expense Sharing App for Urbit
+# Group ExpensesAn
 
-For details about this app, see the [proposal](./proposal.md).
+Expense sharing app for Urbit.
+
+For details about this app, see the [proposal](https://urbit.org/grants/splitwise).
 
 ## Development
+
+See [inbox](inbox.md) for open tasks.
 
 ### Setup
 
@@ -42,7 +46,7 @@ watch "rsync -zr tahuti/* zod/tahuti"
 
 ### Debugging
 
-`%dbug` agent wrapper is in use: 
+`%dbug` agent wrapper is in use:
 
 ```
 |start %dbug
@@ -119,20 +123,20 @@ GET   api/groups/{uuid}/expenses/{uuid}  // Get an expense               (JSON o
 POST  api/groups/action/join             // Join a group                 (JSON object)
 ```
 
-
 ### Abbreviations
 
 - gid: group ID
 - eid: expense ID
+- reg: register (of members)
+- acl: access-control list
+- led: ledger (of expenses)
 
 
 ## Contributing
 
 You can contribute in various ways. Foremost, you can always reach out
 to me on the network (`~talfus-laddus`). Critic and praise are welcomed
-equally. You can also use the [issue/ticket
-tracker](https://todo.sr.ht/~talfus-laddus/tahuti) to report any bugs or
-request new features.
+equally.
 For financial support, you can donate to my Ethereum Address:
 
 `0x Ee09 333c 1a33 2Ba8 dA96 4230 C71C 724A 2F48 aC56`
