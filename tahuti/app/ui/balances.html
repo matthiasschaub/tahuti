@@ -119,6 +119,8 @@
       const USD = (value) =>
         currency(value, {
           symbol: "$",
+          pattern: `# !`,
+          negativePattern: `-# !`,
           fromCents: true,
         });
       const EUR = (value) =>
@@ -127,18 +129,21 @@
           decimal: ",",
           separator: ".",
           pattern: `# !`,
-          negativePattern: `# !`,
+          negativePattern: `-# !`,
           fromCents: true,
         });
       const BTC = (value) =>
         currency(value, {
           symbol: "₿",
+          pattern: `# !`,
+          negativePattern: `-# !`,
           fromCents: true,
           precision: 8,
         });
       for (const row of tableBody.rows) {
         for (const cell of row.cells) {
           if (cell.headers == "amount") {
+            console.log(cell.innerText)
             if (code == "EUR") {
               cell.innerText = EUR(cell.innerText).format();
             } else if (code == "USD") {

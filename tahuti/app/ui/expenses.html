@@ -163,6 +163,7 @@
       const USD = (value) =>
         currency(value, {
           symbol: "$",
+          pattern: `# !`,
           fromCents: true,
         });
       const EUR = (value) =>
@@ -171,13 +172,13 @@
           decimal: ",",
           separator: ".",
           pattern: `# !`,
-          negativePattern: `# !`,
           fromCents: true,
         });
       const BTC = (value) =>
         currency(value, {
           symbol: "₿",
           decimal: ".",
+          pattern: `# !`,
           fromCents: true,
           precision: 8,
         });
