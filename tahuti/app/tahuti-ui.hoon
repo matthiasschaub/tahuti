@@ -22,6 +22,10 @@
 /*  currency               %js    /app/ui/assets/currency/js
 /*  request-group          %js    /app/ui/assets/request-group/js
 /*  request-expense        %js    /app/ui/assets/request-expense/js
+/*  icon-16                %png   /app/ui/static/images/icons/16/png
+/*  icon-180               %png   /app/ui/static/images/icons/180/png
+/*  icon-192               %png   /app/ui/static/images/icons/192/png
+/*  icon-512               %png   /app/ui/static/images/icons/512/png
 ::
 |%
 +$  card  card:agent:gall
@@ -99,6 +103,8 @@
         %'GET'
       ?+  site
           [(send [404 ~ [%plain "404 - Not Found"]]) state]
+        ::  html
+        ::
         [%apps %tahuti ~]
           [(send [200 ~ [%html groups]]) state]
         [%apps %tahuti %groups ~]
@@ -117,10 +123,14 @@
           [(send [200 ~ [%html settings]]) state]
         [%apps %tahuti %groups @t %invite ~]
           [(send [200 ~ [%html invite]]) state]
+        ::  css
+        ::
         [%apps %tahuti %static %css %min %style ~]
           [(send [200 ~ [%css style]]) state]
         [%apps %tahuti %static %css %min %print ~]
           [(send [200 ~ [%css print]]) state]
+        ::  javascript
+        ::
         [%apps %tahuti %manifest ~]
           [(send [200 ~ [%json manifest]]) state]
         [%apps %tahuti %assets %htmx ~]
@@ -139,6 +149,16 @@
           [(send [200 ~ [%js request-group]]) state]
         [%apps %tahuti %assets %request-expense ~]
           [(send [200 ~ [%js request-expense]]) state]
+        ::  icons
+        ::
+        [%apps %tahuti %static %images %icons %16 ~]
+          [(send [200 ~ [%png icon-16]]) state]
+        [%apps %tahuti %static %images %icons %180 ~]
+          [(send [200 ~ [%png icon-180]]) state]
+        [%apps %tahuti %static %images %icons %192 ~]
+          [(send [200 ~ [%png icon-192]]) state]
+        [%apps %tahuti %static %images %icons %512 ~]
+          [(send [200 ~ [%png icon-512]]) state]
       ==
     ==
   --

@@ -3,8 +3,14 @@
   <head>
     <title>Group Expenses</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="An Expense Sharing App for Urbit" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <meta
+      name="description"
+      content="An Expense Sharing App for Urbit"
+    />
     <!-- PWA -->
     <meta name="theme-color" content="#cc241d" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -29,7 +35,10 @@
       href="/apps/tahuti/manifest.json"
       crossorigin="use-credentials"
     />
-    <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
+    <link
+      rel="stylesheet"
+      href="/apps/tahuti/static/css/min/style.css"
+    />
     <link
       rel="stylesheet"
       href="/apps/tahuti/static/css/min/print.css"
@@ -75,7 +84,6 @@
         mustache-template="group-template"
       ></div>
       <template id="group-template">
-        <!-- iterate over array of members object -->
         <h2>{{title}}</h2>
         <h3>Details</h3>
         <table>
@@ -98,83 +106,118 @@
       </template>
 
       <h3>Members</h3>
-      <ul
-        id="get-register"
-        hx-get="/register"
-        hx-trigger="load"
-        mustache-template="register-template"
-      ></ul>
-      <template id="register-template">
-        <!-- iterate over array of register list -->
-        {{#.}}
-        <li>{{.}}</li>
-        {{/.}}
-      </template>
-      <ul
-        id="get-invitees"
-        hx-get="/invitees"
-        hx-trigger="load"
-        mustache-template="invitees-template"
-      ></ul>
-      <template id="invitees-template">
-        <!-- iterate over array of invitees list -->
-        {{#.}}
-        <li>{{.}} <small>(invited)</small></li>
-        {{/.}}
-      </template>
+      <ul>
+        <div
+          id="get-members"
+          hx-get="/members"
+          hx-trigger="load"
+          hx-swap="outerHTML"
+          mustache-template="members-template"
+        ></div>
+        <template id="members-template">
+          {{#.}}
+          <li>{{.}}</li>
+          {{/.}}
+        </template>
+        <div
+          id="get-invitees"
+          hx-get="/invitees"
+          hx-trigger="load"
+          mustache-template="invitees-template"
+        ></div>
+        <template id="invitees-template">
+          {{#.}}
+          <li>{{.}} <small>(invited)</small></li>
+          {{/.}}
+        </template>
+      </ul>
 
       <fieldset>
         <!-- Action is set by request-group.js -->
         <form id="btn-invite" action="">
           Invite other people on Urbit to this group.
           <br />
-          <button class="button-primary" type="submit">Invite people ▸</button>
+          <button class="button-primary" type="submit">
+            Invite people ▸
+          </button>
         </form>
       </fieldset>
+
+      <!-- TODO -->
+      <!-- <h3>Leave group</h3> -->
+      <!-- <fieldset> -->
+      <!--     <!-1- hx-delete="/" -1-> -->
+      <!--     <!-1- TODO -1-> -->
+      <!--     <form -->
+      <!--         id="delete-groups" -->
+      <!--         hx-confirm="Are you sure?" -->
+      <!--         hx-ext="json-enc" -->
+      <!--         hx-swap="none" -->
+      <!--         hx-request="noHeaders" -->
+      <!--         hx-vals="js:{gid: gid()}" -->
+      <!--         hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'" -->
+      <!--     > -->
+      <!--         Leaving this group will not remove any expenses you have been -->
+      <!--         involved with. -->
+      <!--         <!-1- Group host can not leave a group. -1-> -->
+      <!--         <br /> -->
+      <!--         <button class="button-cancel" type="submit"> -->
+      <!--             Leave this group -->
+      <!--         </button> -->
+      <!--     </form> -->
+      <!-- </fieldset> -->
+
+      <h3>Delete group</h3>
+      <fieldset>
+        <form
+          id="delete-groups"
+          hx-delete="/"
+          hx-confirm="Are you sure?"
+          hx-ext="json-enc"
+          hx-swap="none"
+          hx-request="noHeaders"
+          hx-vals="js:{gid: gid()}"
+          hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'"
+        >
+          Deleting this group will permanently remove all expenses and
+          members. This action can only be performed by the group host.
+          <br />
+          <button class="button-cancel" type="submit">
+            Delete this group
+          </button>
+        </form>
+      </fieldset>
+
+      <h3>About</h3>
+      <table>
+        <thead></thead>
+        <tbody>
+          <tr>
+            <th>Version</th>
+            <td
+              hx-get="/apps/tahuti/api/version"
+              hx-trigger="load"
+              mustache-template="about-template"
+            ></td>
+          </tr>
+          <tr>
+            <th>Developer</th>
+            <td>~talfus-laddus</td>
+          </tr>
+          <tr>
+            <th>Code Repository</th>
+            <td>
+              <a href="https://git.sr.ht/~talfus-laddus/tahuti"
+                >Sourcehut</a
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <template id="version-template">
+        <td>{{#.}} {{.}} {{/.}}</td>
+      </template>
     </div>
-
-    <!-- TODO -->
-    <!-- <h3>Leave group</h3> -->
-    <!-- <fieldset> -->
-    <!--     <!-1- hx-delete="/" -1-> -->
-    <!--     <!-1- TODO -1-> -->
-    <!--     <form -->
-    <!--         id="delete-groups" -->
-    <!--         hx-confirm="Are you sure?" -->
-    <!--         hx-ext="json-enc" -->
-    <!--         hx-swap="none" -->
-    <!--         hx-request="noHeaders" -->
-    <!--         hx-vals="js:{gid: gid()}" -->
-    <!--         hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'" -->
-    <!--     > -->
-    <!--         Leaving this group will not remove any expenses you have been -->
-    <!--         involved with. -->
-    <!--         <!-1- Group host can not leave a group. -1-> -->
-    <!--         <br /> -->
-    <!--         <button class="button-cancel" type="submit"> -->
-    <!--             Leave this group -->
-    <!--         </button> -->
-    <!--     </form> -->
-    <!-- </fieldset> -->
-
-    <h3>Delete group</h3>
-    <fieldset>
-      <form
-        id="delete-groups"
-        hx-delete="/"
-        hx-confirm="Are you sure?"
-        hx-ext="json-enc"
-        hx-swap="none"
-        hx-request="noHeaders"
-        hx-vals="js:{gid: gid()}"
-        hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'"
-      >
-        Deleting this group will permanently remove all expenses and members.
-        This action can only be performed by the group host.
-        <br />
-        <button class="button-cancel" type="submit">Delete this group</button>
-      </form>
-    </fieldset>
   </body>
 
   <script src="/apps/tahuti/assets/request-group.js"></script>

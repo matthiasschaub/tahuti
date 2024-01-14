@@ -81,6 +81,9 @@
       ?+  site
         [(send [404 ~ [%plain "404 - Not Found"]]) state]
         ::
+          [%apps %tahuti %api %version ~]
+        [(send [200 ~ [%json (version:enjs '0.0.5')]]) state]
+        ::
           [%apps %tahuti %api %our ~]
         [(send [200 ~ [%json (ship:enjs our.bowl)]]) state]
         ::
@@ -98,16 +101,36 @@
         =/  response  (group:enjs group)
         [(send [200 ~ [%json response]]) state]
         ::
-          [%apps %tahuti %api %groups @t %register ~]
+          [%apps %tahuti %api %groups @t %members ~]
         =/  gid       (snag 4 `(list @t)`site)
         =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/groups/noun
         =/  groups    .^(groups %gx path)
         =/  group     (~(got by groups) gid)
+        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/acls/noun
+        =/  acls      .^(acls %gx path)
+        =/  acl       (need (~(get by acls) gid))
+        =.  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/regs/noun
+        =/  regs      .^(regs %gx path)
+        =/  reg       (~(got by regs) gid)
+        =/  members   (~(int in reg) acl)
+        =.  members   (~(put in members) host.group)
+        =/  response  (ships:enjs members)
+        [(send [200 ~ [%json response]]) state]
+        ::
+          [%apps %tahuti %api %groups @t %castoff ~]
+        =/  gid       (snag 4 `(list @t)`site)
+        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/groups/noun
+        =/  groups    .^(groups %gx path)
+        =/  group     (~(got by groups) gid)
+        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/acls/noun
+        =/  acls      .^(acls %gx path)
+        =/  acl       (need (~(get by acls) gid))
         =.  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/regs/noun
         =/  regs      .^(regs %gx path)
         =/  reg       (~(got by regs) gid)
         =.  reg       (~(put in reg) host.group)
-        =/  response  (ships:enjs reg)
+        =/  castoff   (~(int in reg) acl)
+        =/  response  (ships:enjs castoff)
         [(send [200 ~ [%json response]]) state]
         ::
           [%apps %tahuti %api %groups @t %invitees ~]

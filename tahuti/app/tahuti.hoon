@@ -72,13 +72,17 @@
       regs    (~(put by regs) gid.group.action ~)
       leds    (~(put by leds) gid.group.action ~)
     ==
+    ::  (delete state and kick all subscribers)
+      ::
       %del-group
     ~&  >  '%tahuti (on-poke): del group'
     ?>  (~(has by groups) gid.action)
     ?>  =(our.bowl src.bowl)
+    =/  group  (~(got by groups) gid.action)
+    ?>  =(our.bowl host.group)
     :-  ^-  (list card)
-        :: TODO: delete group for subscribers
-        ~
+        :~  [%give %kick [/[gid.action] ~] ~]
+        ==
     %=  this
       groups  (~(del by groups) gid.action)
       acls    (~(del by acls) gid.action)
@@ -154,10 +158,8 @@
     %=  this
       acls    (~(put by acls) gid.action acl)
     ==
-    ::
-    ::  TODO: do not remove from reg.
-    ::    kick also from subscriber list (bowl).
-    ::
+    ::  (remove shop from access-control and subscriber lists)
+      ::
       %kick
     ~&  >  '%tahuti (on-poke): kick'
     =/  group  (~(got by groups) gid.action)
@@ -165,21 +167,16 @@
     ?>  =(our.bowl host.group)
     ?<  =(our.bowl p.action)
     ?<  =(host.group p.action)
-    =/  acl  (~(got by acls) gid.action)
-    =.  acl  (~(del in acl) p.action)
     =/  reg  (~(got by regs) gid.action)
     =.  reg  (~(del in reg) p.action)
     :-  ^-  (list card)
       :~
         :*  %give  %fact  [/[gid.action] ~]  %tahuti-update
-            !>  ^-  update  [%acl gid.action acl]
-        ==
-        :*  %give  %fact  [/[gid.action] ~]  %tahuti-update
             !>  ^-  update  [%reg gid.action reg]
         ==
+        :*  %give  %kick  [/[gid.action] ~]  [~ p.action]  ==
       ==
     %=  this
-      acls    (~(put by acls) gid.action acl)
       regs    (~(put by regs) gid.action reg)
     ==
     ::  (subscribe to a group hosted on another ship)
@@ -261,6 +258,9 @@
       [~ this]
     ~&  >>>  '%tahuti (on-agent): subscription failed'
     [~ this]
+    ::  (archive group)
+      ::
+      :: %kick
     ::
       %fact
     ?>  ?=(%tahuti-update p.cage.sign)

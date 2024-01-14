@@ -2,8 +2,9 @@
 
 ## Back-end
 
-- leave group
-- remove from group
+- leave group (archive vs remove) as a member
+- remove member from group as a host
+- handle kick -> archive group
 - add and use scry path based on gid/eid
 - surface pending invites to user (UX)
 - evaluate if bankers rounding in `lib/stats.hoon` would be better
@@ -24,6 +25,10 @@
 - select as default drop down currently logged in ship
 - mouse pointer on hover for delete link
 
+## API 
+
+- add /version endpoint
+
 ## Tests
 
 - use module scoped fixtures everywhere to keep it simple
@@ -36,3 +41,4 @@
 - checkout "Fetch JSON" guide on how to use threads to fetch exchange
 - use knots (name part of the path) in api `?+`
 rates
+- support export of all expenses as backup

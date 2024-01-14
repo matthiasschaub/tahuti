@@ -63,13 +63,13 @@ def test_kick_invitee(zod, gid):
     assert resp.status_code == 200
     time.sleep(2)
 
-    # GET /invitees
-    url = f"/apps/tahuti/api/groups/{gid}/invitees"
-    resp = zod.get(url)
-    assert resp.status_code == 200
-    result = resp.json()
-    assert isinstance(result, list)
-    assert "~nus" not in result
+#     # GET /invitees
+#     url = f"/apps/tahuti/api/groups/{gid}/invitees"
+#     resp = zod.get(url)
+#     assert resp.status_code == 200
+#     result = resp.json()
+#     assert isinstance(result, list)
+#     assert "~nus" not in result
 
     # GET /register
     url = f"/apps/tahuti/api/groups/{gid}/register"

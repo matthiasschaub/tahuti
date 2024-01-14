@@ -99,7 +99,7 @@ def test_groups_get_single_not_found(zod):
     assert response.status_code == 500
 
 
-def test_groups_delete(zod, gid, group):
+def test_groups_del(zod, gid, group):
     # PUT
     url = f"/apps/tahuti/api/groups/{gid}"
     response = zod.delete(url)

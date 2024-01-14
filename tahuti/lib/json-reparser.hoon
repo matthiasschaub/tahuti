@@ -13,6 +13,10 @@
 |%
 ++  enjs
   |%
+    ++  version
+      |=  v=@t
+      ^-  (pair %s @t)
+      [%s v]
     ++  ship
       |=  s=@p
       ^-  (pair %s @t)
