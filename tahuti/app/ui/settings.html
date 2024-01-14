@@ -3,14 +3,8 @@
   <head>
     <title>Group Expenses</title>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
-    <meta
-      name="description"
-      content="An Expense Sharing App for Urbit"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="An Expense Sharing App for Urbit" />
     <!-- PWA -->
     <meta name="theme-color" content="#cc241d" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -19,16 +13,20 @@
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
-    <!-- TODO does SVG work for apple? -->
     <link
       rel="apple-touch-icon"
-      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/180.png"
     />
     <link
       rel="icon"
-      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/512.svg"
-      type="image/svg+xml"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/16.png"
+      sizes="16x16"
+    />
+    <link
+      rel="icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
       sizes="any"
+      type="image/svg+xml"
     />
     <link
       rel="manifest"
@@ -36,17 +34,15 @@
       crossorigin="use-credentials"
     />
     <link
-      rel="stylesheet"
-      href="/apps/tahuti/static/css/min/style.css"
+      rel="apple-touch-icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
     />
+    <!-- /PWA -->
+    <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
     <link
       rel="stylesheet"
       href="/apps/tahuti/static/css/min/print.css"
       media="print"
-    />
-    <link
-      rel="apple-touch-icon"
-      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
     />
     <script src="/apps/tahuti/assets/htmx.js"></script>
     <script src="/apps/tahuti/assets/json-enc.js"></script>
@@ -137,9 +133,7 @@
         <form id="btn-invite" action="">
           Invite other people on Urbit to this group.
           <br />
-          <button class="button-primary" type="submit">
-            Invite people ▸
-          </button>
+          <button class="button-primary" type="submit">Invite people ▸</button>
         </form>
       </fieldset>
 
@@ -179,12 +173,10 @@
           hx-vals="js:{gid: gid()}"
           hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'"
         >
-          Deleting this group will permanently remove all expenses and
-          members. This action can only be performed by the group host.
+          Deleting this group will permanently remove all expenses and members.
+          This action can only be performed by the group host.
           <br />
-          <button class="button-cancel" type="submit">
-            Delete this group
-          </button>
+          <button class="button-cancel" type="submit">Delete this group</button>
         </form>
       </fieldset>
 
@@ -207,9 +199,7 @@
           <tr>
             <th>Code Repository</th>
             <td>
-              <a href="https://git.sr.ht/~talfus-laddus/tahuti"
-                >Sourcehut</a
-              >
+              <a href="https://git.sr.ht/~talfus-laddus/tahuti">Sourcehut</a>
             </td>
           </tr>
         </tbody>
