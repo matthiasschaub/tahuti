@@ -1,4 +1,4 @@
-# Group ExpensesAn
+# Group Expenses
 
 Expense sharing app for Urbit.
 
