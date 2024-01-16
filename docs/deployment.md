@@ -12,7 +12,8 @@
 
 1. Bump version numbers in `desk.docket-0` and `tahuti-api.hoon`
 2. Boot the moon
-2. `|commit` the changes
+3. `|commit` the changes
+4. On the planet: Sync from the moon: `|sync %tahuti ~sarwyd-taswyn-talfus-laddus %tahuti`
 
 The planet will automatically retrieve those updates and distribute them.
 
