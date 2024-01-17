@@ -25,64 +25,78 @@
       |=  s=(set @p)
       ^-  json
       [%a (turn ~(tap in s) ship:enjs)]
+    ++  invite
+      |=  i=[=gid =host]
+      ^-  json
+      %-  pairs:enjs:format
+      :~
+        :-  'gid'       [%s gid.i]
+        :-  'host'      [%s (scot %p host.i)]
+      ==
+    ++  invites
+      ::  turn map of groups into list
+      ::
+      |=  i=^invites
+      ^-  json
+      [%a (turn ~(tap in i) invite:enjs)]
     ++  group
-    |=  g=^group
-    ^-  json
-    %-  pairs:enjs:format
-    :~
-      :-  'gid'       [%s gid.g]
-      :-  'title'     [%s title.g]
-      :-  'host'      [%s (scot %p host.g)]
-      :-  'currency'  [%s currency.g]
-    ==
-  ::  (groups as json array)
-  ::
-  ++  groups
-    ::  turn map of groups into list
+      |=  g=^group
+      ^-  json
+      %-  pairs:enjs:format
+      :~
+        :-  'gid'       [%s gid.g]
+        :-  'title'     [%s title.g]
+        :-  'host'      [%s (scot %p host.g)]
+        :-  'currency'  [%s currency.g]
+      ==
+    ::  (groups as json array)
     ::
-    |=  g=^groups
-    ^-  json
-    [%a (turn ~(val by g) group:enjs)]
-  ++  expense
-    |=  e=^expense
-    ^-  json
-    %-  pairs:enjs:format
-    :~
-      :-  'gid'       [%s gid.e]
-      :-  'eid'       [%s eid.e]
-      :-  'title'     [%s title.e]
-      :-  'amount'    (numb:enjs:format amount.e)
-      :-  'currency'  [%s currency.e]
-      ::  TODO
-      ::  :-  'currency-format' ...
-      :-  'payer'     [%s (scot %p payer.e)]
-      :-  'date'      (sect:enjs:format date.e)
-      ::  TODO.
-      ::  :-  'date-format'  (dust:chrono:userlib (yore date.e))
-      :-  'involves'  [%a (turn involves.e ship:enjs)]
-    ==
-  ++  ledger
-    |=  vals=(list ^expense)
-    ^-  json
-    [%a (turn vals expense:enjs)]
-  ::  (net amounts as json array)
-  ::
-  ++  net
-    ::  turn net amounts map into list
+    ++  groups
+      ::  turn map of groups into list
+      ::
+      |=  g=^groups
+      ^-  json
+      [%a (turn ~(val by g) group:enjs)]
+    ++  expense
+      |=  e=^expense
+      ^-  json
+      %-  pairs:enjs:format
+      :~
+        :-  'gid'       [%s gid.e]
+        :-  'eid'       [%s eid.e]
+        :-  'title'     [%s title.e]
+        :-  'amount'    (numb:enjs:format amount.e)
+        :-  'currency'  [%s currency.e]
+        ::  TODO
+        ::  :-  'currency-format' ...
+        :-  'payer'     [%s (scot %p payer.e)]
+        :-  'date'      (sect:enjs:format date.e)
+        ::  TODO.
+        ::  :-  'date-format'  (dust:chrono:userlib (yore date.e))
+        :-  'involves'  [%a (turn involves.e ship:enjs)]
+      ==
+    ++  ledger
+      |=  vals=(list ^expense)
+      ^-  json
+      [%a (turn vals expense:enjs)]
+    ::  (net amounts as json array)
     ::
-    |=  n=^net
-    ^-  json
-    :-  %a
-    %+  turn  ~(tap by n)
-    |=  [member=@p amount=@s]
-    =/  [syn=? abs=@]  (old:si amount)
-    =/  fmt  ?.(syn "-{<abs>}" "{<abs>}")
-    %-  pairs:enjs:format
-    :~
-      :-  'member'  [%s (scot %p member)]
-      :-  'amount'  [%s (crip fmt)]
-    ==
-  --
+    ++  net
+      ::  turn net amounts map into list
+      ::
+      |=  n=^net
+      ^-  json
+      :-  %a
+      %+  turn  ~(tap by n)
+      |=  [member=@p amount=@s]
+      =/  [syn=? abs=@]  (old:si amount)
+      =/  fmt  ?.(syn "-{<abs>}" "{<abs>}")
+      %-  pairs:enjs:format
+      :~
+        :-  'member'  [%s (scot %p member)]
+        :-  'amount'  [%s (crip fmt)]
+      ==
+    --
 ::
 ++  dejs
   |%

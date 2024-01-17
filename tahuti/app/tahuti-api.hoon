@@ -87,6 +87,12 @@
           [%apps %tahuti %api %our ~]
         [(send [200 ~ [%json (ship:enjs our.bowl)]]) state]
         ::
+          [%apps %tahuti %api %invites ~]
+        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/invites/noun
+        =/  invites   .^(invites %gx path)
+        =/  response  (invites:enjs invites)
+        [(send [200 ~ [%json response]]) state]
+        ::
           [%apps %tahuti %api %groups ~]
         =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/groups/noun
         =/  groups    .^(groups %gx path)

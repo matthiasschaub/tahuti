@@ -146,13 +146,15 @@
     %=  this
       leds  (~(put by leds) gid.action ledger)
     ==
-    ::  (add ship to access-control list)
+    ::  (add ship to access-control list and send an invite)
       ::
       %allow
-    ~&  >  '%tahuti (on-poke): allow ship to subscribe'
+    ~&  >  '%tahuti (on-poke): allow to subscribe and invite'
     =/  group  (~(got by groups) gid.action)
     ?.  =(our.bowl host.group)
       :-  ^-  (list card)
+        ::  TODO  more elegant?
+        :: :~  [%pass ~ %agent [host.group %tahuti] %poke mark vase]
         :~  [%pass ~ %agent [host.group %tahuti] %poke %tahuti-action !>(action)]
         ==
       this
@@ -165,18 +167,13 @@
         :*  %give  %fact  [/[gid.action] ~]  %tahuti-update
             !>  ^-  update  [%acl gid.action acl]
         ==
-        ::  TODO  poke %send
+        :*  %pass  ~  %agent  [p.action %tahuti]
+            %poke  %tahuti-action  !>([%add-invite gid.group host.group])
+        ==
       ==
     %=  this
       acls     (~(put by acls) gid.action acl)
     ==
-    ::  (send invitation)
-      ::
-      %invite
-    ~&  >  '%tahuti (on-poke): send invite'
-    :-  ^-  (list card)
-        ~
-    this
     ::  (receive invitation)
       ::
       %add-invite
@@ -216,7 +213,7 @@
     %=  this
       regs    (~(put by regs) gid.action reg)
     ==
-    ::  (subscribe to a group hosted on another ship)
+    ::  (subscribe to a group and remove invite)
       ::
       %join
     ~&  >  '%tahuti (on-poke): join'
@@ -225,7 +222,9 @@
     :-  ^-  (list card)
         :~  [%pass path %agent [host.action %tahuti] %watch path]
         ==
-    this
+    %=  this
+      invites  (~(del in invites) [gid.action host.action])
+    ==
   ==
 ++  on-arvo  on-arvo:default
 ++  on-watch

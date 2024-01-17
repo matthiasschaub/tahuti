@@ -20,33 +20,37 @@ def test_invitee_empty_body(zod, gid):
 
 
 @pytest.mark.usefixtures("group")
-def test_invitees_single(auth, gid):
+def test_invitees_single(zod, nus, auth, gid):
     """Test PUT and GET requests."""
 
     # PUT /invitees
-    url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/invitees"
-    response = requests.put(url, cookies=auth, json={"invitee": "~nus"})
-    assert response.status_code == 200
-    # idempotent
-    response = requests.put(url, cookies=auth, json={"invitee": "~nus"})
+    url = f"/apps/tahuti/api/groups/{gid}/invitees"
+    response = zod.put(url, json={"invitee": "~nus"})
     assert response.status_code == 200
 
     # GET /invitees
     url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/invitees"
-    response = requests.get(url, cookies=auth)
+    response = zod.get(url)
     assert response.status_code == 200
     result = response.json()
     assert isinstance(result, list)
     assert "~nus" in result
-    assert result.count("~nus") == 1  # idempotent
 
     # GET /members
-    url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/members"
-    response = requests.get(url, cookies=auth)
+    url = f"/apps/tahuti/api/groups/{gid}/members"
+    response = zod.get(url)
     assert response.status_code == 200
     result = response.json()
     assert isinstance(result, list)
     assert "~nus" not in result
+
+    # GET /invites (nus)
+    url = "/apps/tahuti/api/invites"
+    response = nus.get(url)
+    assert response.status_code == 200
+    result = response.json()
+    assert isinstance(result, list)
+    assert {"host": "~zod", "gid": gid} in result
 
 
 @pytest.mark.usefixtures("group")

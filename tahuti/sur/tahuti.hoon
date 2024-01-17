@@ -18,6 +18,7 @@
 ::
 ::    invites
 ::
++$  invite    [=gid =host]
 +$  invites   (set [=gid =host])
 ::
 ::    register of members (reg)
@@ -78,7 +79,6 @@
       ::
       ::  member actions
       ::
-      [%invite =gid =@p]    :: send invitation
       [%add-invite =gid =host]
       [%del-invite =gid =host]
       ::

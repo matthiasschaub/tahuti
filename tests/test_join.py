@@ -52,6 +52,14 @@ def test_join(zod, nus, gid, group, invitee):
     result = response.json()
     assert result == ["~zod", invitee]
 
+    # GET /invites
+    url = "/apps/tahuti/api/invites"
+    response = nus.get(url)
+    assert response.status_code == 200
+    result = response.json()
+    assert isinstance(result, list)
+    assert {"host": group["host"], "gid": gid} not in result
+
 
 def test_join_not_allowed(nus, gid, group):
     join = {
