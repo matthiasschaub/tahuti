@@ -171,7 +171,7 @@
         =/  gid       (snag 4 `(list @t)`site)
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
         =/  invitee   (invitee:dejs content)
-        =/  action    [%invite gid invitee]
+        =/  action    [%allow gid invitee]
         =/  response  (send [200 ~ [%plain "ok"]])
         :-  ^-  (list card)
           %+  snoc

@@ -16,6 +16,10 @@
     =currency          ::  three-letter ISO code
   ==
 ::
+::    invites
+::
++$  invites   (set [=gid =host])
+::
 ::    register of members (reg)
 ::    access-control list (acl)
 ::
@@ -67,21 +71,25 @@
 ::    input requests/actions
 ::
 +$  action
-  $%  :: group actions performed by host
+  $%  ::  group actions
       ::
       [%add-group =group]
-      [%invite =gid =@p]    :: allow to subscribe
-      :: [%allow =gid =ship]
+      [%del-group =gid]
+      ::
+      ::  member actions
+      ::
+      [%invite =gid =@p]    :: send invitation
+      [%add-invite =gid =host]
+      [%del-invite =gid =host]
+      ::
+      [%allow =gid =@p]     :: allow to subscribe
       [%kick =gid =@p]      :: kick subscriber
       [%join =gid =host]    :: subscribe
-      [%del-group =gid]
-      ::[%edit-group =gid =group]
-      ::::
-      :::: expense actions performed by members
-      ::::
+      ::
+      ::  expense actions
+      ::
       [%add-expense =gid =expense]
       [%del-expense =gid =eid]
-      ::[%edit-group =gid =eid =expense]
   ==
 ::
 ::    output events/updater

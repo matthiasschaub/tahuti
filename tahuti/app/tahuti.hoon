@@ -10,16 +10,25 @@
 +$  card  card:agent:gall
 +$  versioned-state
   $%  state-0
+      state-1
   ==
 +$  state-0
   $:  %0
+      =groups
+      =regs
+      =acls
+      =leds
+  ==
++$  state-1
+  $:  %1
+      =invites
       =groups
       =regs        :: registers
       =acls        :: access-control lists
       =leds        :: ledgers
   ==
 --
-=|  state-0
+=|  state-1
 =*  state  -
 ::  debug wrap
 ::
@@ -44,12 +53,14 @@
   !>(state)
 ::
 ++  on-load
-  |=  old=vase
+  |=  =vase
   ^-  [(list card) $_(this)]
+  =/  old  !<(versioned-state vase)
   :-  ^-  (list card)
       ~
-  %=  this
-    state  !<(state-0 old)
+  ?-  -.old
+    %1  this(state old)
+    %0  this(state [%1 ~ groups.old regs.old acls.old leds.old])
   ==
 ++  on-poke
   ~&  >  '%tahuti (on-poke)'
@@ -72,7 +83,7 @@
       regs    (~(put by regs) gid.group.action ~)
       leds    (~(put by leds) gid.group.action ~)
     ==
-    ::  (delete state and kick all subscribers)
+    ::  (delete group and kick all subscribers)
       ::
       %del-group
     ~&  >  '%tahuti (on-poke): del group'
@@ -137,8 +148,8 @@
     ==
     ::  (add ship to access-control list)
       ::
-      %invite
-    ~&  >  '%tahuti (on-poke): invite'
+      %allow
+    ~&  >  '%tahuti (on-poke): allow ship to subscribe'
     =/  group  (~(got by groups) gid.action)
     ?.  =(our.bowl host.group)
       :-  ^-  (list card)
@@ -154,11 +165,37 @@
         :*  %give  %fact  [/[gid.action] ~]  %tahuti-update
             !>  ^-  update  [%acl gid.action acl]
         ==
+        ::  TODO  poke %send
       ==
     %=  this
-      acls    (~(put by acls) gid.action acl)
+      acls     (~(put by acls) gid.action acl)
     ==
-    ::  (remove shop from access-control and subscriber lists)
+    ::  (send invitation)
+      ::
+      %invite
+    ~&  >  '%tahuti (on-poke): send invite'
+    :-  ^-  (list card)
+        ~
+    this
+    ::  (receive invitation)
+      ::
+      %add-invite
+    ~&  >  '%tahuti (on-poke): receive invite'
+    :-  ^-  (list card)
+        ~
+    %=  this
+      invites  (~(put in invites) [gid.action host.action])
+    ==
+    ::  (decline invitation)
+      ::
+      %del-invite
+    ~&  >  '%tahuti (on-poke): decline invite'
+    :-  ^-  (list card)
+        ~
+    %=  this
+      invites  (~(del in invites) [gid.action host.action])
+    ==
+    ::  (remove ship from access-control and subscriber lists)
       ::
       %kick
     ~&  >  '%tahuti (on-poke): kick'
@@ -223,19 +260,20 @@
   ^-  (unit (unit [mark vase]))
   ?+  path  ~|('%tahuti (on-peek)' (on-peek:default path))
     ::
+      [%x %invites ~]
+    [~ ~ [%noun !>(invites.this)]]
+    ::
       [%x %groups ~]
     [~ ~ [%noun !>(groups.this)]]
     ::
-      [%x %regs ~]
-    [~ ~ [%noun !>(regs.this)]]
+      [%x =gid ~]
+    =/  group  (~(got by groups) gid.path)
+    =/  acl    (~(got by acls) gid.path)
+    =/  reg    (~(got by regs) gid.path)
+    =/  led    (~(got by leds) gid.path)
+    [~ ~ [%noun !>([group acl reg led])]]
     ::
-      [%x %acls ~]
-    [~ ~ [%noun !>(acls.this)]]
-    ::
-      [%x %leds ~]
-    [~ ~ [%noun !>(leds.this)]]
-    ::
-      [%x %stat %net =gid ~]
+      [%x =gid %net ~]
     ?>  (~(has by groups) gid.path)
     =/  group  (~(got by groups) gid.path)
     =/  reg    (~(got by regs) gid.path)
