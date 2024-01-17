@@ -22,8 +22,8 @@ def test_join(zod, nus, gid, group, invitee):
     result = response.json()
     assert result == []
 
-    # GET /register
-    url = f"/apps/tahuti/api/groups/{gid}/register"
+    # GET /members
+    url = f"/apps/tahuti/api/groups/{gid}/members"
     response = zod.get(url)
     assert response.status_code == 200
     result = response.json()
@@ -45,8 +45,8 @@ def test_join(zod, nus, gid, group, invitee):
     result = response.json()
     assert result == []
 
-    # GET /register
-    url = f"/apps/tahuti/api/groups/{gid}/register"
+    # GET /members
+    url = f"/apps/tahuti/api/groups/{gid}/members"
     response = nus.get(url)
     assert response.status_code == 200
     result = response.json()

@@ -46,6 +46,7 @@
 ::
 +$  groups    (map gid group)
 +$  ledger    (map eid expense)
++$  led       (map eid expense)
 +$  regs      (map gid register)
 +$  acls      (map gid acl)
 +$  leds      (map gid ledger)

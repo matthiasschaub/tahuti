@@ -95,81 +95,58 @@
         ::
           [%apps %tahuti %api %groups @t ~]
         =/  gid       (snag 4 `(list @t)`site)
-        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/groups/noun
-        =/  groups    .^(groups %gx path)
-        =/  group     (need (~(get by groups) gid))
+        =/  path  /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/[gid]/noun
+        =,  .^([=group =acl =reg =led] %gx path)
         =/  response  (group:enjs group)
-        [(send [200 ~ [%json response]]) state]
-        ::
-          [%apps %tahuti %api %groups @t %members ~]
-        =/  gid       (snag 4 `(list @t)`site)
-        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/groups/noun
-        =/  groups    .^(groups %gx path)
-        =/  group     (~(got by groups) gid)
-        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/acls/noun
-        =/  acls      .^(acls %gx path)
-        =/  acl       (need (~(get by acls) gid))
-        =.  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/regs/noun
-        =/  regs      .^(regs %gx path)
-        =/  reg       (~(got by regs) gid)
-        =/  members   (~(int in reg) acl)
-        =.  members   (~(put in members) host.group)
-        =/  response  (ships:enjs members)
-        [(send [200 ~ [%json response]]) state]
-        ::
-          [%apps %tahuti %api %groups @t %castoff ~]
-        =/  gid       (snag 4 `(list @t)`site)
-        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/groups/noun
-        =/  groups    .^(groups %gx path)
-        =/  group     (~(got by groups) gid)
-        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/acls/noun
-        =/  acls      .^(acls %gx path)
-        =/  acl       (need (~(get by acls) gid))
-        =.  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/regs/noun
-        =/  regs      .^(regs %gx path)
-        =/  reg       (~(got by regs) gid)
-        =.  reg       (~(put in reg) host.group)
-        =/  castoff   (~(int in reg) acl)
-        =/  response  (ships:enjs castoff)
-        [(send [200 ~ [%json response]]) state]
-        ::
-          [%apps %tahuti %api %groups @t %invitees ~]
-        =/  gid       (snag 4 `(list @t)`site)
-        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/acls/noun
-        =/  acls      .^(acls %gx path)
-        =/  acl       (need (~(get by acls) gid))
-        =.  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/regs/noun
-        =/  regs      .^(regs %gx path)
-        =/  reg       (~(got by regs) gid)
-        =/  invitees  (~(dif in acl) reg)
-        =/  response  (ships:enjs invitees)
-        [(send [200 ~ [%json response]]) state]
-        ::
-          [%apps %tahuti %api %groups @t %expenses ~]
-        =/  gid       (snag 4 `(list @t)`site)
-        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/leds/noun
-        =/  leds      .^(leds %gx path)
-        =/  ledger    (~(got by leds) gid)
-        =/  vals      ~(val by ledger)
-        =.  vals      (sort vals |=([a=expense b=expense] (gth date.a date.b)))
-        =/  response  (ledger:enjs vals)
         [(send [200 ~ [%json response]]) state]
         ::
           [%apps %tahuti %api %groups @t %expenses @t ~]
         =/  gid       (snag 4 `(list @t)`site)
         =/  eid       (snag 6 `(list @t)`site)
-        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/leds/noun
-        =/  leds      .^(leds %gx path)
-        =/  ledger    (~(got by leds) gid)
-        =/  expense   (~(got by ledger) eid)
+        =/  path  /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/[gid]/noun
+        =,  .^([=group =acl =reg =led] %gx path)
+        =/  expense   (~(got by led) eid)
         =/  response  (expense:enjs expense)
         [(send [200 ~ [%json response]]) state]
-          [%apps %tahuti %api %groups @t %balances ~]
-        =/  gid   (snag 4 `(list @t)`site)
-        =/  path  /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/stat/net/[gid]/noun
-        =/  net   .^(net %gx path)
-        =/  resp  (net:enjs net)
-        [(send [200 ~ [%json resp]]) state]
+        ::
+          [%apps %tahuti %api %groups @t @t ~]
+        ::  get state of a group
+        =/  gid       (snag 4 `(list @t)`site)
+        =/  endpoint  (snag 5 `(list @t)`site)
+        =/  path  /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/[gid]/noun
+        =,  .^([=group =acl =reg =led] %gx path)
+        ?+  endpoint
+          [(send [404 ~ [%plain "404 - Not Found"]]) state]
+          ::
+            %members
+          =/  members   (~(int in reg) acl)
+          =.  members   (~(put in members) host.group)
+          =/  response  (ships:enjs members)
+          [(send [200 ~ [%json response]]) state]
+          ::
+            %castoffs
+          =/  members   (~(put in reg) host.group)
+          =/  castoff   (~(int in members) acl)
+          =/  response  (ships:enjs castoff)
+          [(send [200 ~ [%json response]]) state]
+            ::
+            %invitees
+          =/  invitees  (~(dif in acl) reg)
+          =/  response  (ships:enjs invitees)
+          [(send [200 ~ [%json response]]) state]
+          ::
+            %expenses
+          =/  vals      ~(val by led)
+          =.  vals      (sort vals |=([a=expense b=expense] (gth date.a date.b)))
+          =/  response  (ledger:enjs vals)
+          [(send [200 ~ [%json response]]) state]
+          ::
+            %balances
+          =/  path  /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/[gid]/net/noun
+          =/  net   .^(net %gx path)
+          =/  resp  (net:enjs net)
+          [(send [200 ~ [%json resp]]) state]
+        ==
       ==
       ::
         %'PUT'

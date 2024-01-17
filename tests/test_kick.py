@@ -41,8 +41,8 @@ def test_kick_member(zod, gid):
     assert isinstance(result, list)
     assert "~nus" not in result
 
-    # GET /register
-    url = f"/apps/tahuti/api/groups/{gid}/register"
+    # GET /members
+    url = f"/apps/tahuti/api/groups/{gid}/members"
     response = zod.get(url)
     assert response.status_code == 200
     result = response.json()
@@ -71,8 +71,8 @@ def test_kick_invitee(zod, gid):
 #     assert isinstance(result, list)
 #     assert "~nus" not in result
 
-    # GET /register
-    url = f"/apps/tahuti/api/groups/{gid}/register"
+    # GET /members
+    url = f"/apps/tahuti/api/groups/{gid}/members"
     response = zod.get(url)
     assert response.status_code == 200
     result = response.json()

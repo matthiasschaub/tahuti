@@ -40,8 +40,8 @@ def test_invitees_single(auth, gid):
     assert "~nus" in result
     assert result.count("~nus") == 1  # idempotent
 
-    # GET /register
-    url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/register"
+    # GET /members
+    url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/members"
     response = requests.get(url, cookies=auth)
     assert response.status_code == 200
     result = response.json()
