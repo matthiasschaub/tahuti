@@ -14,6 +14,8 @@
 
 ## Front-end
 
+- add "report a bug" and "feedback" button
+    - `<a href="/apps/talk/dm/~talfus-laddus" target="_blank">`
 - after join group list is still empty
 - replace details and delete by symbols in expenses table
 - minify JavaScript files
