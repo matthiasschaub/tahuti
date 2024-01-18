@@ -1,170 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Group Expenses</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="An Expense Sharing App for Urbit" />
-    <!-- PWA -->
-    <meta name="theme-color" content="#cc241d" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="Group Expenses" />
-    <meta
-      name="apple-mobile-web-app-status-bar-style"
-      content="black-translucent"
-    />
-    <link
-      rel="apple-touch-icon"
-      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/180.png"
-    />
-    <link
-      rel="icon"
-      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/16.png"
-      sizes="16x16"
-    />
-    <link
-      rel="icon"
-      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
-      sizes="any"
-      type="image/svg+xml"
-    />
-    <link
-      rel="manifest"
-      href="/apps/tahuti/manifest.json"
-      crossorigin="use-credentials"
-    />
-    <!-- /PWA -->
-    <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
-    <link
-      rel="stylesheet"
-      href="/apps/tahuti/static/css/min/print.css"
-      media="print"
-    />
-    <script src="/apps/tahuti/assets/htmx.js"></script>
-    <script src="/apps/tahuti/assets/json-enc.js"></script>
-    <script src="/apps/tahuti/assets/path-deps.js"></script>
-    <script src="/apps/tahuti/assets/client-side-templates.js"></script>
-    <script src="/apps/tahuti/assets/mustache.js"></script>
-  </head>
-
-  <body>
-    <header>
-      <nav aria-label="Global">
-        <ul>
-          <li>
-            <a href="/apps/tahuti/groups">↜ Groups</a>
-          </li>
-          <li>
-            <a style="opacity: 0.3">Expenses</a>
-          </li>
-          <li>
-            <a style="opacity: 0.3">Balances</a>
-          </li>
-          <li>
-            <a style="opacity: 0.3">Reimbursments</a>
-          </li>
-          <li>
-            <a style="opacity: 0.3">Settings</a>
-          </li>
-        </ul>
-      </nav>
-    </header>
-
-    <h2>Group Expenses</h2>
-
-    <h3>Create new group</h3>
-    <!-- TODO: Move to separate page -->
-    <fieldset>
-      <form
-        id="put-groups"
-        hx-put="/apps/tahuti/api/groups"
-        hx-ext="json-enc"
-        hx-swap="none"
-        hx-vals="js:{gid: self.crypto.randomUUID()}"
-        hx-request="noHeaders"
-        hx-on::after-request="if(event.detail.successful) this.reset()"
-      >
-        <label>Titel</label>
-        <br />
-        <input
-          id="group-title"
-          type="text"
-          name="title"
-          aria-label="Group Title"
-          required
+    <head>
+        <title>Group Expenses</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="An Expense Sharing App for Urbit" />
+        <!-- PWA -->
+        <meta name="theme-color" content="#cc241d" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-title" content="Group Expenses" />
+        <meta
+            name="apple-mobile-web-app-status-bar-style"
+            content="black-translucent"
         />
-        <br />
-        <label>Currency</label>
-        <br />
-        <select
-          id="currency"
-          type="text"
-          name="currency"
-          aria-label="Currency"
-          required
-        >
-          <option value="EUR">EUR</option>
-          <option value="USD">USD</option>
-          <option value="BTC">BTC</option>
-        </select>
-        <br />
-        <button class="button-primary" type="submit">Create group ▸</button>
-      </form>
-    </fieldset>
-
-    <!-- TODO: Move to separate page -->
-    <h3>Join existing group</h3>
-
-    <p>
-      If you are invited to join a group, as well as knowing the host and group
-      ID of a group, you can enter it here to join.
-    </p>
-    <fieldset>
-      <form
-        id="post-join"
-        hx-post="/apps/tahuti/api/action/join"
-        hx-ext="json-enc"
-        hx-swap="none"
-        hx-request="noHeaders"
-        hx-on::after-request="if(event.detail.successful) this.reset()"
-      >
-        <!-- TODO: add validation (valid @p) -->
-        <label>Host</label>
-        <br />
-        <input
-          type="text"
-          name="host"
-          aria-label="host"
-          placeholder="~zod"
-          required
+        <link
+            rel="apple-touch-icon"
+            href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/180.png"
         />
-        <br />
-        <label>Group ID</label>
-        <br />
-        <!-- TODO: add validation (valid uuid) -->
-        <input
-          type="text"
-          name="gid"
-          aria-label="Group ID"
-          placeholder="14488cd0-f23f-4d21-862e-d79803d159e4"
-          required
+        <link
+            rel="icon"
+            href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/16.png"
+            sizes="16x16"
         />
-        <br />
-        <button class="button-primary" type="submit">Join group ▸</button>
-      </form>
-    </fieldset>
-  </body>
-  <script>
-    const ids = ["put-groups", "post-join"];
-    for (const i in ids) {
-      console.log(ids[i]);
-      const element = document.getElementById(ids[i]);
-      console.log(element);
-      element.addEventListener("htmx:afterRequest", (event) => {
-        if (event.detail.successful) {
-          window.location.pathname = "/apps/tahuti/groups";
+        <link
+            rel="icon"
+            href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
+            sizes="any"
+            type="image/svg+xml"
+        />
+        <link
+            rel="manifest"
+            href="/apps/tahuti/manifest.json"
+            crossorigin="use-credentials"
+        />
+        <!-- /PWA -->
+        <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
+        <link
+            rel="stylesheet"
+            href="/apps/tahuti/static/css/min/print.css"
+            media="print"
+        />
+        <script src="/apps/tahuti/assets/htmx.js"></script>
+        <script src="/apps/tahuti/assets/json-enc.js"></script>
+        <script src="/apps/tahuti/assets/path-deps.js"></script>
+        <script src="/apps/tahuti/assets/client-side-templates.js"></script>
+        <script src="/apps/tahuti/assets/mustache.js"></script>
+    </head>
+
+    <body>
+        <header>
+            <nav aria-label="Global">
+                <ul>
+                    <li>
+                        <a href="/apps/tahuti/groups">↜ Groups</a>
+                    </li>
+                    <li>
+                        <a style="opacity: 0.3">Expenses</a>
+                    </li>
+                    <li>
+                        <a style="opacity: 0.3">Balances</a>
+                    </li>
+                    <li>
+                        <a style="opacity: 0.3">Reimbursments</a>
+                    </li>
+                    <li>
+                        <a style="opacity: 0.3">Settings</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <h2>Group Expenses</h2>
+
+        <h3>Create new group</h3>
+        <fieldset>
+            <form
+                id="put-groups"
+                hx-put="/apps/tahuti/api/groups"
+                hx-ext="json-enc"
+                hx-swap="none"
+                hx-vals="js:{gid: self.crypto.randomUUID()}"
+                hx-request="noHeaders"
+                hx-on::after-request="if(event.detail.successful) this.reset()"
+            >
+                <label>Titel</label>
+                <br />
+                <input
+                    id="group-title"
+                    type="text"
+                    name="title"
+                    aria-label="Group Title"
+                    required
+                />
+                <br />
+                <label>Currency</label>
+                <br />
+                <select
+                    id="currency"
+                    type="text"
+                    name="currency"
+                    aria-label="Currency"
+                    required
+                >
+                    <option value="EUR">EUR</option>
+                    <option value="USD">USD</option>
+                    <option value="BTC">BTC</option>
+                </select>
+                <br />
+                <button class="button-primary" type="submit">
+                    Create group ▸
+                </button>
+            </form>
+        </fieldset>
+    </body>
+    <script>
+        const ids = ["put-groups"];
+        for (const i in ids) {
+            const element = document.getElementById(ids[i]);
+            element.addEventListener("htmx:afterRequest", (event) => {
+                if (event.detail.successful) {
+                    window.location.pathname = "/apps/tahuti/groups";
+                }
+            });
         }
-      });
-    }
-  </script>
+    </script>
 </html>

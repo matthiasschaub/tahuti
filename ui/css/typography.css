@@ -1,6 +1,6 @@
 p {
   line-height: var(--vspace);
-  margin: var(--vspace) var(--vspace);
+  /* margin: var(--vspace) var(--vspace); */
 }
 
 h1 {

@@ -3,8 +3,14 @@
   <head>
     <title>Group Expenses</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="An Expense Sharing App for Urbit" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+    <meta
+      name="description"
+      content="An Expense Sharing App for Urbit"
+    />
     <!-- PWA -->
     <meta name="theme-color" content="#cc241d" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -34,7 +40,10 @@
       crossorigin="use-credentials"
     />
     <!-- /PWA -->
-    <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
+    <link
+      rel="stylesheet"
+      href="/apps/tahuti/static/css/min/style.css"
+    />
     <link
       rel="stylesheet"
       href="/apps/tahuti/static/css/min/print.css"
@@ -70,14 +79,17 @@
     </header>
 
     <div hx-ext="client-side-templates">
-      <div hx-get="/" hx-trigger="load" mustache-template="title-template">
+      <div
+        hx-get="/"
+        hx-trigger="load"
+        mustache-template="title-template"
+      >
         <h2 style="opacity: 0">Loading ...</h2>
       </div>
       <template id="title-template">
         <h2>{{title}}</h2>
       </template>
 
-      <h3>Invite people</h3>
       <fieldset>
         <form
           id="put-invitees"
@@ -87,7 +99,7 @@
           hx-on::after-request="if(event.detail.successful) this.reset()"
         >
           <!-- TODO: add validation for valid @p -->
-          <label><em>First</em> invite via Urbit ID,</label>
+          <label>Urbit ID</label>
           <br />
           <input
             id="invitee"
@@ -98,36 +110,24 @@
             required="required"
           />
           <br />
+          <button
+            class="button-primary"
+            type="submit"
+            form="put-invitees"
+          >
+            Send invite ▸
+          </button>
         </form>
-
-        <label><em>then</em> share the Group ID with them.</label>
-        <br />
-        <input
-          <input
-          id="gid"
-          type="text"
-          name="Group ID"
-          aria-label="Group ID"
-          readonly
-        />
-        <br />
-        <button
-          class="button-primary"
-          type="submit"
-          form="put-invitees"
-          onclick="copyGidToClipboard()"
-        >
-          Send invite & copy group ID ▸
-        </button>
       </fieldset>
     </div>
   </body>
 
   <script src="/apps/tahuti/assets/request-group.js"></script>
   <script>
-    document.getElementById("gid").value = gid();
-    function copyGidToClipboard() {
-      navigator.clipboard.writeText(gid());
-    }
+    const form = document.getElementById("put-invitees");
+    form.addEventListener("htmx:afterRequest", (event) => {
+      if (event.detail.successful) {
+        window.location.pathname = "/apps/tahuti/groups/" + gid() + "/settings";
+      }
   </script>
 </html>
