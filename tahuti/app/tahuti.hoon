@@ -168,7 +168,7 @@
             !>  ^-  update  [%acl gid.action acl]
         ==
         :*  %pass  ~  %agent  [p.action %tahuti]
-            %poke  %tahuti-action  !>([%add-invite gid.group host.group])
+            %poke  %tahuti-action  !>([%add-invite group])
         ==
       ==
     %=  this
@@ -181,7 +181,7 @@
     :-  ^-  (list card)
         ~
     %=  this
-      invites  (~(put in invites) [gid.action host.action])
+      invites  (~(put by invites) gid.group.action group.action)
     ==
     ::  (decline invitation)
       ::
@@ -190,7 +190,7 @@
     :-  ^-  (list card)
         ~
     %=  this
-      invites  (~(del in invites) [gid.action host.action])
+      invites  (~(del by invites) gid.group.action)
     ==
     ::  (remove ship from access-control and subscriber lists)
       ::
@@ -223,7 +223,7 @@
         :~  [%pass path %agent [host.action %tahuti] %watch path]
         ==
     %=  this
-      invites  (~(del in invites) [gid.action host.action])
+      invites  (~(del by invites) gid.action)
     ==
   ==
 ++  on-arvo  on-arvo:default

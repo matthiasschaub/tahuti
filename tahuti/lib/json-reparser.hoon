@@ -25,20 +25,6 @@
       |=  s=(set @p)
       ^-  json
       [%a (turn ~(tap in s) ship:enjs)]
-    ++  invite
-      |=  i=[=gid =host]
-      ^-  json
-      %-  pairs:enjs:format
-      :~
-        :-  'gid'       [%s gid.i]
-        :-  'host'      [%s (scot %p host.i)]
-      ==
-    ++  invites
-      ::  turn map of groups into list
-      ::
-      |=  i=^invites
-      ^-  json
-      [%a (turn ~(tap in i) invite:enjs)]
     ++  group
       |=  g=^group
       ^-  json

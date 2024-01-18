@@ -90,7 +90,7 @@
           [%apps %tahuti %api %invites ~]
         =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/invites/noun
         =/  invites   .^(invites %gx path)
-        =/  response  (invites:enjs invites)
+        =/  response  (groups:enjs invites)
         [(send [200 ~ [%json response]]) state]
         ::
           [%apps %tahuti %api %groups ~]

@@ -16,11 +16,6 @@
     =currency          ::  three-letter ISO code
   ==
 ::
-::    invites
-::
-+$  invite    [=gid =host]
-+$  invites   (set [=gid =host])
-::
 ::    register of members (reg)
 ::    access-control list (acl)
 ::
@@ -50,6 +45,7 @@
 ::    maps
 ::
 +$  groups    (map gid group)
++$  invites   (map gid group)
 +$  ledger    (map eid expense)
 +$  led       (map eid expense)
 +$  regs      (map gid register)
@@ -79,8 +75,8 @@
       ::
       ::  member actions
       ::
-      [%add-invite =gid =host]
-      [%del-invite =gid =host]
+      [%add-invite =group]
+      [%del-invite =group]
       ::
       [%allow =gid =@p]     :: allow to subscribe
       [%kick =gid =@p]      :: kick subscriber
