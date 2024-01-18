@@ -163,7 +163,7 @@
     // format values
     //
     const tableBody = document.getElementById("expenses");
-    tableBody.addEventListener("htmx:afterRequest", (event) => {
+    tableBody.addEventListener("htmx:afterSwap", (event) => {
       const code = document.getElementById("currency").innerText;
       const USD = (value) =>
         currency(value, {

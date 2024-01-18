@@ -156,7 +156,7 @@
     // format values
     //
     const list = document.getElementById("expense");
-    list.addEventListener("htmx:afterRequest", (event) => {
+    list.addEventListener("htmx:afterSwap", (event) => {
       date = document.getElementById("date");
       const dval = new Date(Number(date.innerText));
       date.innerText = dval.toLocaleDateString();
