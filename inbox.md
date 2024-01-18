@@ -14,6 +14,7 @@
 
 ## Front-end
 
+- format of values should take place afterSettle not afterRequest
 - add "report a bug" and "feedback" button
     - `<a href="/apps/talk/dm/~talfus-laddus" target="_blank">`
 - after join group list is still empty
@@ -26,6 +27,7 @@
 - if deletion of expense happens by a subscriber (not the host) HTMX fetches to fast the new expenses list so that the delete expense is still shown -> Introduce polling.
 - select as default drop down currently logged in ship
 - mouse pointer on hover for delete link
+- if cancel is pressed validation is triggered. Disable validation for cancel button.
 
 ## API 
 
