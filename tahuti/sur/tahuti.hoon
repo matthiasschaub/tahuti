@@ -1,3 +1,4 @@
+/+  mip  ::  maps of maps
 ::    structure file (type definitions)
 ::
 |%
@@ -64,6 +65,7 @@
 ::    statistics
 ::
 +$  net  (map @p @s)
++$  rei  (mip:mip @p @p @s)  :: reimbursements
 ::
 ::    input requests/actions
 ::

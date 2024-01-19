@@ -1,7 +1,7 @@
 ::    statistics
 ::
 /-  *tahuti, *graph
-/+  *graph, *edmonds-karp
+/+  *graph, *edmonds-karp, mip
 ::
 |_  [exes=(list expense) fleet=(list @p)]
 ++  sum
@@ -120,8 +120,8 @@
       i  +(i)
     ==
   %=($ i +(i))
-++  adj
-  ::  adjacency matrix with net amount as capacities
+++  en-adj
+  ::  encode expenses as adjacency matrix with net amount as capacities
   ::
   ::    the adjacency matrix contains a source and sink node.
   ::
@@ -143,26 +143,25 @@
   ::
   =/  n    (lent fleet)
   =/  g    (reap (add n 2) (reap (add n 2) 0))
-  ::  TODO:     how to define inf equivalent value?
-  ::
   =/  [c=(list @ud) d=(list @ud)]  ind
-  =/  inf  100
-  ::    indices are shifted by one to account for the source node
+  =/  inf  (mul sum 2)
+  ::  indices are shifted by one to account for the source node
   ::
   =/  i    0
   =/  j    0
   =/  v    0
   =/  u    0
+  ::  for each debitor
+  ::
   |-
   ?.  =(i (lent d))
-    ::  assigning expenses as capacities to edges
-    ::
     =.  v  +((snag i d))
     =.  j  0
+    ::  for each creditor
+    ::
     |-
     ?.  =(j (lent c))
-      :: debitor -> creditor edges
-      :: are connected by edges with infinit capacity
+      ::  create debitor -> creditor edges with infinit capacity
       ::
       =.  u  +((snag j c))
       %=  $
@@ -170,14 +169,17 @@
         j  +(j)
       ==
     =.  j  0
+    ::  for each debitor
+    ::
     |-
     ?.  =(j (lent d))
-      :: debitor -> debitor edges
-      :: are connected by edges with infinit capacity
+      ::  create debitor -> debitor edges with infinit capacity
       ::
       =.  u  +((snag j d))
+      ::  if, same node
+      ::
       ?:  =(v u)
-        ::  avoid self-loop
+        ::  then, do not create edge (avoid self-loop)
         ::
         %=($ j +(j))
       =.  g  (set:edge g v u inf)
@@ -187,20 +189,24 @@
         j  +(j)
       ==
     %=(^^$ i +(i))
+  ::  for each debitor
+  ::
   =.  i  0
   |-
   ?.  =(i (lent d))
-    ::  source -> debitor edges
+    ::  create source -> debitor edges
     ::
     =.  v  +((snag i d))
     %=  $
       g  (set:edge g 0 v (abs:si (snag (sub v 1) ~(val by net))))
       i  +(i)
     ==
-  =/  j  0
+  ::  for each creditor
+  ::
+  =.  j  0
   |-
-  ?.  =(j (lent d))
-    ::  creditor -> sink edges
+  ?.  =(j (lent c))
+    ::  create creditor -> sink edges
     ::
     =.  u  +((snag j c))
     %=  $
@@ -208,8 +214,62 @@
       j  +(j)
     ==
   g
-::++  rei
-::  :: reimbursement
-::  ::
-::  (edmonds-karp [adj 0 +((lent fleet))])
+++  de-adj
+  ^-  rei
+  =/  g  (tail (need (edmonds-karp [en-adj 0 +((lent fleet))])))
+  =/  r  *rei
+  =/  n  (lent fleet)
+  =/  [c=(list @ud) d=(list @ud)]  ind
+  ::  indices are shifted by one to account for the source node
+  ::
+  =/  i    0
+  =/  j    0
+  =/  v    0
+  =/  u    0
+  =/  a    --0  :: amount
+  ::  for each debitor
+  ::
+  |-
+  ?.  =(i (lent d))
+    =.  v  (snag i d)
+    =.  j  0
+    ::  for each creditor
+    ::
+    |-
+    ?.  =(j (lent c))
+      ::  debitor -> creditor edges
+      ::
+      =.  u  (snag j c)
+      =.  a  (new:si | (get:edge g +(v) +(u)))
+      =.  r  (~(put bi:mip r) (snag v fleet) (snag u fleet) a)
+      %=  $
+        r  r
+        j  +(j)
+      ==
+    =.  j  0
+    ::  for each debitor
+    ::
+    |-
+    ?.  =(j (lent d))
+      ::  debitor -> debitor edges
+      ::
+      =.  u  (snag j d)
+      ::  if, same node
+      ::
+      ?:  =(v u)
+        ::  then, do not create edge (avoid self-loop)
+        ::
+        %=($ j +(j))
+      ::  else,
+      ::
+      =.  a  (new:si | (get:edge g +(v) +(u)))
+      =.  r  (~(put bi:mip r) (snag v fleet) (snag u fleet) a)
+      =.  a  (new:si | (get:edge g +(u) +(v)))
+      =.  r  (~(put bi:mip r) (snag u fleet) (snag v fleet) a)
+      %=  $
+        r  r
+        j  +(j)
+      ==
+    %=(^^$ i +(i))
+  r
 --
