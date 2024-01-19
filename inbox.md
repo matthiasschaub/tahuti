@@ -5,8 +5,6 @@
 - leave group (archive vs remove) as a member
 - remove member from group as a host
 - handle kick -> archive group
-- add and use scry path based on gid/eid
-- surface pending invites to user (UX)
 - evaluate if bankers rounding in `lib/stats.hoon` would be better
 - add error handling
   - e.g. add expense for huge integer will error but it is not displayed on the website
@@ -14,13 +12,13 @@
 
 ## Front-end
 
-- format of values should take place afterSettle not afterRequest
 - add "report a bug" and "feedback" button
     - `<a href="/apps/talk/dm/~talfus-laddus" target="_blank">`
+- add support button
 - after join group list is still empty
 - replace details and delete by symbols in expenses table
 - minify JavaScript files
-- use not headers options for HTMX requests
+- use no headers option for HTMX requests
 - add default values for empty responses (no groups, no members, etc.)
 - validate ship names
 - cut elements values to certain length if too long (show full text on hover)
@@ -29,9 +27,6 @@
 - mouse pointer on hover for delete link
 - if cancel is pressed validation is triggered. Disable validation for cancel button.
 
-## API 
-
-- add /version endpoint
 
 ## Tests
 
@@ -44,5 +39,4 @@
 - checkout "JSON" guide on how to parse GUID/UUID
 - checkout "Fetch JSON" guide on how to use threads to fetch exchange
 - use knots (name part of the path) in api `?+`
-rates
 - support export of all expenses as backup
