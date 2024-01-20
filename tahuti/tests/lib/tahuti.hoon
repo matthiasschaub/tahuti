@@ -1,4 +1,4 @@
-/+  *test, *tahuti
+/+  *test, tahuti
 ::
 |%
 ++  fixtures

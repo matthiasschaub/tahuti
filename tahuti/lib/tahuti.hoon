@@ -240,7 +240,8 @@
       ::  debitor -> creditor edges
       ::
       =.  u  (snag j c)
-      =.  a  (new:si | (get:edge g +(v) +(u)))
+      :: =.  a  (new:si | (get:edge g +(v) +(u)))
+      =.  a  (new:si & (get:edge g +(v) +(u)))
       =.  r  (~(put bi:mip r) (snag v fleet) (snag u fleet) a)
       %=  $
         r  r
@@ -262,9 +263,11 @@
         %=($ j +(j))
       ::  else,
       ::
-      =.  a  (new:si | (get:edge g +(v) +(u)))
+      :: =.  a  (new:si | (get:edge g +(v) +(u)))
+      =.  a  (new:si & (get:edge g +(v) +(u)))
       =.  r  (~(put bi:mip r) (snag v fleet) (snag u fleet) a)
-      =.  a  (new:si | (get:edge g +(u) +(v)))
+      :: =.  a  (new:si | (get:edge g +(u) +(v)))
+      =.  a  (new:si & (get:edge g +(u) +(v)))
       =.  r  (~(put bi:mip r) (snag u fleet) (snag v fleet) a)
       %=  $
         r  r

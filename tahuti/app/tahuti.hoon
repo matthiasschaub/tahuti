@@ -3,7 +3,7 @@
 /+  agentio        :: agent input/output helper
 /+  dbug
 /+  verb
-/+  stat           :: tahuti statistics library
+/+  tahuti         :: tahuti statistics library
 ::  types
 ::
 |%
@@ -278,7 +278,7 @@
     =/  reg    (~(got by regs) gid.path)
     =/  led    (~(got by leds) gid.path)
     =.  reg    (~(put in reg) host.group)
-    =/  net    ~(net stat [~(val by led) ~(tap in reg)])
+    =/  net    ~(net tahuti [~(val by led) ~(tap in reg)])
     [~ ~ [%noun !>(net)]]
     ::
       [%x =gid %rei ~]
@@ -287,7 +287,7 @@
     =/  reg    (~(got by regs) gid.path)
     =/  led    (~(got by leds) gid.path)
     =.  reg    (~(put in reg) host.group)
-    =/  rei    ~(de-adj stat [~(val by led) ~(tap in reg)])
+    =/  rei    ~(de-adj tahuti [~(val by led) ~(tap in reg)])
     [~ ~ [%noun !>(rei)]]
   ==
 ++  on-agent
