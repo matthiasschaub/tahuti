@@ -152,6 +152,11 @@
           =/  net   .^(net %gx path)
           =/  resp  (net:enjs net)
           [(send [200 ~ [%json resp]]) state]
+            %reimbursements
+          =/  path  /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/[gid]/rei/noun
+          =/  rei   .^(rei %gx path)
+          =/  res   (rei:enjs rei)
+          [(send [200 ~ [%json res]]) state]
         ==
       ==
       ::

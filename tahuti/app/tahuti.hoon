@@ -280,6 +280,15 @@
     =.  reg    (~(put in reg) host.group)
     =/  net    ~(net stat [~(val by led) ~(tap in reg)])
     [~ ~ [%noun !>(net)]]
+    ::
+      [%x =gid %rei ~]
+    ?>  (~(has by groups) gid.path)
+    =/  group  (~(got by groups) gid.path)
+    =/  reg    (~(got by regs) gid.path)
+    =/  led    (~(got by leds) gid.path)
+    =.  reg    (~(put in reg) host.group)
+    =/  rei    ~(de-adj stat [~(val by led) ~(tap in reg)])
+    [~ ~ [%noun !>(rei)]]
   ==
 ++  on-agent
   ~&  >  '%tahuti (on-agent)'

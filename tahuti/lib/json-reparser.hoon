@@ -82,6 +82,22 @@
         :-  'member'  [%s (scot %p member)]
         :-  'amount'  [%s (crip fmt)]
       ==
+    ++  rei
+      ::  turn reimbursements map of map into list
+      ::
+      |=  r=^rei
+      ^-  json
+      :-  %a
+      %+  turn  ~(tap bi:mip r)
+      |=  [debitor=@p creditor=@p amount=@s]
+      =/  [syn=? abs=@]  (old:si amount)
+      =/  fmt  ?.(syn "-{<abs>}" "{<abs>}")
+      %-  pairs:enjs:format
+      :~
+        :-  'debitor'  [%s (scot %p debitor)]
+        :-  'creditor'  [%s (scot %p creditor)]
+        :-  'amount'  [%s (crip fmt)]
+      ==
     --
 ::
 ++  dejs

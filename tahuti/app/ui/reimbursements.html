@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+  <head>
+    <title>Group Expenses</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="An Expense Sharing App for Urbit" />
+    <!-- PWA -->
+    <meta name="theme-color" content="#cc241d" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Group Expenses" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/180.png"
+    />
+    <link
+      rel="icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/16.png"
+      sizes="16x16"
+    />
+    <link
+      rel="icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
+      sizes="any"
+      type="image/svg+xml"
+    />
+    <link
+      rel="manifest"
+      href="/apps/tahuti/manifest.json"
+      crossorigin="use-credentials"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
+    />
+    <!-- /PWA -->
+    <link rel="stylesheet" href="/apps/tahuti/static/css/min/style.css" />
+    <link
+      rel="stylesheet"
+      href="/apps/tahuti/static/css/min/print.css"
+      media="print"
+    />
+    <script src="/apps/tahuti/assets/htmx.js"></script>
+    <script src="/apps/tahuti/assets/client-side-templates.js"></script>
+    <script src="/apps/tahuti/assets/mustache.js"></script>
+    <script src="/apps/tahuti/assets/currency.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <!-- hrefs is set by request.js -->
+          <li>
+            <a href="/apps/tahuti/groups">↜ Groups</a>
+          </li>
+          <li>
+            <a id="expenses-href" href="">Expenses</a>
+          </li>
+          <li>
+            <a id="balances-href" href="">Balances</a>
+          </li>
+          <li>
+            <a id="reimbursements-href"><strong>Reimbursements</strong></a>
+          </li>
+          <li>
+            <a id="settings-href" href="">Settings</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <div hx-ext="client-side-templates">
+      <div
+        hx-get="/"
+        hx-trigger="load"
+        hx-swap="outerHTML"
+        mustache-template="group-template"
+      >
+        <h2 style="opacity: 0">Loading ...</h2>
+      </div>
+      <template id="group-template">
+        <h2>{{title}}</h2>
+        <div id="currency" hidden>{{currency}}</div>
+      </template>
+
+      <table id="reimbursements">
+        <thead>
+          <tr>
+            <th>Debitor</th>
+            <th>Creditor</th>
+            <th id="amount">Amount</th>
+          </tr>
+        </thead>
+        <tbody
+          id="get-reimbursements"
+          hx-get="/reimbursements"
+          hx-trigger="load"
+          mustache-template="reimbursements-template"
+        ></tbody>
+      </table>
+      <template id="reimbursements-template">
+        <!-- iterate over array of reimbursements object -->
+        {{#.}}
+        <tr>
+          <td>{{debitor}}</td>
+          <td>{{creditor}}</td>
+          <td headers="amount">{{amount}}</td>
+        </tr>
+        {{/.}}
+      </template>
+    </div>
+  </body>
+
+  <script src="/apps/tahuti/assets/request-group.js"></script>
+  <script>
+    // format values
+    //
+    const tableBody = document.getElementById("get-reimbursements");
+    tableBody.addEventListener("htmx:afterSwap", (event) => {
+      const code = document.getElementById("currency").innerText;
+      const USD = (value) =>
+        currency(value, {
+          symbol: "$",
+          pattern: `# !`,
+          negativePattern: `-# !`,
+          fromCents: true,
+        });
+      const EUR = (value) =>
+        currency(value, {
+          symbol: "€",
+          decimal: ",",
+          separator: ".",
+          pattern: `# !`,
+          negativePattern: `-# !`,
+          fromCents: true,
+        });
+      const BTC = (value) =>
+        currency(value, {
+          symbol: "₿",
+          pattern: `# !`,
+          negativePattern: `-# !`,
+          fromCents: true,
+          precision: 8,
+        });
+      for (const row of tableBody.rows) {
+        for (const cell of row.cells) {
+          if (cell.headers == "amount") {
+            console.log(cell.innerText);
+            if (code == "EUR") {
+              cell.innerText = EUR(cell.innerText).format();
+            } else if (code == "USD") {
+              cell.innerText = USD(cell.innerText).format();
+            } else if (code == "BTC") {
+              cell.innerText = BTC(cell.innerText).format();
+            } else {
+              <!-- TODO: what to do in this case?-->
+              console.log("currency code not supported.");
+            }
+          }
+        }
+      }
+    });
+  </script>
+</html>

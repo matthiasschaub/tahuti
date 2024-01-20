@@ -7,6 +7,7 @@
 /*  invites                %html  /app/ui/invites/html
 /*  create                 %html  /app/ui/create/html
 /*  balances               %html  /app/ui/balances/html
+/*  reimbursements         %html  /app/ui/reimbursements/html
 /*  expenses               %html  /app/ui/expenses/html
 /*  add                    %html  /app/ui/add/html
 /*  details                %html  /app/ui/details/html
@@ -120,6 +121,8 @@
           [(send [200 ~ [%html details]]) state]
         [%apps %tahuti %groups @t %balances ~]
           [(send [200 ~ [%html balances]]) state]
+        [%apps %tahuti %groups @t %reimbursements ~]
+          [(send [200 ~ [%html reimbursements]]) state]
         [%apps %tahuti %groups @t %add ~]
           [(send [200 ~ [%html add]]) state]
         [%apps %tahuti %groups @t %settings ~]
