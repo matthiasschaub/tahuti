@@ -65,7 +65,7 @@
 ::    statistics
 ::
 +$  net  (map @p @s)
-+$  rei  (mip:mip @p @p @s)  :: reimbursements
++$  rei  (mip:mip @p @p @ud)  :: reimbursements
 ::
 ::    input requests/actions
 ::

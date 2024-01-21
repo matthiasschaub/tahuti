@@ -27,6 +27,7 @@ const endpoints = [
   "add",
   "expenses",
   "balances",
+  "reimbursements",
   "members",
   "settings",
   "invite",

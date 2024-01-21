@@ -111,6 +111,7 @@ blockquote {
   font-style: italic;
   line-height: calc(1 * var(--vspace));
   margin: var(--vspace-2) var(--vspace-2);
+  text-align: center;
 }
 
 .caption_ts {
