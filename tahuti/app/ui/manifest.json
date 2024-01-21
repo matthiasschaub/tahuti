@@ -4,8 +4,8 @@
   "description": "An expense sharing app for Urbit",
   "start_url": "/apps/tahuti",
   "scope": "/apps/tahuti",
-  "background_color": "#cc241d",
-  "theme_color": "#cc241d",
+  "background_color": "#fffff3",
+  "theme_color": "#fffff3",
   "orientation": "any",
   "display": "standalone",
   "icons": [
@@ -18,6 +18,11 @@
       "src": "https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/192.png",
       "type": "image/png",
       "sizes": "192x192"
+    },
+    {
+      "src": "https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/180.png",
+      "type": "image/png",
+      "sizes": "180x180"
     },
     {
       "src": "https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/512.png",
