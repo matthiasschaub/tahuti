@@ -1,14 +1,14 @@
 ::
 ::
 /-  *tahuti
-/+  *test, stat, *edmonds-karp, mip
+/+  *test, tahuti, *edmonds-karp, mip
 ::
 |%
 ++  fixtures
   |%
   ++  one
     |%
-    ++  fleet
+    ++  ships
       ^-  (list @p)
       %-  limo
         :*  ~zod  ~nus  ~  ==
@@ -41,12 +41,12 @@
         ==
     ++  rei
       =/  r  *^rei
-      (~(put bi:mip r) ~nus ~zod -6)
+      (~(put bi:mip r) ~nus ~zod 6)
     --
   ++  two
     ::  two payments simplified to one
     |%
-    ++  fleet
+    ++  ships
       ^-  (list @p)
       %-  limo
         :*  ~zod  ~nus  ~lus  ~
@@ -66,25 +66,28 @@
         ==
     ++  rei
       =/  r  *^rei
-      (~(put bi:mip r) ~nus ~lus --5)
+      (~(put bi:mip r) ~nus ~lus 5)
     --
   --
-++  test-en-de-adj
+++  test-ajd-one
   ;:  weld
     %+  expect-eq
       !>  adj:one:fixtures
-      !>  ~(en-adj stat [expenses:one:fixtures fleet:one:fixtures])
+      !>  ~(adj tahuti [expenses:one:fixtures ships:one:fixtures])
     %+  expect-eq
       !>  [6 flowgraph:one:fixtures]
-      !>  (need (edmonds-karp [~(en-adj stat [expenses:one:fixtures fleet:one:fixtures]) 0 3]))
-    %+  expect-eq
-      !>  rei:one:fixtures
-      !>  ~(de-adj stat [expenses:one:fixtures fleet:one:fixtures])
+      !>  (need (edmonds-karp [~(adj tahuti [expenses:one:fixtures ships:one:fixtures]) 0 3]))
   ==
-++  test-en-de-adj-two
+++  test-rei-one
+  ;:  weld
+  %+  expect-eq
+    !>  rei:one:fixtures
+    !>  ~(rei tahuti [expenses:one:fixtures ships:one:fixtures])
+  ==
+++  test-rei-two
   ;:  weld
     %+  expect-eq
       !>  rei:two:fixtures
-      !>  ~(de-adj stat [expenses:two:fixtures fleet:two:fixtures])
+      !>  ~(rei tahuti [expenses:two:fixtures ships:two:fixtures])
   ==
 --

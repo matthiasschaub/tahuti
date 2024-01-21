@@ -101,7 +101,7 @@
         ::
           [%apps %tahuti %api %groups @t ~]
         =/  gid       (snag 4 `(list @t)`site)
-        =/  path  /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/[gid]/noun
+        =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/[gid]/noun
         =,  .^([=group =acl =reg =led] %gx path)
         =/  response  (group:enjs group)
         [(send [200 ~ [%json response]]) state]

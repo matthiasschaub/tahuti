@@ -287,7 +287,7 @@
     =/  reg    (~(got by regs) gid.path)
     =/  led    (~(got by leds) gid.path)
     =.  reg    (~(put in reg) host.group)
-    =/  rei    ~(de-adj tahuti [~(val by led) ~(tap in reg)])
+    =/  rei    ~(rei tahuti [~(val by led) ~(tap in reg)])
     [~ ~ [%noun !>(rei)]]
   ==
 ++  on-agent

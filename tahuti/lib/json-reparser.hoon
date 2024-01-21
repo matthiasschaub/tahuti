@@ -89,14 +89,12 @@
       ^-  json
       :-  %a
       %+  turn  ~(tap bi:mip r)
-      |=  [debitor=@p creditor=@p amount=@s]
-      =/  [syn=? abs=@]  (old:si amount)
-      =/  fmt  ?.(syn "-{<abs>}" "{<abs>}")
+      |=  [debitor=@p creditor=@p amount=@ud]
       %-  pairs:enjs:format
       :~
-        :-  'debitor'  [%s (scot %p debitor)]
+        :-  'debitor'   [%s (scot %p debitor)]
         :-  'creditor'  [%s (scot %p creditor)]
-        :-  'amount'  [%s (crip fmt)]
+        :-  'amount'    (numb:enjs:format amount)
       ==
     --
 ::

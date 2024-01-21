@@ -120,8 +120,8 @@
       i  +(i)
     ==
   %=($ i +(i))
-++  en-adj
-  ::  encode expenses as adjacency matrix with net amount as capacities
+++  adj
+  ::  adjacency matrix with net amount as capacities
   ::
   ::    the adjacency matrix contains a source and sink node.
   ::
@@ -214,11 +214,24 @@
       j  +(j)
     ==
   g
-++  de-adj
-  ^-  rei
-  =/  g  (tail (need (edmonds-karp [en-adj 0 +((lent fleet))])))
-  =/  r  *rei
-  =/  n  (lent fleet)
+++  rei
+  ^-  ^rei
+  ::  .r: reimbursements
+  ::  .g: graph
+  ::  .s: ships
+  ::  .n: number of ships
+  ::  .c: creditor indices
+  ::  .d: debitor indices
+  ::  .v: vertex (row)
+  ::  .u: vertex (col)
+  ::  .i: counter
+  ::  .j: counter
+  ::  .a: amount
+  ::
+  =/  g  (tail (need (edmonds-karp [adj 0 +((lent fleet))])))
+  =/  s  ~(tap in ~(key by net))
+  =/  r  *^rei
+  =/  n  (lent s)
   =/  [c=(list @ud) d=(list @ud)]  ind
   ::  indices are shifted by one to account for the source node
   ::
@@ -226,49 +239,46 @@
   =/  j    0
   =/  v    0
   =/  u    0
-  =/  a    --0  :: amount
+  =/  a    0
   ::  for each debitor
   ::
   |-
   ?.  =(i (lent d))
     =.  v  (snag i d)
-    =.  j  0
     ::  for each creditor
     ::
+    =.  j  0
     |-
     ?.  =(j (lent c))
-      ::  debitor -> creditor edges
+      ::  debitor -> creditor edge
       ::
       =.  u  (snag j c)
-      :: =.  a  (new:si | (get:edge g +(v) +(u)))
-      =.  a  (new:si & (get:edge g +(v) +(u)))
-      =.  r  (~(put bi:mip r) (snag v fleet) (snag u fleet) a)
+      =.  a  (get:edge g +(v) +(u))
+      =.  r  (~(put bi:mip r) (snag v s) (snag u s) a)
       %=  $
         r  r
         j  +(j)
       ==
-    =.  j  0
     ::  for each debitor
     ::
+    =.  j  0
     |-
     ?.  =(j (lent d))
-      ::  debitor -> debitor edges
+      ::  debitor -> debitor edge
       ::
       =.  u  (snag j d)
       ::  if, same node
       ::
       ?:  =(v u)
-        ::  then, do not create edge (avoid self-loop)
+        ::  then, avoid self-loop
         ::
         %=($ j +(j))
       ::  else,
       ::
-      :: =.  a  (new:si | (get:edge g +(v) +(u)))
-      =.  a  (new:si & (get:edge g +(v) +(u)))
-      =.  r  (~(put bi:mip r) (snag v fleet) (snag u fleet) a)
-      :: =.  a  (new:si | (get:edge g +(u) +(v)))
-      =.  a  (new:si & (get:edge g +(u) +(v)))
-      =.  r  (~(put bi:mip r) (snag u fleet) (snag v fleet) a)
+      =.  a  (get:edge g +(v) +(u))
+      =.  r  (~(put bi:mip r) (snag v s) (snag u s) a)
+      =.  a  (get:edge g +(u) +(v))
+      =.  r  (~(put bi:mip r) (snag u s) (snag v s) a)
       %=  $
         r  r
         j  +(j)
