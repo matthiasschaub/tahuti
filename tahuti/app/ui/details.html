@@ -183,7 +183,7 @@
     // format values
     //
     const list = document.getElementById("expense");
-    list.addEventListener("htmx:afterSwap", (event) => {
+    list.addEventListener("htmx:afterSettle", (event) => {
       date = document.getElementById("date");
       const dval = new Date(Number(date.innerText));
       date.innerText = dval.toLocaleDateString();

@@ -119,7 +119,7 @@
     // format values
     //
     const tableBody = document.getElementById("get-balances");
-    tableBody.addEventListener("htmx:afterSwap", (event) => {
+    tableBody.addEventListener("htmx:afterSettle", (event) => {
       const code = document.getElementById("currency").innerText;
       const USD = (value) =>
         currency(value, {
