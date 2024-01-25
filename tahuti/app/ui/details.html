@@ -92,39 +92,66 @@
         <div id="currency" hidden>{{currency}}</div>
       </template>
 
-      <table
+      <div
         id="expense"
         hx-get="/"
         hx-trigger="load"
         mustache-template="expense-template"
-      ></table>
+      ></div>
       <template id="expense-template">
-        <!-- iterate over array of members object -->
-        <thead></thead>
-        <tbody>
-          {{#.}}
-          <tr>
-            <th>For what?</th>
-            <td>{{title}}</td>
-          </tr>
-          <tr>
-            <th>Amount</th>
-            <td id="amount">{{amount}}</td>
-          </tr>
-          <tr>
-            <th>Paid by</th>
-            <td>{{payer}}</td>
-          </tr>
-          <tr>
-            <th>Date</th>
-            <td id="date">{{date}}</td>
-          </tr>
-          <tr>
-            <th>Involves</th>
-            <td id="invovles">{{involves}}</td>
-          </tr>
-          {{/.}}
-        </tbody>
+        <table class="col-two">
+          <!-- iterate over array of members object -->
+          <thead></thead>
+          <tbody>
+            {{#.}}
+            <tr>
+              <th>For what?</th>
+              <td>{{title}}</td>
+            </tr>
+            <tr>
+              <th>Amount</th>
+              <td id="amount">{{amount}}</td>
+            </tr>
+            <tr>
+              <th>Paid by</th>
+              <td>{{payer}}</td>
+            </tr>
+            <tr>
+              <th>Date</th>
+              <td id="date">{{date}}</td>
+            </tr>
+            <tr>
+              <th>Time</th>
+              <td id="time">{{date}}</td>
+            </tr>
+            <tr>
+              <th>Involves</th>
+              <td>
+                {{#involves}} 
+                    {{.}} <br />
+                {{/involves}}
+              </td>
+            </tr>
+            {{/.}}
+          </tbody>
+        </table>
+        <fieldset>
+          <form
+            id="delete-exepense"
+            hx-delete="/expenses/{{eid}}"
+            hx-confirm="Are you sure?"
+            hx-ext="json-enc"
+            hx-swap="none"
+            hx-request="noHeaders"
+            hx-on::after-request="window.location.pathname = '/apps/tahuti/groups/{{gid}}/expenses'"
+          >
+            Deleting this expense will permanently remove it.
+            <br />
+            <button class="button-cancel" type="submit">
+              Delete this expense
+            </button>
+          </form>
+        </fieldset>
       </template>
     </div>
   </body>
@@ -160,6 +187,12 @@
       date = document.getElementById("date");
       const dval = new Date(Number(date.innerText));
       date.innerText = dval.toLocaleDateString();
+
+      time = document.getElementById("time");
+      time.innerText = dval.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
 
       const amount = document.getElementById("amount");
       const code = document.getElementById("currency").innerText;

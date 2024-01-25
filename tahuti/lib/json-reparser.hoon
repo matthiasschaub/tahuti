@@ -88,11 +88,11 @@
       |=  r=^rei
       ^-  json
       :-  %a
-      =/  l
-      %+  skip  ~(tap bi:mip r)
-      |=  [debitor=@p creditor=@p amount=@ud]
-      =(amount 0)
-      %+  turn  l
+      %+  turn
+        %+  skip
+          ~(tap bi:mip r)
+        |=  [debitor=@p creditor=@p amount=@ud]
+        =(amount 0)
       |=  [debitor=@p creditor=@p amount=@ud]
       %-  pairs:enjs:format
       :~

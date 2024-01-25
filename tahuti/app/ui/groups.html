@@ -14,6 +14,11 @@
       content="black-translucent"
     />
     <link
+      rel="apple-touche-icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/180.png"
+      sizes="16x16"
+    />
+    <link
       rel="icon"
       href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/16.png"
       sizes="16x16"
@@ -71,7 +76,7 @@
     <h2>Group Expenses</h2>
 
     <div hx-ext="client-side-templates">
-      <table id="groups">
+      <table id="groups" class="groups">
         <thead>
           <tr>
             <th>Group</th>
@@ -90,11 +95,8 @@
       <template id="groups-template">
         <!-- iterate over array of members object -->
         {{#.}}
-        <tr>
-          <td>
-            <a href="/apps/tahuti/groups/{{gid}}/expenses.html"> {{title}}</a>
-          </td>
-
+        <tr onclick="window.location='/apps/tahuti/groups/{{gid}}/expenses';">
+          <td>{{title}}</td>
           <td>{{host}}</td>
         </tr>
         {{/.}}

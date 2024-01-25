@@ -90,14 +90,13 @@
         <div id="currency" hidden>{{currency}}</div>
       </template>
 
-      <table id="expenses">
+      <table id="expenses" class="expenses">
         <thead>
           <tr>
             <th>For what?</th>
             <th id="amount">Amount</th>
             <th>Paid by</th>
             <th id="date">Date</th>
-            <th style="opacity: 0">details/delete</th>
           </tr>
         </thead>
         <!-- TODO: path-deps delay:5s does not work. Only first path-deps is triggered.-->
@@ -112,23 +111,13 @@
       <template id="expenses-template">
         <!-- iterate over array of members object -->
         {{#.}}
-        <tr>
+        <tr
+          onclick="window.location='/apps/tahuti/groups/{{gid}}/expenses/{{eid}}';"
+        >
           <td>{{title}}</td>
           <td headers="amount">{{amount}}</td>
           <td>{{payer}}</td>
           <td headers="date">{{date}}</td>
-          <td>
-            <a href="/apps/tahuti/groups/{{gid}}/expenses/{{eid}}">details</a>
-            /
-            <a
-              id="delete"
-              hx-delete="/expenses/{{eid}}"
-              hx-confirm="Are you sure?"
-              hx-trigger="click"
-              hx-swap="none"
-              >delete</a
-            >
-          </td>
         </tr>
         {{/.}}
       </template>

@@ -29,9 +29,17 @@ document.body.addEventListener("htmx:configRequest", (event) => {
   event.detail.path = site.replace(/\/$/, ""); // without trailing slash
 });
 
-// set HTML href URLs
+// set HTML href and action URLs
 //
-const endpoints = ["add", "expenses", "balances", "members", "settings"];
+const endpoints = [
+  "add",
+  "expenses",
+  "balances",
+  "reimbursements",
+  "members",
+  "settings",
+  "invite",
+];
 for (let i = 0; i < endpoints.length; i++) {
   const element = document.getElementById(`${endpoints[i]}-href`);
   if (element != null) {
