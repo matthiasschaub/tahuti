@@ -82,7 +82,7 @@
         [(send [404 ~ [%plain "404 - Not Found"]]) state]
         ::
           [%apps %tahuti %api %version ~]
-        [(send [200 ~ [%json (version:enjs '0.0.13')]]) state]
+        [(send [200 ~ [%json (version:enjs '0.0.14')]]) state]
         ::
           [%apps %tahuti %api %our ~]
         [(send [200 ~ [%json (ship:enjs our.bowl)]]) state]
