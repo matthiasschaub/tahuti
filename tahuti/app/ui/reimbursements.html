@@ -89,7 +89,7 @@
       <blockquote>
         Suggested reimbursements is currently an experimental feature.
       </blockquote>
-      <table id="reimbursements">
+      <table id="reimbursements" class="reimbursements">
         <thead hidden>
           <tr>
             <th>Debitor</th>
@@ -110,7 +110,7 @@
         {{#.}}
         <tr>
           <td>{{debitor}}</td>
-          <td>owes</td>
+          <td><small>owes</small></td>
           <td>{{creditor}}</td>
           <td headers="amount">{{amount}}</td>
         </tr>

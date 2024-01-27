@@ -38,7 +38,7 @@ table > thead > tr > :is(th, td) {
   font-style: italic;
   border-top: 2px solid;
   border-bottom: 1px solid;
-  max-width: 7em;
+  max-width: 8em;
 }
 
 table > :is(thead, tbody) > tr > :is(th, td) {
@@ -51,9 +51,10 @@ table > tbody > tr:last-child > :is(th, td) {
   border-bottom: 2px solid;
 }
 
+.reimbursements > :is(thead, tbody) > tr > :is(th, td),
 .expenses > :is(thead, tbody) > tr > :is(th, td),
 .groups > :is(thead, tbody) > tr > :is(th, td) {
-  max-width: 7em;
+  max-width: 8em;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -65,6 +66,10 @@ table > tbody > tr:last-child > :is(th, td) {
 
 .col-two > :is(thead, tbody) > tr > :is(th, td):nth-child(2) {
   text-align: right;
+}
+
+.reimbursements > :is(thead, tbody) > tr > :is(th, td) {
+    padding-right: 15px;
 }
 
 @media (max-width: 640px) {
