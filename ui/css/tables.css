@@ -74,7 +74,7 @@ table > tbody > tr:last-child > :is(th, td) {
   .expenses > thead > tr th:nth-child(4) {
     display: none;
   }
-  .expenses > table > :is(thead, tbody) > tr > :is(th, td):nth-child(2) {
+  .expenses > :is(thead, tbody) > tr > :is(th, td):nth-child(2) {
     text-align: right;
   }
 }
