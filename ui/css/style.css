@@ -77,14 +77,6 @@ body {
   width: 4em;
 }
 
-.svg-btn {
-  cursor: pointer;
-}
-
-#add-btn {
-  margin-top: var(--vspace);
-  margin-bottom: var(--vspace);
-}
 
 img {
   max-width: var(--max-width);

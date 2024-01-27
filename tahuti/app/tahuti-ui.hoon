@@ -12,6 +12,7 @@
 /*  add                    %html  /app/ui/add/html
 /*  details                %html  /app/ui/details/html
 /*  settings               %html  /app/ui/settings/html
+/*  about                  %html  /app/ui/about/html
 /*  invite                 %html  /app/ui/invite/html
 /*  style                  %css   /app/ui/static/css/min/style/css
 /*  print                  %css   /app/ui/static/css/min/print/css
@@ -22,6 +23,9 @@
 /*  client-side-templates  %js    /app/ui/assets/client-side-templates/js
 /*  mustache               %js    /app/ui/assets/mustache/js
 /*  currency               %js    /app/ui/assets/currency/js
+/*  dinero                 %js    /app/ui/assets/dinero/js
+/*  dinero-currencies      %js    /app/ui/assets/dinero-currencies/js
+/*  cur                    %js    /app/ui/assets/cur/js
 /*  request-group          %js    /app/ui/assets/request-group/js
 /*  request-expense        %js    /app/ui/assets/request-expense/js
 /*  icon-16                %png   /app/ui/static/images/icons/16/png
@@ -127,6 +131,8 @@
           [(send [200 ~ [%html add]]) state]
         [%apps %tahuti %groups @t %settings ~]
           [(send [200 ~ [%html settings]]) state]
+        [%apps %tahuti %groups @t %about ~]
+          [(send [200 ~ [%html about]]) state]
         [%apps %tahuti %groups @t %invite ~]
           [(send [200 ~ [%html invite]]) state]
         ::  css
@@ -151,6 +157,12 @@
           [(send [200 ~ [%js mustache]]) state]
         [%apps %tahuti %assets %currency ~]
           [(send [200 ~ [%js currency]]) state]
+        [%apps %tahuti %assets %cur ~]
+          [(send [200 ~ [%js cur]]) state]
+        [%apps %tahuti %assets %dinero ~]
+          [(send [200 ~ [%js dinero]]) state]
+        [%apps %tahuti %assets %dinero-currencies ~]
+          [(send [200 ~ [%js dinero-currencies]]) state]
         [%apps %tahuti %assets %request-group ~]
           [(send [200 ~ [%js request-group]]) state]
         [%apps %tahuti %assets %request-expense ~]

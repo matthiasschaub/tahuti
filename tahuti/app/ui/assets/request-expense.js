@@ -38,6 +38,7 @@ const endpoints = [
   "reimbursements",
   "members",
   "settings",
+  "about",
   "invite",
 ];
 for (let i = 0; i < endpoints.length; i++) {
