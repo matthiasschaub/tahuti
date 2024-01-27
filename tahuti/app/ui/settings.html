@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="An Expense Sharing App for Urbit" />
     <!-- PWA -->
-    <meta name="theme-color" content="#cc241d" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Group Expenses" />
     <meta
@@ -73,7 +72,7 @@
       </nav>
     </header>
 
-    <div hx-ext="client-side-templates">
+    <div hx-ext="client-side-templates" hx-request="noHeaders">
       <div
         hx-get="/"
         hx-trigger="load"
@@ -147,7 +146,6 @@
       <!--         hx-confirm="Are you sure?" -->
       <!--         hx-ext="json-enc" -->
       <!--         hx-swap="none" -->
-      <!--         hx-request="noHeaders" -->
       <!--         hx-vals="js:{gid: gid()}" -->
       <!--         hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'" -->
       <!--     > -->
@@ -161,23 +159,16 @@
       <!--     </form> -->
       <!-- </fieldset> -->
 
-      <h3>Delete group</h3>
+      <h3>Export expenses</h3>
       <fieldset>
-        <form
-          id="delete-groups"
-          hx-delete="/"
-          hx-confirm="Are you sure?"
-          hx-ext="json-enc"
-          hx-swap="none"
-          hx-request="noHeaders"
-          hx-vals="js:{gid: gid()}"
-          hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'"
+        Download all expenses of this group as JSON.
+        <br />
+        <button
+          class="button-primary"
+          onclick="window.location.pathname = '/apps/tahuti/api/groups/' + gid() + '/expenses'"
         >
-          Deleting this group will permanently remove all expenses and members.
-          This action can only be performed by the group host.
-          <br />
-          <button class="button-cancel" type="submit">Delete this group</button>
-        </form>
+          Export expenses ▸
+        </button>
       </fieldset>
 
       <h3>About</h3>
@@ -190,7 +181,11 @@
           </tr>
           <tr>
             <th>Developer</th>
-            <td>~talfus-laddus</td>
+            <td>
+              <a href="/apps/talk/dm/~talfus-laddus" target="_blank"
+                >~talfus-laddus</a
+              >
+            </td>
           </tr>
           <tr>
             <th>Code Repository</th>
@@ -203,6 +198,31 @@
       <template id="version-template">
         <td>{{#.}} {{.}} {{/.}}</td>
       </template>
+
+      <h3>Contact</h3>
+      <p>
+        Please reach out to
+        <a href="/apps/talk/dm/~talfus-laddus" target="_blank">~talfus-laddus</a
+        >, to report any bug, to give feedbag or to receive support.
+      </p>
+
+      <h3>Delete group</h3>
+      <fieldset>
+        <form
+          id="delete-groups"
+          hx-delete="/"
+          hx-confirm="Are you sure?"
+          hx-ext="json-enc"
+          hx-swap="none"
+          hx-vals="js:{gid: gid()}"
+          hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'"
+        >
+          Deleting this group will permanently remove all expenses and members.
+          This action can only be performed by the group host.
+          <br />
+          <button class="button-cancel" type="submit">Delete this group</button>
+        </form>
+      </fieldset>
     </div>
   </body>
 

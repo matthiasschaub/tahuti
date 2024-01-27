@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="An Expense Sharing App for Urbit" />
     <!-- PWA -->
-    <meta name="theme-color" content="#cc241d" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Group Expenses" />
     <meta
@@ -76,7 +75,7 @@
       </nav>
     </header>
 
-    <div hx-ext="client-side-templates">
+    <div hx-ext="client-side-templates" hx-request="noHeaders">
       <div
         hx-get="/"
         hx-trigger="load"
@@ -127,8 +126,7 @@
             <tr>
               <th>Involves</th>
               <td>
-                {{#involves}} 
-                    {{.}} <br />
+                {{#involves}} {{.}} <br />
                 {{/involves}}
               </td>
             </tr>
@@ -142,7 +140,6 @@
             hx-confirm="Are you sure?"
             hx-ext="json-enc"
             hx-swap="none"
-            hx-request="noHeaders"
             hx-on::after-request="window.location.pathname = '/apps/tahuti/groups/{{gid}}/expenses'"
           >
             Deleting this expense will permanently remove it.

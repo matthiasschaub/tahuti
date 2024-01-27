@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="An Expense Sharing App for Urbit" />
     <!-- PWA -->
-    <meta name="theme-color" content="#cc241d" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Group Expenses" />
     <meta
@@ -71,7 +70,7 @@
       </nav>
     </header>
 
-    <div hx-ext="client-side-templates">
+    <div hx-ext="client-side-templates" hx-request="noHeaders">
       <div
         hx-get="/"
         hx-trigger="load"

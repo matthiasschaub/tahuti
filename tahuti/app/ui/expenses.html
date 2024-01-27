@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="An Expense Sharing App for Urbit" />
     <!-- PWA -->
-    <meta name="theme-color" content="#cc241d" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Group Expenses" />
     <meta
@@ -46,7 +45,6 @@
     />
     <script src="/apps/tahuti/assets/htmx.js"></script>
     <script src="/apps/tahuti/assets/client-side-templates.js"></script>
-    <script src="/apps/tahuti/assets/path-deps.js"></script>
     <script src="/apps/tahuti/assets/mustache.js"></script>
     <script src="/apps/tahuti/assets/currency.js"></script>
   </head>
@@ -75,7 +73,7 @@
       </nav>
     </header>
 
-    <div hx-ext="client-side-templates,path-deps">
+    <div hx-ext="client-side-templates" hx-request="noHeaders">
       <div
         hx-get="/"
         hx-trigger="load"
@@ -103,8 +101,7 @@
         <tbody
           id="expenses"
           hx-get="/expenses"
-          hx-trigger="load,path-deps"
-          path-deps="/apps/tahuti/api/groups/*/expenses"
+          hx-trigger="load"
           mustache-template="expenses-template"
         ></tbody>
       </table>
@@ -146,7 +143,6 @@
         ></path></svg
     ></a>
   </footer>
-
   <script src="/apps/tahuti/assets/request-group.js"></script>
   <script>
     // format values

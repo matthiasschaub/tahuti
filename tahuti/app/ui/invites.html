@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="An Expense Sharing App for Urbit" />
     <!-- PWA -->
-    <meta name="theme-color" content="#cc241d" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Group Expenses" />
     <meta
@@ -73,11 +72,10 @@
     </header>
 
     <h2>Group Expenses</h2>
-    <div hx-ext="client-side-templates">
+    <div hx-ext="client-side-templates" hx-request="noHeaders">
       <div
         hx-get="/apps/tahuti/api/invites"
         hx-trigger="load"
-        hx-request="noHeaders"
         mustache-template="invites-template"
       ></div>
       <template id="invites-template">
@@ -94,7 +92,6 @@
               hx-post="/apps/tahuti/api/action/join"
               hx-ext="json-enc"
               hx-swap="none"
-              hx-request="noHeaders"
               hx-vals='{"gid": "{{gid}}", "host": "{{host}}"}'
               hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups"'
               type="submit"
