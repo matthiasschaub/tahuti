@@ -65,6 +65,9 @@
           <li>
             <a id="settings-href" href=""><strong>Settings</strong></a>
           </li>
+          <li>
+            <a id="about-href" href=""><strong>About</strong></a>
+          </li>
         </ul>
       </nav>
     </header>
@@ -167,41 +170,6 @@
           Export expenses ▸
         </button>
       </fieldset>
-
-      <h3>About</h3>
-      <table class="col-two">
-        <thead></thead>
-        <tbody>
-          <tr>
-            <th>Version</th>
-            <td hx-get="/apps/tahuti/api/version" hx-trigger="load"></td>
-          </tr>
-          <tr>
-            <th>Developer</th>
-            <td>
-              <a href="/apps/talk/dm/~talfus-laddus" target="_blank"
-                >~talfus-laddus</a
-              >
-            </td>
-          </tr>
-          <tr>
-            <th>Code Repository</th>
-            <td>
-              <a href="https://git.sr.ht/~talfus-laddus/tahuti">Sourcehut</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <template id="version-template">
-        <td>{{#.}} {{.}} {{/.}}</td>
-      </template>
-
-      <h3>Contact</h3>
-      <p>
-        Please reach out to
-        <a href="/apps/talk/dm/~talfus-laddus" target="_blank">~talfus-laddus</a
-        >, to report any bug, to give feedbag or to receive support.
-      </p>
 
       <h3>Delete group</h3>
       <fieldset>
