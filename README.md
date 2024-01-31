@@ -12,13 +12,7 @@ Documentation:
 - [Development Setup](docs/development.md)
 - [Deployment](docs/deployment.md)
 
-See [inbox](inbox.md) for a loosely managed lists of open tasks.
-
-## Roadmap
-
-- [ ] Simplify debts
-- [ ] Support for multiple currencies
-- [ ] Private/public groups
+See [inbox](inbox.md) for a loosely managed lists of open tasks and planned enhancements.
 
 ## Contributing
 
