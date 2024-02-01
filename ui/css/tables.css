@@ -68,10 +68,6 @@ table > tbody > tr:last-child > :is(th, td) {
   text-align: right;
 }
 
-.reimbursements > :is(thead, tbody) > tr > :is(th, td) {
-    padding-right: 15px;
-}
-
 @media (max-width: 640px) {
   .expenses > tbody > tr td:nth-child(3),
   .expenses > tbody > tr td:nth-child(4),
