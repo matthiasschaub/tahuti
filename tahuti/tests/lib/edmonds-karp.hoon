@@ -65,9 +65,9 @@
   ;:  weld
     %+  expect-eq
       !>  [23 one:expected:fixtures]
-      !>  (need (edmonds-karp [one:given:fixtures 0 5]))
+      !>  (need (edmonds-karp [one:given:fixtures 0 5 100]))
     %+  expect-eq
       !>  [30 two:expected:fixtures]
-      !>  (need (edmonds-karp [two:given:fixtures 0 5]))
+      !>  (need (edmonds-karp [two:given:fixtures 0 5 100]))
   ==
 --

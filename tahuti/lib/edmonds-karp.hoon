@@ -10,9 +10,11 @@
   |=  ::  .g: graph as adjacency matrix
       ::  .s: source
       ::  .t: sink
+      ::  .i: infinity
       $:  g=graph
           s=@ud
           t=@ud
+          i=@ud
       ==
   ^-  (unit (pair maxflow=@ud flowgraph=graph))
   ::
@@ -20,16 +22,13 @@
   =/  f         (reap n (reap n 0))              :: flow graph as adjacency matrix
   =/  maxflow   0
   =/  path      (bfs [g s t])                    :: augmenting path
-  ::  TODO:     how to define inf equivalent value?
-  ::
-  =/  inf       100
   ::  while there is an augmenting path
   ::
   |-
   ?:  =([~] path)
     (some [maxflow f])
   =/  path        (need path)
-  =/  bottleneck  inf                            :: bottleneck capacity
+  =/  bottleneck  i                              :: bottleneck capacity
   =/  v           t
   ::  find bottleneck of the path
   ::

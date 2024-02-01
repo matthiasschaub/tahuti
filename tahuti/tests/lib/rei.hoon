@@ -60,13 +60,13 @@
           ::
           ::  -> simplified: ~nus owes ~lus 5
           ::
-          [%gid %eid %title 5 %eur ~zod *@da (limo [~nus ~])]
-          [%gid %eid %title 5 %eur ~lus *@da (limo [~zod ~])]
+          [%gid %eid %title 1.328.649.235 %eur ~zod *@da (limo [~nus ~])]
+          [%gid %eid %title 1.328.649.235 %eur ~lus *@da (limo [~zod ~])]
           ~
         ==
     ++  rei
       =/  r  *^rei
-      (~(put bi:mip r) ~nus ~lus 5)
+      (~(put bi:mip r) ~nus ~lus 1.328.649.235)
     --
   --
 ++  test-ajd-one
@@ -76,7 +76,7 @@
       !>  ~(adj tahuti [expenses:one:fixtures ships:one:fixtures])
     %+  expect-eq
       !>  [6 flowgraph:one:fixtures]
-      !>  (need (edmonds-karp [~(adj tahuti [expenses:one:fixtures ships:one:fixtures]) 0 3]))
+      !>  (need (edmonds-karp [~(adj tahuti [expenses:one:fixtures ships:one:fixtures]) 0 3 100]))
   ==
 ++  test-rei-one
   ;:  weld

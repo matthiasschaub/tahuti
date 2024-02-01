@@ -10,19 +10,20 @@
     ^-  [(list expense) (list @p)]
     :: (pair (list [@p @ud (list @p)]) (list @p))
     :-
+      %-  limo
       :~
         :*
           %gid
           %eid
-          "foo"
+          %title
           0
           %eur
           ~zod
           ~2018.5.14..22.31.46..1435
-          `(set @p)`(silt [~zod ~])
+          `(list @p)`(limo [~zod ~])
         ==
       ==
-    :~  ~zod  ==
+    %-  limo  :~  ~zod  ==
   ++  single-single
     :: ^-  (pair (list [@p @ud (list @p)]) (list @p))
     ^-  [(list expense) (list @p)]
@@ -31,12 +32,12 @@
         :*
           %gid
           %eid
-          "foo"
+          %title
           1
           %eur
           ~zod
           ~2018.5.14..22.31.46..1435
-          `(set @p)`(silt [~zod ~])
+          `(list @p)`(limo [~zod ~])
         ==
       ==
     :~  ~zod  ==
@@ -50,32 +51,32 @@
         :*
           %gid
           %eid1
-          "foo"
+          %title
           1
           %eur
           ~zod
           ~2018.5.14..22.31.46..1435
-          `(set @p)`(silt [~zod ~])
+          `(list @p)`(limo [~zod ~])
         ==
         :*
           %gid
           %eid2
-          "foo"
+          %title
           2
           %eur
           ~zod
           ~2018.5.14..22.31.46..1435
-          `(set @p)`(silt [~zod ~])
+          `(list @p)`(limo [~zod ~])
         ==
         :*
           %gid
           %eid3
-          "foo"
+          %title
           3
           %eur
           ~zod
           ~2018.5.14..22.31.46..1435
-          `(set @p)`(silt [~zod ~])
+          `(list @p)`(limo [~zod ~])
         ==
       ==
     :~  ~zod  ==
@@ -89,32 +90,32 @@
         :*
           %gid
           %eid1
-          "foo"
+          %title
           1
           %eur
           ~zod
           ~2018.5.14..22.31.46..1435
-          `(set @p)`(silt [~zod ~nus ~])
+          `(list @p)`(limo [~zod ~nus ~])
         ==
         :*
           %gid
           %eid2
-          "foo"
+          %title
           2
           %eur
           ~nus
           ~2018.5.14..22.31.46..1435
-          `(set @p)`(silt [~zod ~nus ~])
+          `(list @p)`(limo [~zod ~nus ~])
         ==
         :*
           %gid
           %eid3
-          "foo"
+          %title
           3
           %eur
           ~nus
           ~2018.5.14..22.31.46..1435
-          `(set @p)`(silt [~zod ~nus ~])
+          `(list @p)`(limo [~zod ~nus ~])
         ==
       ==
     :~  ~zod  ~nus  ==
@@ -128,32 +129,32 @@
         :*
           %gid
           %eid1
-          "foo"
+          %title
           1
           %eur
           ~zod
           ~2018.5.14..22.31.46..1435
-          `(set @p)`(silt [~nus ~])
+          `(list @p)`(limo [~nus ~])
         ==
         :*
           %gid
           %eid2
-          "foo"
+          %title
           2
           %eur
           ~nus
           ~2018.5.14..22.31.46..1435
-          `(set @p)`(silt [~zod ~nus ~])
+          `(list @p)`(limo [~zod ~nus ~])
         ==
         :*
           %gid
           %eid3
-          "foo"
+          %title
           3
           %eur
           ~nus
           ~2018.5.14..22.31.46..1435
-          `(set @p)`(silt [~zod ~])
+          `(list @p)`(limo [~zod ~])
         ==
       ==
     :~  ~zod  ~nus  ==
@@ -196,7 +197,7 @@
       !>  (malt (limo [[~zod --0] ~]))
       !>  ~(net tahuti multi-single:fixtures)
     %+  expect-eq
-      !>  (malt (limo [[~zod -2] [~nus --2] ~]))
+      !>  (malt (limo [[~zod -1] [~nus --3] ~]))
       !>  ~(net tahuti multi-multi-equal:fixtures)
     %+  expect-eq
       !>  (malt (limo [[~zod -3] [~nus --3] ~]))
@@ -217,9 +218,9 @@
         %-  limo
           :*
             ::         s ~zod ~nus t
-            %-  limo  [0 2 0 0 ~]  :: s
-            %-  limo  [0 0 100 0 ~]  :: ~zod
-            %-  limo  [0 0 0 2 ~]  :: ~nus
+            %-  limo  [0 1 0 0 ~]  :: s
+            %-  limo  [0 0 12 0 ~]  :: ~zod
+            %-  limo  [0 0 0 3 ~]  :: ~nus
             %-  limo  [0 0 0 0 ~]  ::  t
             ~
           ==
@@ -230,7 +231,7 @@
           :*
             ::         s ~zod ~nus t
             %-  limo  [0 3 0 0 ~]  :: s
-            %-  limo  [0 0 100 0 ~]  :: ~zod
+            %-  limo  [0 0 12 0 ~]  :: ~zod
             %-  limo  [0 0 0 3 ~]  :: ~nus
             %-  limo  [0 0 0 0 ~]  ::  t
             ~

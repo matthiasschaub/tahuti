@@ -282,6 +282,7 @@
     [~ ~ [%noun !>(net)]]
     ::
       [%x =gid %rei ~]
+    ~&  >  '%tahuti (on-peek): reimbursements'
     ?>  (~(has by groups) gid.path)
     =/  group  (~(got by groups) gid.path)
     =/  reg    (~(got by regs) gid.path)

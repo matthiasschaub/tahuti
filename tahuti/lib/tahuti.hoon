@@ -19,6 +19,7 @@
     i    +(i)
   ==
 ::
+++  inf  (mul sum 2)
 ++  gro
   ::    gross amount of ships
   ::
@@ -144,7 +145,6 @@
   =/  n    (lent fleet)
   =/  g    (reap (add n 2) (reap (add n 2) 0))
   =/  [c=(list @ud) d=(list @ud)]  ind
-  =/  inf  (mul sum 2)
   ::  indices are shifted by one to account for the source node
   ::
   =/  i    0
@@ -228,7 +228,7 @@
   ::  .j: counter
   ::  .a: amount
   ::
-  =/  g  (tail (need (edmonds-karp [adj 0 +((lent fleet))])))
+  =/  g  (tail (need (edmonds-karp [adj 0 +((lent fleet)) inf])))
   =/  s  ~(tap in ~(key by net))
   =/  r  *^rei
   =/  n  (lent s)
