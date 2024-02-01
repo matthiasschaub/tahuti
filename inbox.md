@@ -12,6 +12,11 @@
 - feat: support multiple currencies when creating a new group
 - feat: support multiple currencies when adding a new expense
 - feat: public groups
+- feat: edit expense
+- ui: different setting pages for different roles
+    - host will have delete group button and remove member
+    - members will have a leave group button
+    - if public group no settings are available (only group metadata)
 - api: response only after successful %poke
     - add HTTP response card to state
     - wait (on-arvo) for ack from %tahuti before sending HTTP response
