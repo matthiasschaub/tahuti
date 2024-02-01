@@ -1,26 +1,6 @@
 import pytest
-import time
-import requests
 from .utils import BaseUrlSession
 from uuid import uuid4
-
-
-@pytest.fixture(scope="session")
-def auth():
-    url = "http://localhost:8080/~/login"
-    data = {"password": "lidlut-tabwed-pillex-ridrup"}
-    with requests.Session() as session:
-        response = session.post(url, data=data)  # perform the login
-    return response.cookies
-
-
-@pytest.fixture(scope="session")
-def auth_nus():
-    url = "http://localhost:8081/~/login"
-    data = {"password": "bortem-pinwyl-macnyx-topdeg"}
-    with requests.Session() as session:
-        response = session.post(url, data=data)  # perform the login
-    return response.cookies
 
 
 @pytest.fixture(scope="session")
@@ -38,6 +18,16 @@ def nus():
     """Request session for ~nus which is authenticated"""
     baseUrl = "http://localhost:8081"
     data = {"password": "bortem-pinwyl-macnyx-topdeg"}
+    with BaseUrlSession(baseUrl) as session:
+        session.post("/~/login", data=data)  # perform the login
+        yield session
+
+
+@pytest.fixture(scope="session")
+def lus():
+    """Request session for ~nus which is authenticated"""
+    baseUrl = "http://localhost:8082"
+    data = {"password": "macsyr-davfed-tanrux-linnec"}
     with BaseUrlSession(baseUrl) as session:
         session.post("/~/login", data=data)  # perform the login
         yield session
@@ -121,6 +111,14 @@ def invitee(zod, gid, group) -> str:
 
 
 @pytest.fixture
+def invitee_lus(zod, gid, group) -> str:
+    """Based on `group`. Adds invitee."""
+    url = f"/apps/tahuti/api/groups/{gid}/invitees"
+    zod.put(url, json={"invitee": "~lus"})
+    return "~lus"
+
+
+@pytest.fixture
 def member(nus, gid, group, invitee) -> str:
     """Based on `group`. Adds invitee."""
     join = {
@@ -129,6 +127,18 @@ def member(nus, gid, group, invitee) -> str:
     }
     url = "/apps/tahuti/api/action/join"
     nus.post(url, json=join)
+    return "~nus"
+
+
+@pytest.fixture
+def member_lus(lus, gid, group, invitee_lus) -> str:
+    """Based on `group`. Adds invitee."""
+    join = {
+        "host": group["host"],
+        "gid": gid,
+    }
+    url = "/apps/tahuti/api/action/join"
+    lus.post(url, json=join)
     return "~nus"
 
 
