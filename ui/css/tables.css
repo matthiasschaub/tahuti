@@ -51,7 +51,6 @@ table > tbody > tr:last-child > :is(th, td) {
   border-bottom: 2px solid;
 }
 
-.reimbursements > :is(thead, tbody) > tr > :is(th, td),
 .expenses > :is(thead, tbody) > tr > :is(th, td),
 .groups > :is(thead, tbody) > tr > :is(th, td) {
   max-width: 8em;

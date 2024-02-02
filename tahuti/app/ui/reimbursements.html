@@ -96,13 +96,12 @@
         <div id="currency" hidden>{{currency}}</div>
       </template>
       <blockquote>
-        Suggested reimbursements is currently an experimental feature.
+      Who owes to whom?
       </blockquote>
-      <p>Who owes to whom?</p>
       <table id="reimbursements" class="reimbursements col-two">
-        <thead hidden>
-          <tr>
-            <th>Debitor</th>
+        <thead>
+          <tr hidden>
+            <th></th>
             <th id="amount">Amount</th>
           </tr>
         </thead>
@@ -120,6 +119,7 @@
           <td>
             {{debitor}}<br /><small>owes</small><br />{{creditor}}
           </td>
+          <td style="line-height:9px;"></td>
           <td headers="amount">{{amount}}</td>
         </tr>
         {{/.}}
