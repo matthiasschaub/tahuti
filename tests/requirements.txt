@@ -1,4 +1,0 @@
-pytest==7.4.0
-requests==2.31.0
-schema==0.7.5
-hypothesis==6.89.0
