@@ -5,4 +5,8 @@ __pycache__/
 .hypothesis
 .ruff_cache
 
+# javascript
 node_modules/
+
+# custom
+deploy.sh
