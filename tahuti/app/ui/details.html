@@ -133,7 +133,7 @@
         <fieldset>
           <form
             id="delete-exepense"
-            hx-delete="/expenses/{{eid}}"
+            hx-delete="/expenses/{{eid()}}"
             hx-confirm="Are you sure?"
             hx-ext="json-enc"
             hx-swap="none"
@@ -141,7 +141,7 @@
           >
             Deleting this expense will permanently remove it.
             <br />
-            <button class="button-cancel" type="button" value="Cancel">
+            <button class="button-cancel" type="submit" value="Cancel">
               Delete this expense
             </button>
           </form>
