@@ -1,5 +1,8 @@
+# python
 venv/
 __pycache__/
 .pytest_cache/
 .hypothesis
 .ruff_cache
+
+node_modules/

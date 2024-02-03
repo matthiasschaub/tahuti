@@ -1,0 +1,21 @@
+{
+  "name": "tahuti",
+  "version": "0.0.17",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node build.mjs",
+    "lint": "eslint ."
+  },
+  "author": "~talfus-laddus",
+  "license": "MIT",
+  "devDependencies": {
+    "esbuild": "0.20.0",
+    "eslint": "^8.56.0"
+  },
+  "dependencies": {
+    "currency.js": "^2.0.4",
+    "htmx.org": "^1.9.10",
+    "mustache": "^4.2.0"
+  }
+}
