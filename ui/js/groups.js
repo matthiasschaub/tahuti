@@ -45,6 +45,4 @@ if (btnInvite != null) {
   btnInvite.action = `/apps/tahuti/groups/${gid()}/invite`;
 }
 
-export {
-    gid,
-};
+export { gid };

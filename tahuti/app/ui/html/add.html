@@ -1,0 +1,312 @@
+<!doctype html>
+<html class="dark" lang="en">
+  <head>
+    <title>Group Expenses</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="An Expense Sharing App for Urbit" />
+    <!-- PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Group Expenses" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/180.png"
+    />
+    <link
+      rel="icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/16.png"
+      sizes="16x16"
+    />
+    <link
+      rel="icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
+      sizes="any"
+      type="image/svg+xml"
+    />
+    <link
+      rel="manifest"
+      href="/apps/tahuti/manifest.json"
+      crossorigin="use-credentials"
+    />
+    <!-- /PWA -->
+    <link rel="stylesheet" href="/apps/tahuti/css/style.css" />
+    <link rel="stylesheet" href="/apps/tahuti/css/print.css" media="print" />
+    <script src="/apps/tahuti/js/index.js"></script>
+    <script src="/apps/tahuti/js/json-enc.js"></script>
+    <script src="/apps/tahuti/js/client-side-templates.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <!-- hrefs is set by request.js -->
+          <li>
+            <a href="/apps/tahuti/groups">↜ Groups</a>
+          </li>
+          <li>
+            <a id="expenses-href" href="">Expenses</a>
+          </li>
+          <li>
+            <a id="balances-href" href="">Balances</a>
+          </li>
+          <li>
+            <a id="settings-href" href="">Settings</a>
+          </li>
+          <li>
+            <a id="about-href" href="">About</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <div hx-ext="client-side-templates" hx-request="noHeaders">
+      <div
+        hx-get="/"
+        hx-trigger="load"
+        hx-swap="outerHTML"
+        mustache-template="title-template"
+      >
+        <h2 style="opacity: 0">Loading ...</h2>
+      </div>
+      <template id="title-template">
+        <h2>{{title}}</h2>
+      </template>
+
+      <h3>Add an expense</h3>
+      <!-- TODO: redirect to /expenses -->
+      <fieldset>
+        <form
+          id="put-expenses"
+          hx-put="/expenses"
+          hx-ext="json-enc"
+          hx-vals="js:{eid: self.crypto.randomUUID(), gid: gid()}"
+        >
+          <!-- amount -->
+          <label for="amount">How much?</label>
+          <br />
+          <input
+            id="amount"
+            type="text"
+            inputmode="text"
+            autocomplete="transaction-amount"
+            name="amount"
+            aria-label="Amount"
+            placeholder="Amount"
+            required
+          />
+          <br />
+
+          <!-- titel -->
+          <label for="title">What for?</label>
+          <br />
+          <input
+            id="title"
+            type="text"
+            inputmode="text"
+            autocomplete="on"
+            name="title"
+            aria-label="Title"
+            placeholder="Title"
+            required
+          />
+          <br />
+
+          <!-- currency -->
+          <label for="currency">Which currency?</label>
+          <br />
+          <select
+            hx-get="/"
+            hx-trigger="load"
+            mustache-template="currency-template"
+            id="currency"
+            type="text"
+            name="currency"
+            aria-label="Currency"
+            required
+          ></select>
+          <template id="currency-template">
+            <option value="{{currency}}">{{currency}}</option>
+          </template>
+          <br />
+
+          <!-- payer -->
+          <!-- TODO: add current ship as default value -->
+          <label for="payer">Who paid?</label>
+          <br />
+          <select
+            hx-get="/members"
+            hx-trigger="load"
+            mustache-template="payer-template"
+            id="payer"
+            type="text"
+            name="payer"
+            aria-label="Payer"
+            required
+          ></select>
+          <template id="payer-template">
+            {{#.}}
+            <option value="{{.}}">{{.}}</option>
+            {{/.}}
+          </template>
+          <br />
+
+          <!-- involved -->
+          <label>Who is involved?</label>
+          <br />
+          <div
+            hx-get="/members"
+            hx-trigger="load"
+            mustache-template="involved-template"
+          ></div>
+          <template id="involved-template">
+            {{#.}}
+            <input
+              class="checkbox"
+              id="check-{{.}}"
+              type="checkbox"
+              name="involves"
+              value="{{.}}"
+              checked
+            />
+            <label for="check-{{.}}">{{.}}</label>
+            {{/.}}
+          </template>
+
+          <!-- When? -->
+          <label for="date">When?</label>
+          <br />
+          <input
+            id="date"
+            type="date"
+            inputmode="text"
+            name="date"
+            aria-label="Date"
+          />
+          <br />
+
+          <!-- Submit -->
+          <button class="button-primary" type="submit">Add expense ▸</button>
+          <button
+            class="button-cancel"
+            onclick="window.location.href='/apps/tahuti/groups/' + gid() + '/expenses';
+"
+            type="button"
+            value="Cancel"
+          >
+            Cancel
+          </button>
+        </form>
+      </fieldset>
+    </div>
+  </body>
+
+  <script src="/apps/tahuti/js/groups.js"></script>
+  <script>
+    const form = document.getElementById("put-expenses");
+    const amount = document.getElementById("amount");
+    const date = document.getElementById("date");
+
+    // set defaults
+    //
+    date.valueAsDate = new Date();
+
+    // validate inputs
+    //
+    amount.addEventListener("input", (event) => {
+      // amount must be a number
+      let val = amount.value;
+      val = val.replace(",", "");
+      val = val.replace(".", "");
+      val = Number(val);
+      if (Number.isNaN(parseFloat(val)) && !Number.isFinite(val)) {
+        amount.setCustomValidity("Please enter a valid amount.");
+      } else {
+        amount.setCustomValidity("");
+      }
+    });
+    // involves: validate that at least one checkbox (involved member) is selected
+    form.addEventListener("htmx:afterSettle", (event) => {
+      <!-- TODO: more elegant way? -->
+      <!-- function validateCheckboxes() { -->
+      <!--     var checkboxes = document.querySelectorAll( -->
+      <!--         'input[name="involves"]:checked' -->
+      <!--     ); -->
+      <!--     console.log(checkboxes); -->
+      <!--     if (checkboxes.length === 0) { -->
+      <!--         alert("Please check at least one checkbox"); -->
+      <!--         return false; // Prevent the form from submitting -->
+      <!--     } -->
+      <!--     return true; // Allow form submission if at least one checkbox is checked -->
+      <!-- } -->
+
+      const checkboxes = Array.from(document.querySelectorAll(".checkbox"));
+      checkboxes.forEach((item) => {
+        item.addEventListener("click", (event) => {
+          if (checkboxes.reduce((acc, curr) => acc || curr.checked, false)) {
+            <!-- valid -->
+            checkboxes.at(-1).setCustomValidity("");
+          } else {
+            <!-- invalid -->
+            checkboxes.at(-1).setCustomValidity("Select at least one.");
+          }
+        });
+      });
+    });
+
+    // format values
+    //
+    form.addEventListener("htmx:configRequest", (event) => {
+      // send amount in cents
+      const USD = (value) => currency(value);
+      const EUR = (value) =>
+        currency(value, {
+          decimal: ",",
+          separator: ".",
+        });
+      const BTC = (value) =>
+        currency(value, {
+          precision: 8,
+        });
+      if ("amount" in event.detail.parameters) {
+        if (event.detail.parameters.currency == "EUR") {
+          event.detail.parameters.amount = EUR(
+            amount.value,
+          ).intValue.toString();
+        } else if (event.detail.parameters.currency == "USD") {
+          event.detail.parameters.amount = USD(
+            amount.value,
+          ).intValue.toString();
+        } else if (event.detail.parameters.currency == "BTC") {
+          event.detail.parameters.amount = BTC(
+            amount.value,
+          ).intValue.toString();
+        } else {
+          <!-- TODO: what to do in this case?-->
+          console.log("currency code not supported.");
+        }
+      }
+      // send date as unix timestamp
+      if ("date" in event.detail.parameters) {
+        event.detail.parameters.date = new Date(date.value).valueOf();
+      }
+      // always send checkbox checks as array
+      if ("involves" in event.detail.parameters) {
+        if (!Array.isArray(event.detail.parameters.involves)) {
+          // only one checkbox is selected
+          event.detail.parameters.involves = [event.detail.parameters.involves];
+        }
+      }
+    });
+
+    form.addEventListener("htmx:afterRequest", (event) => {
+      if (event.detail.successful && event.detail.elt.id == "put-expenses") {
+        window.location.pathname = "/apps/tahuti/groups/" + gid() + "/expenses";
+      }
+    });
+  </script>
+</html>

@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <title>Group Expenses</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="An Expense Sharing App for Urbit" />
     <!-- PWA -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,15 +32,14 @@
       href="/apps/tahuti/manifest.json"
       crossorigin="use-credentials"
     />
+    <link
+      rel="apple-touch-icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
+    />
     <!-- /PWA -->
     <link rel="stylesheet" href="/apps/tahuti/css/style.css" />
-    <link
-      rel="stylesheet"
-      href="/apps/tahuti/css/print.css"
-      media="print"
-    />
+    <link rel="stylesheet" href="/apps/tahuti/css/print.css" media="print" />
     <script src="/apps/tahuti/js/index.js"></script>
-    <script src="/apps/tahuti/js/json-enc.js"></script>
     <script src="/apps/tahuti/js/client-side-templates.js"></script>
   </head>
 
@@ -58,66 +57,61 @@
             <a id="balances-href" href="">Balances</a>
           </li>
           <li>
-            <a id="settings-href" href=""><strong>Settings</strong></a>
+            <a id="settings-href" href="">Settings</a>
           </li>
           <li>
-            <a id="about-href" href="">About</a>
+            <a id="about-href" href=""><strong>About</strong></a>
           </li>
         </ul>
       </nav>
     </header>
 
     <div hx-ext="client-side-templates" hx-request="noHeaders">
-      <div hx-get="/" hx-trigger="load" mustache-template="title-template">
-        <h2 style="opacity: 0">Loading ...</h2>
-      </div>
-      <template id="title-template">
+      <div
+        hx-get="/"
+        hx-trigger="load"
+        mustache-template="group-template"
+      ></div>
+      <template id="group-template">
         <h2>{{title}}</h2>
       </template>
 
-      <h3>Invite people</h3>
-      <fieldset>
-        <form
-          id="put-invitees"
-          hx-put="/invitees"
-          hx-ext="json-enc"
-          hx-swap="none"
-        >
-          <!-- TODO: add validation for valid @p -->
-          <label>Urbit ID</label>
-          <br />
-          <input
-            id="invitee"
-            type="text"
-            name="invitee"
-            aria-label="invitee"
-            placeholder="~zod"
-            required="required"
-          />
-          <br />
-          <button class="button-primary" type="submit" form="put-invitees">
-            Send invite ▸
-          </button>
-          <button
-            class="button-cancel"
-            onclick="window.location.href='/apps/tahuti/groups/' + gid() + '/settings';"
-            type="button"
-            value="Cancel"
-          >
-            Cancel
-          </button>
-        </form>
-      </fieldset>
+      <h3>About</h3>
+      <table class="col-two">
+        <thead></thead>
+        <tbody>
+          <tr>
+            <th>Version</th>
+            <td hx-get="/apps/tahuti/api/version" hx-trigger="load"></td>
+          </tr>
+          <tr>
+            <th>Developer</th>
+            <td>
+              <a href="/apps/talk/dm/~talfus-laddus" target="_blank"
+                >~talfus-laddus</a
+              >
+            </td>
+          </tr>
+          <tr>
+            <th>Code Repository</th>
+            <td>
+              <a href="https://git.sr.ht/~talfus-laddus/tahuti">Sourcehut</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <template id="version-template">
+        <td>{{#.}} {{.}} {{/.}}</td>
+      </template>
+
+      <h3>Contact</h3>
+      <p>
+        Please reach out to
+        <a href="/apps/talk/dm/~talfus-laddus" target="_blank">~talfus-laddus</a
+        >, to report any bug, to give feedbag or to receive support.
+      </p>
     </div>
   </body>
 
   <script src="/apps/tahuti/js/groups.js"></script>
-  <script>
-    const form = document.getElementById("put-invitees");
-    form.addEventListener("htmx:afterRequest", (event) => {
-      if (event.detail.successful) {
-        window.location.pathname = "/apps/tahuti/groups/" + gid() + "/settings";
-      }
-    });
-  </script>
 </html>

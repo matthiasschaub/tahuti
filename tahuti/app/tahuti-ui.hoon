@@ -1,35 +1,29 @@
 /+  dbug
 /+  verb
 /+  default-agent
-/+  server                 :: HTTP request processing
-/+  schooner               :: HTTP response handling
-/*  groups                 %html  /app/ui/groups/html
-/*  invites                %html  /app/ui/invites/html
-/*  create                 %html  /app/ui/create/html
-/*  balances               %html  /app/ui/balances/html
-/*  reimbursements         %html  /app/ui/reimbursements/html
-/*  expenses               %html  /app/ui/expenses/html
-/*  add                    %html  /app/ui/add/html
-/*  details                %html  /app/ui/details/html
-/*  settings               %html  /app/ui/settings/html
-/*  about                  %html  /app/ui/about/html
-/*  invite                 %html  /app/ui/invite/html
-/*  style                  %css   /app/ui/css/style/css
-/*  print                  %css   /app/ui/css/print/css
-/*  manifest               %json  /app/ui/manifest/json
-/*  index                  %js    /app/ui/js/index/js
-/*  json-enc               %js    /app/ui/js/json-enc/js
-/*  path-deps              %js    /app/ui/js/path-deps/js
-/*  client-side-templates  %js    /app/ui/js/client-side-templates/js
-/*  dinero                 %js    /app/ui/assets/dinero/js
-/*  dinero-currencies      %js    /app/ui/assets/dinero-currencies/js
-/*  cur                    %js    /app/ui/assets/cur/js
-/*  groups-js              %js    /app/ui/js/groups/js
-/*  expenses-js            %js    /app/ui/js/expenses/js
-/*  icon-16                %png   /app/ui/static/images/icons/16/png
-/*  icon-180               %png   /app/ui/static/images/icons/180/png
-/*  icon-192               %png   /app/ui/static/images/icons/192/png
-/*  icon-512               %png   /app/ui/static/images/icons/512/png
+/+  server                    :: HTTP request processing
+/+  schooner                  :: HTTP response handling
+::
+/*  html-groups               %html  /app/ui/html/groups/html
+/*  html-create               %html  /app/ui/html/create/html
+/*  html-invites              %html  /app/ui/html/invites/html
+/*  html-expenses             %html  /app/ui/html/expenses/html
+/*  html-balances             %html  /app/ui/html/balances/html
+/*  html-reimbursements       %html  /app/ui/html/reimbursements/html
+/*  html-settings             %html  /app/ui/html/settings/html
+/*  html-about                %html  /app/ui/html/about/html
+/*  html-add                  %html  /app/ui/html/add/html
+/*  html-invite               %html  /app/ui/html/invite/html
+/*  html-details              %html  /app/ui/html/details/html
+/*  css-style                 %css   /app/ui/css/style/css
+/*  css-print                 %css   /app/ui/css/print/css
+/*  js-index                  %js    /app/ui/js/index/js
+/*  js-groups                 %js    /app/ui/js/groups/js
+/*  js-expenses               %js    /app/ui/js/expenses/js
+/*  js-json-enc               %js    /app/ui/js/json-enc/js
+/*  js-path-deps              %js    /app/ui/js/path-deps/js
+/*  js-client-side-templates  %js    /app/ui/js/client-side-templates/js
+/*  json-manifest             %json  /app/ui/json/manifest/json
 ::
 |%
 +$  card  card:agent:gall
@@ -110,67 +104,52 @@
         ::  html
         ::
         [%apps %tahuti ~]
-          [(send [200 ~ [%html groups]]) state]
+          [(send [200 ~ [%html html-groups]]) state]
         [%apps %tahuti %groups ~]
-          [(send [200 ~ [%html groups]]) state]
+          [(send [200 ~ [%html html-groups]]) state]
         [%apps %tahuti %invites ~]
-          [(send [200 ~ [%html invites]]) state]
+          [(send [200 ~ [%html html-invites]]) state]
         [%apps %tahuti %groups %create ~]
-          [(send [200 ~ [%html create]]) state]
+          [(send [200 ~ [%html html-create]]) state]
         [%apps %tahuti %groups @t %expenses ~]
-          [(send [200 ~ [%html expenses]]) state]
-        [%apps %tahuti %groups @t %expenses @t ~]
-          [(send [200 ~ [%html details]]) state]
+          [(send [200 ~ [%html html-expenses]]) state]
         [%apps %tahuti %groups @t %balances ~]
-          [(send [200 ~ [%html balances]]) state]
+          [(send [200 ~ [%html html-balances]]) state]
         [%apps %tahuti %groups @t %reimbursements ~]
-          [(send [200 ~ [%html reimbursements]]) state]
-        [%apps %tahuti %groups @t %add ~]
-          [(send [200 ~ [%html add]]) state]
+          [(send [200 ~ [%html html-reimbursements]]) state]
         [%apps %tahuti %groups @t %settings ~]
-          [(send [200 ~ [%html settings]]) state]
+          [(send [200 ~ [%html html-settings]]) state]
         [%apps %tahuti %groups @t %about ~]
-          [(send [200 ~ [%html about]]) state]
+          [(send [200 ~ [%html html-about]]) state]
+        [%apps %tahuti %groups @t %add ~]
+          [(send [200 ~ [%html html-add]]) state]
         [%apps %tahuti %groups @t %invite ~]
-          [(send [200 ~ [%html invite]]) state]
+          [(send [200 ~ [%html html-invite]]) state]
+        [%apps %tahuti %groups @t %expenses @t ~]
+          [(send [200 ~ [%html html-details]]) state]
         ::  css
         ::
         [%apps %tahuti %css %style ~]
-          [(send [200 ~ [%css style]]) state]
+          [(send [200 ~ [%css css-style]]) state]
         [%apps %tahuti %css %print ~]
-          [(send [200 ~ [%css print]]) state]
+          [(send [200 ~ [%css css-print]]) state]
         ::  javascript
         ::
-        [%apps %tahuti %manifest ~]
-          [(send [200 ~ [%json manifest]]) state]
         [%apps %tahuti %js %index ~]
-          [(send [200 ~ [%js index]]) state]
+          [(send [200 ~ [%js js-index]]) state]
         [%apps %tahuti %js %json-enc ~]
-          [(send [200 ~ [%js json-enc]]) state]
+          [(send [200 ~ [%js js-json-enc]]) state]
         [%apps %tahuti %js %path-deps ~]
-          [(send [200 ~ [%js path-deps]]) state]
+          [(send [200 ~ [%js js-path-deps]]) state]
         [%apps %tahuti %js %client-side-templates ~]
-          [(send [200 ~ [%js client-side-templates]]) state]
-        [%apps %tahuti %assets %cur ~]
-          [(send [200 ~ [%js cur]]) state]
-        [%apps %tahuti %assets %dinero ~]
-          [(send [200 ~ [%js dinero]]) state]
-        [%apps %tahuti %assets %dinero-currencies ~]
-          [(send [200 ~ [%js dinero-currencies]]) state]
+          [(send [200 ~ [%js js-client-side-templates]]) state]
         [%apps %tahuti %js %groups ~]
-          [(send [200 ~ [%js groups-js]]) state]
+          [(send [200 ~ [%js js-groups]]) state]
         [%apps %tahuti %js %expenses ~]
-          [(send [200 ~ [%js expenses-js]]) state]
-        ::  icons
-        ::
-        [%apps %tahuti %static %images %icons %16 ~]
-          [(send [200 ~ [%png icon-16]]) state]
-        [%apps %tahuti %static %images %icons %180 ~]
-          [(send [200 ~ [%png icon-180]]) state]
-        [%apps %tahuti %static %images %icons %192 ~]
-          [(send [200 ~ [%png icon-192]]) state]
-        [%apps %tahuti %static %images %icons %512 ~]
-          [(send [200 ~ [%png icon-512]]) state]
+          [(send [200 ~ [%js js-expenses]]) state]
+        ::  json
+        [%apps %tahuti %manifest ~]
+          [(send [200 ~ [%json json-manifest]]) state]
       ==
     ==
   --

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Group Expenses</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="An Expense Sharing App for Urbit" />
+    <!-- PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Group Expenses" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/180.png"
+    />
+    <link
+      rel="icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/16.png"
+      sizes="16x16"
+    />
+    <link
+      rel="icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
+      sizes="any"
+      type="image/svg+xml"
+    />
+    <link
+      rel="manifest"
+      href="/apps/tahuti/manifest.json"
+      crossorigin="use-credentials"
+    />
+    <!-- /PWA -->
+    <link rel="stylesheet" href="/apps/tahuti/css/style.css" />
+    <link rel="stylesheet" href="/apps/tahuti/css/print.css" media="print" />
+    <script src="/apps/tahuti/js/index.js"></script>
+    <script src="/apps/tahuti/js/json-enc.js"></script>
+    <script src="/apps/tahuti/js/client-side-templates.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <nav aria-label="Global">
+        <ul>
+          <li>
+            <a href="/apps/tahuti/groups">↜ Groups</a>
+          </li>
+          <li>
+            <a id="expenses-href" href="">Expenses</a>
+          </li>
+          <li>
+            <a id="balances-href" href="">Balances</a>
+          </li>
+          <li>
+            <a id="settings-href" href=""><strong>Settings</strong></a>
+          </li>
+          <li>
+            <a id="about-href" href="">About</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <div hx-ext="client-side-templates" hx-request="noHeaders">
+      <div hx-get="/" hx-trigger="load" mustache-template="title-template">
+        <h2 style="opacity: 0">Loading ...</h2>
+      </div>
+      <template id="title-template">
+        <h2>{{title}}</h2>
+      </template>
+
+      <h3>Invite people</h3>
+      <fieldset>
+        <form
+          id="put-invitees"
+          hx-put="/invitees"
+          hx-ext="json-enc"
+          hx-swap="none"
+        >
+          <!-- TODO: add validation for valid @p -->
+          <label>Urbit ID</label>
+          <br />
+          <input
+            id="invitee"
+            type="text"
+            name="invitee"
+            aria-label="invitee"
+            placeholder="~zod"
+            required="required"
+          />
+          <br />
+          <button class="button-primary" type="submit" form="put-invitees">
+            Send invite ▸
+          </button>
+          <button
+            class="button-cancel"
+            onclick="window.location.href='/apps/tahuti/groups/' + gid() + '/settings';"
+            type="button"
+            value="Cancel"
+          >
+            Cancel
+          </button>
+        </form>
+      </fieldset>
+    </div>
+  </body>
+
+  <script src="/apps/tahuti/js/groups.js"></script>
+  <script>
+    const form = document.getElementById("put-invitees");
+    form.addEventListener("htmx:afterRequest", (event) => {
+      if (event.detail.successful) {
+        window.location.pathname = "/apps/tahuti/groups/" + gid() + "/settings";
+      }
+    });
+  </script>
+</html>

@@ -11,3 +11,9 @@
 ```bash
 convert 512.png -background "#FFFFF3" -flatten 512.png
 ```
+
+
+Note
+    "build": "node build.mjs",
+
+"init": "npm run clean && mkdir ./build && cp ./src/html/* ./build/ && cp -r ./src/images ./build",

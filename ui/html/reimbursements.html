@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html class="dark" lang="en">
   <head>
     <title>Group Expenses</title>
@@ -38,11 +38,7 @@
     />
     <!-- /PWA -->
     <link rel="stylesheet" href="/apps/tahuti/css/style.css" />
-    <link
-      rel="stylesheet"
-      href="/apps/tahuti/css/print.css"
-      media="print"
-    />
+    <link rel="stylesheet" href="/apps/tahuti/css/print.css" media="print" />
     <script src="/apps/tahuti/js/index.js"></script>
     <script src="/apps/tahuti/js/client-side-templates.js"></script>
   </head>
@@ -59,7 +55,7 @@
             <a id="expenses-href" href="">Expenses</a>
           </li>
           <li>
-            <a id="balances-href" href=""><strong>Balances</strong></a>
+            <a id="balances-href" href="">Balances</a>
           </li>
           <li>
             <a id="settings-href" href="">Settings</a>
@@ -84,87 +80,39 @@
         <h2>{{title}}</h2>
         <div id="currency" hidden>{{currency}}</div>
       </template>
-
-      <table id="balances" class="col-two">
+      <blockquote>Who owes to whom?</blockquote>
+      <table id="reimbursements" class="reimbursements col-two">
         <thead>
-          <tr>
-            <th>Member</th>
+          <tr hidden>
+            <th></th>
             <th id="amount">Amount</th>
           </tr>
         </thead>
         <tbody
-          id="get-balances"
-          hx-get="/balances"
+          id="get-reimbursements"
+          hx-get="/reimbursements"
           hx-trigger="load"
-          mustache-template="balances-template"
+          mustache-template="reimbursements-template"
         ></tbody>
       </table>
-      <template id="balances-template">
-        <!-- iterate over array of balances object -->
+      <template id="reimbursements-template">
+        <!-- iterate over array of reimbursements object -->
         {{#.}}
         <tr>
-          <td>{{member}}</td>
+          <td>{{debitor}}<br /><small>owes</small><br />{{creditor}}</td>
+          <td style="line-height: 9px"></td>
           <td headers="amount">{{amount}}</td>
         </tr>
         {{/.}}
       </template>
     </div>
-
-    <footer>
-      <a
-        id="reimbursements-href"
-        title="Suggested reimbursements"
-        aria-label="Suggested reimbursements"
-        href=""
-      >
-        <?xml version="1.0" encoding="UTF-8"?><svg
-          id="add-btn"
-          width="24px"
-          height="24px"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          color="#000000"
-        >
-          <path
-            d="M9.01894 9C9.00639 8.83498 9 8.66824 9 8.5C9 4.91015 11.9101 2 15.5 2C19.0899 2 22 4.91015 22 8.5C22 12.0899 19.0899 15 15.5 15C15.3318 15 15.165 14.9936 15 14.9811"
-            stroke="#000000"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></path>
-          <path
-            d="M8.5 22C4.91015 22 2 19.0899 2 15.5C2 11.9101 4.91015 9 8.5 9C12.0899 9 15 11.9101 15 15.5C15 19.0899 12.0899 22 8.5 22Z"
-            stroke="#000000"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></path>
-          <path
-            d="M22 17C22 18.6569 20.6569 20 19 20H17M17 20L19 18M17 20L19 22"
-            stroke="#000000"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></path>
-          <path
-            d="M2 7C2 5.34315 3.34315 4 5 4H7M7 4L5 6M7 4L5 2"
-            stroke="#000000"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></path>
-        </svg>
-      </a>
-    </footer>
   </body>
 
   <script src="/apps/tahuti/js/groups.js"></script>
   <script>
     // format values
     //
-    const tableBody = document.getElementById("get-balances");
+    const tableBody = document.getElementById("get-reimbursements");
     tableBody.addEventListener("htmx:afterSettle", (event) => {
       const code = document.getElementById("currency").innerText;
       const USD = (value) =>
