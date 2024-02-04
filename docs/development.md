@@ -36,6 +36,7 @@ watch "rsync -zr tahuti/* zod/tahuti"
 |install our %tahuti
 ```
 
+
 ## Debugging
 
 `%dbug` agent wrapper is in use:
@@ -49,23 +50,31 @@ http://localhost:8080/~debug
 
 ### Unit Tests (Hoon)
 
+Unit tests written in Hoon. Those are testing the libraries (`lib`).
+
 To run all tests files:
 
 ```dojo
-|commit %tahuti
 -test /=tahuti=/tests
 ```
 
-### Integration Tests (Python)
+### Unit & Property-Based Tests (Python)
 
-Integration tests are written in Python and are utilizing the `pytest`
-framework. The tests run against tahuti's API on two fake ships (`~zod` and `~nus`).
+Unit and property-based tests written in Python. These test utilize the
+`pytest` and `hypothesis` frameworks. The tests run against `%tahuti`'s API
+on three fake ships (`~zod`, `~nus` and `lus`). Fake ships are managed
+with [pilothouse](https://git.sr.ht/~talfus-laddus/pilothouse).
+
+Prerequisite are:
+
+- Python ^3.11
+- Poetry ^1.7
 
 ```bash
-# Setup Python environment for test framework (pytest)
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+cd tests
+# setup Python environment
+poetry install
+poetry shell
 # Run all tests
 pytest tests
 ```
@@ -74,9 +83,9 @@ pytest tests
 
 There are three agents:
 
-- `%tahuti-ui`: UI agent. Serves front-end (HTML, CSS and HTMX).
+- `%tahuti-ui`: UI agent. Serves front-end (HTML, CSS, JS and HTMX).
 - `%tahuti-api`: REST API agent. Interfaces with front-end via requests with JSON payload.
-- `%tahuti`: Core agent. Manages state (groups and expenses).
+- `%tahuti`: Core agent. Manages state (groups, expenses and subscriptions).
 
 ### %tahuti
 
@@ -87,7 +96,7 @@ Depends on [%mip](https://github.com/urbit/urbit/blob/develop/pkg/landscape/lib/
 Inspired by [%feature](https://docs.urbit.org/userspace/apps/examples/feature)
 Depends on [%schooner](https://github.com/urbit/yard/blob/main/desk/lib/schooner.hoon)
 
-The front-end is build with HTML, CSS and HTMX.
+The front-end is build with HTML, CSS, JS and HTMX.
 HTMX is used to interfaces with the API using JSON encoded request bodies
 (`json-enc` extension) and client side templates (`mustache.json`).
 
