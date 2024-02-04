@@ -1,9 +1,8 @@
 [tool.poetry]
 name = "tahuti"
-version = "0.1.0"
+version = ""
 description = ""
-authors = ["Your Name <you@example.com>"]
-readme = "README.md"
+authors = ["~talfus-laddus"]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -12,7 +11,6 @@ requests = "^2.31.0"
 schema = "^0.7.5"
 hypothesis = "^6.97.5"
 ruff = "^0.2.0"
-
 
 [build-system]
 requires = ["poetry-core"]
