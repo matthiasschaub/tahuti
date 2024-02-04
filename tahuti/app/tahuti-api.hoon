@@ -231,6 +231,7 @@
         state
       ::
           [%apps %tahuti %api %groups @t %expenses @t ~]
+        ~&  >  '%tahuti-api: DELETE /expenses/{eid}'
         =/  gid       (snag 4 `(list @t)`site)
         =/  eid       (snag 6 `(list @t)`site)
         =/  action    [%del-expense gid eid]

@@ -10,17 +10,9 @@ function gid() {
   return parts.pop() || parts.pop();
 }
 
-// extract expense ID from URL
-//
-function eid() {
-  const parts = window.location.href.split("/");
-  return parts.pop() || parts.pop(); // handle potential trailing slash
-}
-
-export { gid, eid };
+export { gid };
 
 window.htmx = require("htmx.org");
 window.Mustache = require("mustache");
 window.currency = require("currency.js");
 window.gid = gid;
-window.eid = eid;

@@ -23,6 +23,12 @@ document.body.addEventListener("htmx:configRequest", (event) => {
       event.detail.path
     }`;
     event.detail.path = site.replace(/\/$/, ""); // without trailing slash
+  } else if (event.detail.elt.id === "delete-expense") {
+    // delete expense
+    const site = `/apps/tahuti/api/groups/${gid()}/expenses/${eid()}${
+      event.detail.path
+    }`;
+    event.detail.path = site.replace(/\/$/, ""); // without trailing slash
   } else {
     // request group
     const site = `/apps/tahuti/api/groups/${gid()}${event.detail.path}`;
