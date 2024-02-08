@@ -19,9 +19,6 @@ See [inbox](inbox.md) for a loosely managed lists of open tasks and planned enha
 You can contribute in various ways. Foremost, you can always reach out
 to me on the network (`~talfus-laddus`). Critic and praise are welcomed
 equally.
-For financial support, you can donate to my Ethereum Address:
-
-`0x Ee09 333c 1a33 2Ba8 dA96 4230 C71C 724A 2F48 aC56`
 
 ## Contact
 
