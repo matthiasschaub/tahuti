@@ -1,6 +1,6 @@
 import * as esbuild from "esbuild";
 
-await esbuild.build({
+let ctx = await esbuild.context({
   entryPoints: [
     "manifest.json",
     "./html/about.html",
@@ -16,6 +16,7 @@ await esbuild.build({
     "./html/settings.html",
     "./css/style.css",
     "./css/print.css",
+    "./svg/circles.svg",
     "./js/index.js",
     "./js/groups.js",
     "./js/expenses.js",
@@ -26,6 +27,9 @@ await esbuild.build({
   entryNames: "[ext]/[name]", // will name the result files by their folder names
   bundle: true,
   minify: true,
-  loader: { ".json": "copy", ".html": "copy" },
+  loader: { ".json": "copy", ".html": "copy", ".svg": "copy" },
   outdir: "../tahuti/app/ui",
 });
+
+await ctx.watch();
+console.log("watching...");

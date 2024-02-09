@@ -1,3 +1,8 @@
+header {
+  position: relative;
+  z-index: 2;
+}
+
 header > nav ul,
 header > nav ol {
   align-content: space-around;

@@ -58,6 +58,7 @@ html {
 
 body {
   /* font-size: 1.0833em; */
+  position: relative;
   font-size: 1em;
   max-width: var(--max-width);
   margin: 0 auto;
@@ -84,6 +85,35 @@ img {
 aside {
   width: 30%;
   float: right;
+}
+
+.overlay {
+  /* cover whole page */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg0_h);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.spinner {
+  display: block;
+  margin: auto;
+  margin-top: var(--vspace-1);
+}
+
+.htmx-indicator {
+  opacity: 0;
+  transition: opacity 500ms ease-in;
+}
+
+.htmx-request .htmx-indicator {
+  opacity: 1;
+}
+
+.htmx-request.htmx-indicator {
+  opacity: 1;
 }
 
 /* small devices (less then 1036.78px) */

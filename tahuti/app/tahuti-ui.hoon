@@ -17,6 +17,7 @@
 /*  html-details              %html  /app/ui/html/details/html
 /*  css-style                 %css   /app/ui/css/style/css
 /*  css-print                 %css   /app/ui/css/print/css
+/*  svg-circles               %svg   /app/ui/svg/circles/svg
 /*  js-index                  %js    /app/ui/js/index/js
 /*  js-groups                 %js    /app/ui/js/groups/js
 /*  js-expenses               %js    /app/ui/js/expenses/js
@@ -133,6 +134,10 @@
           [(send [200 ~ [%css css-style]]) state]
         [%apps %tahuti %css %print ~]
           [(send [200 ~ [%css css-print]]) state]
+        ::  svg
+        ::
+        [%apps %tahuti %svg %circles ~]
+          [(send [200 ~ [%svg svg-circles]]) state]
         ::  javascript
         ::
         [%apps %tahuti %js %index ~]
