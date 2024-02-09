@@ -100,7 +100,7 @@ aside {
 .spinner {
   display: block;
   margin: auto;
-  margin-top: var(--vspace-1);
+  margin-top: var(--vspace-0);
 }
 
 .htmx-indicator {
