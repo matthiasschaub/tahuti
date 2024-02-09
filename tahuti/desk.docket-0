@@ -1,10 +1,10 @@
 :~  title+'Group Expenses (alpha)'
     info+'An expense sharing app'
     color+0xff.fff3
-    image+'https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/512.png'
+    image+'https://raw.githubusercontent.com/matthiasschaub/tahuti/main/tahuti/app/ui/static/images/icons/512.png'
     base+'tahuti'
     site+/apps/tahuti
-    version+[0 0 19]
-    website+'https://git.sr.ht/~talfus-laddus/tahuti'
+    version+[2024 02 09]
+    website+'https://github.com/matthiasschaub/tahuti'
     license+'MIT'
 ==
