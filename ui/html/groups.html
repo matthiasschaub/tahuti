@@ -100,7 +100,7 @@
       <template id="groups-template">
         <!-- iterate over array of members object -->
         {{#.}}
-        <tr onclick="window.location='/apps/tahuti/groups/{{gid}}/expenses';">
+        <tr onclick="loadGroup('{{gid}}')">
           <td>{{title}}</td>
           <td>{{host}}</td>
         </tr>
@@ -139,12 +139,25 @@
     </div>
   </body>
   <script>
-    const element = document.getElementById("get-invites");
-    element.addEventListener("htmx:afterSwap", (event) => {
-      if (element.innerHTML != "") {
-        element.innerHTML =
+    const e = document.getElementById("get-invites");
+    e.addEventListener("htmx:afterSwap", (event) => {
+      if (e.innerHTML != "") {
+        e.innerHTML =
           'You are invited to join another group. See <a href="/apps/tahuti/invites">invites</a>.';
       }
     });
+
+    window.onpageshow = function (event) {
+      if (event.persisted) {
+        const e = document.getElementById("overlay");
+        e.classList.remove("htmx-request");
+      }
+    };
+
+    function loadGroup(gid) {
+      const e = document.getElementById("overlay");
+      e.classList.add("htmx-request");
+      window.location = `/apps/tahuti/groups/${gid}/expenses`;
+    }
   </script>
 </html>
