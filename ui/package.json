@@ -11,7 +11,9 @@
   "license": "MIT",
   "devDependencies": {
     "esbuild": "0.20.0",
-    "eslint": "^8.56.0"
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "3.2.5"
   },
   "dependencies": {
     "currency.js": "^2.0.4",
