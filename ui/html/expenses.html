@@ -50,19 +50,21 @@
         <ul>
           <!-- hrefs are set by request.js -->
           <li>
-            <a href="/apps/tahuti/groups">↜ Groups</a>
+            <a href="/apps/tahuti/groups" onclick="loading()">↜ Groups</a>
           </li>
           <li>
-            <a id="expenses-href" href=""><strong>Expenses</strong></a>
+            <a id="expenses-href" href="" onclick="loading()"
+              ><strong>Expenses</strong></a
+            >
           </li>
           <li>
-            <a id="balances-href" href="">Balances</a>
+            <a id="balances-href" href="" onclick="loading()">Balances</a>
           </li>
           <li>
-            <a id="settings-href" href="">Settings</a>
+            <a id="settings-href" href="" onclick="loading()">Settings</a>
           </li>
           <li>
-            <a id="about-href" href="">About</a>
+            <a id="about-href" href="" onclick="loading()">About</a>
           </li>
         </ul>
       </nav>
@@ -126,7 +128,7 @@
 
   <footer>
     <!-- href is set by request.js -->
-    <a id="add-href" aria-label="Add expense" href="">
+    <a id="add-href" aria-label="Add expense" href="" onclick="loading()">
       <svg
         id="add-btn"
         width="24px"

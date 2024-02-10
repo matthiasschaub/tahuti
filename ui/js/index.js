@@ -10,9 +10,15 @@ function gid() {
   return parts.pop() || parts.pop();
 }
 
-export { gid };
+function loading() {
+  const e = document.getElementById("overlay");
+  e.classList.add("htmx-request");
+}
+
+export { gid, loading };
 
 window.htmx = require("htmx.org");
 window.Mustache = require("mustache");
 window.currency = require("currency.js");
 window.gid = gid;
+window.loading = loading;

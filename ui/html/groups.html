@@ -100,7 +100,9 @@
       <template id="groups-template">
         <!-- iterate over array of members object -->
         {{#.}}
-        <tr onclick="loadGroup('{{gid}}')">
+        <tr
+          onclick="window.location='/apps/tahuti/groups/{{gid}}/expenses'; loading();"
+        >
           <td>{{title}}</td>
           <td>{{host}}</td>
         </tr>
@@ -153,15 +155,5 @@
         e.classList.remove("htmx-request");
       }
     };
-
-    function loading() {
-      const e = document.getElementById("overlay");
-      e.classList.add("htmx-request");
-    }
-
-    function loadGroup(gid) {
-      loading();
-      window.location = `/apps/tahuti/groups/${gid}/expenses`;
-    }
   </script>
 </html>

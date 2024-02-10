@@ -67,7 +67,11 @@
       <img class="spinner" src="/apps/tahuti/svg/circles.svg" />
     </div>
 
-    <div hx-ext="client-side-templates" hx-request="noHeaders" hx-indicator="#overlay">
+    <div
+      hx-ext="client-side-templates"
+      hx-request="noHeaders"
+      hx-indicator="#overlay"
+    >
       <div hx-get="/" hx-trigger="load" mustache-template="title-template">
         <h2 style="opacity: 0">Loading ...</h2>
       </div>

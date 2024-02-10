@@ -71,7 +71,11 @@
     </div>
 
     <h2>Group Expenses</h2>
-    <div hx-ext="client-side-templates" hx-request="noHeaders" hx-indicator="#overlay">
+    <div
+      hx-ext="client-side-templates"
+      hx-request="noHeaders"
+      hx-indicator="#overlay"
+    >
       <div
         hx-get="/apps/tahuti/api/invites"
         hx-trigger="load"
