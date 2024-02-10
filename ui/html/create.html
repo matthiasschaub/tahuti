@@ -66,6 +66,10 @@
       </nav>
     </header>
 
+    <div id="overlay" class="overlay htmx-indicator">
+      <img class="spinner" src="/apps/tahuti/svg/circles.svg" />
+    </div>
+
     <h2>Group Expenses</h2>
 
     <h3>Create new group</h3>
@@ -78,6 +82,7 @@
         hx-vals="js:{gid: self.crypto.randomUUID()}"
         hx-request="noHeaders"
         hx-on::after-request="if(event.detail.successful) this.reset()"
+        hx-indicator="#overlay"
       >
         <label>Titel</label>
         <br />

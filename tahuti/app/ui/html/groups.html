@@ -50,7 +50,7 @@
       <nav aria-label="Global">
         <ul>
           <li>
-            <a href="/apps/tahuti/groups">
+            <a href="/apps/tahuti/groups" onclick="loading()">
               <svg
                 class="svg-ico"
                 width="512"
@@ -71,7 +71,7 @@
       </nav>
     </header>
 
-    <div id="overlay" class="overlay htmx-indicator">
+    <div id="overlay" class="overlay htmx-indicator htmx-request">
       <img class="spinner" src="/apps/tahuti/svg/circles.svg" />
     </div>
 
@@ -108,7 +108,7 @@
       </template>
 
       <footer>
-        <a id="add-href" href="/apps/tahuti/groups/create">
+        <a id="add-href" href="/apps/tahuti/groups/create" onclick="loading()">
           <svg
             id="add-btn"
             width="24px"
@@ -143,7 +143,7 @@
     e.addEventListener("htmx:afterSwap", (event) => {
       if (e.innerHTML != "") {
         e.innerHTML =
-          'You are invited to join another group. See <a href="/apps/tahuti/invites">invites</a>.';
+          'You are invited to join another group. See <a href="/apps/tahuti/invites" onclick="loading()">invites</a>.';
       }
     });
 
@@ -154,9 +154,13 @@
       }
     };
 
-    function loadGroup(gid) {
+    function loading() {
       const e = document.getElementById("overlay");
       e.classList.add("htmx-request");
+    }
+
+    function loadGroup(gid) {
+      loading();
       window.location = `/apps/tahuti/groups/${gid}/expenses`;
     }
   </script>
