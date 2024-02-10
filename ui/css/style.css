@@ -95,12 +95,14 @@ aside {
   background-color: var(--bg0_h);
   z-index: 1;
   pointer-events: none;
+  view-transition-name: overlay;
 }
 
 .spinner {
   display: block;
   margin: auto;
   margin-top: var(--vspace-0);
+  view-transition-name: spinner;
 }
 
 .htmx-indicator {
