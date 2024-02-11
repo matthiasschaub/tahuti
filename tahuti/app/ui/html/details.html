@@ -89,6 +89,7 @@
       id="expense"
       hx-get="/api/groups/{gid_eid}/expenses/{eid}"
       hx-trigger="load"
+      hx-ext="client-side-formats"
       mustache-template="expense-template"
     ></div>
     <template id="expense-template">
@@ -115,7 +116,7 @@
           </tr>
           <tr>
             <th>Time</th>
-            <td id="time">{{date}}</td>
+            <td id="time">{{time}}</td>
           </tr>
           <tr>
             <th>Involves</th>
@@ -146,57 +147,4 @@
     </template>
   </body>
   <script src="/apps/tahuti/js/groups.js"></script>
-  <script>
-    const USD = (value) =>
-      currency(value, {
-        symbol: "$",
-        pattern: `# !`,
-        fromCents: true,
-      });
-    const EUR = (value) =>
-      currency(value, {
-        symbol: "€",
-        decimal: ",",
-        separator: ".",
-        pattern: `# !`,
-        fromCents: true,
-      });
-    const BTC = (value) =>
-      currency(value, {
-        symbol: "₿",
-        decimal: ".",
-        pattern: `# !`,
-        fromCents: true,
-        precision: 8,
-      });
-
-    // format values
-    //
-    const list = document.getElementById("expense");
-    list.addEventListener("htmx:afterSettle", (event) => {
-      date = document.getElementById("date");
-      const dval = new Date(Number(date.innerText));
-      date.innerText = dval.toLocaleDateString();
-
-      time = document.getElementById("time");
-      time.innerText = dval.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-
-      const amount = document.getElementById("amount");
-      const code = document.getElementById("currency").innerText;
-
-      if (code == "EUR") {
-        amount.innerText = EUR(amount.innerText).format();
-      } else if (code == "USD") {
-        amount.innerText = USD(amount.innerText).format();
-      } else if (code == "BTC") {
-        amount.innerText = BTC(amount.innerText).format();
-      } else {
-        <!-- TODO: what to do in this case?-->
-        console.log("currency code not supported.");
-      }
-    });
-  </script>
 </html>

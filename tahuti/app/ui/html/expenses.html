@@ -82,7 +82,6 @@
     ></div>
     <template id="meta-temp">
       <h2>{{title}}</h2>
-      <div id="currency" hidden>{{currency}}</div>
     </template>
 
     <table id="expenses" class="expenses">
@@ -100,6 +99,7 @@
         hx-get="/api/groups/{gid}/expenses"
         hx-trigger="load"
         mustache-template="expenses-template"
+        hx-ext="client-side-formats"
       ></tbody>
     </table>
     <template id="expenses-template">
@@ -140,58 +140,4 @@
     ></a>
   </footer>
   <script src="/apps/tahuti/js/groups.js"></script>
-  <script>
-    // format values
-    //
-    const tableBody = document.getElementById("expenses");
-    tableBody.addEventListener("htmx:afterSettle", (event) => {
-      const code = document.getElementById("currency").innerText;
-      const USD = (value) =>
-        currency(value, {
-          symbol: "$",
-          pattern: `# !`,
-          fromCents: true,
-        });
-      const EUR = (value) =>
-        currency(value, {
-          symbol: "€",
-          decimal: ",",
-          separator: ".",
-          pattern: `# !`,
-          fromCents: true,
-        });
-      const BTC = (value) =>
-        currency(value, {
-          symbol: "₿",
-          decimal: ".",
-          pattern: `# !`,
-          fromCents: true,
-          precision: 8,
-        });
-      for (const row of tableBody.rows) {
-        for (const cell of row.cells) {
-          if (cell.headers == "date") {
-            const date = new Date(Number(cell.innerText));
-            const options = {
-              month: "short",
-              day: "numeric",
-            };
-            cell.innerText = date.toLocaleDateString(undefined, options);
-          }
-          if (cell.headers == "amount") {
-            if (code == "EUR") {
-              cell.innerText = EUR(cell.innerText).format();
-            } else if (code == "USD") {
-              cell.innerText = USD(cell.innerText).format();
-            } else if (code == "BTC") {
-              cell.innerText = BTC(cell.innerText).format();
-            } else {
-              <!-- TODO: what to do in this case?-->
-              console.log("currency code not supported.");
-            }
-          }
-        }
-      }
-    });
-  </script>
 </html>
