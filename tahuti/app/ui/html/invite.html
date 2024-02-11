@@ -41,24 +41,29 @@
     <script src="/apps/tahuti/js/client-side-templates.js"></script>
   </head>
 
-  <body>
+  <body
+    hx-boost="true"
+    hx-ext="client-side-templates"
+    hx-request="noHeaders"
+    hx-indicator="#overlay"
+  >
     <header>
       <nav aria-label="Global">
         <ul>
           <li>
-            <a href="/apps/tahuti/groups">↜ Groups</a>
+            <a href="/groups">↜ Groups</a>
           </li>
           <li>
-            <a id="expenses-href" href="">Expenses</a>
+            <a href="/groups/{gid}/expenses">Expenses</a>
           </li>
           <li>
-            <a id="balances-href" href="">Balances</a>
+            <a href="/groups/{gid}/balances">Balances</a>
           </li>
           <li>
-            <a id="settings-href" href=""><strong>Settings</strong></a>
+            <a href="/groups/{gid}/settings">Settings</a>
           </li>
           <li>
-            <a id="about-href" href="">About</a>
+            <a href="/groups/{gid}/about">About</a>
           </li>
         </ul>
       </nav>
@@ -69,51 +74,49 @@
     </div>
 
     <div
-      hx-ext="client-side-templates"
-      hx-request="noHeaders"
-      hx-indicator="#overlay"
+      hx-get="api/groups/{gid}"
+      hx-trigger="load"
+      mustache-template="title-template"
     >
-      <div hx-get="/" hx-trigger="load" mustache-template="title-template">
-        <h2 style="opacity: 0">Loading ...</h2>
-      </div>
-      <template id="title-template">
-        <h2>{{title}}</h2>
-      </template>
-
-      <h3>Invite people</h3>
-      <fieldset>
-        <form
-          id="put-invitees"
-          hx-put="/invitees"
-          hx-ext="json-enc"
-          hx-swap="none"
-        >
-          <!-- TODO: add validation for valid @p -->
-          <label>Urbit ID</label>
-          <br />
-          <input
-            id="invitee"
-            type="text"
-            name="invitee"
-            aria-label="invitee"
-            placeholder="~zod"
-            required="required"
-          />
-          <br />
-          <button class="button-primary" type="submit" form="put-invitees">
-            Send invite ▸
-          </button>
-          <button
-            class="button-cancel"
-            onclick="window.location.href='/apps/tahuti/groups/' + gid() + '/settings';"
-            type="button"
-            value="Cancel"
-          >
-            Cancel
-          </button>
-        </form>
-      </fieldset>
+      <h2 style="opacity: 0">Loading ...</h2>
     </div>
+    <template id="title-template">
+      <h2>{{title}}</h2>
+    </template>
+
+    <h3>Invite people</h3>
+    <fieldset>
+      <form
+        id="put-invitees"
+        hx-put="/api/groups/{gid}/invitees"
+        hx-ext="json-enc"
+        hx-swap="none"
+      >
+        <!-- TODO: add validation for valid @p -->
+        <label>Urbit ID</label>
+        <br />
+        <input
+          id="invitee"
+          type="text"
+          name="invitee"
+          aria-label="invitee"
+          placeholder="~zod"
+          required="required"
+        />
+        <br />
+        <button class="button-primary" type="submit" form="put-invitees">
+          Send invite ▸
+        </button>
+        <button
+          class="button-cancel"
+          onclick="window.location.href='/apps/tahuti/groups/' + gid() + '/settings';"
+          type="button"
+          value="Cancel"
+        >
+          Cancel
+        </button>
+      </form>
+    </fieldset>
   </body>
 
   <script src="/apps/tahuti/js/groups.js"></script>

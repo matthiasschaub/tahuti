@@ -41,7 +41,7 @@
     <script src="/apps/tahuti/js/client-side-templates.js"></script>
   </head>
 
-  <body>
+  <body hx-boost="true" hx-request="noHeaders" hx-indicator="#overlay">
     <header>
       <nav aria-label="Global">
         <ul>
@@ -83,7 +83,6 @@
         hx-vals="js:{gid: self.crypto.randomUUID()}"
         hx-request="noHeaders"
         hx-on::after-request="if(event.detail.successful) this.reset()"
-        hx-indicator="#overlay"
       >
         <label>Titel</label>
         <br />

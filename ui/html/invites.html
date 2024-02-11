@@ -41,7 +41,12 @@
     <script src="/apps/tahuti/js/client-side-templates.js"></script>
   </head>
 
-  <body>
+  <body
+    hx-boost="true"
+    hx-ext="client-side-templates"
+    hx-request="noHeaders"
+    hx-indicator="#overlay"
+  >
     <header>
       <nav aria-label="Global">
         <ul>
@@ -73,39 +78,33 @@
 
     <h2>Group Expenses</h2>
     <div
-      hx-ext="client-side-templates"
-      hx-request="noHeaders"
-      hx-indicator="#overlay"
-    >
-      <div
-        hx-get="/apps/tahuti/api/invites"
-        hx-trigger="load"
-        mustache-template="invites-template"
-      ></div>
-      <template id="invites-template">
-        {{#.}}
-        <fieldset>
-          <label
-            >You got invited to join <em>{{title}}</em> by
-            <em>{{host}}</em>.</label
+      hx-get="/apps/tahuti/api/invites"
+      hx-trigger="load"
+      mustache-template="invites-template"
+    ></div>
+    <template id="invites-template">
+      {{#.}}
+      <fieldset>
+        <label
+          >You got invited to join <em>{{title}}</em> by
+          <em>{{host}}</em>.</label
+        >
+        <form>
+          <button
+            id="post-join"
+            class="button-primary"
+            hx-post="/apps/tahuti/api/action/join"
+            hx-ext="json-enc"
+            hx-swap="none"
+            hx-vals='{"gid": "{{gid}}", "host": "{{host}}"}'
+            hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups"'
+            type="submit"
           >
-          <form>
-            <button
-              id="post-join"
-              class="button-primary"
-              hx-post="/apps/tahuti/api/action/join"
-              hx-ext="json-enc"
-              hx-swap="none"
-              hx-vals='{"gid": "{{gid}}", "host": "{{host}}"}'
-              hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups"'
-              type="submit"
-            >
-              Join group ▸
-            </button>
-          </form>
-        </fieldset>
-        {{/.}}
-      </template>
-    </div>
+            Join group ▸
+          </button>
+        </form>
+      </fieldset>
+      {{/.}}
+    </template>
   </body>
 </html>

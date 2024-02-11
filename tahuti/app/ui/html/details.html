@@ -33,10 +33,6 @@
       href="/apps/tahuti/manifest.json"
       crossorigin="use-credentials"
     />
-    <link
-      rel="apple-touch-icon"
-      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
-    />
     <!-- /PWA -->
     <link rel="stylesheet" href="/apps/tahuti/css/style.css" />
     <link rel="stylesheet" href="/apps/tahuti/css/print.css" media="print" />
@@ -45,25 +41,29 @@
     <script src="/apps/tahuti/js/client-side-templates.js"></script>
   </head>
 
-  <body>
+  <body
+    hx-boost="true"
+    hx-ext="client-side-templates"
+    hx-request="noHeaders"
+    hx-indicator="#overlay"
+  >
     <header>
       <nav>
         <ul>
-          <!-- hrefs are set by request.js -->
           <li>
-            <a href="/apps/tahuti/groups">↜ Groups</a>
+            <a href="/groups">↜ Groups</a>
           </li>
           <li>
-            <a id="expenses-href" href="">Expenses</a>
+            <a href="/groups/{gid_eid}/expenses">Expenses</a>
           </li>
           <li>
-            <a id="balances-href" href="">Balances</a>
+            <a href="/groups/{gid_eid}/balances">Balances</a>
           </li>
           <li>
-            <a id="settings-href" href="">Settings</a>
+            <a href="/groups/{gid_eid}/settings">Settings</a>
           </li>
           <li>
-            <a id="about-href" href="">About</a>
+            <a href="/groups/{gid_eid}/about">About</a>
           </li>
         </ul>
       </nav>
@@ -74,87 +74,78 @@
     </div>
 
     <div
-      hx-ext="client-side-templates"
-      hx-request="noHeaders"
-      hx-indicator="#overlay"
-    >
-      <div
-        hx-get="/"
-        hx-trigger="load"
-        hx-swap="outerHTML"
-        mustache-template="group-template"
-      >
-        <h2 style="opacity: 0">Loading ...</h2>
-        <div id="currency" hidden></div>
-      </div>
+      hx-get="/api/groups/{gid_eid}"
+      hx-trigger="load"
+      hx-swap="outerHTML"
+      mustache-template="group-template"
+    ></div>
 
-      <template id="group-template">
-        <h2>{{title}}</h2>
-        <div id="currency" hidden>{{currency}}</div>
-      </template>
+    <template id="group-template">
+      <h2>{{title}}</h2>
+      <div id="currency" hidden>{{currency}}</div>
+    </template>
 
-      <div
-        id="expense"
-        hx-get="/"
-        hx-trigger="load"
-        mustache-template="expense-template"
-      ></div>
-      <template id="expense-template">
-        <table class="col-two">
-          <!-- iterate over array of members object -->
-          <thead></thead>
-          <tbody>
-            {{#.}}
-            <tr>
-              <th>For what?</th>
-              <td>{{title}}</td>
-            </tr>
-            <tr>
-              <th>Amount</th>
-              <td id="amount">{{amount}}</td>
-            </tr>
-            <tr>
-              <th>Paid by</th>
-              <td>{{payer}}</td>
-            </tr>
-            <tr>
-              <th>Date</th>
-              <td id="date">{{date}}</td>
-            </tr>
-            <tr>
-              <th>Time</th>
-              <td id="time">{{date}}</td>
-            </tr>
-            <tr>
-              <th>Involves</th>
-              <td>
-                {{#involves}} {{.}} <br />
-                {{/involves}}
-              </td>
-            </tr>
-            {{/.}}
-          </tbody>
-        </table>
-        <fieldset>
-          <form
-            id="delete-expense"
-            hx-delete="/"
-            hx-confirm="Are you sure?"
-            hx-ext="json-enc"
-            hx-swap="none"
-            hx-on::after-request="window.location.pathname = '/apps/tahuti/groups/{{gid}}/expenses'"
-          >
-            Deleting this expense will permanently remove it.
-            <br />
-            <button class="button-cancel" type="submit">
-              Delete this expense ▸
-            </button>
-          </form>
-        </fieldset>
-      </template>
-    </div>
+    <div
+      id="expense"
+      hx-get="/api/groups/{gid_eid}/expenses/{eid}"
+      hx-trigger="load"
+      mustache-template="expense-template"
+    ></div>
+    <template id="expense-template">
+      <table class="col-two">
+        <!-- iterate over array of members object -->
+        <thead></thead>
+        <tbody>
+          {{#.}}
+          <tr>
+            <th>For what?</th>
+            <td>{{title}}</td>
+          </tr>
+          <tr>
+            <th>Amount</th>
+            <td id="amount">{{amount}}</td>
+          </tr>
+          <tr>
+            <th>Paid by</th>
+            <td>{{payer}}</td>
+          </tr>
+          <tr>
+            <th>Date</th>
+            <td id="date">{{date}}</td>
+          </tr>
+          <tr>
+            <th>Time</th>
+            <td id="time">{{date}}</td>
+          </tr>
+          <tr>
+            <th>Involves</th>
+            <td>
+              {{#involves}} {{.}} <br />
+              {{/involves}}
+            </td>
+          </tr>
+          {{/.}}
+        </tbody>
+      </table>
+      <fieldset>
+        <form
+          id="delete-expense"
+          hx-delete="/api/groups/{gid_eid}/expenses/{eid}"
+          hx-confirm="Are you sure?"
+          hx-ext="json-enc"
+          hx-swap="none"
+          hx-on::after-request="window.location.pathname = '/apps/tahuti/groups/{{gid}}/expenses'"
+        >
+          Deleting this expense will permanently remove it.
+          <br />
+          <button class="button-cancel" type="submit">
+            Delete this expense ▸
+          </button>
+        </form>
+      </fieldset>
+    </template>
   </body>
-  <script src="/apps/tahuti/js/expenses.js"></script>
+  <script src="/apps/tahuti/js/groups.js"></script>
   <script>
     const USD = (value) =>
       currency(value, {

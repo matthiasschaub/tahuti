@@ -76,15 +76,7 @@ body {
   vertical-align: middle;
   height: 4em;
   width: 4em;
-}
-
-img {
-  max-width: var(--max-width);
-}
-
-aside {
-  width: 30%;
-  float: right;
+  margin-bottom: -23.2px;
 }
 
 .overlay {

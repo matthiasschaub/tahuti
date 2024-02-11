@@ -21,4 +21,6 @@ window.htmx = require("htmx.org");
 window.Mustache = require("mustache");
 window.currency = require("currency.js");
 window.gid = gid;
+window.eid = eid;
+window.gid_eid = gid_eid;
 window.loading = loading;

@@ -17,6 +17,7 @@
 /*  html-details              %html  /app/ui/html/details/html
 /*  css-style                 %css   /app/ui/css/style/css
 /*  css-print                 %css   /app/ui/css/print/css
+/*  svg-tahuti                %svg   /app/ui/svg/tahuti/svg
 /*  svg-circles               %svg   /app/ui/svg/circles/svg
 /*  js-index                  %js    /app/ui/js/index/js
 /*  js-groups                 %js    /app/ui/js/groups/js
@@ -136,6 +137,8 @@
           [(send [200 ~ [%css css-print]]) state]
         ::  svg
         ::
+        [%apps %tahuti %svg %tahuti ~]
+          [(send [200 ~ [%svg svg-tahuti]]) state]
         [%apps %tahuti %svg %circles ~]
           [(send [200 ~ [%svg svg-circles]]) state]
         ::  javascript

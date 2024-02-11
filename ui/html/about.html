@@ -33,35 +33,37 @@
       href="/apps/tahuti/manifest.json"
       crossorigin="use-credentials"
     />
-    <link
-      rel="apple-touch-icon"
-      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
-    />
     <!-- /PWA -->
     <link rel="stylesheet" href="/apps/tahuti/css/style.css" />
     <link rel="stylesheet" href="/apps/tahuti/css/print.css" media="print" />
     <script src="/apps/tahuti/js/index.js"></script>
+    <script src="/apps/tahuti/js/json-enc.js"></script>
     <script src="/apps/tahuti/js/client-side-templates.js"></script>
   </head>
 
-  <body>
+  <body
+    hx-boost="true"
+    hx-ext="client-side-templates"
+    hx-request="noHeaders"
+    hx-indicator="#overlay"
+  >
     <header>
       <nav aria-label="Global">
         <ul>
           <li>
-            <a href="/apps/tahuti/groups">↜ Groups</a>
+            <a href="/groups">↜ Groups</a>
           </li>
           <li>
-            <a id="expenses-href" href="">Expenses</a>
+            <a href="/groups/{gid}/expenses">Expenses</a>
           </li>
           <li>
-            <a id="balances-href" href="">Balances</a>
+            <a href="/groups/{gid}/balances">Balances</a>
           </li>
           <li>
-            <a id="settings-href" href="">Settings</a>
+            <a href="/groups/{gid}/settings">Settings</a>
           </li>
           <li>
-            <a id="about-href" href=""><strong>About</strong></a>
+            <a href="/groups/{gid}/about">About</a>
           </li>
         </ul>
       </nav>
@@ -72,58 +74,56 @@
     </div>
 
     <div
-      hx-ext="client-side-templates"
-      hx-request="noHeaders"
-      hx-indicator="#overlay"
-    >
-      <div
-        hx-get="/"
-        hx-trigger="load"
-        mustache-template="group-template"
-      ></div>
-      <template id="group-template">
-        <h2>{{title}}</h2>
-      </template>
+      hx-get="/api/groups/{gid}"
+      hx-trigger="load"
+      mustache-template="group-template"
+    ></div>
+    <template id="group-template">
+      <h2>{{title}}</h2>
+    </template>
 
-      <blockquote>
-        <a href="https://www.createwcare.com/">Create w/ care</a>
-      </blockquote>
+    <blockquote>
+      <a href="https://www.createwcare.com/">Create w/ care</a>
+    </blockquote>
 
-      <h3>About</h3>
-      <table class="col-two">
-        <thead></thead>
-        <tbody>
-          <tr>
-            <th>Version</th>
-            <td hx-get="/apps/tahuti/api/version" hx-trigger="load"></td>
-          </tr>
-          <tr>
-            <th>Developer</th>
-            <td>
-              <a href="/apps/talk/dm/~talfus-laddus" target="_blank"
-                >~talfus-laddus</a
-              >
-            </td>
-          </tr>
-          <tr>
-            <th>Code Repository</th>
-            <td>
-              <a href="https://git.sr.ht/~talfus-laddus/tahuti">Sourcehut</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <template id="version-template">
-        <td>{{#.}} {{.}} {{/.}}</td>
-      </template>
+    <h3>About</h3>
+    <table class="col-two">
+      <thead></thead>
+      <tbody>
+        <tr>
+          <th>Version</th>
+          <td hx-get="/api/version" hx-trigger="load"></td>
+        </tr>
+        <tr>
+          <th>Developer</th>
+          <td>
+            <a
+              href="/apps/talk/dm/~talfus-laddus"
+              target="_blank"
+              hx-boost="false"
+              >~talfus-laddus</a
+            >
+          </td>
+        </tr>
+        <tr>
+          <th>Code Repository</th>
+          <td>
+            <a href="https://git.sr.ht/~talfus-laddus/tahuti">Sourcehut</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <template id="version-template">
+      <td>{{#.}} {{.}} {{/.}}</td>
+    </template>
 
-      <h3>Contact</h3>
-      <p>
-        Please reach out to
-        <a href="/apps/talk/dm/~talfus-laddus" target="_blank">~talfus-laddus</a
-        >, to report any bug, to give feedbag or to receive support.
-      </p>
-    </div>
+    <h3>Contact</h3>
+    <p>
+      Please reach out to
+      <a href="/apps/talk/dm/~talfus-laddus" target="_blank" hx-boot="false"
+        >~talfus-laddus</a
+      >, to report any bug, to give feedbag or to receive support.
+    </p>
   </body>
 
   <script src="/apps/tahuti/js/groups.js"></script>

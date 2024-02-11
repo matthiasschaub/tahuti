@@ -17,6 +17,7 @@ let ctx = await esbuild.context({
     "./css/style.css",
     "./css/print.css",
     "./svg/circles.svg",
+    "./svg/tahuti.svg",
     "./js/index.js",
     "./js/groups.js",
     "./js/expenses.js",

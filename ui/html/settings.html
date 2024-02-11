@@ -33,10 +33,6 @@
       href="/apps/tahuti/manifest.json"
       crossorigin="use-credentials"
     />
-    <link
-      rel="apple-touch-icon"
-      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
-    />
     <!-- /PWA -->
     <link rel="stylesheet" href="/apps/tahuti/css/style.css" />
     <link rel="stylesheet" href="/apps/tahuti/css/print.css" media="print" />
@@ -45,24 +41,29 @@
     <script src="/apps/tahuti/js/client-side-templates.js"></script>
   </head>
 
-  <body>
+  <body
+    hx-boost="true"
+    hx-ext="client-side-templates"
+    hx-request="noHeaders"
+    hx-indicator="#overlay"
+  >
     <header>
       <nav aria-label="Global">
         <ul>
           <li>
-            <a href="/apps/tahuti/groups">↜ Groups</a>
+            <a href="/groups">↜ Groups</a>
           </li>
           <li>
-            <a id="expenses-href" href="">Expenses</a>
+            <a href="/groups/{gid}/expenses">Expenses</a>
           </li>
           <li>
-            <a id="balances-href" href="">Balances</a>
+            <a href="/groups/{gid}/balances">Balances</a>
           </li>
           <li>
-            <a id="settings-href" href=""><strong>Settings</strong></a>
+            <a href="/groups/{gid}/settings"><strong>Settings</strong></a>
           </li>
           <li>
-            <a id="about-href" href="">About</a>
+            <a href="/groups/{gid}/about">About</a>
           </li>
         </ul>
       </nav>
@@ -73,126 +74,120 @@
     </div>
 
     <div
-      hx-ext="client-side-templates"
-      hx-request="noHeaders"
-      hx-indicator="#overlay"
-    >
+      hx-get="/api/groups/{gid}"
+      hx-trigger="load"
+      mustache-template="group-template"
+    ></div>
+    <template id="group-template">
+      <h2>{{title}}</h2>
+      <h3>Details</h3>
+      <table class="col-two">
+        <thead></thead>
+        <tbody>
+          <tr>
+            <th>Title</th>
+            <td>{{title}}</td>
+          </tr>
+          <tr>
+            <th>Currency</th>
+            <td>{{currency}}</td>
+          </tr>
+          <tr>
+            <th>Host</th>
+            <td>{{host}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </template>
+
+    <h3>Members</h3>
+    <ul>
       <div
-        hx-get="/"
+        id="get-members"
+        hx-get="/api/groups/{gid}/members"
         hx-trigger="load"
-        mustache-template="group-template"
+        hx-swap="outerHTML"
+        mustache-template="members-template"
       ></div>
-      <template id="group-template">
-        <h2>{{title}}</h2>
-        <h3>Details</h3>
-        <table class="col-two">
-          <thead></thead>
-          <tbody>
-            <tr>
-              <th>Title</th>
-              <td>{{title}}</td>
-            </tr>
-            <tr>
-              <th>Currency</th>
-              <td>{{currency}}</td>
-            </tr>
-            <tr>
-              <th>Host</th>
-              <td>{{host}}</td>
-            </tr>
-          </tbody>
-        </table>
+      <template id="members-template">
+        {{#.}}
+        <li>{{.}}</li>
+        {{/.}}
       </template>
+      <div
+        id="get-invitees"
+        hx-get="/api/groups/{gid}/invitees"
+        hx-trigger="load"
+        mustache-template="invitees-template"
+      ></div>
+      <template id="invitees-template">
+        {{#.}}
+        <li>{{.}} <small>(invited)</small></li>
+        {{/.}}
+      </template>
+    </ul>
 
-      <h3>Members</h3>
-      <ul>
-        <div
-          id="get-members"
-          hx-get="/members"
-          hx-trigger="load"
-          hx-swap="outerHTML"
-          mustache-template="members-template"
-        ></div>
-        <template id="members-template">
-          {{#.}}
-          <li>{{.}}</li>
-          {{/.}}
-        </template>
-        <div
-          id="get-invitees"
-          hx-get="/invitees"
-          hx-trigger="load"
-          mustache-template="invitees-template"
-        ></div>
-        <template id="invitees-template">
-          {{#.}}
-          <li>{{.}} <small>(invited)</small></li>
-          {{/.}}
-        </template>
-      </ul>
-
-      <fieldset>
-        <!-- Action is set by request-group.js -->
-        <form id="btn-invite" action="">
-          Invite other people on Urbit to this group.
-          <br />
-          <button class="button-primary" type="submit">Invite people ▸</button>
-        </form>
-      </fieldset>
-
-      <!-- TODO -->
-      <!-- <h3>Leave group</h3> -->
-      <!-- <fieldset> -->
-      <!--     <!-1- hx-delete="/" -1-> -->
-      <!--     <!-1- TODO -1-> -->
-      <!--     <form -->
-      <!--         id="delete-groups" -->
-      <!--         hx-confirm="Are you sure?" -->
-      <!--         hx-ext="json-enc" -->
-      <!--         hx-swap="none" -->
-      <!--         hx-vals="js:{gid: gid()}" -->
-      <!--         hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'" -->
-      <!--     > -->
-      <!--         Leaving this group will not remove any expenses you have been -->
-      <!--         involved with. -->
-      <!--         <!-1- Group host can not leave a group. -1-> -->
-      <!--         <br /> -->
-      <!--         <button class="button-cancel" type="submit"> -->
-      <!--             Leave this group -->
-      <!--         </button> -->
-      <!--     </form> -->
-      <!-- </fieldset> -->
-
-      <h3>Export expenses</h3>
-      <fieldset>
-        Download all expenses of this group as JSON.
+    <fieldset>
+      <!-- Action is set by request-group.js -->
+      <form id="btn-invite" action="">
+        Invite other people on Urbit to this group.
         <br />
-        <button
-          class="button-primary"
-          onclick="window.location.pathname = '/apps/tahuti/api/groups/' + gid() + '/expenses'"
-        >
-          Export expenses ▸
-        </button>
-      </fieldset>
+        <button class="button-primary" type="submit">Invite people ▸</button>
+      </form>
+    </fieldset>
 
-      <h3>Delete group</h3>
-      <fieldset>
-        <form
-          id="delete-groups"
-          hx-delete="/"
-          hx-confirm="Are you sure?"
-          hx-ext="json-enc"
-          hx-swap="none"
-          hx-vals="js:{gid: gid()}"
-          hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'"
-        >
-          Deleting this group will permanently remove all expenses and members.
-          This action can only be performed by the group host.
-          <br />
-          <button class="button-cancel" type="submit">Delete this group</button>
-        </form>
-      </fieldset>
-    </div>
+    <!-- TODO -->
+    <!-- <h3>Leave group</h3> -->
+    <!-- <fieldset> -->
+    <!--     <!-1- hx-delete="/" -1-> -->
+    <!--     <!-1- TODO -1-> -->
+    <!--     <form -->
+    <!--         id="delete-groups" -->
+    <!--         hx-confirm="Are you sure?" -->
+    <!--         hx-ext="json-enc" -->
+    <!--         hx-swap="none" -->
+    <!--         hx-vals="js:{gid: gid()}" -->
+    <!--         hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'" -->
+    <!--     > -->
+    <!--         Leaving this group will not remove any expenses you have been -->
+    <!--         involved with. -->
+    <!--         <!-1- Group host can not leave a group. -1-> -->
+    <!--         <br /> -->
+    <!--         <button class="button-cancel" type="submit"> -->
+    <!--             Leave this group -->
+    <!--         </button> -->
+    <!--     </form> -->
+    <!-- </fieldset> -->
+
+    <h3>Export expenses</h3>
+    <fieldset>
+      Download all expenses of this group as JSON.
+      <br />
+      <button
+        class="button-primary"
+        onclick="window.location.pathname = '/apps/tahuti/api/groups/' + gid() + '/expenses'"
+      >
+        Export expenses ▸
+      </button>
+    </fieldset>
+
+    <h3>Delete group</h3>
+    <fieldset>
+      <form
+        id="delete-groups"
+        hx-delete="/api/groups/{gid}"
+        hx-confirm="Are you sure?"
+        hx-ext="json-enc"
+        hx-swap="none"
+        hx-vals="js:{gid: gid()}"
+        hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'"
+      >
+        Deleting this group will permanently remove all expenses and members.
+        This action can only be performed by the group host.
+        <br />
+        <button class="button-cancel" type="submit">Delete this group</button>
+      </form>
+    </fieldset>
   </body>
 
   <script src="/apps/tahuti/js/groups.js"></script>
