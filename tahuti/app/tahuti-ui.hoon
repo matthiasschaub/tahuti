@@ -153,8 +153,6 @@
           [(send [200 ~ [%js js-client-side-templates]]) state]
         [%apps %tahuti %js %groups ~]
           [(send [200 ~ [%js js-groups]]) state]
-        [%apps %tahuti %js %expenses ~]
-          [(send [200 ~ [%js js-expenses]]) state]
         ::  json
         [%apps %tahuti %manifest ~]
           [(send [200 ~ [%json json-manifest]]) state]

@@ -16,6 +16,7 @@ htmx.defineExtension("client-side-formats", {
       currency(value, {
         symbol: "$",
         pattern: `# !`,
+        negativePattern: `-# !`,
         fromCents: true,
       });
     const EUR = (value) =>
@@ -24,6 +25,7 @@ htmx.defineExtension("client-side-formats", {
         decimal: ",",
         separator: ".",
         pattern: `# !`,
+        negativePattern: `-# !`,
         fromCents: true,
       });
     const BTC = (value) =>
@@ -31,53 +33,75 @@ htmx.defineExtension("client-side-formats", {
         symbol: "₿",
         decimal: ".",
         pattern: `# !`,
+        negativePattern: `-# !`,
         fromCents: true,
         precision: 8,
       });
-
     var data = JSON.parse(text);
-    if (!Array.isArray(data)) {
-      const date = new Date(Number(data.date));
-      data.date = date.toLocaleDateString();
-      const options = {
-        hour: "2-digit",
-        minute: "2-digit",
-      };
-      data.time = date.toLocaleTimeString([], options);
+    switch (elt.id) {
+      case "expenses": {
+        for (let i = 0; i < data.length; i++) {
+          const date = new Date(Number(data[i].date));
+          const options = {
+            month: "short",
+            day: "numeric",
+          };
+          data[i].date = date.toLocaleDateString(undefined, options);
 
-      const amount = data.amount;
-      const currency = data.currency;
+          const amount = data[i].amount;
+          const currency = data[i].currency;
 
-      if (currency == "EUR") {
-        data.amount = EUR(amount).format();
-      } else if (currency == "USD") {
-        data.amount = USD(amount).format();
-      } else if (currency == "BTC") {
-        data.amount = BTC(amount).format();
-      } else {
-        throw "Currency code not suppored: " + currency;
+          if (currency == "EUR") {
+            data[i].amount = EUR(amount).format();
+          } else if (currency == "USD") {
+            data[i].amount = USD(amount).format();
+          } else if (currency == "BTC") {
+            data[i].amount = BTC(amount).format();
+          } else {
+            throw "Currency code not suppored: " + currency;
+          }
+        }
+        break;
       }
-    } else {
-      for (let i = 0; i < data.length; i++) {
-        const date = new Date(Number(data[i].date));
+      case "details": {
+        const date = new Date(Number(data.date));
         const options = {
-          month: "short",
-          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
         };
-        data[i].date = date.toLocaleDateString(undefined, options);
+        data.date = date.toLocaleDateString();
+        data.time = date.toLocaleTimeString([], options);
 
-        const amount = data[i].amount;
-        const currency = data[i].currency;
+        const amount = data.amount;
+        const currency = data.currency;
 
         if (currency == "EUR") {
-          data[i].amount = EUR(amount).format();
+          data.amount = EUR(amount).format();
         } else if (currency == "USD") {
-          data[i].amount = USD(amount).format();
+          data.amount = USD(amount).format();
         } else if (currency == "BTC") {
-          data[i].amount = BTC(amount).format();
+          data.amount = BTC(amount).format();
         } else {
           throw "Currency code not suppored: " + currency;
         }
+        break;
+      }
+      case "balances":
+      case "reimbursements": {
+        for (let i = 0; i < data.length; i++) {
+          const currency = "EUR";
+          const amount = data[i].amount;
+          if (currency == "EUR") {
+            data[i].amount = EUR(amount).format();
+          } else if (currency == "USD") {
+            data[i].amount = USD(amount).format();
+          } else if (currency == "BTC") {
+            data[i].amount = BTC(amount).format();
+          } else {
+            throw "Currency code not suppored: " + currency;
+          }
+        }
+        break;
       }
     }
     return JSON.stringify(data);

@@ -86,13 +86,13 @@
     </template>
 
     <div
-      id="expense"
+      id="details"
       hx-get="/api/groups/{gid_eid}/expenses/{eid}"
       hx-trigger="load"
       hx-ext="client-side-formats"
-      mustache-template="expense-template"
+      mustache-template="details-template"
     ></div>
-    <template id="expense-template">
+    <template id="details-template">
       <table class="col-two">
         <!-- iterate over array of members object -->
         <thead></thead>

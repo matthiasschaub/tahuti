@@ -86,7 +86,7 @@
       <div id="currency" hidden>{{currency}}</div>
     </template>
     <blockquote>Who owes to whom?</blockquote>
-    <table id="reimbursements" class="reimbursements col-two">
+    <table class="reimbursements col-two">
       <thead>
         <tr hidden>
           <th></th>
@@ -94,9 +94,10 @@
         </tr>
       </thead>
       <tbody
-        id="get-reimbursements"
+        id="reimbursements"
         hx-get="/api/groups/{gid}/reimbursements"
         hx-trigger="load"
+        hx-ext="client-side-formats"
         mustache-template="reimbursements-template"
       ></tbody>
     </table>
@@ -113,53 +114,4 @@
   </body>
 
   <script src="/apps/tahuti/js/groups.js"></script>
-  <script>
-    // format values
-    //
-    const tableBody = document.getElementById("get-reimbursements");
-    tableBody.addEventListener("htmx:afterSettle", (event) => {
-      const code = document.getElementById("currency").innerText;
-      const USD = (value) =>
-        currency(value, {
-          symbol: "$",
-          pattern: `# !`,
-          negativePattern: `-# !`,
-          fromCents: true,
-        });
-      const EUR = (value) =>
-        currency(value, {
-          symbol: "€",
-          decimal: ",",
-          separator: ".",
-          pattern: `# !`,
-          negativePattern: `-# !`,
-          fromCents: true,
-        });
-      const BTC = (value) =>
-        currency(value, {
-          symbol: "₿",
-          pattern: `# !`,
-          negativePattern: `-# !`,
-          fromCents: true,
-          precision: 8,
-        });
-      for (const row of tableBody.rows) {
-        for (const cell of row.cells) {
-          if (cell.headers == "amount") {
-            console.log(cell.innerText);
-            if (code == "EUR") {
-              cell.innerText = EUR(cell.innerText).format();
-            } else if (code == "USD") {
-              cell.innerText = USD(cell.innerText).format();
-            } else if (code == "BTC") {
-              cell.innerText = BTC(cell.innerText).format();
-            } else {
-              <!-- TODO: what to do in this case?-->
-              console.log("currency code not supported.");
-            }
-          }
-        }
-      }
-    });
-  </script>
 </html>
