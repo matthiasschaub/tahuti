@@ -53,15 +53,21 @@
     hx-indicator="#overlay"
   >
     <header>
-      <nav aria-label="Global">
+      <!-- invisible header bar to keep spacing consistent -->
+      <nav style="opacity: 0; pointer-events: none">
         <ul>
-          <li>
-            <a href="/apps/tahuti/groups">
-              <img class="svg-ico" src="/apps/tahuti/svg/tahuti.svg" />
-            </a>
-          </li>
+          <li>Groups</li>
+          <li>Expenses</li>
+          <li>Balances</li>
+          <li>Settings</li>
+          <li>About</li>
         </ul>
       </nav>
+      <div class="header-icon">
+        <a href="/apps/tahuti/groups">
+          <img class="svg-ico" src="/apps/tahuti/svg/tahuti.svg" />
+        </a>
+      </div>
     </header>
 
     <div id="overlay" class="overlay htmx-indicator htmx-request">
@@ -88,7 +94,12 @@
     <template id="groups-template">
       <!-- iterate over array of members object -->
       {{#.}}
-      <tr onclick="window.location='/apps/tahuti/groups/{{gid}}/expenses';">
+      <tr
+        hx-get="/groups/{{gid}}/expenses"
+        hx-target="body"
+        hx-trigger="click"
+        hx-push-url="true"
+      >
         <td>{{title}}</td>
         <td>{{host}}</td>
       </tr>

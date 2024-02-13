@@ -21,7 +21,6 @@
 /*  svg-circles               %svg   /app/ui/svg/circles/svg
 /*  js-index                  %js    /app/ui/js/index/js
 /*  js-groups                 %js    /app/ui/js/groups/js
-/*  js-expenses               %js    /app/ui/js/expenses/js
 /*  js-json-enc               %js    /app/ui/js/json-enc/js
 /*  js-path-deps              %js    /app/ui/js/path-deps/js
 /*  js-client-side-templates  %js    /app/ui/js/client-side-templates/js

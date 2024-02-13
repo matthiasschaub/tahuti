@@ -106,7 +106,10 @@
       <!-- iterate over array of members object -->
       {{#.}}
       <tr
-        onclick="window.location='/apps/tahuti/groups/{{gid}}/expenses/{{eid}}';"
+        hx-get="/groups/{{gid}}/expenses/{{eid}}"
+        hx-target="body"
+        hx-trigger="click"
+        hx-push-url="true"
       >
         <td>{{title}}</td>
         <td headers="amount">{{amount}}</td>

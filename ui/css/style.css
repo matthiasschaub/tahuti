@@ -71,6 +71,13 @@ body {
   padding-bottom: var(--vspace-1);
 }
 
+header > .header-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
 .svg-ico {
   display: inline;
   vertical-align: middle;
