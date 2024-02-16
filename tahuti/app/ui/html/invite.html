@@ -34,11 +34,11 @@
       crossorigin="use-credentials"
     />
     <!-- /PWA -->
-    <link rel="stylesheet" href="/apps/tahuti/css/style.css" />
-    <link rel="stylesheet" href="/apps/tahuti/css/print.css" media="print" />
-    <script src="/apps/tahuti/js/index.js"></script>
-    <script src="/apps/tahuti/js/json-enc.js"></script>
-    <script src="/apps/tahuti/js/client-side-templates.js"></script>
+    <link rel="stylesheet" href="/apps/tahuti/style.css" />
+    <link rel="stylesheet" href="/apps/tahuti/print.css" media="print" />
+    <script src="/apps/tahuti/index.js"></script>
+    <script src="/apps/tahuti/json-enc.js"></script>
+    <script src="/apps/tahuti/client-side-templates.js"></script>
   </head>
 
   <body
@@ -119,7 +119,7 @@
     </fieldset>
   </body>
 
-  <script src="/apps/tahuti/js/groups.js"></script>
+  <script src="/apps/tahuti/helper.js"></script>
   <script>
     const form = document.getElementById("put-invitees");
     form.addEventListener("htmx:afterRequest", (event) => {

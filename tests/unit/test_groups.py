@@ -12,6 +12,7 @@ def group_schema():
             "title": str,
             "host": str,
             "currency": str,
+            "public": bool,
         },
     )
 
@@ -24,7 +25,13 @@ def groups_schema(group_schema):
 
 @pytest.mark.parametrize("host", (None, "", "foo", "~nus"))
 def test_groups_put_invalid_host(host, zod):
-    group = {"gid": str(uuid4()), "title": "foo", "host": host, "currency": "EUR"}
+    group = {
+        "gid": str(uuid4()),
+        "title": "foo",
+        "host": host,
+        "currency": "EUR",
+        "public": False,
+    }
     url = "/apps/tahuti/api/groups"
 
     # PUT /groups
@@ -97,7 +104,7 @@ def test_groups_delete_unauthorized(zod, nus, gid, group):
     url = f"/apps/tahuti/api/groups/{gid}"
     response = nus.delete(url)
     # TODO: should be 403 Forbidden
-    assert response.status_code == 200
+    assert response.status_code == 500
 
     # GET /groups
     url = "/apps/tahuti/api/groups"

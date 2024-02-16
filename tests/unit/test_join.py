@@ -6,7 +6,7 @@ def test_join(zod, nus, gid, group, invitee):
         "host": group["host"],
         "gid": gid,
     }
-    url = "/apps/tahuti/api/action/join"
+    url = "/apps/tahuti/api/join"
     response = nus.post(url, json=join)
     assert response.status_code == 200
 
@@ -66,6 +66,6 @@ def test_join_not_allowed(nus, gid, group):
         "host": group["host"],
         "gid": gid,
     }
-    url = "/apps/tahuti/api/action/join"
+    url = "/apps/tahuti/api/join"
     response = nus.post(url, json=join)
     assert response.status_code == 200

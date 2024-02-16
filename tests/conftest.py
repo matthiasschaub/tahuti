@@ -42,7 +42,13 @@ def gid_module():
 
 @pytest.fixture(scope="module")
 def group_module(zod, gid_module) -> dict:
-    group = {"gid": gid_module, "title": "assembly", "host": "~zod", "currency": "EUR"}
+    group = {
+        "gid": gid_module,
+        "title": "assembly",
+        "host": "~zod",
+        "currency": "EUR",
+        "public": False,
+    }
     url = "/apps/tahuti/api/groups"
     zod.put(url, json=group)
     return group
@@ -70,7 +76,7 @@ def member_module(nus, gid_module, group_module, invitee_module) -> str:
         "host": group_module["host"],
         "gid": gid_module,
     }
-    url = "/apps/tahuti/api/action/join"
+    url = "/apps/tahuti/api/join"
     nus.post(url, json=join)
     return "~nus"
 
@@ -81,7 +87,7 @@ def member_lus_module(lus, gid_module, group_module, invitee_lus_module) -> str:
         "host": group_module["host"],
         "gid": gid_module,
     }
-    url = "/apps/tahuti/api/action/join"
+    url = "/apps/tahuti/api/join"
     lus.post(url, json=join)
     return "~lus"
 
@@ -114,7 +120,13 @@ def gid():
 
 @pytest.fixture
 def group(zod, gid) -> dict:
-    group = {"gid": gid, "title": "assembly", "host": "~zod", "currency": "EUR"}
+    group = {
+        "gid": gid,
+        "title": "assembly",
+        "host": "~zod",
+        "currency": "EUR",
+        "public": False,
+    }
     url = "/apps/tahuti/api/groups"
     zod.put(url, json=group)
     return group
@@ -143,7 +155,7 @@ def member(nus, gid, group, invitee) -> str:
         "host": group["host"],
         "gid": gid,
     }
-    url = "/apps/tahuti/api/action/join"
+    url = "/apps/tahuti/api/join"
     nus.post(url, json=join)
     return "~nus"
 
@@ -155,7 +167,7 @@ def member_lus(lus, gid, group, invitee_lus) -> str:
         "host": group["host"],
         "gid": gid,
     }
-    url = "/apps/tahuti/api/action/join"
+    url = "/apps/tahuti/api/join"
     lus.post(url, json=join)
     return "~nus"
 

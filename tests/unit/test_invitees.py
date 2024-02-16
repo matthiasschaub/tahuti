@@ -54,6 +54,7 @@ def test_invitees_single(zod, nus, gid):
         "currency": "EUR",
         "title": "assembly",
         "gid": gid,
+        "public": False,
     } in result
 
 

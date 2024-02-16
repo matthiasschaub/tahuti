@@ -34,6 +34,7 @@
         :-  'title'     [%s title.g]
         :-  'host'      [%s (scot %p host.g)]
         :-  'currency'  [%s currency.g]
+        :-  'public'    [%b public.g]
       ==
     ::  (groups as json array)
     ::
@@ -123,12 +124,13 @@
   ++  group
     ::  input same as group but without host
     ::
-    ^-  $-(json [=gid =title =currency])
+    ^-  $-(json [=gid =title =currency =public])
     %-  ot:dejs:format                                     :: obj as tuplejsonre
     :~
       :-  %gid        so:dejs:format
       :-  %title      so:dejs:format
       :-  %currency   so:dejs:format
+      :-  %public     bo:dejs:format
     ==
   ++  expense
     ^-  $-(json ^expense)

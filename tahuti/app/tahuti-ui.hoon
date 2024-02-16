@@ -1,3 +1,4 @@
+/-  *tahuti
 /+  dbug
 /+  verb
 /+  default-agent
@@ -37,7 +38,7 @@
 =*  state  -
 ::  debug wrap
 ::
-%+  verb  %.n
+%+  verb   %.n
 %-  agent:dbug
 ::  agent core
 ::
@@ -79,6 +80,7 @@
   ?+  mark  (on-poke:default mark vase)
     ::
       %handle-http-request
+    ~&  >  '%tahuti-ui: handle http request'
     =^  cards  state
       (handle-http !<([@ta =inbound-request:eyre] vase))
     [cards this]
@@ -86,76 +88,97 @@
   ++  handle-http
     |=  [eyre-id=@ta =inbound-request:eyre]
     ^-  [(list card) $_(state)]
-    =/  ,request-line:server
+    =/  hx-req=?
+      ?~  (get-header:http 'hx-request' header-list.request.inbound-request)
+        %.n
+      %.y
+    =/  request-line
       (parse-request-line:server url.request.inbound-request)
+    =+  site=site.request-line
+    =+  ext=ext.request-line
     =+  send=(cury response:schooner eyre-id)
-    ::  redirect if not authenticated
-    ::
-    ?.  authenticated.inbound-request
-      [(send [302 ~ [%login-redirect './apps/tahuti']]) state]
-    ::  crash if request is not from our ship
-    ::
-    ?>  =(src.bowl our.bowl)
-    ?+  method.request.inbound-request
-      [(send [405 ~ [%plain "405 - Method Not Allowed"]]) state]
-      ::
-        %'GET'
-      ?+  site
-          [(send [404 ~ [%plain "404 - Not Found"]]) state]
-        ::  html
-        ::
-        [%apps %tahuti ~]
-          [(send [200 ~ [%html html-groups]]) state]
-        [%apps %tahuti %groups ~]
-          [(send [200 ~ [%html html-groups]]) state]
-        [%apps %tahuti %invites ~]
-          [(send [200 ~ [%html html-invites]]) state]
-        [%apps %tahuti %groups %create ~]
-          [(send [200 ~ [%html html-create]]) state]
-        [%apps %tahuti %groups @t %expenses ~]
-          [(send [200 ~ [%html html-expenses]]) state]
-        [%apps %tahuti %groups @t %balances ~]
-          [(send [200 ~ [%html html-balances]]) state]
-        [%apps %tahuti %groups @t %reimbursements ~]
-          [(send [200 ~ [%html html-reimbursements]]) state]
-        [%apps %tahuti %groups @t %settings ~]
-          [(send [200 ~ [%html html-settings]]) state]
-        [%apps %tahuti %groups @t %about ~]
-          [(send [200 ~ [%html html-about]]) state]
-        [%apps %tahuti %groups @t %add ~]
-          [(send [200 ~ [%html html-add]]) state]
-        [%apps %tahuti %groups @t %invite ~]
-          [(send [200 ~ [%html html-invite]]) state]
-        [%apps %tahuti %groups @t %expenses @t ~]
-          [(send [200 ~ [%html html-details]]) state]
-        ::  css
-        ::
-        [%apps %tahuti %css %style ~]
-          [(send [200 ~ [%css css-style]]) state]
-        [%apps %tahuti %css %print ~]
-          [(send [200 ~ [%css css-print]]) state]
-        ::  svg
-        ::
-        [%apps %tahuti %svg %tahuti ~]
-          [(send [200 ~ [%svg svg-tahuti]]) state]
-        [%apps %tahuti %svg %circles ~]
-          [(send [200 ~ [%svg svg-circles]]) state]
-        ::  javascript
-        ::
-        [%apps %tahuti %js %index ~]
-          [(send [200 ~ [%js js-index]]) state]
-        [%apps %tahuti %js %json-enc ~]
-          [(send [200 ~ [%js js-json-enc]]) state]
-        [%apps %tahuti %js %path-deps ~]
-          [(send [200 ~ [%js js-path-deps]]) state]
-        [%apps %tahuti %js %client-side-templates ~]
-          [(send [200 ~ [%js js-client-side-templates]]) state]
-        [%apps %tahuti %js %groups ~]
-          [(send [200 ~ [%js js-groups]]) state]
-        ::  json
-        [%apps %tahuti %manifest ~]
-          [(send [200 ~ [%json json-manifest]]) state]
+    =+  auth=authenticated.inbound-request
+    =/  public=?
+      ?:  (gte (lent site) 4)
+        =/  gid   (snag 3 site)
+        =/  path  /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/[gid]/noun
+        =,  .^([=group =acl =reg =led] %gx path)
+        public.group
+      ?~  ext
+        %.n
+      ?+  +.ext  %.n
+        %css   %.y
+        %js    %.y
+        %svg   %.y
+        %json  %.y
       ==
+    ?.  ?|(auth public)
+      ?.  hx-req
+        [(send [302 ~ [%login-redirect './apps/tahuti']]) state]
+      [(send [200 ~ [%hx-login-redirect './apps/tahuti']]) state]
+    ?.  =(method.request.inbound-request %'GET')
+      [(send [405 ~ [%plain "405 - Method Not Allowed"]]) state]
+    ?+  site  [(send [404 ~ [%plain "404 - Not Found"]]) state]
+      ::
+      [%apps %tahuti ~]
+        [(send [302 ~ [%redirect './tahuti/groups']]) state]
+      ::  css
+      ::
+      [%apps %tahuti %style ~]
+        [(send [200 ~ [%css css-style]]) state]
+      [%apps %tahuti %print ~]
+        [(send [200 ~ [%css css-print]]) state]
+      ::  svg
+      ::
+      [%apps %tahuti %tahuti ~]
+        [(send [200 ~ [%svg svg-tahuti]]) state]
+      [%apps %tahuti %circles ~]
+        [(send [200 ~ [%svg svg-circles]]) state]
+      ::  js
+      ::
+      [%apps %tahuti %index ~]
+        [(send [200 ~ [%js js-index]]) state]
+      [%apps %tahuti %helper ~]
+        [(send [200 ~ [%js js-groups]]) state]
+      [%apps %tahuti %json-enc ~]
+        [(send [200 ~ [%js js-json-enc]]) state]
+      [%apps %tahuti %path-deps ~]
+        [(send [200 ~ [%js js-path-deps]]) state]
+      [%apps %tahuti %client-side-templates ~]
+        [(send [200 ~ [%js js-client-side-templates]]) state]
+      ::  json
+      ::
+      [%apps %tahuti %manifest ~]
+        [(send [200 ~ [%json json-manifest]]) state]
+      ::  html
+      ::
+      [%apps %tahuti @t ~]
+        ?.  auth
+          ?.  hx-req
+            [(send [302 ~ [%login-redirect './apps/tahuti']]) state]
+          [(send [200 ~ [%hx-login-redirect './apps/tahuti']]) state]
+        =/  endpoint  (snag 2 `(list @t)`site)
+        ?+  endpoint  [(send [404 ~ [%plain "404 - Not Found"]]) state]
+          %groups   [(send [200 ~ [%html html-groups]]) state]
+          %invites  [(send [200 ~ [%html html-invites]]) state]
+          %create   [(send [200 ~ [%html html-create]]) state]
+        ==
+      ::
+      [%apps %tahuti %groups @t @t ~]
+        =/  endpoint  (snag 4 `(list @t)`site)
+        ?+  endpoint  [(send [404 ~ [%plain "404 - Not Found"]]) state]
+          %expenses        [(send [200 ~ [%html html-expenses]]) state]
+          %balances        [(send [200 ~ [%html html-balances]]) state]
+          %reimbursements  [(send [200 ~ [%html html-reimbursements]]) state]
+          %settings        [(send [200 ~ [%html html-settings]]) state]
+          %about           [(send [200 ~ [%html html-about]]) state]
+          %add             [(send [200 ~ [%html html-add]]) state]
+          %invite          [(send [200 ~ [%html html-invite]]) state]
+        ==
+      ::
+      [%apps %tahuti %groups @t %expenses @t ~]
+        [(send [200 ~ [%html html-details]]) state]
+      ::
     ==
   --
 ++  on-arvo

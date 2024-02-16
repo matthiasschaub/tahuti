@@ -26,9 +26,10 @@
     [%png p=@]
     [%svg p=@]
     ::
+    [%hx-login-redirect l=cord]
     [%login-redirect l=cord]
-    [%none ~]
     [%redirect o=cord]
+    [%none ~]
   ==
 ::
 +$  http-status  @ud
@@ -76,6 +77,14 @@
     :_  `(as-octs:mimes:html p.resource)
     :-  http-status
     (weld headers ['content-type'^'image/svg+xml']~)
+    ::
+      %hx-login-redirect
+    =+  %^  cat  3
+      '/~/login?redirect='
+    l.resource
+    :_  ~
+    :-  http-status
+    (weld headers [['HX-Redirect' -]]~)
     ::
       %login-redirect
     =+  %^  cat  3

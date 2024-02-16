@@ -122,7 +122,7 @@ GET   api/groups/{uuid}/expenses         // Get all expenses of a group  (JSON a
 PUT   api/groups/{uuid}/expenses         // Add or edit an expense       (JSON object)
 GET   api/groups/{uuid}/expenses/{uuid}  // Get an expense               (JSON object)
 
-POST  api/groups/action/join             // Join a group                 (JSON object)
+POST  api/groups/join             // Join a group                 (JSON object)
 
 GET   api/groups/{uuid}/balances         // Get balances of a group      (JSON array)
 GET   api/groups/{uuid}/reimbursements   // Get reimburesements          (JSON array)

@@ -11,16 +11,25 @@
 +$  versioned-state
   $%  state-0
       state-1
+      state-2
   ==
 +$  state-0
   $:  %0
-      =groups
+      groups=groups-0
       =regs
       =acls
       =leds
   ==
 +$  state-1
   $:  %1
+      invites=invites-0
+      groups=groups-0
+      =regs
+      =acls
+      =leds
+  ==
++$  state-2
+  $:  %2
       =invites
       =groups
       =regs        :: registers
@@ -28,16 +37,18 @@
       =leds        :: ledgers
   ==
 --
-=|  state-1
+=|  state-2
 =*  state  -
 ::  debug wrap
 ::
-%+  verb  %.n
+%+  verb   %.n
 %-  agent:dbug
 ::  agent core
 ::
 ^-  agent:gall
 |_  =bowl:gall
+::  aliases
+::
 +*  this  .
     default  ~(. (default-agent this %.n) bowl)
 ::
@@ -55,13 +66,44 @@
 ++  on-load
   |=  =vase
   ^-  [(list card) $_(this)]
-  =/  old  !<(versioned-state vase)
-  :-  ^-  (list card)
-      ~
-  ?-  -.old
-    %1  this(state old)
-    %0  this(state [%1 ~ groups.old regs.old acls.old leds.old])
-  ==
+  |^  =+  !<(old=versioned-state vase)
+      :-  ^-  (list card)
+          ~
+      %=  this
+        state  (build-state old)
+      ==
+  ++  build-state
+    |=  old=versioned-state
+    :: ^-  state-2
+    ^-  state-2
+    |-
+    |^  ?-  -.old
+          %2  old
+          %1  $(old (state-1-to-2 old))
+          %0  $(old (state-0-to-1 old))
+        ==
+    ++  state-0-to-1
+      |=  =state-0
+      ^-  state-1
+      [%1 ~ groups.state-0 regs.state-0 acls.state-0 leds.state-0]
+    ++  state-1-to-2
+      |=  =state-1
+      ^-  state-2
+      |^  :*
+            %2
+            (~(run by invites.state-1) set-access)
+            (~(run by groups.state-1) set-access)
+            regs.state-1
+            acls.state-1
+            leds.state-1
+          ==
+      ++  set-access
+        |=  =group-0
+        ^-  group
+        [gid.group-0 title.group-0 host.group-0 currency.group-0 %.n]
+      --
+    --
+  --
 ++  on-poke
   ~&  >  '%tahuti (on-poke)'
   |=  [=mark =vase]

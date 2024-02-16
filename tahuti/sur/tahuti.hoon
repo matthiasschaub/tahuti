@@ -9,17 +9,24 @@
 +$  title     @t
 +$  host      @p
 +$  currency  @tas
++$  public    ?
 +$  group
   $:
     =gid
     =title
     =host
-    =currency          ::  three-letter ISO code
+    =currency          ::  three-letter ISO codesur
+    =public
   ==
 ::
 ::    register of members (reg)
 ::    access-control list (acl)
 ::
++$  member
+  $?
+    @tas
+    @p
+  ==
 +$  register  (set @p)
 +$  reg       (set @p)
 +$  acl       (set @p)
@@ -100,4 +107,16 @@
       [%acl =gid =acl]
       [%reg =gid =reg]
     ==
+::
+::    old
+::
++$  group-0
+  $:
+    =gid
+    =title
+    =host
+    =currency
+  ==
++$  groups-0   (map gid group-0)
++$  invites-0  (map gid group-0)
 --
