@@ -44,9 +44,16 @@ document.body.addEventListener("htmx:configRequest", (event) => {
   event.detail.path = site.replace(/\/$/, ""); // without trailing slash
 });
 
-const btnInvite = document.getElementById("btn-invite");
-if (btnInvite != null) {
-  btnInvite.action = `/groups/${gid()}/invite`;
-}
+document.body.addEventListener("htmx:responseError", function (evt) {
+  if (evt.detail.xhr) {
+    alert(event.detail.xhr.response);
+  } else {
+    // Unspecified failure, usually caused by network error
+    console.error("Unexpected htmx error", evt.detail);
+    alert(
+      "Unexpected error, check your connection and try to refresh the page.",
+    );
+  }
+});
 
 export { gid, eid, gid_eid };

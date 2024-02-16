@@ -41,12 +41,7 @@
     <script src="/apps/tahuti/client-side-templates.js"></script>
   </head>
 
-  <body
-    hx-boost="true"
-    hx-ext="client-side-templates"
-    hx-request="noHeaders"
-    hx-indicator="#overlay"
-  >
+  <body hx-boost="true" hx-ext="client-side-templates" hx-indicator="#overlay">
     <header>
       <nav aria-label="Global">
         <ul>
@@ -92,7 +87,7 @@
       <tbody>
         <tr>
           <th>Version</th>
-          <td hx-get="/api/version" hx-trigger="load"></td>
+          <td hx-get="/api/groups/{gid}/version" hx-trigger="load"></td>
         </tr>
         <tr>
           <th>Developer</th>

@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <title>Group Expenses</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,91 +9,133 @@
     <!-- PWA -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Group Expenses" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <link rel="apple-touch-icon"
-        href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/180.png" />
-    <link rel="icon" href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/16.png"
-        sizes="16x16" />
-    <link rel="icon" href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
-        sizes="any" type="image/svg+xml" />
-    <link rel="manifest" href="/apps/tahuti/manifest.json" crossorigin="use-credentials" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/180.png"
+    />
+    <link
+      rel="icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icons/16.png"
+      sizes="16x16"
+    />
+    <link
+      rel="icon"
+      href="https://git.sr.ht/~talfus-laddus/tahuti/blob/main/tahuti/app/ui/static/images/icon.svg"
+      sizes="any"
+      type="image/svg+xml"
+    />
+    <link
+      rel="manifest"
+      href="/apps/tahuti/manifest.json"
+      crossorigin="use-credentials"
+    />
     <!-- /PWA -->
     <link rel="stylesheet" href="/apps/tahuti/style.css" />
     <link rel="stylesheet" href="/apps/tahuti/print.css" media="print" />
     <script src="/apps/tahuti/index.js"></script>
     <script src="/apps/tahuti/json-enc.js"></script>
     <script src="/apps/tahuti/client-side-templates.js"></script>
-</head>
+  </head>
 
-<body hx-boost="true" hx-ext="client-side-templates" hx-indicator="#overlay">
+  <body hx-boost="true" hx-ext="client-side-templates" hx-indicator="#overlay">
     <header>
-        <nav>
-            <ul>
-                <!-- hrefs are set by request.js -->
-                <li>
-                    <a href="/groups">↜ Groups</a>
-                </li>
-                <li>
-                    <a href="/groups/{gid}/expenses"><strong>Expenses</strong></a>
-                </li>
-                <li>
-                    <a href="/groups/{gid}/balances">Balances</a>
-                </li>
-                <li>
-                    <a href="/groups/{gid}/settings">Settings</a>
-                </li>
-                <li>
-                    <a href="/groups/{gid}/about">About</a>
-                </li>
-            </ul>
-        </nav>
+      <nav>
+        <ul>
+          <!-- hrefs are set by request.js -->
+          <li>
+            <a href="/groups">↜ Groups</a>
+          </li>
+          <li>
+            <a href="/groups/{gid}/expenses"><strong>Expenses</strong></a>
+          </li>
+          <li>
+            <a href="/groups/{gid}/balances">Balances</a>
+          </li>
+          <li>
+            <a href="/groups/{gid}/settings">Settings</a>
+          </li>
+          <li>
+            <a href="/groups/{gid}/about">About</a>
+          </li>
+        </ul>
+      </nav>
     </header>
 
     <div id="overlay" class="overlay htmx-indicator htmx-request">
-        <img class="spinner" src="/apps/tahuti/circles.svg" />
+      <img class="spinner" src="/apps/tahuti/circles.svg" />
     </div>
 
-    <div hx-get="/api/groups/{gid}" hx-trigger="load" hx-swap="outerHTML" mustache-template="meta-temp"></div>
+    <div
+      hx-get="/api/groups/{gid}"
+      hx-trigger="load"
+      hx-swap="outerHTML"
+      mustache-template="meta-temp"
+    ></div>
     <template id="meta-temp">
-        <h2>{{title}}</h2>
+      <h2>{{title}}</h2>
     </template>
 
     <table id="expenses" class="expenses">
-        <thead>
-            <tr>
-                <th>For what?</th>
-                <th id="amount">Amount</th>
-                <th>Paid by</th>
-                <th id="date">Date</th>
-            </tr>
-        </thead>
-        <!-- TODO: path-deps delay:5s does not work. Only first path-deps is triggered.-->
-        <tbody id="expenses" hx-get="/api/groups/{gid}/expenses" hx-trigger="load" mustache-template="expenses-template"
-            hx-ext="client-side-formats"></tbody>
+      <thead>
+        <tr>
+          <th>For what?</th>
+          <th id="amount">Amount</th>
+          <th>Paid by</th>
+          <th id="date">Date</th>
+        </tr>
+      </thead>
+      <!-- TODO: path-deps delay:5s does not work. Only first path-deps is triggered.-->
+      <tbody
+        id="expenses"
+        hx-get="/api/groups/{gid}/expenses"
+        hx-trigger="load"
+        mustache-template="expenses-template"
+        hx-ext="client-side-formats"
+      ></tbody>
     </table>
     <template id="expenses-template">
-        <!-- iterate over array of members object -->
-        {{#.}}
-        <tr hx-get="/groups/{{gid}}/expenses/{{eid}}" hx-target="body" hx-trigger="click" hx-push-url="true">
-            <td>{{title}}</td>
-            <td headers="amount">{{amount}}</td>
-            <td>{{payer}}</td>
-            <td headers="date">{{date}}</td>
-        </tr>
-        {{/.}}
+      <!-- iterate over array of members object -->
+      {{#.}}
+      <tr
+        hx-get="/groups/{{gid}}/expenses/{{eid}}"
+        hx-target="body"
+        hx-trigger="click"
+        hx-push-url="true"
+      >
+        <td>{{title}}</td>
+        <td headers="amount">{{amount}}</td>
+        <td>{{payer}}</td>
+        <td headers="date">{{date}}</td>
+      </tr>
+      {{/.}}
     </template>
-</body>
+  </body>
 
-<footer>
+  <footer>
     <!-- href is set by request.js -->
     <a aria-label="Add expense" href="/groups/{gid}/add">
-        <svg id="add-btn" width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24" fill="#fffff3"
-            xmlns="http://www.w3.org/2000/svg" color="#000000">
-            <path
-                d="M22 14V8.5M6 13V6a3 3 0 013-3h5M16.992 4h3m3 0h-3m0 0V1m0 3v3M12 21H6a4 4 0 010-8h12a4 4 0 104 4v-3"
-                stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-        </svg></a>
-</footer>
-<script src="/apps/tahuti/helper.js"></script>
-
+      <svg
+        id="add-btn"
+        width="24px"
+        height="24px"
+        stroke-width="1.5"
+        viewBox="0 0 24 24"
+        fill="#fffff3"
+        xmlns="http://www.w3.org/2000/svg"
+        color="#000000"
+      >
+        <path
+          d="M22 14V8.5M6 13V6a3 3 0 013-3h5M16.992 4h3m3 0h-3m0 0V1m0 3v3M12 21H6a4 4 0 010-8h12a4 4 0 104 4v-3"
+          stroke="#000000"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        ></path></svg
+    ></a>
+  </footer>
+  <script src="/apps/tahuti/helper.js"></script>
 </html>

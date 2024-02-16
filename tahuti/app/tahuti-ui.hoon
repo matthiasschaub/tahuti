@@ -121,7 +121,9 @@
     ?+  site  [(send [404 ~ [%plain "404 - Not Found"]]) state]
       ::
       [%apps %tahuti ~]
-        [(send [302 ~ [%redirect './tahuti/groups']]) state]
+        ?.  hx-req
+          [(send [302 ~ [%login-redirect './apps/tahuti']]) state]
+        [(send [200 ~ [%hx-login-redirect './apps/tahuti']]) state]
       ::  css
       ::
       [%apps %tahuti %style ~]
@@ -173,7 +175,12 @@
           %settings        [(send [200 ~ [%html html-settings]]) state]
           %about           [(send [200 ~ [%html html-about]]) state]
           %add             [(send [200 ~ [%html html-add]]) state]
-          %invite          [(send [200 ~ [%html html-invite]]) state]
+          %invite
+            ?.  auth
+              ?.  hx-req
+                [(send [302 ~ [%login-redirect './apps/tahuti']]) state]
+              [(send [200 ~ [%hx-login-redirect './apps/tahuti']]) state]
+            [(send [200 ~ [%html html-invite]]) state]
         ==
       ::
       [%apps %tahuti %groups @t %expenses @t ~]

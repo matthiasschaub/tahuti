@@ -46,11 +46,7 @@
     <script src="/apps/tahuti/client-side-templates.js"></script>
   </head>
 
-  <body
-    hx-boost="true"
-    hx-ext="client-side-templates"
-    hx-indicator="#overlay"
-  >
+  <body hx-boost="true" hx-ext="client-side-templates" hx-indicator="#overlay">
     <header>
       <!-- invisible header bar to keep spacing consistent -->
       <nav style="opacity: 0; pointer-events: none">
@@ -127,7 +123,8 @@
         </svg>
       </a>
       <p
-        hx-get="/apps/tahuti/api/invites"
+        id="get-invites"
+        hx-get="/api/invites"
         hx-trigger="load"
         mustache-template="invites-template"
       ></p>

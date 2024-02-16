@@ -41,12 +41,7 @@
     <script src="/apps/tahuti/client-side-templates.js"></script>
   </head>
 
-  <body
-    hx-boost="true"
-    hx-ext="client-side-templates"
-    hx-request="noHeaders"
-    hx-indicator="#overlay"
-  >
+  <body hx-boost="true" hx-ext="client-side-templates" hx-indicator="#overlay">
     <header>
       <nav aria-label="Global">
         <ul>
@@ -133,11 +128,17 @@
 
     <fieldset>
       <!-- Action is set by request-group.js -->
-      <form id="btn-invite" action="/groups/{gid}/invite">
-        Invite other people on Urbit to this group.
-        <br />
-        <button class="button-primary" type="submit">Invite people ▸</button>
-      </form>
+      Invite other people on Urbit to this group.
+      <br />
+      <button
+        class="button-primary"
+        hx-get="/groups/{gid}/invite"
+        hx-target="body"
+        hx-trigger="click"
+        hx-push-url="true"
+      >
+        Invite people ▸
+      </button>
     </fieldset>
 
     <!-- TODO -->
@@ -184,8 +185,8 @@
         hx-ext="json-enc"
         hx-swap="none"
         hx-vals="js:{gid: gid()}"
-        hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'"
       >
+        <!-- hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'" -->
         Deleting this group will permanently remove all expenses and members.
         This action can only be performed by the group host.
         <br />
@@ -194,5 +195,5 @@
     </fieldset>
   </body>
 
-  <script src="/apps/tahuti/js/helper.js"></script>
+  <script src="/apps/tahuti/helper.js"></script>
 </html>

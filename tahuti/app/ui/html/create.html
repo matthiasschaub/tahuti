@@ -41,7 +41,7 @@
     <script src="/apps/tahuti/client-side-templates.js"></script>
   </head>
 
-  <body hx-boost="true" hx-request="noHeaders" hx-indicator="#overlay">
+  <body hx-boost="true" hx-indicator="#overlay">
     <header>
       <nav aria-label="Global">
         <ul>
@@ -80,7 +80,7 @@
         hx-put="/apps/tahuti/api/groups"
         hx-ext="json-enc"
         hx-swap="none"
-        hx-vals="js:{gid: self.crypto.randomUUID(), public: false}"
+        hx-vals="js:{gid: self.crypto.randomUUID(), public: true}"
         hx-request="noHeaders"
         hx-on::after-request="if(event.detail.successful) this.reset()"
       >

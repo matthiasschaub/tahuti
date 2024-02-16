@@ -91,9 +91,6 @@
         =/  endpoint  (snag 3 `(list @t)`site)
         ?+  endpoint  [(send [404 ~ [%plain "404 - Not Found"]]) state]
           ::
-            %version
-          [(send [200 ~ [%json (version:enjs '2024-02-16.1')]]) state]
-          ::
             %invites
           =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/invites/noun
           =/  invites   .^(invites %gx path)
@@ -121,6 +118,9 @@
         =,  .^([=group =acl =reg =led] %gx path)
         ?+  endpoint
           [(send [404 ~ [%plain "404 - Not Found"]]) state]
+          ::
+            %version
+          [(send [200 ~ [%json (version:enjs '2024-02-16.1')]]) state]
           ::
             %members
           =/  members   (~(int in reg) acl)
@@ -221,9 +221,13 @@
       ?+  site  [(send [404 ~ [%plain "404 - Not Found"]]) state]
         ::
           [%apps %tahuti %api %groups @t ~]
-        ?.  auth
-          [(send [401 ~ [%plain "401 - Unauthorized"]]) state]
         =/  gid        (snag 4 `(list @t)`site)
+        =/  path  /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/[gid]/noun
+        =,  .^([=group =acl =reg =led] %gx path)
+        ?.  auth
+          [(send [401 ~ [%plain "Unauthorized"]]) state]
+        ?.  =(our.bowl host.group)
+          [(send [403 ~ [%plain "Forbidden"]]) state]
         =/  action    [%del-group gid]
         :-  ^-  (list card)
           %+  snoc

@@ -41,17 +41,12 @@
     <script src="/apps/tahuti/client-side-templates.js"></script>
   </head>
 
-  <body
-    hx-boost="true"
-    hx-ext="client-side-templates"
-    hx-request="noHeaders"
-    hx-indicator="#overlay"
-  >
+  <body hx-boost="true" hx-ext="client-side-templates" hx-indicator="#overlay">
     <header>
       <nav aria-label="Global">
         <ul>
           <li>
-            <a href="/apps/tahuti/groups">
+            <a href="/groups">
               <svg
                 class="svg-ico"
                 width="512"
@@ -78,7 +73,7 @@
 
     <h2>Group Expenses</h2>
     <div
-      hx-get="/apps/tahuti/api/invites"
+      hx-get="/api/invites"
       hx-trigger="load"
       mustache-template="invites-template"
     ></div>
@@ -93,10 +88,10 @@
           <button
             id="post-join"
             class="button-primary"
-            hx-post="/apps/tahuti/api/action/join"
+            hx-post="/api/join"
             hx-ext="json-enc"
             hx-swap="none"
-            hx-vals='{"gid": "{{gid}}", "host": "{{host}}"}'
+            hx-vals='{"gid": "{{gid}}", "host": "{{host}}", "public": "{{public}}"}'
             hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups"'
             type="submit"
           >
@@ -106,5 +101,6 @@
       </fieldset>
       {{/.}}
     </template>
+    <script src="/apps/tahuti/helper.js"></script>
   </body>
 </html>

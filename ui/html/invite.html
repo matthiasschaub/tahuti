@@ -41,12 +41,7 @@
     <script src="/apps/tahuti/client-side-templates.js"></script>
   </head>
 
-  <body
-    hx-boost="true"
-    hx-ext="client-side-templates"
-    hx-request="noHeaders"
-    hx-indicator="#overlay"
-  >
+  <body hx-boost="true" hx-ext="client-side-templates" hx-indicator="#overlay">
     <header>
       <nav aria-label="Global">
         <ul>
@@ -70,11 +65,11 @@
     </header>
 
     <div id="overlay" class="overlay htmx-indicator htmx-request">
-      <img class="spinner" src="/apps/tahuti/svg/circles.svg" />
+      <img class="spinner" src="/apps/tahuti/circles.svg" />
     </div>
 
     <div
-      hx-get="api/groups/{gid}"
+      hx-get="/api/groups/{gid}"
       hx-trigger="load"
       mustache-template="title-template"
     >
