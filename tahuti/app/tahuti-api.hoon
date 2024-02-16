@@ -92,7 +92,7 @@
         ?+  endpoint  [(send [404 ~ [%plain "404 - Not Found"]]) state]
           ::
             %version
-          [(send [200 ~ [%json (version:enjs '2024-02-13.1')]]) state]
+          [(send [200 ~ [%json (version:enjs '2024-02-16.1')]]) state]
           ::
             %invites
           =/  path      /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/invites/noun
