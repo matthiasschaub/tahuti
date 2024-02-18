@@ -120,7 +120,7 @@
           [(send [404 ~ [%plain "404 - Not Found"]]) state]
           ::
             %version
-          [(send [200 ~ [%json (version:enjs '2024-02-18.1')]]) state]
+          [(send [200 ~ [%json (version:enjs '2024-02-18.2')]]) state]
           ::
             %members
           =/  aclmod    `(set @tas)`(~(run in acl) |=(=@p `@tas`(scot %p p)))
