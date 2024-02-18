@@ -86,6 +86,7 @@
         hx-put="/api/groups/{gid}/invitees"
         hx-ext="json-enc"
         hx-swap="none"
+        hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups/" + gid() + "/settings";'
       >
         <!-- TODO: add validation for valid @p -->
         <label>Urbit ID</label>
@@ -115,12 +116,4 @@
   </body>
 
   <script src="/apps/tahuti/helper.js"></script>
-  <script>
-    const form = document.getElementById("put-invitees");
-    form.addEventListener("htmx:afterRequest", (event) => {
-      if (event.detail.successful) {
-        window.location.pathname = "/apps/tahuti/groups/" + gid() + "/settings";
-      }
-    });
-  </script>
 </html>

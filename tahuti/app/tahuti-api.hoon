@@ -120,21 +120,23 @@
           [(send [404 ~ [%plain "404 - Not Found"]]) state]
           ::
             %version
-          [(send [200 ~ [%json (version:enjs '2024-02-16.1')]]) state]
+          [(send [200 ~ [%json (version:enjs '2024-02-16.2')]]) state]
           ::
             %members
-          =/  members   (~(int in reg) acl)
-          =.  members   (~(put in members) host.group)
-          [(send [200 ~ [%json (ships:enjs members)]]) state]
+          =/  aclmod    `(set @tas)`(~(run in acl) |=(=@p `@tas`(scot %p p)))
+          =/  members   (~(int in reg) aclmod)
+          =.  members   (~(put in reg) `@tas`(scot %p host.group))
+          [(send [200 ~ [%json (members:enjs members)]]) state]
           ::
             %castoffs
-          =/  members   (~(put in reg) host.group)
-          =/  castoff   (~(int in members) acl)
-          [(send [200 ~ [%json (ships:enjs castoff)]]) state]
+          =/  aclmod    `(set @tas)`(~(run in acl) |=(=@p `@tas`(scot %p p)))
+          =/  castoff   (~(int in reg) aclmod)
+          [(send [200 ~ [%json (members:enjs castoff)]]) state]
             ::
             %invitees
-          =/  invitees  (~(dif in acl) reg)
-          [(send [200 ~ [%json (ships:enjs invitees)]]) state]
+          =/  aclmod    `(set @tas)`(~(run in acl) |=(=@p `@tas`(scot %p p)))
+          =/  invitees  (~(dif in aclmod) reg)
+          [(send [200 ~ [%json (members:enjs invitees)]]) state]
           ::
             %expenses
           =/  val       ~(val by led)
@@ -171,6 +173,9 @@
           [(send [401 ~ [%plain "401 - Unauthorized"]]) state]
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
         =,  (group:dejs content)
+        ?:  ?|(=(title '') =(title ' '))
+          [(send [422 ~ [%plain "422 - Unprocessable Entity"]]) state]
+        :: ?<  (sane ...)
         =/  action    [%add-group [gid title host=our.bowl currency public]]
         :-  ^-  (list card)
           %+  snoc
@@ -181,10 +186,25 @@
           [%apps %tahuti %api %groups @t %invitees ~]
         ?.  auth
           [(send [401 ~ [%plain "401 - Unauthorized"]]) state]
-        =/  gid       (snag 4 `(list @t)`site)
-        =/  content   (need (de:json:html q.u.body.request.inbound-request))
-        =/  invitee   (invitee:dejs content)
-        =/  action    [%allow gid invitee]
+        =/  gid      (snag 4 `(list @t)`site)
+        =/  content  (need (de:json:html q.u.body.request.inbound-request))
+        =/  invitee  (invitee:dejs content)
+        =/  action   [%allow gid invitee]
+        :-  ^-  (list card)
+          %+  snoc
+            (send [200 ~ [%plain "ok"]])
+          [%pass ~ %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
+        state
+        ::
+          [%apps %tahuti %api %groups @t %members ~]
+        ?.  auth
+          [(send [401 ~ [%plain "401 - Unauthorized"]]) state]
+        =/  gid      (snag 4 `(list @t)`site)
+        =/  content  (need (de:json:html q.u.body.request.inbound-request))
+        =/  member   (member:dejs content)
+        ?:  ?|(=(member '') =(member ' '))
+          [(send [422 ~ [%plain "422 - Unprocessable Entity"]]) state]
+        =/  action  [%add-member gid member]
         :-  ^-  (list card)
           %+  snoc
             (send [200 ~ [%plain "ok"]])
@@ -208,6 +228,8 @@
         =/  gid       (snag 4 `(list @t)`site)
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
         =/  expense   (expense:dejs content)
+        ?:  ?|(=(title.expense '') =(title.expense ' '))
+          [(send [422 ~ [%plain "422 - Unprocessable Entity"]]) state]
         =/  action    [%add-expense gid expense]
         :-  ^-  (list card)
           %+  snoc

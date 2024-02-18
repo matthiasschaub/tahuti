@@ -185,6 +185,7 @@
         hx-ext="json-enc"
         hx-swap="none"
         hx-vals="js:{gid: gid()}"
+        hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups"'
       >
         <!-- hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'" -->
         Deleting this group will permanently remove all expenses and members.

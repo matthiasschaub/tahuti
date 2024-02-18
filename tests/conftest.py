@@ -133,6 +133,20 @@ def group(zod, gid) -> dict:
 
 
 @pytest.fixture
+def group_public(zod, gid) -> dict:
+    group = {
+        "gid": gid,
+        "title": "assembly",
+        "host": "~zod",
+        "currency": "EUR",
+        "public": True,
+    }
+    url = "/apps/tahuti/api/groups"
+    zod.put(url, json=group)
+    return group
+
+
+@pytest.fixture
 def invitee(zod, gid, group) -> str:
     """Based on `group`. Adds invitee."""
     url = f"/apps/tahuti/api/groups/{gid}/invitees"

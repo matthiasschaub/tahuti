@@ -8,36 +8,8 @@
 ::
 |%
 +$  card  card:agent:gall
-+$  versioned-state
-  $%  state-0
-      state-1
-      state-2
-  ==
-+$  state-0
-  $:  %0
-      groups=groups-0
-      =regs
-      =acls
-      =leds
-  ==
-+$  state-1
-  $:  %1
-      invites=invites-0
-      groups=groups-0
-      =regs
-      =acls
-      =leds
-  ==
-+$  state-2
-  $:  %2
-      =invites
-      =groups
-      =regs        :: registers
-      =acls        :: access-control lists
-      =leds        :: ledgers
-  ==
 --
-=|  state-2
+=|  state-3
 =*  state  -
 ::  debug wrap
 ::
@@ -74,11 +46,11 @@
       ==
   ++  build-state
     |=  old=versioned-state
-    :: ^-  state-2
-    ^-  state-2
+    ^-  state-3
     |-
     |^  ?-  -.old
-          %2  old
+          %3  old
+          %2  $(old (state-2-to-3 old))
           %1  $(old (state-1-to-2 old))
           %0  $(old (state-0-to-1 old))
         ==
@@ -101,6 +73,41 @@
         |=  =group-0
         ^-  group
         [gid.group-0 title.group-0 host.group-0 currency.group-0 %.n]
+      --
+    ++  state-2-to-3
+      |=  =state-2
+      ^-  state-3
+      |^  :*
+            %3
+            invites.state-2
+            groups.state-2
+            (~(run by regs.state-2) reg-0-to-1)
+            acls.state-2
+            (~(run by leds.state-2) led-0-to-1)
+          ==
+      ++  reg-0-to-1
+        |=  =reg-0
+        ^-  reg
+        (~(run in reg-0) member-0-to-1)
+      ++  led-0-to-1
+        |=  =led-0
+        ^-  led
+        (~(run by led-0) expense-0-to-1)
+      ++  expense-0-to-1
+        |=  =expense-0
+        :*
+          gid.expense-0
+          eid.expense-0
+          title.expense-0
+          amount.expense-0
+          currency.expense-0
+          (member-0-to-1 payer.expense-0)
+          date.expense-0
+          (turn involves.expense-0 member-0-to-1)
+        ==
+      ++  member-0-to-1
+        |=  =@p
+        `@tas`(scot %p p)
       --
     --
   --
@@ -142,6 +149,28 @@
       regs    (~(del by regs) gid.action)
       leds    (~(del by leds) gid.action)
     ==
+    ::  (add member without Urbit ID)
+      ::
+      %add-member
+    ~&  >  '%tahuti (on-poke): add member'
+    =/  group  (~(got by groups) gid.action)
+    ?>  public.group
+    ?.  =(our.bowl host.group)
+      :-  ^-  (list card)
+        :~  [%pass ~ %agent [host.group %tahuti] %poke %tahuti-action !>(action)]
+        ==
+      this
+    =/  reg  (~(got by regs) gid.action)
+    =.  reg  (~(put in reg) member.action)
+    :-  ^-  (list card)
+      :~
+        :*  %give  %fact  [/[gid.action] ~]  %tahuti-update
+            !>  ^-  update  [%reg gid.action reg]
+        ==
+      ==
+    %=  this
+      regs  (~(put by regs) gid.action reg)
+    ==
     ::
       %add-expense
     ~&  >  '%tahuti (on-poke): add expense'
@@ -152,8 +181,8 @@
         ==
       this
     =/  register  (~(got by regs) gid.action)
-    ?>  (~(has in (~(put in register) host.group)) payer.expense.action)
-    ?>  (~(has in (~(put in register) host.group)) src.bowl)
+    ?>  (~(has in (~(put in register) `@tas`(scot %p host.group))) payer.expense.action)
+    ?>  (~(has in (~(put in register) `@tas`(scot %p host.group))) `@tas`(scot %p src.bowl))
     =/  ledger  (~(got by leds) gid.action)
     ?<  (~(has by ledger) eid.expense.action)
     =.  ledger  (~(put by ledger) eid.expense.action expense.action)
@@ -191,12 +220,10 @@
     ::  (add ship to access-control list and send an invite)
       ::
       %allow
-    ~&  >  '%tahuti (on-poke): allow to subscribe and invite'
+    ~&  >  '%tahuti (on-poke): allow'
     =/  group  (~(got by groups) gid.action)
     ?.  =(our.bowl host.group)
       :-  ^-  (list card)
-        ::  TODO  more elegant?
-        :: :~  [%pass ~ %agent [host.group %tahuti] %poke mark vase]
         :~  [%pass ~ %agent [host.group %tahuti] %poke %tahuti-action !>(action)]
         ==
       this
@@ -204,6 +231,8 @@
     ?<  =(our.bowl p.action)
     =/  acl  (~(got by acls) gid.action)
     =.  acl  (~(put in acl) p.action)
+    ~&  p.action
+    ~&  group
     :-  ^-  (list card)
       :~
         :*  %give  %fact  [/[gid.action] ~]  %tahuti-update
@@ -284,7 +313,7 @@
   =/  acl       (~(got by acls) gid)
   =/  ledger    (~(got by leds) gid)
   ?>  (~(has in acl) src.bowl)
-  =.  register    (~(put in register) src.bowl)
+  =.  register    (~(put in register) `@tas`(scot %p src.bowl))
   :-  ^-  (list card)
       :~
         :*  %give  %fact  [/[gid] ~]  %tahuti-update
@@ -305,9 +334,11 @@
     [~ ~ [%noun !>(invites.this)]]
     ::
       [%x %groups ~]
+    ~&  >  '%tahuti (on-peek): groups'
     [~ ~ [%noun !>(groups.this)]]
     ::
       [%x =gid ~]
+    ~&  >  '%tahuti (on-peek): gid'
     =/  group  (~(got by groups) gid.path)
     =/  acl    (~(got by acls) gid.path)
     =/  reg    (~(got by regs) gid.path)
@@ -319,7 +350,7 @@
     =/  group  (~(got by groups) gid.path)
     =/  reg    (~(got by regs) gid.path)
     =/  led    (~(got by leds) gid.path)
-    =.  reg    (~(put in reg) host.group)
+    =.  reg    (~(put in reg) `@tas`(scot %p host.group))
     =/  net    ~(net tahuti [~(val by led) ~(tap in reg)])
     [~ ~ [%noun !>(net)]]
     ::
@@ -329,7 +360,8 @@
     =/  group  (~(got by groups) gid.path)
     =/  reg    (~(got by regs) gid.path)
     =/  led    (~(got by leds) gid.path)
-    =.  reg    (~(put in reg) host.group)
+    =.  reg    (~(put in reg) `@tas`(scot %p host.group))
+    ~&  reg
     =/  rei    ~(rei tahuti [~(val by led) ~(tap in reg)])
     [~ ~ [%noun !>(rei)]]
   ==

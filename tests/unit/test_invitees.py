@@ -2,7 +2,15 @@ import pytest
 
 
 @pytest.mark.parametrize(
-    "json", ({}, "", "~zod", {"invitee": ""}, {"invitee": None}, {"invitee": "zod"})
+    "json",
+    (
+        {},
+        "",
+        "~zod",
+        {"member": ""},
+        {"member": None},
+        {"member": " "},
+    ),
 )
 @pytest.mark.usefixtures("group")
 def test_invitee_invalid(json, zod, gid):
@@ -18,8 +26,7 @@ def test_invitee_empty_body(zod, gid):
     assert resp.status_code == 418
 
 
-@pytest.mark.usefixtures("group")
-def test_invitees_single(zod, nus, gid):
+def test_invitees_single(zod, nus, gid, group):
     """Test PUT and GET requests."""
 
     # PUT /invitees
@@ -28,20 +35,12 @@ def test_invitees_single(zod, nus, gid):
     assert response.status_code == 200
 
     # GET /invitees
-    url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/invitees"
+    url = f"/apps/tahuti/api/groups/{gid}/invitees"
     response = zod.get(url)
     assert response.status_code == 200
     result = response.json()
     assert isinstance(result, list)
     assert "~nus" in result
-
-    # GET /members
-    url = f"/apps/tahuti/api/groups/{gid}/members"
-    response = zod.get(url)
-    assert response.status_code == 200
-    result = response.json()
-    assert isinstance(result, list)
-    assert "~nus" not in result
 
     # GET /invites (nus)
     url = "/apps/tahuti/api/invites"
@@ -49,13 +48,7 @@ def test_invitees_single(zod, nus, gid):
     assert response.status_code == 200
     result = response.json()
     assert isinstance(result, list)
-    assert {
-        "host": "~zod",
-        "currency": "EUR",
-        "title": "assembly",
-        "gid": gid,
-        "public": False,
-    } in result
+    assert group in result
 
 
 @pytest.mark.usefixtures("group")

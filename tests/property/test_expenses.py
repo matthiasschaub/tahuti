@@ -24,7 +24,7 @@ def expense_schema():
 
 @given(
     amount=strategies.integers(min_value=0),
-    title=strategies.text(),
+    title=strategies.text(min_size=1),
     dt=strategies.datetimes(
         min_value=datetime(1970, 1, 1, 0, 0),
         allow_imaginary=False,

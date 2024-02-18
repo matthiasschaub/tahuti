@@ -3,10 +3,16 @@ import pytest
 
 
 @settings(deadline=None)
-@given(title=strategies.text(), uuid=strategies.uuids())
+@given(title=strategies.text(min_size=1), uuid=strategies.uuids(), public=strategies.booleans())
 @pytest.mark.parametrize("currency", ("EUR", "USD", "BTC"))
-def test_groups_put(uuid, title, currency, zod):
-    group = {"gid": str(uuid), "title": title, "host": "~zod", "currency": currency}
+def test_groups_put(uuid, title, public, currency, zod):
+    group = {
+        "gid": str(uuid),
+        "title": title,
+        "host": "~zod",
+        "currency": currency,
+        "public": public,
+    }
     url = "/apps/tahuti/api/groups"
     # PUT /groups
     response = zod.put(url, json=group)

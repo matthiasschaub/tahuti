@@ -8,14 +8,14 @@ import pytest
 )
 @pytest.mark.usefixtures("group", "member")
 def test_kick_invalid(json, zod, gid):
-    url = f"/apps/tahuti/api/groups/{gid}/invitees"
+    url = f"/apps/tahuti/api/groups/{gid}/kick"
     resp = zod.put(url, json=json)
     assert resp.status_code == 500
 
 
 @pytest.mark.usefixtures("group", "member")
 def test_kick_empty_body(zod, gid):
-    url = f"/apps/tahuti/api/groups/{gid}/invitees"
+    url = f"/apps/tahuti/api/groups/{gid}/kick"
     resp = zod.put(url, json=None)
     assert resp.status_code == 418
 

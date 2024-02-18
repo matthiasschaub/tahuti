@@ -26,9 +26,10 @@
     [%png p=@]
     [%svg p=@]
     ::
-    [%hx-login-redirect l=cord]
     [%login-redirect l=cord]
+    [%hx-login-redirect l=cord]
     [%redirect o=cord]
+    [%hx-redirect o=cord]
     [%none ~]
   ==
 ::
@@ -78,14 +79,6 @@
     :-  http-status
     (weld headers ['content-type'^'image/svg+xml']~)
     ::
-      %hx-login-redirect
-    =+  %^  cat  3
-      '/~/login?redirect='
-    l.resource
-    :_  ~
-    :-  http-status
-    (weld headers [['HX-Redirect' -]]~)
-    ::
       %login-redirect
     =+  %^  cat  3
       '/~/login?redirect='
@@ -94,10 +87,22 @@
     :-  http-status
     (weld headers [['location' -]]~)
     ::
+      %hx-login-redirect
+    =+  %^  cat  3
+      '/~/login?redirect='
+    l.resource
+    :_  ~
+    :-  http-status
+    (weld headers [['HX-Redirect' -]]~)
       %redirect
     :_  ~
     :-  http-status
     (weld headers ['location'^o.resource]~)
+    ::
+      %hx-redirect
+    :_  ~
+    :-  http-status
+    (weld headers ['HX-Redirect'^o.resource]~)
     ::
       %none
     [[http-status headers] ~]

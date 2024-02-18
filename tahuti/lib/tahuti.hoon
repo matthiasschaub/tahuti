@@ -3,19 +3,19 @@
 /-  *tahuti, *graph
 /+  *graph, *edmonds-karp, mip
 ::
-|_  [exes=(list expense) fleet=(list @p)]
+|_  [exs=(list expense) reg=(list member)]
 ++  sum
   ::    total sum of expenses
   ::
   ^-  @ud
-  =/  n    (lent exes)
+  =/  n    (lent exs)
   =/  i    0
   =/  sum  0
   |-
   ?:  =(i n)
     sum
   %=  $
-    sum  (add sum amount:(snag i exes))
+    sum  (add sum amount:(snag i exs))
     i    +(i)
   ==
 ::
@@ -23,14 +23,14 @@
 ++  gro
   ::    gross amount of ships
   ::
-  ^-  (map @p @ud)
-  =/  n    (lent exes)
+  ^-  (map member @ud)
+  =/  n    (lent exs)
   =/  i    0
-  =/  gro  *(map @p @ud)
+  =/  gro  *(map member @ud)
   |-
   ?:  =(i n)
     gro
-  =/  ex  (snag i exes)
+  =/  ex  (snag i exs)
   =/  current  (~(gut by gro) payer:ex 0)
   =/  total    (add current amount:ex)
   %=  $
@@ -43,14 +43,14 @@
   ::
   ::  rounding strategy of fra:si is half round down
   ::
-  ^-  (map @p @s)
-  =/  n    (lent exes)
+  ^-  (map member @s)
+  =/  n    (lent exs)
   =/  i    0
-  =/  net  *(map @p @s)
+  =/  net  *(map member @s)
   |-                            :: for each ship
-  ?:  =(i (lent fleet))
+  ?:  =(i (lent reg))
     net
-  =/  ship  (snag i fleet)
+  =/  ship  (snag i reg)
   =/  d     --0                 :: debit
   =/  c     --0                 :: credit
   =/  j     0
@@ -60,7 +60,7 @@
       net  (~(put by net) [ship (dif:si c d)])
       i    +(i)
     ==
-  =/  ex  (snag j exes)
+  =/  ex  (snag j exs)
   ?:  :: if, ship is involved and is payer
       ::
       ?&
@@ -142,7 +142,7 @@
   ::  .v: vertex (row)
   ::  .u: vertex (col)
   ::
-  =/  n    (lent fleet)
+  =/  n    (lent reg)
   =/  g    (reap (add n 2) (reap (add n 2) 0))
   =/  [c=(list @ud) d=(list @ud)]  ind
   ::  indices are shifted by one to account for the source node
@@ -228,7 +228,7 @@
   ::  .j: counter
   ::  .a: amount
   ::
-  =/  g  (tail (need (edmonds-karp [adj 0 +((lent fleet)) inf])))
+  =/  g  (tail (need (edmonds-karp [adj 0 +((lent reg)) inf])))
   =/  s  ~(tap in ~(key by net))
   =/  r  *^rei
   =/  n  (lent s)

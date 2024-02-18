@@ -122,8 +122,8 @@
       ::
       [%apps %tahuti ~]
         ?.  hx-req
-          [(send [302 ~ [%login-redirect './apps/tahuti']]) state]
-        [(send [200 ~ [%hx-login-redirect './apps/tahuti']]) state]
+          [(send [302 ~ [%redirect '/apps/tahuti/groups']]) state]
+        [(send [200 ~ [%hx-redirect '/apps/tahuti/groups']]) state]
       ::  css
       ::
       [%apps %tahuti %style ~]

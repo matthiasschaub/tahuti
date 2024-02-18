@@ -28,6 +28,25 @@ def expenses_schema(expense_schema):
 
 
 @pytest.mark.usefixtures("group")
+def test_expense_put_empty_title(zod, gid, expenses_schema):
+    """Add multiple expenses by host"""
+    expense = {
+        "gid": gid,
+        "eid": str(uuid4()),
+        "title": "",
+        "amount": "100",
+        "currency": "EUR",
+        "payer": "~zod",
+        "date": 1699182124,
+        "involves": ["~zod"],
+    }
+    url = f"/apps/tahuti/api/groups/{gid}/expenses"
+    # PUT /expenses
+    response = zod.put(url, json=expense)
+    assert response.status_code == 422
+
+
+@pytest.mark.usefixtures("group")
 def test_expense_put_multi(zod, gid, expenses_schema):
     """Add multiple expenses by host"""
     expense = {

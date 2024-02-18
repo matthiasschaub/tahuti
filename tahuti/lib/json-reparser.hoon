@@ -15,16 +15,24 @@
   |%
     ++  version
       |=  v=@t
-      ^-  (pair %s @t)
+      ^-  json
       [%s v]
     ++  ship
       |=  s=@p
-      ^-  (pair %s @t)
+      ^-  json
       [%s (scot %p s)]
     ++  ships
       |=  s=(set @p)
       ^-  json
       [%a (turn ~(tap in s) ship:enjs)]
+    ++  member
+      |=  m=^member
+      ^-  json
+      [%s m]
+    ++  members
+      |=  m=(set ^member)
+      ^-  json
+      [%a (turn ~(tap in m) member:enjs)]
     ++  group
       |=  g=^group
       ^-  json
@@ -54,13 +62,9 @@
         :-  'title'     [%s title.e]
         :-  'amount'    (numb:enjs:format amount.e)
         :-  'currency'  [%s currency.e]
-        ::  TODO
-        ::  :-  'currency-format' ...
-        :-  'payer'     [%s (scot %p payer.e)]
+        :-  'payer'     [%s payer.e]
         :-  'date'      (sect:enjs:format date.e)
-        ::  TODO.
-        ::  :-  'date-format'  (dust:chrono:userlib (yore date.e))
-        :-  'involves'  [%a (turn involves.e ship:enjs)]
+        :-  'involves'  [%a (turn involves.e member:enjs)]
       ==
     ++  ledger
       |=  vals=(list ^expense)
@@ -75,12 +79,12 @@
       ^-  json
       :-  %a
       %+  turn  ~(tap by n)
-      |=  [member=@p amount=@s]
+      |=  [member=@tas amount=@s]
       =/  [syn=? abs=@]  (old:si amount)
       =/  fmt  ?.(syn "-{<abs>}" "{<abs>}")
       %-  pairs:enjs:format
       :~
-        :-  'member'  [%s (scot %p member)]
+        :-  'member'  [%s member]
         :-  'amount'  [%s (crip fmt)]
       ==
     ++  rei
@@ -92,58 +96,61 @@
       %+  turn
         %+  skip
           ~(tap bi:mip r)
-        |=  [debitor=@p creditor=@p amount=@ud]
+        |=  [debitor=@tas creditor=@tas amount=@ud]
         =(amount 0)
-      |=  [debitor=@p creditor=@p amount=@ud]
+      |=  [debitor=@tas creditor=@tas amount=@ud]
       %-  pairs:enjs:format
       :~
-        :-  'debitor'   [%s (scot %p debitor)]
-        :-  'creditor'  [%s (scot %p creditor)]
+        :-  'debitor'   [%s debitor]
+        :-  'creditor'  [%s creditor]
         :-  'amount'    (numb:enjs:format amount)
       ==
     --
 ::
 ++  dejs
   |%
-  ++  ship
-    ^-  $-(json @p)
-    (se:dejs:format %p)
+  ++  member
+    ^-  $-(json member=^member)
+    %-  ot:dejs:format
+    :~
+      :-  %member    so:dejs:format
+    ==
   ++  invitee
     ^-  $-(json invitee=@p)
-    %-  ot:dejs:format                                     :: obj as tuplejsonre
+    %-  ot:dejs:format
     :~
-      :-  %invitee    (se:dejs:format %p)
+      :-  %invitee   (se:dejs:format %p)
     ==
   ++  join
     ^-  $-(json [gid=@tas host=@p])
     %-  ot:dejs:format
     :~
-      :-  %gid        so:dejs:format
-      :-  %host       (se:dejs:format %p)
+      :-  %gid       so:dejs:format
+      :-  %host      (se:dejs:format %p)
     ==
   ++  group
     ::  input same as group but without host
     ::
     ^-  $-(json [=gid =title =currency =public])
-    %-  ot:dejs:format                                     :: obj as tuplejsonre
+    %-  ot:dejs:format
     :~
-      :-  %gid        so:dejs:format
-      :-  %title      so:dejs:format
-      :-  %currency   so:dejs:format
-      :-  %public     bo:dejs:format
+      :-  %gid       so:dejs:format
+      :-  %title     so:dejs:format
+      :-  %currency  so:dejs:format
+      :-  %public    bo:dejs:format
     ==
   ++  expense
     ^-  $-(json ^expense)
-    %-  ot:dejs:format                                     :: obj as tuple
+    %-  ot:dejs:format
     :~
-      :-  %gid        so:dejs:format
-      :-  %eid        so:dejs:format
-      :-  %title      so:dejs:format
-      :-  %amount     (su:dejs:format dem)
-      :-  %currency   so:dejs:format
-      :-  %payer      (se:dejs:format %p)
-      :-  %date       du:dejs:format
-      :-  %involves   (ar:dejs:format (se:dejs:format %p)):dejs:format
+      :-  %gid       so:dejs:format
+      :-  %eid       so:dejs:format
+      :-  %title     so:dejs:format
+      :-  %amount    (su:dejs:format dem)
+      :-  %currency  so:dejs:format
+      :-  %payer     so:dejs:format
+      :-  %date      du:dejs:format
+      :-  %involves  (ar:dejs:format so:dejs:format):dejs:format
     ==
   --
 --

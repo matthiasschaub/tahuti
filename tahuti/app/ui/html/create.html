@@ -80,7 +80,7 @@
         hx-put="/apps/tahuti/api/groups"
         hx-ext="json-enc"
         hx-swap="none"
-        hx-vals="js:{gid: self.crypto.randomUUID(), public: true}"
+        hx-vals="js:{gid: self.crypto.randomUUID(), public: false}"
         hx-request="noHeaders"
         hx-on::after-request="if(event.detail.successful) this.reset()"
       >

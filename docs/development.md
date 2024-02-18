@@ -117,6 +117,7 @@ GET   api/groups/{uuid}/invitees         // Get all invitees of a group  (JSON a
 PUT   api/groups/{uuid}/invitees         // Invite a ship                (JSON object)
 
 GET   api/groups/{uuid}/members          // Get all members of a group   (JSON array)
+PUT   api/groups/{uuid}/members          // Add a member                 (JSON object)
 
 GET   api/groups/{uuid}/expenses         // Get all expenses of a group  (JSON array)
 PUT   api/groups/{uuid}/expenses         // Add or edit an expense       (JSON object)
