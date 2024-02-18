@@ -80,9 +80,9 @@
         hx-put="/apps/tahuti/api/groups"
         hx-ext="json-enc"
         hx-swap="none"
-        hx-vals="js:{gid: self.crypto.randomUUID(), public: false}"
+        hx-vals="js:{gid: self.crypto.randomUUID()}"
         hx-request="noHeaders"
-        hx-on::after-request="if(event.detail.successful) this.reset()"
+        hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups";'
       >
         <label>Titel</label>
         <br />
@@ -108,6 +108,19 @@
           <option value="BTC">BTC</option>
         </select>
         <br />
+        <label>Access</label>
+        <br />
+        <select
+          id="public"
+          type="text"
+          name="public"
+          aria-label="Public"
+          required
+        >
+          <option value="false">Private</option>
+          <option value="true">Public</option>
+        </select>
+        <br />
         <button class="button-primary" type="submit">Create group ▸</button>
         <button
           class="button-cancel"
@@ -121,14 +134,14 @@
     </fieldset>
   </body>
   <script>
-    const ids = ["put-groups"];
-    for (const i in ids) {
-      const element = document.getElementById(ids[i]);
-      element.addEventListener("htmx:afterRequest", (event) => {
-        if (event.detail.successful) {
-          window.location.pathname = "/apps/tahuti/groups";
-        }
-      });
-    }
+    const form = document.getElementById("put-groups");
+    form.addEventListener("htmx:configRequest", (event) => {
+      console.log(event);
+      if ("public" in event.detail.parameters) {
+        event.detail.parameters.public =
+          event.detail.parameters.public === "true";
+        console.log(event.detail.parameters.public === "true");
+      }
+    });
   </script>
 </html>

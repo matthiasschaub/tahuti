@@ -45,11 +45,15 @@ document.body.addEventListener("htmx:configRequest", (event) => {
 });
 
 document.body.addEventListener("htmx:responseError", function (evt) {
+  console.error("Unexpected htmx error", evt.detail);
   if (evt.detail.xhr) {
-    alert(event.detail.xhr.response);
+    if (evt.detail.xhr.status === 500) {
+      alert("500 - Internal Server Error");
+    } else {
+      alert(event.detail.xhr.response);
+    }
   } else {
     // Unspecified failure, usually caused by network error
-    console.error("Unexpected htmx error", evt.detail);
     alert(
       "Unexpected error, check your connection and try to refresh the page.",
     );

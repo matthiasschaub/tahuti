@@ -127,8 +127,7 @@
     </ul>
 
     <fieldset>
-      <!-- Action is set by request-group.js -->
-      Invite other people on Urbit to this group.
+      Add members to this group.
       <br />
       <button
         class="button-primary"
@@ -137,7 +136,7 @@
         hx-trigger="click"
         hx-push-url="true"
       >
-        Invite people ▸
+        Add members ▸
       </button>
     </fieldset>
 
@@ -187,9 +186,7 @@
         hx-vals="js:{gid: gid()}"
         hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups"'
       >
-        <!-- hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'" -->
-        Deleting this group will permanently remove all expenses and members.
-        This action can only be performed by the group host.
+        Permanently delete this group.
         <br />
         <button class="button-cancel" type="submit">Delete this group</button>
       </form>
