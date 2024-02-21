@@ -3,7 +3,11 @@ import pytest
 
 
 @settings(deadline=None)
-@given(title=strategies.text(min_size=1), uuid=strategies.uuids(), public=strategies.booleans())
+@given(
+    title=strategies.text(min_size=1),
+    uuid=strategies.uuids(),
+    public=strategies.booleans(),
+)
 @pytest.mark.parametrize("currency", ("EUR", "USD", "BTC"))
 def test_groups_put(uuid, title, public, currency, zod):
     group = {

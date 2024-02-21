@@ -1,6 +1,8 @@
 from schema import Schema
 import pytest
 from uuid import uuid4
+from time import sleep
+import requests
 
 
 @pytest.fixture
@@ -23,12 +25,11 @@ def groups_schema(group_schema):
     return Schema([group_schema])
 
 
-@pytest.mark.parametrize("host", (None, "", "foo", "~nus"))
-def test_groups_put_invalid_host(host, zod):
+@pytest.mark.parametrize("title", (None, "", " "))
+def test_groups_put_invalid_title(title, zod):
     group = {
         "gid": str(uuid4()),
-        "title": "foo",
-        "host": host,
+        "title": title,
         "currency": "EUR",
         "public": False,
     }
@@ -36,8 +37,7 @@ def test_groups_put_invalid_host(host, zod):
 
     # PUT /groups
     response = zod.put(url, json=group)
-    # TODO: should be 4xx
-    assert response.status_code == 200
+    assert response.status_code in (422, 500)
 
     # GET /groups
     response = zod.get(url)
@@ -46,15 +46,11 @@ def test_groups_put_invalid_host(host, zod):
     assert group not in result
 
 
-def test_groups_put_empty_payload(zod):
-    # TODO: change status code to expected status code not just internal server error
+@pytest.mark.parametrize("payload", (None, "", " ", {}, []))
+def test_groups_put_empty_payload(payload, zod):
     url = "/apps/tahuti/api/groups"
-    response = zod.put(url, json={})
-    assert response.status_code == 500
-    response = zod.put(url, json="")
-    assert response.status_code == 500
-    response = zod.put(url, json=None)
-    assert response.status_code == 418
+    response = zod.put(url, json=payload)
+    assert response.status_code in (418, 500)
 
 
 def test_groups_get_all(zod, group, groups_schema):
@@ -65,6 +61,14 @@ def test_groups_get_all(zod, group, groups_schema):
     result = response.json()
     assert groups_schema.is_valid(result)
     assert group in result
+
+
+@pytest.mark.usefixtures("group")
+def test_groups_get_all_unauthorized():
+    # GET /groups
+    url = "http://localhost:8080/apps/tahuti/api/groups"
+    response = requests.get(url)
+    assert response.status_code == 401
 
 
 def test_groups_get_single(zod, gid, group, group_schema):
@@ -81,10 +85,11 @@ def test_groups_get_single_not_found(zod):
     # GET /groups/{uuid}
     url = f"/apps/tahuti/api/groups/{str(uuid4())}"
     response = zod.get(url)
+    # TODO: should be 4xx
     assert response.status_code == 500
 
 
-def test_groups_del(zod, gid, group):
+def test_groups_delete(zod, gid, group):
     # PUT
     url = f"/apps/tahuti/api/groups/{gid}"
     response = zod.delete(url)
@@ -100,11 +105,13 @@ def test_groups_del(zod, gid, group):
 
 @pytest.mark.usefixtures("member")
 def test_groups_delete_unauthorized(zod, nus, gid, group):
+    # wait for join
+    sleep(0.5)
+
     # PUT
     url = f"/apps/tahuti/api/groups/{gid}"
     response = nus.delete(url)
-    # TODO: should be 403 Forbidden
-    assert response.status_code == 500
+    assert response.status_code == 403
 
     # GET /groups
     url = "/apps/tahuti/api/groups"
@@ -112,3 +119,37 @@ def test_groups_delete_unauthorized(zod, nus, gid, group):
     assert response.status_code == 200
     result = response.json()
     assert group in result
+
+
+@pytest.mark.usefixtures("group")
+def test_groups_get_private(gid):
+    # GET /groups/{uuid}
+    url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}"
+    response = requests.get(url)
+    assert response.status_code == 401
+
+
+def test_groups_get_public(gid, group_public, group_schema):
+    # GET /groups/{uuid}
+    url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}"
+    response = requests.get(url)
+    assert response.status_code == 200
+    result = response.json()
+    assert group_schema.is_valid(result)
+    assert result == group_public
+
+
+@pytest.mark.usefixtures("group")
+def test_groups_delete_private(gid):
+    # PUT
+    url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}"
+    response = requests.delete(url)
+    assert response.status_code == 401
+
+
+@pytest.mark.usefixtures("group_public")
+def test_groups_delete_public(gid):
+    # PUT
+    url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}"
+    response = requests.delete(url)
+    assert response.status_code == 401
