@@ -86,8 +86,8 @@ def test_get_invitees_public(gid):
     assert response.status_code == 401
 
 
-@pytest.mark.usefixtures("group")
-def test_delete_initees(gid, zod, nus, invitee_nus):
+@pytest.mark.usefixtures()
+def test_delete_initees(gid, zod, nus, group, invitee_nus):
     # DELETE /invitees
     url = f"/apps/tahuti/api/groups/{gid}/invitees"
     response = zod.delete(url, json={"invitee": invitee_nus})
@@ -106,4 +106,36 @@ def test_delete_initees(gid, zod, nus, invitee_nus):
     assert response.status_code == 200
     result = response.json()
     assert isinstance(result, list)
-    assert invitee_nus not in result
+    assert group not in result
+
+
+@pytest.mark.usefixtures("group")
+def test_delete_initees_public(gid, invitee_nus):
+    # DELETE /invitees
+    url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/invitees"
+    response = requests.delete(url, json={"invitee": invitee_nus})
+    assert response.status_code == 401
+
+
+def test_delete_initees_unauthorized(zod, nus, gid, group, invitee_nus):
+    """Test DELETE /invitees by other than group host."""
+    # DELETE /invitees
+    url = f"/apps/tahuti/api/groups/{gid}/invitees"
+    response = nus.delete(url, json={"invitee": invitee_nus})
+    # TODO: should be 403 Forbidden
+    assert response.status_code == 500
+
+    # GET /invitees (zod)
+    response = zod.get(url)
+    assert response.status_code == 200
+    result = response.json()
+    assert isinstance(result, list)
+    assert invitee_nus in result
+
+    # GET /invites (nus)
+    url = "http://localhost:8081/apps/tahuti/api/invites"
+    response = nus.get(url)
+    assert response.status_code == 200
+    result = response.json()
+    assert isinstance(result, list)
+    assert group in result

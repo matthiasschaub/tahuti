@@ -180,6 +180,19 @@ def invitee_lus(zod, gid, group) -> str:
 
 
 @pytest.fixture
+def member_nus(nus, gid, group, invitee_nus) -> str:
+    """Based on `group`. Adds invitee."""
+    join = {
+        "host": group["host"],
+        "gid": gid,
+    }
+    url = "/apps/tahuti/api/join"
+    nus.post(url, json=join)
+    return "~nus"
+
+
+# TODO: deprecate in favor of member_nus
+@pytest.fixture
 def member(nus, gid, group, invitee) -> str:
     """Based on `group`. Adds invitee."""
     join = {
@@ -204,6 +217,20 @@ def member_lus(lus, gid, group, invitee_lus) -> str:
 
 
 @pytest.fixture
+def member_martin(zod, gid, group_public):
+    url = f"/apps/tahuti/api/groups/{gid}/members"
+    zod.put(url, json={"member": "martin"})
+    return "martin"
+
+
+@pytest.fixture
+def kick_nus(zod, gid, group, member_nus):
+    url = f"/apps/tahuti/api/groups/{gid}/kick"
+    zod.post(url, json={"ship": member_nus})
+    assert member_nus
+
+
+@pytest.fixture
 def expense(zod, gid, eid, group):
     """Add single expense by host"""
     expense = {
@@ -217,5 +244,5 @@ def expense(zod, gid, eid, group):
         "involves": ["~zod"],
     }
     url = f"/apps/tahuti/api/groups/{gid}/expenses"
-    zod.put(url, json=expense)
+    response = zod.put(url, json=expense)
     return expense

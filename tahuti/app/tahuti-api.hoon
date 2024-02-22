@@ -125,12 +125,12 @@
             %members
           =/  aclmod    `(set @tas)`(~(run in acl) |=(=@p `@tas`(scot %p p)))
           =/  members   (~(int in reg) aclmod)
-          =.  members   (~(put in reg) `@tas`(scot %p host.group))
+          =.  members   (~(put in members) `@tas`(scot %p host.group))
           [(send [200 ~ [%json (members:enjs members)]]) state]
           ::
             %castoffs
           =/  aclmod    `(set @tas)`(~(run in acl) |=(=@p `@tas`(scot %p p)))
-          =/  castoff   (~(int in reg) aclmod)
+          =/  castoff   (~(dif in reg) aclmod)
           [(send [200 ~ [%json (members:enjs castoff)]]) state]
             ::
             %invitees
@@ -200,7 +200,10 @@
         state
         ::
           [%apps %tahuti %api %groups @t %members ~]
-        ?.  auth
+        ?.  ?&
+              auth
+              public
+            ==
           [(send [401 ~ [%plain "401 - Unauthorized"]]) state]
         =/  gid      (snag 4 `(list @t)`site)
         =/  content  (need (de:json:html q.u.body.request.inbound-request))
@@ -208,19 +211,6 @@
         ?:  ?|(=(member '') =(member ' '))
           [(send [422 ~ [%plain "422 - Unprocessable Entity"]]) state]
         =/  action  [%add-member gid member]
-        :-  ^-  (list card)
-          %+  snoc
-            (send [200 ~ [%plain "ok"]])
-          [%pass ~ %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
-        state
-        ::
-          [%apps %tahuti %api %groups @t %kick ~]
-        ?.  auth
-          [(send [401 ~ [%plain "401 - Unauthorized"]]) state]
-        =/  gid       (snag 4 `(list @t)`site)
-        =/  content   (need (de:json:html q.u.body.request.inbound-request))
-        =/  p         (ship:dejs content)
-        =/  action    [%kick gid p]
         :-  ^-  (list card)
           %+  snoc
             (send [200 ~ [%plain "ok"]])
@@ -243,14 +233,14 @@
       ::
         %'DELETE'
       ~&  >  '%tahuti-api: DELETE'
+      ?.  auth
+        [(send [401 ~ [%plain "401 - Unauthorized"]]) state]
       ?+  site  [(send [404 ~ [%plain "404 - Not Found"]]) state]
         ::
           [%apps %tahuti %api %groups @t ~]
         =/  gid        (snag 4 `(list @t)`site)
         =/  path  /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/[gid]/noun
         =,  .^([=group =acl =reg =led] %gx path)
-        ?.  auth
-          [(send [401 ~ [%plain "Unauthorized"]]) state]
         ?.  .=(our.bowl host.group)
           [(send [403 ~ [%plain "Forbidden"]]) state]
         =/  action    [%del-group gid]
@@ -272,8 +262,6 @@
         state
       ::
           [%apps %tahuti %api %groups @t %invitees ~]
-        ?.  auth
-          [(send [401 ~ [%plain "401 - Unauthorized"]]) state]
         ?~  body.request.inbound-request
           [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
         =/  gid      (snag 4 `(list @t)`site)
@@ -285,21 +273,40 @@
             (send [200 ~ [%plain "ok"]])
           [%pass ~ %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
         state
+          [%apps %tahuti %api %groups @t %members ~]
+        ?~  body.request.inbound-request
+          [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
+        [(send [501 ~ [%plain "501 - Not Implemented"]]) state]
       ==
       ::
         %'POST'
       ~&  >  '%tahuti-api: POST'
+      ?.  auth
+        [(send [401 ~ [%plain "Unauthorized"]]) state]
       ?~  body.request.inbound-request
         [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
       ?+  site  [(send [404 ~ [%plain "404 - Not Found"]]) state]
         ::
           [%apps %tahuti %api %join ~]
-        ?.  auth
-          [(send [401 ~ [%plain "401 - Unauthorized"]]) state]
-        ~&  >  '%tahuti-api: /action/join'
+        ~&  >  '%tahuti-api: /join'
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
         =/  join      (join:dejs content)
         =/  action    [%join gid.join host.join]
+        :-  ^-  (list card)
+          %+  snoc
+            (send [200 ~ [%plain "ok"]])
+          [%pass ~ %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
+        state
+        ::
+          [%apps %tahuti %api %groups @t %kick ~]
+        ~&  >  '%tahuti-api: /kick'
+        =/  gid       (snag 4 `(list @t)`site)
+        =/  path  /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/[gid]/noun
+        =,  .^([=group =acl =reg =led] %gx path)
+        ?.  .=(our.bowl host.group)
+          [(send [403 ~ [%plain "Forbidden"]]) state]
+        =/  content   (need (de:json:html q.u.body.request.inbound-request))
+        =/  action    [%kick gid (ship:dejs content)]
         :-  ^-  (list card)
           %+  snoc
             (send [200 ~ [%plain "ok"]])

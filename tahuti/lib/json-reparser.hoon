@@ -121,6 +121,12 @@
     :~
       :-  %invitee   (se:dejs:format %p)
     ==
+  ++  ship
+    ^-  $-(json @p)
+    %-  ot:dejs:format
+    :~
+      :-  %ship      (se:dejs:format %p)
+    ==
   ++  join
     ^-  $-(json [gid=@tas host=@p])
     %-  ot:dejs:format

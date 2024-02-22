@@ -156,11 +156,16 @@
       %add-expense
     ~&  >  '%tahuti (on-poke): add expense'
     =/  group  (~(got by groups) gid.action)
+    =/  acl    (~(got by acls) gid.action)
     =/  reg    (~(got by regs) gid.action)
     =.  reg    (~(put in reg) `@tas`(scot %p host.group))
     ?>  ?&
           (~(has in reg) `@tas`(scot %p src.bowl))
           (~(has in reg) payer.expense.action)
+        ==
+    ?>  ?|
+          (~(has in acl) src.bowl)
+          .=(src.bowl host.group)
         ==
     ?.  =(our.bowl host.group)
       :-  ^-  (list card)
@@ -183,9 +188,14 @@
       %del-expense
     ~&  >  '%tahuti (on-poke): del expense'
     =/  group  (~(got by groups) gid.action)
+    =/  acl    (~(got by acls) gid.action)
     =/  reg    (~(got by regs) gid.action)
     =.  reg    (~(put in reg) `@tas`(scot %p host.group))
     ?>  (~(has in reg) `@tas`(scot %p src.bowl))
+    ?>  ?|
+          (~(has in acl) src.bowl)
+          .=(src.bowl host.group)
+        ==
     ?.  =(our.bowl host.group)
       :-  ^-  (list card)
         :~  [%pass ~ %agent [host.group %tahuti] %poke %tahuti-action !>(action)]
@@ -285,6 +295,7 @@
         ==
     =/  acl  (~(got by acls) gid.action)
     =.  acl  (~(del in acl) p.action)
+    ~&  >  '%tahuti (on-poke): kick - success'
     :-  ^-  (list card)
       :~
         :*  %pass  ~   %agent   [p.action %tahuti]

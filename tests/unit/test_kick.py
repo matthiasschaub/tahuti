@@ -1,47 +1,67 @@
 import requests
-import time
+from time import sleep
 import pytest
+from uuid import uuid4
 
 
 @pytest.mark.parametrize(
-    "json", ({}, "", "~nus", {"kick": ""}, {"kick": None}, {"kick": "nus"})
+    "payload",
+    (
+        {},
+        "",
+        "~nus",
+        {"ship": ""},
+        {"ship": None},
+        {"ship": "nus"},
+    ),
 )
 @pytest.mark.usefixtures("group", "member")
-def test_kick_invalid(json, zod, gid):
+def test_kick_invalid_payload(zod, gid, payload):
     url = f"/apps/tahuti/api/groups/{gid}/kick"
-    resp = zod.put(url, json=json)
+    resp = zod.post(url, json=payload)
     assert resp.status_code == 500
 
 
 @pytest.mark.usefixtures("group", "member")
-def test_kick_empty_body(zod, gid):
+def test_kick_empty_payload(zod, gid):
     url = f"/apps/tahuti/api/groups/{gid}/kick"
-    resp = zod.put(url, json=None)
+    resp = zod.post(url, json=None)
     assert resp.status_code == 418
 
 
-@pytest.mark.usefixtures("group", "member")
-def test_kick_member(zod, gid):
-    """Test PUT and GET requests."""
-
-    # PUT /
+@pytest.mark.usefixtures("group")
+def test_post_kick(zod, gid, member_nus):
+    # POST /kick (zod)
     url = f"/apps/tahuti/api/groups/{gid}/kick"
-    resp = zod.put(url, json="~nus")
+    resp = zod.post(url, json={"ship": member_nus})
     assert resp.status_code == 200
-    # idempotent
-    resp = zod.put(url, json="~nus")
-    assert resp.status_code == 200
-    time.sleep(2)
 
-    # GET /invitees
-    url = f"/apps/tahuti/api/groups/{gid}/invitees"
-    resp = zod.get(url)
-    assert resp.status_code == 200
-    result = resp.json()
-    assert isinstance(result, list)
-    assert "~nus" not in result
 
-    # GET /members
+@pytest.mark.usefixtures("group")
+def test_post_kick_unautherized(nus, gid, member_nus):
+    # POST /kick (zod)
+    sleep(0.5)
+    url = f"/apps/tahuti/api/groups/{gid}/kick"
+    resp = nus.post(url, json={"ship": member_nus})
+    assert resp.status_code == 403
+
+
+@pytest.mark.usefixtures("group")
+def test_post_kick_public(nus, gid, member_nus):
+    # POST /kick (zod)
+    sleep(0.5)
+    url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/kick"
+    resp = requests.post(url, json={"ship": member_nus})
+    assert resp.status_code == 401
+
+
+def test_kick_get_members(
+    zod,
+    gid,
+    group,
+    kick_nus,
+):
+    # GET /members (zod)
     url = f"/apps/tahuti/api/groups/{gid}/members"
     response = zod.get(url)
     assert response.status_code == 200
@@ -50,31 +70,62 @@ def test_kick_member(zod, gid):
     assert "~nus" not in result
 
 
-@pytest.mark.usefixtures("group", "invitee")
-def test_kick_invitee(zod, gid):
-    """Test PUT and GET requests."""
-
-    # PUT /
-    url = f"/apps/tahuti/api/groups/{gid}/kick"
-    resp = zod.put(url, json="~nus")
-    assert resp.status_code == 200
-    # idempotent
-    resp = zod.put(url, json="~nus")
-    assert resp.status_code == 200
-    time.sleep(2)
-
-#     # GET /invitees
-#     url = f"/apps/tahuti/api/groups/{gid}/invitees"
-#     resp = zod.get(url)
-#     assert resp.status_code == 200
-#     result = resp.json()
-#     assert isinstance(result, list)
-#     assert "~nus" not in result
-
-    # GET /members
-    url = f"/apps/tahuti/api/groups/{gid}/members"
+def test_kick_get_castoffs(
+    zod,
+    gid,
+    group,
+    kick_nus,
+):
+    # GET /castoffs (zod)
+    url = f"/apps/tahuti/api/groups/{gid}/castoffs"
     response = zod.get(url)
     assert response.status_code == 200
     result = response.json()
     assert isinstance(result, list)
-    assert "~nus" not in result
+    assert "~nus" in result
+
+
+def test_kick_put_expenses(
+    zod,
+    nus,
+    gid,
+    group,
+    kick_nus,
+):
+    eid = str(uuid4())
+    expense = {
+        "gid": gid,
+        "eid": eid,
+        "title": "foo",
+        "amount": "100",
+        "currency": "EUR",
+        "payer": "~zod",
+        "date": 1699182124,
+        "involves": ["~zod"],
+    }
+    url = f"/apps/tahuti/api/groups/{gid}/expenses"
+    response = nus.put(url, json=expense)
+    assert response.status_code == 200
+
+    response = zod.get(url)
+    assert response.status_code == 200
+    assert eid not in [r["eid"] for r in response.json()]
+
+
+def test_kick_delete_expenses(
+    zod,
+    nus,
+    gid,
+    group,
+    kick_nus,
+    expense,
+    eid,
+):
+    url = f"/apps/tahuti/api/groups/{gid}/expenses/{eid}"
+    response = nus.delete(url)
+    assert response.status_code == 200
+
+    url = f"/apps/tahuti/api/groups/{gid}/expenses"
+    response = zod.get(url)
+    assert response.status_code == 200
+    assert eid in [r["eid"] for r in response.json()]
