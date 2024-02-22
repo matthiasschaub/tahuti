@@ -121,9 +121,11 @@
     ::
       %add-group
     ~&  >  '%tahuti (on-poke): add group'
+    ?>  ?&
+          .=(our.bowl src.bowl)
+          .=(our.bowl host.group.action)
+        ==
     ?<  (~(has by groups) gid.group.action)
-    ?>  =(our.bowl src.bowl)
-    ?>  =(our.bowl host.group.action)
     :-  ^-  (list card)
         ~
     %=  this
@@ -136,10 +138,11 @@
       ::
       %del-group
     ~&  >  '%tahuti (on-poke): del group'
-    ?>  (~(has by groups) gid.action)
-    ?>  =(our.bowl src.bowl)
     =/  group  (~(got by groups) gid.action)
-    ?>  =(our.bowl host.group)
+    ?>  ?&
+          .=(our.bowl src.bowl)
+          .=(our.bowl host.group)
+        ==
     :-  ^-  (list card)
         :~  [%give %kick [/[gid.action] ~] ~]
         ==
@@ -149,17 +152,66 @@
       regs    (~(del by regs) gid.action)
       leds    (~(del by leds) gid.action)
     ==
-    ::  (add member without Urbit ID)
-      ::
-      %add-member
-    ~&  >  '%tahuti (on-poke): add member'
+    ::
+      %add-expense
+    ~&  >  '%tahuti (on-poke): add expense'
     =/  group  (~(got by groups) gid.action)
-    ?>  public.group
+    =/  reg    (~(got by regs) gid.action)
+    =.  reg    (~(put in reg) `@tas`(scot %p host.group))
+    ?>  ?&
+          (~(has in reg) `@tas`(scot %p src.bowl))
+          (~(has in reg) payer.expense.action)
+        ==
     ?.  =(our.bowl host.group)
       :-  ^-  (list card)
         :~  [%pass ~ %agent [host.group %tahuti] %poke %tahuti-action !>(action)]
         ==
       this
+    =/  led  (~(got by leds) gid.action)
+    =.  led  (~(put by led) eid.expense.action expense.action)
+    :-  ^-  (list card)
+      :~
+        :*  %give  %fact  [/[gid.action] ~]  %tahuti-update
+            !>  ^-  update  [%ledger gid.action led]
+        ==
+      ==
+    %=  this
+      leds  (~(put by leds) gid.action led)
+    ==
+    ::
+      ::
+      %del-expense
+    ~&  >  '%tahuti (on-poke): del expense'
+    =/  group  (~(got by groups) gid.action)
+    =/  reg    (~(got by regs) gid.action)
+    =.  reg    (~(put in reg) `@tas`(scot %p host.group))
+    ?>  (~(has in reg) `@tas`(scot %p src.bowl))
+    ?.  =(our.bowl host.group)
+      :-  ^-  (list card)
+        :~  [%pass ~ %agent [host.group %tahuti] %poke %tahuti-action !>(action)]
+        ==
+      this
+    =/  led  (~(got by leds) gid.action)
+    =.  led  (~(del by led) eid.action)
+    :-  ^-  (list card)
+      :~
+        :*  %give  %fact  [/[gid.action] ~]  %tahuti-update
+            !>  ^-  update  [%ledger gid.action led]
+        ==
+      ==
+    %=  this
+      leds  (~(put by leds) gid.action led)
+    ==
+    ::  (add member without Urbit ID)
+      ::
+      %add-member
+    ~&  >  '%tahuti (on-poke): add member'
+    =/  group  (~(got by groups) gid.action)
+    ?>  ?&
+          .=(our.bowl src.bowl)
+          .=(our.bowl host.group)
+          public.group
+        ==
     =/  reg  (~(got by regs) gid.action)
     =.  reg  (~(put in reg) member.action)
     :-  ^-  (list card)
@@ -171,68 +223,18 @@
     %=  this
       regs  (~(put by regs) gid.action reg)
     ==
-    ::
-      %add-expense
-    ~&  >  '%tahuti (on-poke): add expense'
-    =/  group  (~(got by groups) gid.action)
-    ?.  =(our.bowl host.group)
-      :-  ^-  (list card)
-        :~  [%pass ~ %agent [host.group %tahuti] %poke %tahuti-action !>(action)]
-        ==
-      this
-    =/  register  (~(got by regs) gid.action)
-    ?>  (~(has in (~(put in register) `@tas`(scot %p host.group))) payer.expense.action)
-    ?>  (~(has in (~(put in register) `@tas`(scot %p host.group))) `@tas`(scot %p src.bowl))
-    =/  ledger  (~(got by leds) gid.action)
-    ?<  (~(has by ledger) eid.expense.action)
-    =.  ledger  (~(put by ledger) eid.expense.action expense.action)
-    :-  ^-  (list card)
-      :~
-        :*  %give  %fact  [/[gid.action] ~]  %tahuti-update
-            !>  ^-  update  [%ledger gid.action ledger]
-        ==
-      ==
-    %=  this
-      leds  (~(put by leds) gid.action ledger)
-    ==
-    ::
-      ::
-      %del-expense
-    ~&  >  '%tahuti (on-poke): del expense'
-    =/  group  (~(got by groups) gid.action)
-    ?.  =(our.bowl host.group)
-      :-  ^-  (list card)
-        :~  [%pass ~ %agent [host.group %tahuti] %poke %tahuti-action !>(action)]
-        ==
-      this
-    ?>  =(our.bowl host.group)
-    =/  ledger  (~(got by leds) gid.action)
-    =.  ledger  (~(del by ledger) eid.action)
-    :-  ^-  (list card)
-      :~
-        :*  %give  %fact  [/[gid.action] ~]  %tahuti-update
-            !>  ^-  update  [%ledger gid.action ledger]
-        ==
-      ==
-    %=  this
-      leds  (~(put by leds) gid.action ledger)
-    ==
-    ::  (add ship to access-control list and send an invite)
+    ::  (add member with Urbit ID to access-control list and send an invite)
       ::
       %allow
     ~&  >  '%tahuti (on-poke): allow'
     =/  group  (~(got by groups) gid.action)
-    ?.  =(our.bowl host.group)
-      :-  ^-  (list card)
-        :~  [%pass ~ %agent [host.group %tahuti] %poke %tahuti-action !>(action)]
+    ?>  ?&
+          .=(our.bowl src.bowl)
+          .=(our.bowl host.group)
+          !=(our.bowl p.action)
         ==
-      this
-    ?>  =(our.bowl host.group)
-    ?<  =(our.bowl p.action)
     =/  acl  (~(got by acls) gid.action)
     =.  acl  (~(put in acl) p.action)
-    ~&  p.action
-    ~&  group
     :-  ^-  (list card)
       :~
         :*  %give  %fact  [/[gid.action] ~]  %tahuti-update
@@ -249,6 +251,10 @@
       ::
       %add-invite
     ~&  >  '%tahuti (on-poke): receive invite'
+    ?>  ?|
+          .=(our.bowl src.bowl)
+          .=(src.bowl host.group.action)
+        ==
     :-  ^-  (list card)
         ~
     %=  this
@@ -258,6 +264,10 @@
       ::
       %del-invite
     ~&  >  '%tahuti (on-poke): decline invite'
+    ?>  ?|
+          .=(our.bowl src.bowl)
+          .=(src.bowl host.group.action)
+        ==
     :-  ^-  (list card)
         ~
     %=  this
@@ -268,27 +278,31 @@
       %kick
     ~&  >  '%tahuti (on-poke): kick'
     =/  group  (~(got by groups) gid.action)
-    ?>  =(our.bowl src.bowl)
-    ?>  =(our.bowl host.group)
-    ?<  =(our.bowl p.action)
-    ?<  =(host.group p.action)
-    =/  reg  (~(got by regs) gid.action)
-    =.  reg  (~(del in reg) p.action)
+    ?>  ?&
+          .=(our.bowl src.bowl)
+          .=(our.bowl host.group)
+          !=(our.bowl p.action)
+        ==
+    =/  acl  (~(got by acls) gid.action)
+    =.  acl  (~(del in acl) p.action)
     :-  ^-  (list card)
       :~
+        :*  %pass  ~   %agent   [p.action %tahuti]
+            %poke  %tahuti-action  !>([%del-invite group])
+        ==
         :*  %give  %fact  [/[gid.action] ~]  %tahuti-update
-            !>  ^-  update  [%reg gid.action reg]
+            !>  ^-  update  [%acl gid.action acl]
         ==
         :*  %give  %kick  [/[gid.action] ~]  [~ p.action]  ==
       ==
     %=  this
-      regs    (~(put by regs) gid.action reg)
+      acls    (~(put by acls) gid.action acl)
     ==
     ::  (subscribe to a group and remove invite)
       ::
       %join
     ~&  >  '%tahuti (on-poke): join'
-    ?>  =(our.bowl src.bowl)
+    ?>  .=(our.bowl src.bowl)
     =/  path  /[gid.action]
     :-  ^-  (list card)
         :~  [%pass path %agent [host.action %tahuti] %watch path]
@@ -334,11 +348,9 @@
     [~ ~ [%noun !>(invites.this)]]
     ::
       [%x %groups ~]
-    ~&  >  '%tahuti (on-peek): groups'
     [~ ~ [%noun !>(groups.this)]]
     ::
       [%x =gid ~]
-    ~&  >  '%tahuti (on-peek): gid'
     =/  group  (~(got by groups) gid.path)
     =/  acl    (~(got by acls) gid.path)
     =/  reg    (~(got by regs) gid.path)
@@ -346,7 +358,6 @@
     [~ ~ [%noun !>([group acl reg led])]]
     ::
       [%x =gid %net ~]
-    ?>  (~(has by groups) gid.path)
     =/  group  (~(got by groups) gid.path)
     =/  reg    (~(got by regs) gid.path)
     =/  led    (~(got by leds) gid.path)
@@ -355,8 +366,6 @@
     [~ ~ [%noun !>(net)]]
     ::
       [%x =gid %rei ~]
-    ~&  >  '%tahuti (on-peek): reimbursements'
-    ?>  (~(has by groups) gid.path)
     =/  group  (~(got by groups) gid.path)
     =/  reg    (~(got by regs) gid.path)
     =/  led    (~(got by leds) gid.path)
@@ -385,7 +394,7 @@
     ::
       %fact
     ?>  ?=(%tahuti-update p.cage.sign)
-    ~&  >  '%tahuti (on-agent): update from publisher'
+    ~&  >  '%tahuti (on-agent): update from publisher (%fact)'
     =/  =update  !<(update q.cage.sign)
     ?>  =(gid gid.update)
     :: ?>  =(our.bowl host.group.update)

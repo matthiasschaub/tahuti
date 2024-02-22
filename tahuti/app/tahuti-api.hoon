@@ -173,7 +173,10 @@
           [(send [401 ~ [%plain "401 - Unauthorized"]]) state]
         =/  content   (need (de:json:html q.u.body.request.inbound-request))
         =,  (group:dejs content)
-        ?:  ?|(=(title '') =(title ' '))
+        ?:  ?|
+              .=(title '')
+              .=(title ' ')
+            ==
           [(send [422 ~ [%plain "422 - Unprocessable Entity"]]) state]
         :: ?<  (sane ...)
         =/  action    [%add-group [gid title host=our.bowl currency public]]
@@ -248,7 +251,7 @@
         =,  .^([=group =acl =reg =led] %gx path)
         ?.  auth
           [(send [401 ~ [%plain "Unauthorized"]]) state]
-        ?.  =(our.bowl host.group)
+        ?.  .=(our.bowl host.group)
           [(send [403 ~ [%plain "Forbidden"]]) state]
         =/  action    [%del-group gid]
         :-  ^-  (list card)
@@ -262,6 +265,21 @@
         =/  gid       (snag 4 `(list @t)`site)
         =/  eid       (snag 6 `(list @t)`site)
         =/  action    [%del-expense gid eid]
+        :-  ^-  (list card)
+          %+  snoc
+            (send [200 ~ [%plain "ok"]])
+          [%pass ~ %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
+        state
+      ::
+          [%apps %tahuti %api %groups @t %invitees ~]
+        ?.  auth
+          [(send [401 ~ [%plain "401 - Unauthorized"]]) state]
+        ?~  body.request.inbound-request
+          [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
+        =/  gid      (snag 4 `(list @t)`site)
+        =/  content  (need (de:json:html q.u.body.request.inbound-request))
+        =/  invitee  (invitee:dejs content)
+        =/  action   [%kick gid invitee]
         :-  ^-  (list card)
           %+  snoc
             (send [200 ~ [%plain "ok"]])

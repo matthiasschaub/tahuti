@@ -146,8 +146,25 @@ def group_public(zod, gid) -> dict:
     return group
 
 
+# TODO: deprecate in favor of invitee_nus
 @pytest.fixture
 def invitee(zod, gid, group) -> str:
+    """Based on `group`. Adds invitee."""
+    url = f"/apps/tahuti/api/groups/{gid}/invitees"
+    zod.put(url, json={"invitee": "~nus"})
+    return "~nus"
+
+
+@pytest.fixture
+def invitee_nus(zod, gid, group) -> str:
+    """Based on `group`. Adds invitee."""
+    url = f"/apps/tahuti/api/groups/{gid}/invitees"
+    zod.put(url, json={"invitee": "~nus"})
+    return "~nus"
+
+
+@pytest.fixture
+def invitee_public(zod, gid, group_public) -> str:
     """Based on `group`. Adds invitee."""
     url = f"/apps/tahuti/api/groups/{gid}/invitees"
     zod.put(url, json={"invitee": "~nus"})
