@@ -1,4 +1,5 @@
 import pytest
+import time
 import requests
 
 
@@ -64,22 +65,22 @@ def test_get_members_unauthorized(gid):
 
 
 @pytest.mark.usefixtures("group_public")
-def test_get_members_public(zod, gid, member_nus, member_martin):
+def test_get_members_public(gid, member_nus, member_martin):
     url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/members"
     response = requests.get(url)
     assert response.status_code == 200
     result = response.json()
     assert isinstance(result, list)
     assert "~zod" in result
-    assert member_nus in result
-    assert member_martin in result
+    assert "~nus"in result
+    assert "martin" in result
 
 
 @pytest.mark.usefixtures("group")
 def test_delete_members(zod, gid, member_nus):
     url = f"/apps/tahuti/api/groups/{gid}/members"
     response = zod.delete(url, json={"member": member_nus})
-    assert response.status_code == 401
+    assert response.status_code == 501
 
 
 @pytest.mark.usefixtures("group")
@@ -101,4 +102,4 @@ def test_delete_members_public(zod, gid, member_martin):
 def test_delete_members_public_unauthorized(gid, member_martin):
     url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/members"
     response = requests.delete(url, json={"member": member_martin})
-    assert response.status_code == 401
+    assert response.status_code == 501

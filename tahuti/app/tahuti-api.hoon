@@ -123,15 +123,22 @@
           [(send [200 ~ [%json (version:enjs '2024-02-18.2')]]) state]
           ::
             %members
+          ::  FIX: does not work due to reg containing non Urbit-ID
+          ::    members which get filtered out when comparing against
+          ::    acl
+          ::
+          =/  regmod    `(set @tas)`(silt (skim ~(tap in reg) |=(m=member ?~(`(unit @p)`(slaw %p `@t`m) %.n %.y))))
           =/  aclmod    `(set @tas)`(~(run in acl) |=(=@p `@tas`(scot %p p)))
-          =/  members   (~(int in reg) aclmod)
+          =/  castoffs  (~(dif in regmod) aclmod)
+          =/  members   (~(dif in reg) castoffs)
           =.  members   (~(put in members) `@tas`(scot %p host.group))
           [(send [200 ~ [%json (members:enjs members)]]) state]
           ::
             %castoffs
-          =/  aclmod    `(set @tas)`(~(run in acl) |=(=@p `@tas`(scot %p p)))
-          =/  castoff   (~(dif in reg) aclmod)
-          [(send [200 ~ [%json (members:enjs castoff)]]) state]
+          =/  regmod    `(set @tas)`(silt (skim ~(tap in reg) |=(m=member ?~(`(unit @p)`(slaw %p `@t`m) %.n %.y))))
+          =/  aclmod    `(set @tas)`(~(run in acl) |=(=@p `@tas`(scot %p `@t`p)))
+          =/  castoffs   (~(dif in regmod) aclmod)
+          [(send [200 ~ [%json (members:enjs castoffs)]]) state]
             ::
             %invitees
           =/  aclmod    `(set @tas)`(~(run in acl) |=(=@p `@tas`(scot %p p)))
@@ -233,11 +240,11 @@
       ::
         %'DELETE'
       ~&  >  '%tahuti-api: DELETE'
-      ?.  auth
-        [(send [401 ~ [%plain "401 - Unauthorized"]]) state]
       ?+  site  [(send [404 ~ [%plain "404 - Not Found"]]) state]
         ::
           [%apps %tahuti %api %groups @t ~]
+        ?.  auth
+          [(send [401 ~ [%plain "401 - Unauthorized"]]) state]
         =/  gid        (snag 4 `(list @t)`site)
         =/  path  /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/[gid]/noun
         =,  .^([=group =acl =reg =led] %gx path)
@@ -252,6 +259,11 @@
       ::
           [%apps %tahuti %api %groups @t %expenses @t ~]
         ~&  >  '%tahuti-api: DELETE /expenses/{eid}'
+        ?.  ?|
+              auth
+              public
+            ==
+          [(send [401 ~ [%plain "401 - Unauthorized"]]) state]
         =/  gid       (snag 4 `(list @t)`site)
         =/  eid       (snag 6 `(list @t)`site)
         =/  action    [%del-expense gid eid]
@@ -262,6 +274,8 @@
         state
       ::
           [%apps %tahuti %api %groups @t %invitees ~]
+        ?.  auth
+          [(send [401 ~ [%plain "401 - Unauthorized"]]) state]
         ?~  body.request.inbound-request
           [(send [418 ~ [%plain "418 - I'm a teapot"]]) state]
         =/  gid      (snag 4 `(list @t)`site)

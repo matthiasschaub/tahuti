@@ -1,5 +1,6 @@
 from uuid import uuid4
 import pytest
+import requests
 
 
 @pytest.mark.usefixtures("group", "member", "member_lus")
@@ -37,3 +38,19 @@ def test_reimbusements_simple(zod, gid):
     assert resp.status_code == 200
     res = resp.json()
     assert res == [{"debitor": "~zod", "amount": 10, "creditor": "~lus"}]
+
+
+@pytest.mark.usefixtures("group_public", "expense")
+def test_reimbursements_public(gid):
+    url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/reimbursements"
+    resp = requests.get(url)
+    assert resp.status_code == 200
+    res = resp.json()
+    assert res == []
+
+
+@pytest.mark.usefixtures("group", "expense")
+def test_reimbursements_unauthorized(gid):
+    url = f"http://localhost:8080/apps/tahuti/api/groups/{gid}/reimbursements"
+    resp = requests.get(url)
+    assert resp.status_code == 401
