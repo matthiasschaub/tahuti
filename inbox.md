@@ -3,20 +3,21 @@
 ## Priority
 
 - feat: leave group as member
-  - what should happen? -> archive vs remove
 - feat: remove member from group
-  - what should happen? -> archive vs remove
 - feat: edit expense
+- fix: decline invite
 - ui: make error message for request failure due to unauthenticated request nicer
 - ui: page transitions
 - fix: update static links to icons
 - feat: support multiple currencies when creating a new group
 - feat: support multiple currencies when adding a new expense
-  - convert to groups currency
 
 ## Backlog
 
-- feat(stats): who paid how much for the whole group?
+- refactor: move state transition to its own library or helper arm
+- refactor: add helper to get all data of a group (reg, led, acl, group)
+- refactor: host should be part of register
+- feat: who paid how much for the whole group?
 - feat: history/event log for each event
 - feat: tags
 - ui: sort table after column header
