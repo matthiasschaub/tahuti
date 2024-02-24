@@ -134,6 +134,7 @@
       :-  %gid       so:dejs:format
       :-  %host      (se:dejs:format %p)
     ==
+  ++  leave  join
   ++  group
     ::  input same as group but without host
     ::

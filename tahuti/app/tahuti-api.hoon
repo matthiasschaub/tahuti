@@ -303,9 +303,18 @@
         ::
           [%apps %tahuti %api %join ~]
         ~&  >  '%tahuti-api: /join'
-        =/  content   (need (de:json:html q.u.body.request.inbound-request))
-        =/  join      (join:dejs content)
-        =/  action    [%join gid.join host.join]
+        =,  (join:dejs (need (de:json:html q.u.body.request.inbound-request)))
+        =/  action    [%join gid host]
+        :-  ^-  (list card)
+          %+  snoc
+            (send [200 ~ [%plain "ok"]])
+          [%pass ~ %agent [our.bowl %tahuti] %poke %tahuti-action !>(action)]
+        state
+        ::
+          [%apps %tahuti %api %leave ~]
+        ~&  >  '%tahuti-api: /leave'
+        =,  (leave:dejs (need (de:json:html q.u.body.request.inbound-request)))
+        =/  action   [%leave gid host]
         :-  ^-  (list card)
           %+  snoc
             (send [200 ~ [%plain "ok"]])

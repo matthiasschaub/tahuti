@@ -47,9 +47,9 @@ def test_put_members_public_unauthorized(nus, gid):
 
 @pytest.mark.usefixtures("group")
 def test_get_members(zod, nus, gid, member_nus):
-    for pal in (zod, nus):
+    for ship in (zod, nus):
         url = f"/apps/tahuti/api/groups/{gid}/members"
-        response = pal.get(url)
+        response = ship.get(url)
         assert response.status_code == 200
         result = response.json()
         assert isinstance(result, list)
@@ -72,7 +72,7 @@ def test_get_members_public(gid, member_nus, member_martin):
     result = response.json()
     assert isinstance(result, list)
     assert "~zod" in result
-    assert "~nus"in result
+    assert "~nus" in result
     assert "martin" in result
 
 

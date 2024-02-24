@@ -96,6 +96,7 @@
       [%allow =gid =@p]     :: allow to subscribe
       [%kick =gid =@p]      :: kick subscriber
       [%join =gid =host]    :: subscribe
+      [%leave =gid =host]   :: unsubscribe
       ::
       ::  expense actions
       ::
