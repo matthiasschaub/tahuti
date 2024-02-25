@@ -4,7 +4,7 @@
     image+'https://raw.githubusercontent.com/matthiasschaub/tahuti/main/tahuti/app/ui/static/images/icons/512.png'
     base+'tahuti'
     site+/apps/tahuti
-    version+[24 2 18]
+    version+[24 2 25]
     website+'https://github.com/matthiasschaub/tahuti'
     license+'MIT'
 ==
