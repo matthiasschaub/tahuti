@@ -67,35 +67,35 @@
         ?!  .=  (find [ship ~] involves.ex)  ~
         .=  ship  payer.ex
       ==
-      :: then, increase debit and credit
-      ::
-      %=  $
-        d  (sum:si d (fra:si (new:si & amount.ex) (new:si & (lent involves.ex))))
-        c  (sum:si c (new:si & amount.ex))
-        j  +(j)
-      ==
+    :: then, increase debit and credit
+    ::
+    %=  $
+      d  (sum:si d (fra:si (new:si & amount.ex) (new:si & (lent involves.ex))))
+      c  (sum:si c (new:si & amount.ex))
+      j  +(j)
+    ==
   :: else
   ::
   ?:  :: if, ship is only involved
       ::
       ?!  .=  (find [ship ~] involves.ex)  ~
-      :: then, increase debit
-      ::
-      %=  $
-        d  (sum:si d (fra:si (new:si & amount.ex) (new:si & (lent involves.ex))))
-        j  +(j)
-      ==
+    :: then, increase debit
+    ::
+    %=  $
+      d  (sum:si d (fra:si (new:si & amount.ex) (new:si & (lent involves.ex))))
+      j  +(j)
+    ==
   :: else
   ::
   ?:  :: if, ship is only payer
       ::
       .=  ship  payer.ex
-      :: then, increase credit
-      ::
-      %=  $
-        c  (sum:si c (new:si & amount.ex))
-        j  +(j)
-      ==
+    :: then, increase credit
+    ::
+    %=  $
+      c  (sum:si c (new:si & amount.ex))
+      j  +(j)
+    ==
   :: else, continue
   ::
   %=($ j +(j))

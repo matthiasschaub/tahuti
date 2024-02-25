@@ -123,29 +123,18 @@
         </svg>
       </a>
       <p
-        id="get-invites"
+        id="invites"
         hx-get="/api/invites"
         hx-trigger="load"
-        mustache-template="invites-template"
+        hx-ext="client-side-formats"
+        mustache-template="invites-temp"
       ></p>
-      <template id="invites-template"> {{#.}}{{gid}}{{/.}} </template>
+      <template id="invites-temp">
+        {{#invites}} You are invited to join another group. See
+        <a href="/apps/tahuti/invites">invites</a>. {{/invites}}
+        {{^invites}}{{/invites}}
+      </template>
     </footer>
   </body>
   <script src="/apps/tahuti/helper.js"></script>
-  <script>
-    const e = document.getElementById("get-invites");
-    e.addEventListener("htmx:afterSwap", (event) => {
-      if (e.innerHTML != "") {
-        e.innerHTML =
-          'You are invited to join another group. See <a href="/apps/tahuti/invites">invites</a>.';
-      }
-    });
-
-    window.onpageshow = function (event) {
-      if (event.persisted) {
-        const e = document.getElementById("overlay");
-        e.classList.remove("htmx-request");
-      }
-    };
-  </script>
 </html>

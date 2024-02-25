@@ -103,6 +103,15 @@ htmx.defineExtension("client-side-formats", {
         }
         break;
       }
+      case "invites": {
+        console.log(data);
+        if (data.length > 0) {
+          data = { invites: [true] };
+        } else {
+          data = { invites: [] };
+        }
+        break;
+      }
     }
     return JSON.stringify(data);
   },

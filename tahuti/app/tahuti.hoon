@@ -31,9 +31,13 @@
       ~
   this
 ::
+::  envases, produces current state
+::
 ++  on-save
   ^-  vase
   !>(state)
+::
+::  unwraps old vase, make state changes
 ::
 ++  on-load
   |=  =vase
@@ -111,6 +115,9 @@
       --
     --
   --
+::
+::  another agents sends a message, react
+::
 ++  on-poke
   |=  [=mark =vase]
   ^-  [(list card) $_(this)]
@@ -146,10 +153,11 @@
         :~  [%give %kick [/[gid.action] ~] ~]
         ==
     %=  this
-      groups  (~(del by groups) gid.action)
-      acls    (~(del by acls) gid.action)
-      regs    (~(del by regs) gid.action)
-      leds    (~(del by leds) gid.action)
+      invites  (~(del by invites) gid.action)
+      groups   (~(del by groups) gid.action)
+      acls     (~(del by acls) gid.action)
+      regs     (~(del by regs) gid.action)
+      leds     (~(del by leds) gid.action)
     ==
     ::
       %add-expense
@@ -197,13 +205,13 @@
         ==
     ?.  =(our.bowl host.group)
       :-  ^-  (list card)
-        :~  (action:make-card [host.group action])
+        :~  (action:effect [host.group action])
         ==
       this
     =/  led  (~(got by leds) gid.action)
     =.  led  (~(del by led) eid.action)
     :-  ^-  (list card)
-      :~  (update:make-card [%ledger gid.action led])
+      :~  (update:effect [%ledger gid.action led])
       ==
     %=  this
       leds  (~(put by leds) gid.action led)
@@ -221,7 +229,7 @@
     =/  reg  (~(got by regs) gid.action)
     =.  reg  (~(put in reg) member.action)
     :-  ^-  (list card)
-      :~  (update:make-card [%reg gid.action reg])
+      :~  (update:effect [%reg gid.action reg])
       ==
     %=  this
       regs  (~(put by regs) gid.action reg)
@@ -240,8 +248,8 @@
     =.  acl  (~(put in acl) p.action)
     :-  ^-  (list card)
       :~
-        (update:make-card [%acl gid.action acl])
-        (action:make-card [p.action [%add-invite group]])
+        (update:effect [%acl gid.action acl])
+        (action:effect [p.action [%add-invite group]])
       ==
     %=  this
       acls     (~(put by acls) gid.action acl)
@@ -287,8 +295,8 @@
     =/  path  /[gid.action]
     :-  ^-  (list card)
       :~
-        (update:make-card [%acl gid.action acl])
-        (action:make-card [p.action [%del-invite group]])
+        (update:effect [%acl gid.action acl])
+        (action:effect [p.action [%del-invite group]])
         [%give [%kick [path ~] (some p.action)]]
       ==
     %=  this
@@ -301,33 +309,38 @@
     ?>  .=(our.bowl src.bowl)
     =/  path  /[gid.action]
     :-  ^-  (list card)
-        :~  [%pass path [%agent [host.action %tahuti] [%watch path]]]
-        ==
+      :~  [%pass path [%agent [host.action %tahuti] [%watch path]]]
+      ==
     %=  this
       invites  (~(del by invites) gid.action)
     ==
-    ::  (unsubscribe from a group and remove invite)
+    ::  (unsubscribe from a group and delete group data)
       ::
       %leave
     ~&  >  '%tahuti (on-poke): leave'
     ?>  .=(our.bowl src.bowl)
     =/  path  /[gid.action]
     :-  ^-  (list card)
-        :~  [%pass path [%agent [host.action %tahuti] [%leave ~]]]
-        ==
+      :~  [%pass path [%agent [host.action %tahuti] [%leave ~]]]
+      ==
     %=  this
       invites  (~(del by invites) gid.action)
+      groups   (~(del by groups) gid.action)
+      acls     (~(del by acls) gid.action)
+      regs     (~(del by regs) gid.action)
+      leds     (~(del by leds) gid.action)
     ==
   ==
 ++  on-arvo  on-arvo:default
+::
+::  another agent subscribes, handle subscription
+::
 ++  on-watch
-  ::  (send a %fact back with an empty path,
-  ::  which will only go to the new subscriber.)
-  ::
   |=  path=(pole knot)
   ^-  [(list card) $_(this)]
   ?+  path  ~|('%tahuti (on-watch)' (on-watch:default path))
-    ::
+    ::  (send group data only to the new subscriber)
+      ::
       [=gid ~]
     ~&  >  '%tahuti (on-watch)'
     =/  group  (~(got by groups) gid.path)
@@ -338,28 +351,35 @@
     =/  reg    (~(got by regs) gid.path)
     =.  reg  (~(put in reg) `@tas`(scot %p src.bowl))
     :-  ^-  (list card)
-        :~  (update:make-card [%group gid.path group reg acl led])
+        :~  (update:effect [%group gid.path group reg acl led])
         ==
     %=  this
       regs  (~(put by regs) gid.path reg)
     ==
   ==
+::
+::  another agent unsubscribes, quite subscription
+::
 ++  on-leave
   |=  path=(pole knot)
   ^-  [(list card) $_(this)]
   ?+  path  ~|('%tahuti (on-leave)' (on-leave:default path))
-    ::
+    ::  (remove from access-control list)
+      ::
       [=gid ~]
     ~&  >  '%tahuti (on-leave)'
     =/  acl  (~(got by acls) gid.path)
     =.  acl  (~(del in acl) src.bowl)
     :-  ^-  (list card)
-      :~  (update:make-card [%acl gid.path acl])
+      :~  (update:effect [%acl gid.path acl])
       ==
     %=  this
       acls  (~(put by acls) gid.path acl)
     ==
   ==
+::
+::  another agent requests data, send data
+::
 ++  on-peek
   |=  path=(pole knot)
   ^-  (unit (unit [mark vase]))
@@ -401,6 +421,9 @@
     =/  rei    ~(rei tahuti [~(val by led) ~(tap in reg)])
     [~ ~ [%noun !>(rei)]]
   ==
+::
+::  another agent sends data, receive data
+::
 ++  on-agent
   |=  [=wire =sign:agent:gall]
   ^-  [(list card) $_(this)]
@@ -412,6 +435,15 @@
       [~ this]
     ~&  >>>  '%tahuti (on-agent): subscription failed'
     [~ this]
+    ::  TODO: edit status of group to 'kicked'
+    ::        which means that either the host
+    ::        removed the agent or deleted the group
+    ::  NOTE: maybe this agent has already left the group and no more
+    ::        group data is present
+      ::
+      %kick
+    !!
+    ::
       %fact
     ?>  ?=(%tahuti-update p.cage.sign)
     =/  =update  !<(update q.cage.sign)
@@ -474,8 +506,8 @@
   =/  acl    (~(got by acls) gid)
   =/  reg    (~(got by regs) gid)
   =/  led    (~(got by leds) gid)
-  [group acl reg led]
-++  make-card
+  [group=group acl=acl reg=reg led=led]
+++  effect
   |%
   ::  (give fact as gift - or update subscribers)
   ::

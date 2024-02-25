@@ -97,6 +97,18 @@
           >
             Join group ▸
           </button>
+          <button
+            id="post-leave"
+            class="button-cancel"
+            hx-post="/api/leave"
+            hx-ext="json-enc"
+            hx-swap="none"
+            hx-vals='{"gid": "{{gid}}", "host": "{{host}}", "public": "{{public}}"}'
+            hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups"'
+            type="submit"
+          >
+            Decline invitation ▸
+          </button>
         </form>
       </fieldset>
       {{/.}}

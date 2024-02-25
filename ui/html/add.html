@@ -108,7 +108,7 @@
         <input
           id="amount"
           type="text"
-          inputmode="text"
+          inputmode="decimal"
           autocomplete="transaction-amount"
           name="amount"
           aria-label="Amount"
@@ -174,7 +174,8 @@
             value="{{.}}"
             checked
           />
-          <label for="check-{{.}}">{{.}}</label>
+          <label for="check-{{.}}">{{.}} </label>
+          <br />
           {{/.}}
         </template>
 
