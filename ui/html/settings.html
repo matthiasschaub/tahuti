@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <title>Group Expenses</title>
@@ -124,6 +124,17 @@
         <li>{{.}} <small>(invited)</small></li>
         {{/.}}
       </template>
+      <div
+        id="get-castoffs"
+        hx-get="/api/groups/{gid}/castoffs"
+        hx-trigger="load"
+        mustache-template="castoffs-template"
+      ></div>
+      <template id="castoffs-template">
+        {{#.}}
+        <li>{{.}} <small>(lost)</small></li>
+        {{/.}}
+      </template>
     </ul>
 
     <fieldset>
@@ -140,29 +151,6 @@
       </button>
     </fieldset>
 
-    <!-- TODO -->
-    <!-- <h3>Leave group</h3> -->
-    <!-- <fieldset> -->
-    <!--     <!-1- hx-delete="/" -1-> -->
-    <!--     <!-1- TODO -1-> -->
-    <!--     <form -->
-    <!--         id="delete-groups" -->
-    <!--         hx-confirm="Are you sure?" -->
-    <!--         hx-ext="json-enc" -->
-    <!--         hx-swap="none" -->
-    <!--         hx-vals="js:{gid: gid()}" -->
-    <!--         hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'" -->
-    <!--     > -->
-    <!--         Leaving this group will not remove any expenses you have been -->
-    <!--         involved with. -->
-    <!--         <!-1- Group host can not leave a group. -1-> -->
-    <!--         <br /> -->
-    <!--         <button class="button-cancel" type="submit"> -->
-    <!--             Leave this group -->
-    <!--         </button> -->
-    <!--     </form> -->
-    <!-- </fieldset> -->
-
     <h3>Export expenses</h3>
     <fieldset>
       Download all expenses of this group as JSON.
@@ -174,6 +162,35 @@
         Export expenses ▸
       </button>
     </fieldset>
+
+    <h3>Leave group</h3>
+
+    <div
+      hx-get="/api/groups/{gid}"
+      hx-trigger="load"
+      mustache-template="leave-template"
+    ></div>
+    <template id="leave-template">
+      {{#.}}
+      <fieldset>
+        <!-- TODO: redirect after successful request? -->
+        <form
+          id="leave-groups"
+          hx-confirm="Are you sure?"
+          hx-post="/api/leave"
+          hx-ext="json-enc"
+          hx-swap="none"
+          hx-vals='{"gid": "{{gid}}", "host": "{{host}}", "public": "{{public}}"}'
+          hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'"
+        >
+          Leaving this group will not remove any expenses you have been involved
+          with.
+          <br />
+          <button class="button-cancel" type="submit">Leave this group</button>
+        </form>
+      </fieldset>
+      {{/.}}
+    </template>
 
     <h3>Delete group</h3>
     <fieldset>

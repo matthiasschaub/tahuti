@@ -318,7 +318,10 @@
       ::
       %leave
     ~&  >  '%tahuti (on-poke): leave'
-    ?>  .=(our.bowl src.bowl)
+    ?>  ?&
+          .=(our.bowl src.bowl)
+          !=(our.bowl host.action)
+        ==
     =/  path  /[gid.action]
     :-  ^-  (list card)
       :~  [%pass path [%agent [host.action %tahuti] [%leave ~]]]

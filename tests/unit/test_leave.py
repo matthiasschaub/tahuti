@@ -123,3 +123,23 @@ def test_post_leave_not_allowed(zod, nus, gid, group):
     assert response.status_code == 200
     result = response.json()
     assert result == ["~zod"]
+
+
+def test_post_leave_host(zod, gid, group):
+    leave = {
+        "host": group["host"],
+        "gid": gid,
+    }
+    url = "/apps/tahuti/api/leave"
+    response = zod.post(url, json=leave)
+    assert response.status_code == 403
+
+    # Await leave
+    sleep(0.5)
+
+    # GET /members (zod)
+    url = f"/apps/tahuti/api/groups/{gid}"
+    response = zod.get(url)
+    assert response.status_code == 200
+    result = response.json()
+    assert result == group

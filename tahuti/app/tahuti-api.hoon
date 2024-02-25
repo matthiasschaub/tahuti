@@ -314,6 +314,8 @@
           [%apps %tahuti %api %leave ~]
         ~&  >  '%tahuti-api: /leave'
         =,  (leave:dejs (need (de:json:html q.u.body.request.inbound-request)))
+        ?:  .=(our.bowl host)
+          [(send [403 ~ [%plain "Forbidden"]]) state]
         =/  action   [%leave gid host]
         :-  ^-  (list card)
           %+  snoc
