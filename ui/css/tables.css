@@ -63,6 +63,7 @@ table > tbody > tr:last-child > :is(th, td) {
   cursor: pointer;
 }
 
+.expenses > :is(thead, tbody) > tr > :is(th, td):nth-child(2),
 .col-two > :is(thead, tbody) > tr > :is(th, td):nth-child(2) {
   text-align: right;
 }

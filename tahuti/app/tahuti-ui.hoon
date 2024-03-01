@@ -49,7 +49,6 @@
 ::
 ++  on-init
   ^-  [(list card) $_(this)]
-  ~&  >  '%tahuti-ui: initialize'
   :-  ^-  (list card)
     :~
       :*  %pass  /bind  %arvo  %e
@@ -80,7 +79,6 @@
   ?+  mark  (on-poke:default mark vase)
     ::
       %handle-http-request
-    ~&  >  '%tahuti-ui: handle http request'
     =^  cards  state
       (handle-http !<([@ta =inbound-request:eyre] vase))
     [cards this]

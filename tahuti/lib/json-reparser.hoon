@@ -75,7 +75,7 @@
     ++  net
       ::  turn net amounts map into list
       ::
-      |=  n=^net
+      |=  [n=^net c=@tas]
       ^-  json
       :-  %a
       %+  turn  ~(tap by n)
@@ -84,13 +84,14 @@
       =/  fmt  ?.(syn "-{<abs>}" "{<abs>}")
       %-  pairs:enjs:format
       :~
-        :-  'member'  [%s member]
-        :-  'amount'  [%s (crip fmt)]
+        :-  'member'    [%s member]
+        :-  'amount'    [%s (crip fmt)]
+        :-  'currency'  [%s c]
       ==
     ++  rei
       ::  turn reimbursements map of map into list
       ::
-      |=  r=^rei
+      |=  [r=^rei c=@tas]
       ^-  json
       :-  %a
       %+  turn
@@ -104,6 +105,7 @@
         :-  'debitor'   [%s debitor]
         :-  'creditor'  [%s creditor]
         :-  'amount'    (numb:enjs:format amount)
+        :-  'currency'  [%s c]
       ==
     --
 ::

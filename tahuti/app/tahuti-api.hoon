@@ -29,7 +29,6 @@
 ::
 ++  on-init
   ^-  [(list card) $_(this)]
-  ~&  >  '%tahuti-api: initialize'
   :-  ^-  (list card)
     :~
       :*  %pass  /eyre/connect  %arvo  %e
@@ -58,7 +57,6 @@
   ?+  mark  (on-poke:default mark vase)
     ::
       %handle-http-request
-    ~&  >  '%tahuti-api: handle http request'
     =^  cards  state
       (handle-http !<([@ta =inbound-request:eyre] vase))
     [cards this]
@@ -153,11 +151,11 @@
             %balances
           =/  path  /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/[gid]/net/noun
           =/  net   .^(net %gx path)
-          [(send [200 ~ [%json (net:enjs net)]]) state]
+          [(send [200 ~ [%json (net:enjs [net currency.group])]]) state]
             %reimbursements
           =/  path  /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/[gid]/rei/noun
           =/  rei   .^(rei %gx path)
-          [(send [200 ~ [%json (rei:enjs rei)]]) state]
+          [(send [200 ~ [%json (rei:enjs [rei currency.group])]]) state]
         ==
         ::
           [%apps %tahuti %api %groups @t %expenses @t ~]
@@ -302,7 +300,7 @@
       ?+  site  [(send [404 ~ [%plain "404 - Not Found"]]) state]
         ::
           [%apps %tahuti %api %join ~]
-        ~&  >  '%tahuti-api: /join'
+        ~&  >  '%tahuti-api: POST /join'
         =,  (join:dejs (need (de:json:html q.u.body.request.inbound-request)))
         =/  action    [%join gid host]
         :-  ^-  (list card)
@@ -312,10 +310,10 @@
         state
         ::
           [%apps %tahuti %api %leave ~]
-        ~&  >  '%tahuti-api: /leave'
+        ~&  >  '%tahuti-api: POST /leave'
         =,  (leave:dejs (need (de:json:html q.u.body.request.inbound-request)))
         ?:  .=(our.bowl host)
-          [(send [403 ~ [%plain "Forbidden"]]) state]
+          [(send [403 ~ [%plain "Forbidden: The group host is not allowed to leave the group."]]) state]
         =/  action   [%leave gid host]
         :-  ^-  (list card)
           %+  snoc
@@ -324,7 +322,7 @@
         state
         ::
           [%apps %tahuti %api %groups @t %kick ~]
-        ~&  >  '%tahuti-api: /kick'
+        ~&  >  '%tahuti-api: POST /kick'
         =/  gid       (snag 4 `(list @t)`site)
         =/  path  /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/[gid]/noun
         =,  .^([=group =acl =reg =led] %gx path)

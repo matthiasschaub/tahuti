@@ -90,8 +90,8 @@ htmx.defineExtension("client-side-formats", {
       case "balances":
       case "reimbursements": {
         for (let i = 0; i < data.length; i++) {
-          const currency = "EUR";
           const amount = data[i].amount;
+          const currency = data[i].currency;
           if (currency == "EUR") {
             data[i].amount = EUR(amount).format();
           } else if (currency == "USD") {
