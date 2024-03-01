@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="dark" lang="en">
+<html class="dark">
   <head>
     <title>Group Expenses</title>
     <meta charset="utf-8" />
@@ -76,6 +76,7 @@
     ></div>
     <template id="title-template">
       <h2>{{title}}</h2>
+      <div id="group-currency" hidden>{{currency}}</div>
     </template>
 
     <h3>Add an expense</h3>
@@ -108,8 +109,7 @@
         <input
           id="amount"
           type="text"
-          inputmode="decimal"
-          autocomplete="transaction-amount"
+          inputmode="numeric"
           name="amount"
           aria-label="Amount"
           placeholder="Amount"
@@ -118,6 +118,7 @@
         <br />
 
         <!-- currency -->
+        <!-- TODO: on change update currencyMask -->
         <label for="currency">Which currency?</label>
         <br />
         <select
@@ -208,53 +209,68 @@
 
   <script src="/apps/tahuti/helper.js"></script>
   <script>
+    let currencyMask = null;
+
     const form = document.getElementById("put-expenses");
-    const amount = document.getElementById("amount");
-    const date = document.getElementById("date");
-
-    // set defaults
-    //
-    date.valueAsDate = new Date();
-
-    // validate inputs
-    //
-    amount.addEventListener("input", (event) => {
-      // amount must be a number
-      let val = amount.value;
-      val = val.replace(",", "");
-      val = val.replace(".", "");
-      val = Number(val);
-      if (Number.isNaN(parseFloat(val)) && !Number.isFinite(val)) {
-        amount.setCustomValidity("Please enter a valid amount.");
-      } else {
-        amount.setCustomValidity("");
-      }
-    });
-    // involves: validate that at least one checkbox (involved member) is selected
     form.addEventListener("htmx:afterSettle", (event) => {
-      // TODO: more elegant way?
-      // function validateCheckboxes() {
-      //     var checkboxes = document.querySelectorAll(
-      //         'input[name="involves"]:checked'
-      //     );
-      //     console.log(checkboxes);
-      //     if (checkboxes.length === 0) {
-      //         alert("Please check at least one checkbox");
-      //         return false; // Prevent the form from submitting
-      //     }
-      //     return true; // Allow form submission if at least one checkbox is checked
-      // }
+      // input elements
+      const amount = document.getElementById("amount");
+      const currency = document.getElementById("currency");
+      const involves = Array.from(document.querySelectorAll(".checkbox"));
+      const date = document.getElementById("date");
 
-      const checkboxes = Array.from(document.querySelectorAll(".checkbox"));
-      checkboxes.forEach((item) => {
+      // values
+      const groupCurrency = document.getElementById("group-currency").innerText;
+
+      // validators
+      //
+      // involves: at least one checkbox (involved member) must be selected
+      involves.forEach((item) => {
         item.addEventListener("click", (event) => {
-          if (checkboxes.reduce((acc, curr) => acc || curr.checked, false)) {
+          if (involves.reduce((acc, curr) => acc || curr.checked, false)) {
             // valid
-            checkboxes.at(-1).setCustomValidity("");
+            involves.at(-1).setCustomValidity("");
           } else {
             // invalid
-            checkboxes.at(-1).setCustomValidity("Select at least one.");
+            involves.at(-1).setCustomValidity("Select at least one.");
           }
+        });
+
+        // amount: must be a number
+        amount.addEventListener("input", (event) => {
+          let val = currencyMask.getUnmasked();
+          if (Number.isNaN(parseFloat(val)) && !Number.isFinite(val)) {
+            amount.setCustomValidity("Please enter a valid amount.");
+          } else {
+            amount.setCustomValidity("");
+          }
+        });
+
+        // defaults
+        //
+        // date: current date and time
+        date.valueAsDate = new Date();
+
+        // currency: group currency
+        currency.value = groupCurrency;
+
+        // input masks
+        //
+        // currency: use `@tadashi/currency` and based on `Intl.NumberFormat`
+        const userCurrency = currency.value;
+        const userLocale =
+          navigator.languages && navigator.languages.length
+            ? navigator.languages[0]
+            : navigator.language;
+        currencyMask = new Currency(amount, {
+          maskOpts: {
+            empty: true,
+            locales: userLocale,
+            options: {
+              style: "currency",
+              currency: userCurrency,
+            },
+          },
         });
       });
     });
@@ -262,40 +278,17 @@
     // format values
     //
     form.addEventListener("htmx:configRequest", (event) => {
-      // send amount in cents
-      const USD = (value) => currency(value);
-      const EUR = (value) =>
-        currency(value, {
-          decimal: ",",
-          separator: ".",
-        });
-      const BTC = (value) =>
-        currency(value, {
-          precision: 8,
-        });
+      // send amount in cents as string
       if ("amount" in event.detail.parameters) {
-        if (event.detail.parameters.currency == "EUR") {
-          event.detail.parameters.amount = EUR(
-            amount.value,
-          ).intValue.toString();
-        } else if (event.detail.parameters.currency == "USD") {
-          event.detail.parameters.amount = USD(
-            amount.value,
-          ).intValue.toString();
-        } else if (event.detail.parameters.currency == "BTC") {
-          event.detail.parameters.amount = BTC(
-            amount.value,
-          ).intValue.toString();
-        } else {
-          // TODO: what to do in this case?
-          console.log("currency code not supported.");
-        }
+        let val = currencyMask.getUnmasked().toString();
+        val = val.replace(".", "");
+        event.detail.parameters.amount = val;
       }
       // send date as unix timestamp
       if ("date" in event.detail.parameters) {
         event.detail.parameters.date = new Date(date.value).valueOf();
       }
-      // always send checkbox checks as array
+      // send checkbox checks as array always
       if ("involves" in event.detail.parameters) {
         if (!Array.isArray(event.detail.parameters.involves)) {
           // only one checkbox is selected

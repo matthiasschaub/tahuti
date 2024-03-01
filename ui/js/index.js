@@ -1,6 +1,7 @@
 import htmx from "htmx.org";
 import Mustache from "mustache";
 import currency from "currency.js";
+import Currency from "@tadashi/currency";
 
 // extract group ID from URL
 //
@@ -122,4 +123,5 @@ export { gid };
 window.htmx = htmx;
 window.Mustache = Mustache;
 window.currency = currency;
+window.Currency = Currency;
 window.gid = gid;

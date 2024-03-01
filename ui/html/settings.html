@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <title>Group Expenses</title>
@@ -181,7 +181,7 @@
           hx-ext="json-enc"
           hx-swap="none"
           hx-vals='{"gid": "{{gid}}", "host": "{{host}}", "public": "{{public}}"}'
-          hx-on::after-request="window.location.pathname = '/apps/tahuti/groups'"
+          hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups"'
         >
           Leaving this group will not remove any expenses you have been involved
           with.
