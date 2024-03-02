@@ -1,4 +1,3 @@
-<!doctype html>
 <html class="dark">
   <head>
     <title>Group Expenses</title>
@@ -264,6 +263,8 @@
           navigator.languages && navigator.languages.length
             ? navigator.languages[0]
             : navigator.language;
+        console.log(userCurrency);
+        console.log(userLocale);
         currencyMask = new Currency(amount, {
           maskOpts: {
             empty: true,
@@ -303,6 +304,26 @@
       if (event.detail.successful && event.detail.elt.id == "put-expenses") {
         window.location.pathname = "/apps/tahuti/groups/" + gid() + "/expenses";
       }
+    });
+
+    // automatic conversion between currencies
+    // (user selected currency to group base currency)
+    //
+    amount.addEventListener("input", (event) => {
+      const groupCurrency = document.getElementById("group-currency").innerText;
+      const userCurrency = document.getElementById("currency").value;
+      if (groupCurrency === userCurrency) {
+        return;
+      }
+      const value = currencyMask.getUnmasked();
+      const host = "api.frankfurter.app";
+      fetch(
+        `https://${host}/latest?amount=${value}&from=${userCurrency}&to=${groupCurrency}`
+      )
+        .then((resp) => resp.json())
+        .then((data) => {
+                console.log(`${value} ${userCurrency} = ${data.rates[groupCurrency]} ${groupCurrency}`);
+        });
     });
   </script>
 </html>

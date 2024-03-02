@@ -31,6 +31,7 @@ htmx.defineExtension("client-side-formats", {
     }
 
     var data = JSON.parse(text);
+
     switch (elt.id) {
       case "expenses": {
         for (let i = 0; i < data.length; i++) {
@@ -46,6 +47,7 @@ htmx.defineExtension("client-side-formats", {
         }
         break;
       }
+
       case "details": {
         const date = new Date(Number(data.date));
         const options = {
@@ -60,6 +62,7 @@ htmx.defineExtension("client-side-formats", {
         data.amount = intlCurrencyFormat(amount, currency);
         break;
       }
+
       case "balances":
       case "reimbursements": {
         for (let i = 0; i < data.length; i++) {
@@ -69,6 +72,7 @@ htmx.defineExtension("client-side-formats", {
         }
         break;
       }
+
       case "invites": {
         console.log(data);
         if (data.length > 0) {

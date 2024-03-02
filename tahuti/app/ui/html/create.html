@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <title>Group Expenses</title>
@@ -102,11 +102,7 @@
           name="currency"
           aria-label="Currency"
           required
-        >
-          <option value="EUR">EUR</option>
-          <option value="USD">USD</option>
-          <option value="BTC">BTC</option>
-        </select>
+        ></select>
         <br />
         <label>Access</label>
         <br />
@@ -143,5 +139,15 @@
         console.log(event.detail.parameters.public === "true");
       }
     });
+
+    // Retrieve all supported currencies and add it to select list
+    const select = document.getElementById("currency");
+    const currencies = Intl.supportedValuesOf("currency");
+    for (var i = 0; i < currencies.length; i++) {
+      var option = document.createElement("option");
+      option.value = currencies[i];
+      option.text = currencies[i];
+      select.appendChild(option);
+    }
   </script>
 </html>
