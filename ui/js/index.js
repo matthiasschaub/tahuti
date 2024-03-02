@@ -13,31 +13,23 @@ function gid() {
 
 htmx.defineExtension("client-side-formats", {
   transformResponse: function (text, xhr, elt) {
-    const USD = (value) =>
-      currency(value, {
-        symbol: "$",
-        pattern: `# !`,
-        negativePattern: `-# !`,
-        fromCents: true,
-      });
-    const EUR = (value) =>
-      currency(value, {
-        symbol: "€",
-        decimal: ",",
-        separator: ".",
-        pattern: `# !`,
-        negativePattern: `-# !`,
-        fromCents: true,
-      });
-    const BTC = (value) =>
-      currency(value, {
-        symbol: "₿",
-        decimal: ".",
-        pattern: `# !`,
-        negativePattern: `-# !`,
-        fromCents: true,
-        precision: 8,
-      });
+    function intlCurrencyFormat(cents, currency) {
+      const locale =
+        navigator.languages && navigator.languages.length
+          ? navigator.languages[0]
+          : navigator.language;
+      const options = { style: "currency", currency: currency };
+      const numberFormat = new Intl.NumberFormat(locale, options);
+      const parts = numberFormat.formatToParts(cents);
+      const fraction = parts.find((p) => p.type === "fraction");
+      let precision = 0;
+      if (fraction !== undefined) {
+        precision = fraction.value.length;
+      }
+      const dollars = cents.toFixed(precision) / Math.pow(10, precision);
+      return numberFormat.format(dollars);
+    }
+
     var data = JSON.parse(text);
     switch (elt.id) {
       case "expenses": {
@@ -48,19 +40,9 @@ htmx.defineExtension("client-side-formats", {
             day: "numeric",
           };
           data[i].date = date.toLocaleDateString(undefined, options);
-
           const amount = data[i].amount;
           const currency = data[i].currency;
-
-          if (currency == "EUR") {
-            data[i].amount = EUR(amount).format();
-          } else if (currency == "USD") {
-            data[i].amount = USD(amount).format();
-          } else if (currency == "BTC") {
-            data[i].amount = BTC(amount).format();
-          } else {
-            throw "Currency code not suppored: " + currency;
-          }
+          data[i].amount = intlCurrencyFormat(amount, currency);
         }
         break;
       }
@@ -75,16 +57,7 @@ htmx.defineExtension("client-side-formats", {
 
         const amount = data.amount;
         const currency = data.currency;
-
-        if (currency == "EUR") {
-          data.amount = EUR(amount).format();
-        } else if (currency == "USD") {
-          data.amount = USD(amount).format();
-        } else if (currency == "BTC") {
-          data.amount = BTC(amount).format();
-        } else {
-          throw "Currency code not suppored: " + currency;
-        }
+        data.amount = intlCurrencyFormat(amount, currency);
         break;
       }
       case "balances":
@@ -92,15 +65,7 @@ htmx.defineExtension("client-side-formats", {
         for (let i = 0; i < data.length; i++) {
           const amount = data[i].amount;
           const currency = data[i].currency;
-          if (currency == "EUR") {
-            data[i].amount = EUR(amount).format();
-          } else if (currency == "USD") {
-            data[i].amount = USD(amount).format();
-          } else if (currency == "BTC") {
-            data[i].amount = BTC(amount).format();
-          } else {
-            throw "Currency code not suppored: " + currency;
-          }
+          data[i].amount = intlCurrencyFormat(amount, currency);
         }
         break;
       }
