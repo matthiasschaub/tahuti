@@ -103,20 +103,6 @@
         />
         <br />
 
-        <!-- amount -->
-        <label for="amount">How much?</label>
-        <br />
-        <input
-          id="amount"
-          type="text"
-          inputmode="numeric"
-          name="amount"
-          aria-label="Amount"
-          placeholder="Amount"
-          required
-        />
-        <br />
-
         <!-- currency -->
         <!-- TODO: on change update currencyMask -->
         <label for="currency">Which currency?</label>
@@ -132,9 +118,24 @@
           required
         ></select>
         <template id="currency-template">
-          <option value="{{currency}}">{{currency}}</option>
+          <!-- <option value="{{currency}}">{{currency}}</option> -->
         </template>
         <br />
+
+        <!-- amount -->
+        <label for="amount">How much?</label>
+        <br />
+        <input
+          id="amount"
+          type="text"
+          inputmode="numeric"
+          name="amount"
+          aria-label="Amount"
+          placeholder="Amount"
+          required
+        />
+        <div hidden data-amount="" id="convertedAmount"></div>
+        <br id="break" hidden />
 
         <!-- payer -->
         <!-- TODO: add current ship as default value -->
@@ -210,7 +211,6 @@
   <script src="/apps/tahuti/helper.js"></script>
   <script>
     let currencyMask = null;
-
     const form = document.getElementById("put-expenses");
     form.addEventListener("htmx:afterSettle", (event) => {
       // input elements
@@ -235,64 +235,125 @@
             involves.at(-1).setCustomValidity("Select at least one.");
           }
         });
+      });
+      // amount: must be a number
+      amount.addEventListener("input", (event) => {
+        let val = currencyMask.getUnmasked();
+        if (Number.isNaN(parseFloat(val)) && !Number.isFinite(val)) {
+          amount.setCustomValidity("Please enter a valid amount.");
+        } else {
+          amount.setCustomValidity("");
+        }
+      });
 
-        // amount: must be a number
-        amount.addEventListener("input", (event) => {
-          let val = currencyMask.getUnmasked();
-          if (Number.isNaN(parseFloat(val)) && !Number.isFinite(val)) {
-            amount.setCustomValidity("Please enter a valid amount.");
-          } else {
-            amount.setCustomValidity("");
+      // defaults
+      //
+      // date: current date and time
+      date.valueAsDate = new Date();
+      // currency: group currency
+      // retrieve all supported currencies and add it to select list
+      const host = "api.frankfurter.app";
+      // TODO: set to group currency if request fails
+      fetch(`https://${host}/currencies`)
+        .then((resp) => resp.json())
+        .then((data) => {
+          for (const [key, value] of Object.entries(data)) {
+            var option = document.createElement("option");
+            option.value = key;
+            option.text = key;
+            currency.appendChild(option);
           }
+          currency.value = groupCurrency;
         });
 
-        // defaults
-        //
-        // date: current date and time
-        date.valueAsDate = new Date();
-
-        // currency: group currency
-        currency.value = groupCurrency;
-
-        // TODO: set amount placeholder
-
-        // input masks
-        //
-        // currency: use `@tadashi/currency` and based on `Intl.NumberFormat`
-        const userCurrency = currency.value;
-        const userLocale =
-          navigator.languages && navigator.languages.length
-            ? navigator.languages[0]
-            : navigator.language;
-        console.log(userCurrency);
-        console.log(userLocale);
-        currencyMask = new Currency(amount, {
-          maskOpts: {
-            empty: true,
-            locales: userLocale,
-            options: {
-              style: "currency",
-              currency: userCurrency,
-            },
+      // input masks
+      //
+      // currency: use `@tadashi/currency` based on `Intl.NumberFormat`
+      const userCurrency = groupCurrency;
+      const userLocale =
+        navigator.languages && navigator.languages.length
+          ? navigator.languages[0]
+          : navigator.language;
+      currencyMask = new Currency(amount, {
+        maskOpts: {
+          empty: true,
+          locales: userLocale,
+          options: {
+            style: "currency",
+            currency: userCurrency,
           },
-        });
+        },
+      });
+
+      // TODO: reload input mask (currency mask)
+      currency.addEventListener("change", (event) => {
+        currencyMask.opts.maskOpts.options.currency = currency.value;
+      });
+
+      // automatic conversion between currencies
+      // (user selected currency to group base currency)
+      //
+      amount.addEventListener("input", (event) => {
+        const userCurrency = document.getElementById("currency").value;
+        const convertedAmount = document.getElementById("convertedAmount");
+        const breakElement = document.getElementById("break");
+        if (groupCurrency === userCurrency) {
+          if (!convertedAmount.hasAttribute("hidden")) {
+            convertedAmount.addAttribute("hidden");
+            breakElement.addAttribute("hidden");
+          }
+          return;
+        }
+        const value = currencyMask.getUnmasked();
+        if (value === null || value === 0) {
+          return;
+        }
+        const host = "api.frankfurter.app";
+        fetch(
+          `https://${host}/latest?amount=${value}&from=${userCurrency}&to=${groupCurrency}`,
+        )
+          .then((resp) => resp.json())
+          .then((data) => {
+            convertedAmount.removeAttribute("hidden");
+            breakElement.removeAttribute("hidden");
+            // write as cents to data-* attribute
+            convertedAmount.dataset.amount = dollarToCents(
+              data.rates[groupCurrency],
+              groupCurrency,
+            ).toString();
+            // display formatted number
+            convertedAmount.innerText = `= ${intlCurrencyFormat(
+              data.rates[groupCurrency],
+              groupCurrency,
+            )}`;
+          });
       });
     });
 
-    // format values
+    // format request values
     //
     form.addEventListener("htmx:configRequest", (event) => {
       // send amount in cents as string
       if ("amount" in event.detail.parameters) {
-        let val = currencyMask.getUnmasked().toString();
-        val = val.replace(".", "");
+        const groupCurrency =
+          document.getElementById("group-currency").innerText;
+        const userCurrency = document.getElementById("currency").value;
+        if (groupCurrency === userCurrency) {
+          var val = dollarToCents(
+            currencyMask.getUnmasked(),
+            groupCurrency,
+          ).toString();
+        } else {
+          var val = document.getElementById("convertedAmount").dataset.amount;
+        }
         event.detail.parameters.amount = val;
+        event.detail.parameters.currency = groupCurrency;
       }
       // send date as unix timestamp
       if ("date" in event.detail.parameters) {
         event.detail.parameters.date = new Date(date.value).valueOf();
       }
-      // send checkbox checks as array always
+      // always send checkbox checks as array
       if ("involves" in event.detail.parameters) {
         if (!Array.isArray(event.detail.parameters.involves)) {
           // only one checkbox is selected
@@ -305,28 +366,6 @@
       if (event.detail.successful && event.detail.elt.id == "put-expenses") {
         window.location.pathname = "/apps/tahuti/groups/" + gid() + "/expenses";
       }
-    });
-
-    // automatic conversion between currencies
-    // (user selected currency to group base currency)
-    //
-    amount.addEventListener("input", (event) => {
-      const groupCurrency = document.getElementById("group-currency").innerText;
-      const userCurrency = document.getElementById("currency").value;
-      if (groupCurrency === userCurrency) {
-        return;
-      }
-      const value = currencyMask.getUnmasked();
-      const host = "api.frankfurter.app";
-      fetch(
-        `https://${host}/latest?amount=${value}&from=${userCurrency}&to=${groupCurrency}`,
-      )
-        .then((resp) => resp.json())
-        .then((data) => {
-          console.log(
-            `${value} ${userCurrency} = ${data.rates[groupCurrency]} ${groupCurrency}`,
-          );
-        });
     });
   </script>
 </html>

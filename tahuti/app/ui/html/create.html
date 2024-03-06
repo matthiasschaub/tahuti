@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <title>Group Expenses</title>
@@ -141,13 +141,20 @@
     });
 
     // Retrieve all supported currencies and add it to select list
+    //
+    // Support only currencies which are supported by Frankfurter API.
+    // For a unfiltered list use: Intl.supportedValuesOf("currency");
     const select = document.getElementById("currency");
-    const currencies = Intl.supportedValuesOf("currency");
-    for (var i = 0; i < currencies.length; i++) {
-      var option = document.createElement("option");
-      option.value = currencies[i];
-      option.text = currencies[i];
-      select.appendChild(option);
-    }
+    const host = "api.frankfurter.app";
+    fetch(`https://${host}/currencies`)
+      .then((resp) => resp.json())
+      .then((data) => {
+        for (const [key, value] of Object.entries(data)) {
+          var option = document.createElement("option");
+          option.value = key;
+          option.text = key;
+          select.appendChild(option);
+        }
+      });
   </script>
 </html>
