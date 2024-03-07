@@ -94,7 +94,19 @@ htmx.defineExtension("client-side-formats", {
         break;
       }
 
-      case "balances":
+      case "balances": {
+        for (let i = 0; i < data.length; i++) {
+          const currency = data[i].currency;
+          // amount is a string with dot separated number
+          let amount = Number(data[i].amount.replace(".", ""));
+          console.log(amount);
+          amount = centsToDollar(amount, currency);
+          console.log(amount);
+          data[i].amount = intlCurrencyFormat(amount, currency);
+        }
+        break;
+      }
+
       case "reimbursements": {
         for (let i = 0; i < data.length; i++) {
           const currency = data[i].currency;
@@ -103,7 +115,6 @@ htmx.defineExtension("client-side-formats", {
         }
         break;
       }
-
       case "invites": {
         if (data.length > 0) {
           data = { invites: [true] };
