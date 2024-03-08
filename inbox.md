@@ -2,18 +2,18 @@
 
 ## Priority
 
-- feat: leave group as member
 - feat: remove member from group
 - feat: edit expense
-- fix: decline invite
 - ui: make error message for request failure due to unauthenticated request nicer
 - ui: page transitions
 - fix: update static links to icons
-- feat: support multiple currencies when creating a new group
-- feat: support multiple currencies when adding a new expense
+- fix: assert in backend that expense.currency is the same as group.currency
 
 ## Backlog
 
+- feat(ui): move settings and about sites to hamburger menu
+    - main pages are expenses and balances. One could switch between those to
+      with a swipe like on mobile
 - refactor: move state transition to its own library or helper arm
 - refactor: add helper to get all data of a group (reg, led, acl, group)
 - refactor: host should be part of register
@@ -44,6 +44,7 @@
 - ui: validate ship names
 - ui(add-expense): payer default value should be current ship
 - test: use module scoped fixtures everywhere to keep it simple
+- test: front-end test using selenium to extract parts of the html for approval testing
 - misc: check-out bankers rounding
 - misc: parse @s to valid JSON number. Currently it is dot seperated (eg. -1000 is -1.000)
 - misc: checkout "JSON" guide on how to parse GUID/UUID
