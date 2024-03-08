@@ -20,6 +20,7 @@ let ctx = await esbuild.context({
     "./svg/tahuti.svg",
     "./js/index.js",
     "./js/groups.js",
+    "./js/add.js",
     "./node_modules/htmx.org/dist/ext/path-deps.js",
     "./node_modules/htmx.org/dist/ext/json-enc.js",
     "./node_modules/htmx.org/dist/ext/client-side-templates.js",

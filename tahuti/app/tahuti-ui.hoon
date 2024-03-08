@@ -22,6 +22,7 @@
 /*  svg-circles               %svg   /app/ui/svg/circles/svg
 /*  js-index                  %js    /app/ui/js/index/js
 /*  js-groups                 %js    /app/ui/js/groups/js
+/*  js-add                    %js    /app/ui/js/add/js
 /*  js-json-enc               %js    /app/ui/js/json-enc/js
 /*  js-path-deps              %js    /app/ui/js/path-deps/js
 /*  js-client-side-templates  %js    /app/ui/js/client-side-templates/js
@@ -140,6 +141,8 @@
         [(send [200 ~ [%js js-index]]) state]
       [%apps %tahuti %helper ~]
         [(send [200 ~ [%js js-groups]]) state]
+      [%apps %tahuti %add ~]
+        [(send [200 ~ [%js js-add]]) state]
       [%apps %tahuti %json-enc ~]
         [(send [200 ~ [%js js-json-enc]]) state]
       [%apps %tahuti %path-deps ~]
