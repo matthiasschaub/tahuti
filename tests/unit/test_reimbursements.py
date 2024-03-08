@@ -37,7 +37,7 @@ def test_reimbusements_simple(zod, gid):
     resp = zod.get(url)
     assert resp.status_code == 200
     res = resp.json()
-    assert res == [{"debitor": "~zod", "amount": 10, "creditor": "~lus"}]
+    assert res == [{"debitor": "~zod", "amount": 10, "currency": "EUR", "creditor": "~lus"}]
 
 
 @pytest.mark.usefixtures("group_public", "expense")

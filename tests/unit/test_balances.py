@@ -48,8 +48,8 @@ def test_balances_uneven(zod, nus, gid):
         assert resp.status_code == 200
         res = resp.json()
         assert res == [
-            {"member": "~zod", "amount": "2"},
-            {"member": "~nus", "amount": "-1"},
+            {"member": "~zod", "amount": "2", "currency": "EUR"},
+            {"member": "~nus", "amount": "-1", "currency": "EUR"},
         ]
 
 
@@ -62,8 +62,8 @@ def test_balances_thousand(zod, nus, gid):
         assert resp.status_code == 200
         res = resp.json()
         assert res == [
-            {"member": "~zod", "amount": "60.000"},
-            {"member": "~nus", "amount": "-60.000"},
+            {"member": "~zod", "amount": "60.000", "currency": "EUR"},
+            {"member": "~nus", "amount": "-60.000", "currency": "EUR"},
         ]
 
 
@@ -74,7 +74,7 @@ def test_balances_public(gid):
     assert resp.status_code == 200
     res = resp.json()
     assert res == [
-        {"member": "~zod", "amount": "0"},
+        {"member": "~zod", "amount": "0", "currency": "EUR"},
     ]
 
 

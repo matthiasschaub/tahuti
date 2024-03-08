@@ -45,7 +45,13 @@ def test_balances(zod, gid_module, list1, list2):
                 credit += e["amount"]
             else:
                 pass
-        balances.append({"member": ship, "amount": int(credit - debit)})
+        balances.append(
+            {
+                "member": ship,
+                "amount": int(credit - debit),
+                "currency": "EUR",
+            }
+        )
 
     # GET /balances from ~zod and ~nus
     # Note: Due to update delay in subscription mechanism it does not

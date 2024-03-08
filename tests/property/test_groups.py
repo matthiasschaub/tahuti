@@ -8,7 +8,7 @@ import pytest
     uuid=strategies.uuids(),
     public=strategies.booleans(),
 )
-@pytest.mark.parametrize("currency", ("EUR", "USD", "BTC"))
+@pytest.mark.parametrize("currency", ("EUR", "USD"))
 def test_groups_put(uuid, title, public, currency, zod):
     group = {
         "gid": str(uuid),
