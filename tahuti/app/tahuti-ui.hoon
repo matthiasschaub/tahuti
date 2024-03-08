@@ -18,8 +18,14 @@
 /*  html-details              %html  /app/ui/html/details/html
 /*  css-style                 %css   /app/ui/css/style/css
 /*  css-print                 %css   /app/ui/css/print/css
-/*  svg-tahuti                %svg   /app/ui/svg/tahuti/svg
+/*  svg-add                   %svg   /app/ui/svg/add/svg
 /*  svg-circles               %svg   /app/ui/svg/circles/svg
+/*  svg-tahuti                %svg   /app/ui/svg/tahuti/svg
+/*  png-16                    %png   /app/ui/png/16/png
+/*  png-64                    %png   /app/ui/png/64/png
+/*  png-180                   %png   /app/ui/png/180/png
+/*  png-192                   %png   /app/ui/png/192/png
+/*  png-512                   %png   /app/ui/png/512/png
 /*  js-index                  %js    /app/ui/js/index/js
 /*  js-groups                 %js    /app/ui/js/groups/js
 /*  js-add                    %js    /app/ui/js/add/js
@@ -131,10 +137,24 @@
         [(send [200 ~ [%css css-print]]) state]
       ::  svg
       ::
-      [%apps %tahuti %tahuti ~]
-        [(send [200 ~ [%svg svg-tahuti]]) state]
+      [%apps %tahuti %add-expense ~]
+        [(send [200 ~ [%svg svg-add]]) state]
       [%apps %tahuti %circles ~]
         [(send [200 ~ [%svg svg-circles]]) state]
+      [%apps %tahuti %tahuti ~]
+        [(send [200 ~ [%svg svg-tahuti]]) state]
+      ::  png
+      ::
+      [%apps %tahuti %icon16 ~]
+        [(send [200 ~ [%png png-16]]) state]
+      [%apps %tahuti %icon64 ~]
+        [(send [200 ~ [%png png-64]]) state]
+      [%apps %tahuti %icon180 ~]
+        [(send [200 ~ [%png png-180]]) state]
+      [%apps %tahuti %icon192 ~]
+        [(send [200 ~ [%png png-192]]) state]
+      [%apps %tahuti %icon512 ~]
+        [(send [200 ~ [%png png-512]]) state]
       ::  js
       ::
       [%apps %tahuti %index ~]

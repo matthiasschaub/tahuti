@@ -9,5 +9,5 @@ __pycache__/
 node_modules/
 
 # custom
-deploy.sh
 *.urb
+tahuti/app/ui/
