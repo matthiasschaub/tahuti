@@ -98,11 +98,8 @@ htmx.defineExtension("client-side-formats", {
         for (let i = 0; i < data.length; i++) {
           const currency = data[i].currency;
           // amount is a string with dot separated number
-          console.log(data[i].amount);
-          let amount = Number(data[i].amount.replace(".", ""));
-          console.log(amount);
+          let amount = Number(data[i].amount.replaceAll(".", ""));
           amount = centsToDollar(amount, currency);
-          console.log(amount);
           data[i].amount = intlCurrencyFormat(amount, currency);
         }
         break;
