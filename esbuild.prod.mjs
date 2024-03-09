@@ -1,6 +1,6 @@
 import * as esbuild from "esbuild";
 
-let ctx = await esbuild.context({
+await esbuild.build({
   entryPoints: [
     "./ui/manifest.json",
     "./ui/html/about.html",
@@ -37,6 +37,3 @@ let ctx = await esbuild.context({
   loader: { ".json": "copy", ".html": "copy", ".svg": "copy", ".png": "copy" },
   outdir: "tahuti/app/ui",
 });
-
-await ctx.watch();
-console.log("watching...");
