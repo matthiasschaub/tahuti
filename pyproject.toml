@@ -11,6 +11,7 @@ requests = "^2.31.0"
 schema = "^0.7.5"
 hypothesis = "^6.97.5"
 ruff = "^0.2.0"
+pilothouse = {git = "https://github.com/matthiasschaub/pilothouse"}
 
 [build-system]
 requires = ["poetry-core"]
