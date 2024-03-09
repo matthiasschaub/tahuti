@@ -1,7 +1,7 @@
 :~  title+'Tahuti (beta)'
     info+'An expense sharing app'
     color+0xff.fff3
-    image+'https://raw.githubusercontent.com/matthiasschaub/tahuti/main/tahuti/app/ui/static/images/icons/512.png'
+    image+'https://raw.githubusercontent.com/matthiasschaub/tahuti/main/ui/png/ios/512.png'
     base+'tahuti'
     site+/apps/tahuti
     version+[0 1 0]
