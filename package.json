@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node build.mjs",
+    "build-dev": "node esbuild.dev.mjs",
+    "build-prod": "node esbuild.prod.mjs",
     "lint": "eslint ."
   },
   "author": "~talfus-laddus",
