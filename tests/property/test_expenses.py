@@ -22,6 +22,41 @@ def expense_schema():
     )
 
 
+CURRENCIES = {
+    "AUD": "Australian Dollar",
+    "BGN": "Bulgarian Lev",
+    "BRL": "Brazilian Real",
+    "CAD": "Canadian Dollar",
+    "CHF": "Swiss Franc",
+    "CNY": "Chinese Renminbi Yuan",
+    "CZK": "Czech Koruna",
+    "DKK": "Danish Krone",
+    "EUR": "Euro",
+    "GBP": "British Pound",
+    "HKD": "Hong Kong Dollar",
+    "HUF": "Hungarian Forint",
+    "IDR": "Indonesian Rupiah",
+    "ILS": "Israeli New Sheqel",
+    "INR": "Indian Rupee",
+    "ISK": "Icelandic Króna",
+    "JPY": "Japanese Yen",
+    "KRW": "South Korean Won",
+    "MXN": "Mexican Peso",
+    "MYR": "Malaysian Ringgit",
+    "NOK": "Norwegian Krone",
+    "NZD": "New Zealand Dollar",
+    "PHP": "Philippine Peso",
+    "PLN": "Polish Złoty",
+    "RON": "Romanian Leu",
+    "SEK": "Swedish Krona",
+    "SGD": "Singapore Dollar",
+    "THB": "Thai Baht",
+    "TRY": "Turkish Lira",
+    "USD": "United States Dollar",
+    "ZAR": "South African Rand",
+}
+
+
 @given(
     amount=strategies.integers(min_value=0),
     title=strategies.text(min_size=1),
@@ -29,12 +64,14 @@ def expense_schema():
         min_value=datetime(1970, 1, 1, 0, 0),
         allow_imaginary=False,
     ),
+    currency=strategies.sampled_from(list(CURRENCIES.keys())),
 )
 @pytest.mark.usefixtures("group_module")
 def test_expense_put(
     amount,
     title,
     dt,
+    currency,
     zod,
     gid_module,
     expense_schema,
@@ -50,7 +87,7 @@ def test_expense_put(
         "eid": eid,
         "title": title,
         "amount": str(amount),
-        "currency": "EUR",
+        "currency": currency,
         "payer": "~zod",
         "date": ts,
         "involves": ["~zod"],
