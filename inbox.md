@@ -4,7 +4,6 @@
 
 - feat: remove member from group as a host
 - feat: edit expense
-- ui: make error message for request failure due to unauthenticated request nicer
 - ui: page transitions - keep spinner between sending add expense request and waiting
       for response and going to expenses page.
       Currently, spinner loads, disappears and shortly after loads again.
@@ -32,6 +31,7 @@
 - feat: who paid how much for the whole group?
 - feat: history/event log for each event (like chat of tricount)
 - feat: tags
+- feat: proportional involvement [%]
 - feat(ui): sort table after column header
 - feat(ui): click on suggested reimbursement to add new expense covering debt
 - refactor(api): response only after successful %poke
@@ -54,9 +54,7 @@
 
 ## Misc
 
-- check-out bankers rounding
 - parse @s to valid JSON number. Currently it is dot seperated (eg. -1000 is -1.000)
 - checkout "JSON" guide on how to parse GUID/UUID
-- use knots (name part of the path) in api `?+`
 - add donation button (buy me a coffee, open collective, paypal?)
 - submit to https://urbit.org/applications/submit
