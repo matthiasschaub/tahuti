@@ -51,7 +51,9 @@ h3 {
 a,
 a:visited {
   font-style: italic;
+  text-decoration-line: underline;
   color: var(--fg);
+  cursor: pointer;
 }
 
 a:hover {

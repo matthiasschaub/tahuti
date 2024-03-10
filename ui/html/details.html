@@ -120,22 +120,19 @@
           {{/.}}
         </tbody>
       </table>
-      <fieldset>
-        <form
+      <p style="text-align: center">
+        Permanently
+        <a
           id="delete-expense"
           hx-delete="/api/groups/{gid_eid}/expenses/{eid}"
           hx-confirm="Are you sure?"
           hx-ext="json-enc"
           hx-swap="none"
           hx-on::after-request="window.location.pathname = '/apps/tahuti/groups/{{gid}}/expenses'"
+          >delete</a
         >
-          Deleting this expense will permanently remove it.
-          <br />
-          <button class="button-cancel" type="submit">
-            Delete this expense ▸
-          </button>
-        </form>
-      </fieldset>
+        this expense.
+      </p>
     </template>
   </body>
   <script src="/apps/tahuti/helper.js"></script>

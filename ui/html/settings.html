@@ -135,31 +135,26 @@
       </template>
     </ul>
 
-    <fieldset>
-      Add members to this group.
-      <br />
-      <button
-        class="button-primary"
+    <h3>Add members</h3>
+    <p>
+      <a
         hx-get="/groups/{gid}/invite"
         hx-target="body"
         hx-trigger="click"
         hx-push-url="true"
+        >Add</a
       >
-        Add members ▸
-      </button>
-    </fieldset>
+      members to this group.
+    </p>
 
     <h3>Export expenses</h3>
-    <fieldset>
-      Download all expenses of this group as JSON.
-      <br />
-      <button
-        class="button-primary"
+    <p>
+      <a
         onclick="window.location.pathname = '/apps/tahuti/api/groups/' + gid() + '/expenses'"
+        >Download</a
       >
-        Export expenses ▸
-      </button>
-    </fieldset>
+      all expenses of this group as JSON.
+    </p>
 
     <h3>Leave group</h3>
 
@@ -170,9 +165,9 @@
     ></div>
     <template id="leave-template">
       {{#.}}
-      <fieldset>
-        <!-- TODO: redirect after successful request? -->
-        <form
+      <!-- TODO: redirect after successful request? -->
+      <p>
+        <a
           id="leave-groups"
           hx-confirm="Are you sure?"
           hx-post="/api/leave"
@@ -180,19 +175,20 @@
           hx-swap="none"
           hx-vals='{"gid": "{{gid}}", "host": "{{host}}", "public": "{{public}}"}'
           hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups"'
+          >Leave</a
         >
-          Leaving this group will not remove any expenses you have been involved
-          with.
-          <br />
-          <button class="button-cancel" type="submit">Leave this group</button>
-        </form>
-      </fieldset>
+        this group. This will not remove any expenses you have been involved
+        with.
+      </p>
+      <!-- <br /> -->
+      <!-- <button class="button-cancel" type="submit">Leave this group</button> -->
       {{/.}}
     </template>
 
     <h3>Delete group</h3>
-    <fieldset>
-      <form
+    <p>
+      Permanently
+      <a
         id="delete-groups"
         hx-delete="/api/groups/{gid}"
         hx-confirm="Are you sure?"
@@ -200,12 +196,10 @@
         hx-swap="none"
         hx-vals="js:{gid: gid()}"
         hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups"'
+        >delete</a
       >
-        Permanently delete this group.
-        <br />
-        <button class="button-cancel" type="submit">Delete this group</button>
-      </form>
-    </fieldset>
+      this group.
+    </p>
   </body>
 
   <script src="/apps/tahuti/helper.js"></script>
