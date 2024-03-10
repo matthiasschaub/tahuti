@@ -14,6 +14,6 @@ alacritty --command \
 sleep 1
 alacritty --command \
     poetry run \
-    pilothouseph chain lus tahuti \
+    pilothouse chain lus tahuti \
     &
 poetry shell --directory=tests
