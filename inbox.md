@@ -8,6 +8,7 @@
       for response and going to expenses page.
       Currently, spinner loads, disappears and shortly after loads again.
 - fix: assert in backend that expense.currency is the same as group.currency
+- fix(ui): error message overflow
 
 ## Backlog
 
@@ -27,6 +28,7 @@
 - refactor(tahuti): add helper to get all data of a group (reg, led, acl, group)
 - refactor(tahuti): host should be part of register
 - feat: if host deleted group notify members
+- feat: suggested reimbursement - mark as paid
 - feat: show connection status if host is not reachable
 - feat: who paid how much for the whole group?
 - feat: history/event log for each event (like chat of tricount)
@@ -34,6 +36,7 @@
 - feat: proportional involvement [%]
 - feat(ui): sort table after column header
 - feat(ui): click on suggested reimbursement to add new expense covering debt
+- feat(ui): dark mode
 - refactor(api): response only after successful %poke
   - add HTTP response card to state
   - wait (on-arvo) for ack from %tahuti before sending HTTP response
@@ -41,7 +44,7 @@
 - docs(ui): how to
     - install this app natively
     - see details of an expense
-- feat(ui): dark mode
+- fix(ui): on loading animation scroll to beginning of the page
 - fix(ui): after joining a group the group list is still empty -> introduce polling
 - fix(ui): if deletion of expense happens by a subscriber (not the host) HTMX fetches
   to fast the new expenses list so that the deleted expense is still shown 
@@ -58,3 +61,4 @@
 - checkout "JSON" guide on how to parse GUID/UUID
 - add donation button (buy me a coffee, open collective, paypal?)
 - submit to https://urbit.org/applications/submit
+- create screenshots for GitHub and other sites
