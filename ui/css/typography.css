@@ -100,10 +100,6 @@ pre {
   line-height: calc(0.9167 * var(--vspace));
 
   color: var(--fg);
-  background-color: var(--bg0_s);
-
-  /* margin: var(--vspace-3) var(--vspace-3); */
-  /* padding: 1em; */
 }
 
 blockquote {

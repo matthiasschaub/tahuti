@@ -44,20 +44,31 @@ document.body.addEventListener("htmx:configRequest", (event) => {
   event.detail.path = site.replace(/\/$/, ""); // without trailing slash
 });
 
+// error display
+//
 document.body.addEventListener("htmx:responseError", function (evt) {
-  console.error("Unexpected htmx error", evt.detail);
+  const errorPre = document.getElementById("error-pre");
+  const errorDiv = document.getElementById("error-div");
   if (evt.detail.xhr) {
     if (evt.detail.xhr.status === 500) {
-      alert("500 - Internal Server Error");
+      errorPre.innerText = "500 - Internal Server Error";
+      errorDiv.removeAttribute("hidden");
+      errorDiv.style.display = "grid";
     } else {
-      alert(event.detail.xhr.response);
+      errorPre.innerText = event.detail.xhr.response;
+      errorDiv.style.display = "grid";
     }
   } else {
     // Unspecified failure, usually caused by network error
-    alert(
-      "Unexpected error, check your connection and try to refresh the page.",
-    );
+    (errorPre.innerText =
+      "Unexpected error, check your connection and try to refresh the page."),
+      (errorDiv.style.display = "grid");
   }
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: "smooth",
+  });
 });
 
 export { gid, eid, gid_eid };

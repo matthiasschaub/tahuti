@@ -78,6 +78,20 @@ header > .header-icon {
   transform: translateX(-50%) translateY(-50%);
 }
 
+.error {
+  /* same as h1 */
+  margin: var(--vspace-2) var(--vspace-3) var(--vspace-3) var(--vspace-3);
+  background: var(--bg0_s);
+  background-clip: content-box;
+
+  /* change on error to grid */
+  display: none;
+  grid-template-columns: 1fr auto;
+  padding: 1rem;
+  justify-items: center;
+  align-items: center;
+}
+
 .svg-ico {
   display: inline;
   vertical-align: middle;
