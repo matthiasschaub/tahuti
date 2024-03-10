@@ -25,8 +25,8 @@ form.addEventListener("htmx:afterSettle", (event) => {
   });
   // amount: must be a number
   amount.addEventListener("input", (event) => {
-    let val = currencyMask.getUnmasked();
-    if (Number.isNaN(parseFloat(val)) && !Number.isFinite(val)) {
+    const value = currencyMask.getUnmasked();
+    if (Number.isNaN(parseFloat(value)) && !Number.isFinite(value)) {
       amount.setCustomValidity("Please enter a valid amount.");
     } else {
       amount.setCustomValidity("");
@@ -37,21 +37,7 @@ form.addEventListener("htmx:afterSettle", (event) => {
   //
   // date: current date and time
   date.valueAsDate = new Date();
-  // currency: group currency
-  // retrieve all supported currencies and add it to select list
-  const host = "api.frankfurter.app";
-  // TODO: set to group currency if request fails
-  fetch(`https://${host}/currencies`)
-    .then((resp) => resp.json())
-    .then((data) => {
-      for (const [key, value] of Object.entries(data)) {
-        var option = document.createElement("option");
-        option.value = key;
-        option.text = key;
-        currency.appendChild(option);
-      }
-      currency.value = groupCurrency;
-    });
+  currency.value = groupCurrency;
 
   // input masks
   //
@@ -85,7 +71,6 @@ form.addEventListener("htmx:afterSettle", (event) => {
   // (user selected currency to group base currency)
   //
   amount.addEventListener("input", (event) => {
-    const amount = document.getElementById("amount");
     const userCurrency = document.getElementById("currency").value;
     const convertedAmount = document.getElementById("convertedAmount");
     const breakElement = document.getElementById("break");
@@ -129,16 +114,17 @@ form.addEventListener("htmx:configRequest", (event) => {
   if ("amount" in event.detail.parameters) {
     const groupCurrency = document.getElementById("group-currency").innerText;
     const userCurrency = document.getElementById("currency").value;
+    let value = "";
     if (groupCurrency === userCurrency) {
       const amount = document.getElementById("amount");
-      var val = dollarToCents(
+      value = dollarToCents(
         currencyMask.getUnmasked(),
         groupCurrency,
       ).toString();
     } else {
-      var val = document.getElementById("convertedAmount").dataset.amount;
+      value = document.getElementById("convertedAmount").dataset.amount;
     }
-    event.detail.parameters.amount = val;
+    event.detail.parameters.amount = value;
     event.detail.parameters.currency = groupCurrency;
   }
   // send date as unix timestamp

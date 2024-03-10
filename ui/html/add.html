@@ -102,22 +102,47 @@
         <br />
 
         <!-- currency -->
-        <!-- TODO: on change update currencyMask -->
         <label for="currency">Which currency?</label>
         <br />
         <select
-          hx-get="/api/groups/{gid}"
-          hx-trigger="load"
-          mustache-template="currency-template"
           id="currency"
           type="text"
           name="currency"
           aria-label="Currency"
           required
-        ></select>
-        <template id="currency-template">
-          <!-- <option value="{{currency}}">{{currency}}</option> -->
-        </template>
+        >
+          <option>AUD</option>
+          <option>BGN</option>
+          <option>BRL</option>
+          <option>CAD</option>
+          <option>CHF</option>
+          <option>CNY</option>
+          <option>CZK</option>
+          <option>DKK</option>
+          <option>EUR</option>
+          <option>GBP</option>
+          <option>HKD</option>
+          <option>HUF</option>
+          <option>IDR</option>
+          <option>ILS</option>
+          <option>INR</option>
+          <option>ISK</option>
+          <option>JPY</option>
+          <option>KRW</option>
+          <option>MXN</option>
+          <option>MYR</option>
+          <option>NOK</option>
+          <option>NZD</option>
+          <option>PHP</option>
+          <option>PLN</option>
+          <option>RON</option>
+          <option>SEK</option>
+          <option>SGD</option>
+          <option>THB</option>
+          <option>TRY</option>
+          <option>USD</option>
+          <option>ZAR</option>
+        </select>
         <br />
 
         <!-- amount -->
