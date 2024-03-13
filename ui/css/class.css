@@ -1,0 +1,71 @@
+.button-primary {
+  background: var(--blue);
+  color: white;
+  border: var(--fg) 1px solid;
+}
+
+.button-cancel {
+  background: var(--red);
+  color: white;
+  border: var(--fg) 1px solid;
+}
+
+.error {
+  /* same as h1 */
+  margin: var(--vspace-2) var(--vspace-3) var(--vspace-3) var(--vspace-3);
+  background: var(--bg0_s);
+  background-clip: content-box;
+
+  /* change on error to grid */
+  display: none;
+  grid-template-columns: 1fr auto;
+  padding: 1rem;
+  justify-items: center;
+  align-items: center;
+}
+
+.svg-ico {
+  display: inline;
+  vertical-align: middle;
+  height: 4em;
+  width: 4em;
+  margin-bottom: -23.2px;
+}
+
+.overlay {
+  /* cover whole page */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg0_h);
+  z-index: 1;
+  pointer-events: none;
+  view-transition-name: overlay;
+}
+
+.spinner {
+  display: block;
+  margin: auto;
+  margin-top: var(--vspace-0);
+  view-transition-name: spinner;
+}
+
+.htmx-indicator {
+  opacity: 0;
+  transition: opacity 500ms ease-in;
+}
+
+.htmx-request .htmx-indicator {
+  opacity: 1;
+}
+
+.htmx-request.htmx-indicator {
+  opacity: 1;
+}
+
+header > .header-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}

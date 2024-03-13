@@ -1,14 +1,16 @@
 @charset "utf-8";
 
-@import url("typography.css");
-@import url("header.css");
+@import url("class.css");
 @import url("footer.css");
-@import url("tables.css");
 @import url("form.css");
+@import url("header.css");
+@import url("responsive.css");
+@import url("table.css");
+@import url("typography.css");
 
 :root {
   /* https://www.layoutgridcalculator.com/typographic-scale */
-  /* Base (pt): 13 */
+  /* Base (pt): 12 */
   /* Scale Ratio: Golden Ratio */
   /* No. of sizes in the scale: Pentatonic Scale (x5) */
   /* Composition: Fibonacci Series */
@@ -21,14 +23,15 @@
 
   /* vertical spacing multiplier */
   --vspace: calc(var(--space) * 1rem);
+  /* more space ... */
   --vspace-0: calc(3 * var(--space) * 1rem);
   --vspace-1: calc(2 * var(--space) * 1rem);
   --vspace-2: calc(1.5 * var(--space) * 1rem);
   --vspace-3: calc(0.5 * var(--space) * 1rem);
+  /* ... less space */
 
   --max-width: calc(25 * var(--vspace));
 
-  /* colors for light and dark color schemes */
   --bg0_h: #fffff3;
   --bg0_s: #f2e5bc;
   --fg: #000000;
@@ -36,33 +39,22 @@
   --red: #cc241d;
   --blue: #0062cc;
   --grey: #767676;
-  /* --gray: #928374; */
-  --blue-accent: #2b1dcc;
-
-  --purple: #b16286;
-  --yellow: #d79921;
-}
-
-::selection {
-  background: var(--grey);
 }
 
 html {
   /* 12pt */
   font-size: 16px;
-  /* font-family: sans-serif; */
-  /* font-family: ui-serif; */
   font-family: system-ui;
   font-variant-numeric: oldstyle-nums;
 }
 
 body {
-  /* font-size: 1.0833em; */
   position: relative;
+
   font-size: 1em;
+
   max-width: var(--max-width);
   margin: 0 auto;
-  /* margin-left: var(--vspace); */
 
   color: var(--fg);
   background: var(--bg0_h);
@@ -71,88 +63,9 @@ body {
   padding-bottom: var(--vspace-1);
 }
 
-header > .header-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-}
-
-.error {
-  /* same as h1 */
-  margin: var(--vspace-2) var(--vspace-3) var(--vspace-3) var(--vspace-3);
-  background: var(--bg0_s);
-  background-clip: content-box;
-
-  /* change on error to grid */
-  display: none;
-  grid-template-columns: 1fr auto;
-  padding: 1rem;
-  justify-items: center;
-  align-items: center;
-}
-
-.svg-ico {
-  display: inline;
-  vertical-align: middle;
-  height: 4em;
-  width: 4em;
-  margin-bottom: -23.2px;
-}
-
-.overlay {
-  /* cover whole page */
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: var(--bg0_h);
-  z-index: 1;
-  pointer-events: none;
-  view-transition-name: overlay;
-}
-
-.spinner {
-  display: block;
-  margin: auto;
-  margin-top: var(--vspace-0);
-  view-transition-name: spinner;
-}
-
-.htmx-indicator {
-  opacity: 0;
-  transition: opacity 500ms ease-in;
-}
-
-.htmx-request .htmx-indicator {
-  opacity: 1;
-}
-
-.htmx-request.htmx-indicator {
-  opacity: 1;
-}
-
-/* small devices (less then 1036.78px) */
-@media (max-width: calc(var(--max-width) - 0.02px)) {
-  :root {
-    --max-width: 100%;
-  }
-  body {
-    padding: var(--vspace-3) var(--vspace-3);
-    margin: var(--vspace-3) var(--vspace-3);
-  }
-
-  header > nav ul,
-  header > nav ol {
-    display: block;
-  }
-
-  /* TODO: make responsive */
-  input {
-    width: 100%;
-  }
-}
-
-.columns {
-  display: grid;
-  grid-template-columns: calc(var(--max-width) / 2) calc(var(--max-width) / 2);
+main,
+article,
+header {
+  margin-left: var(--vspace);
+  margin-right: var(--vspace);
 }

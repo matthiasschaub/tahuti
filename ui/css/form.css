@@ -3,6 +3,7 @@ legend {
   padding: 0;
   display: table;
 }
+
 fieldset {
   border: 0;
   padding: 0;
@@ -10,6 +11,7 @@ fieldset {
   margin: var(--vspace) var(--vspace) var(--vspace-3) var(--vspace);
   min-width: 0;
 }
+
 body:not(:-moz-handler-blocked) fieldset {
   display: table-cell;
 }
@@ -55,18 +57,6 @@ button {
   border-radius: 0;
 
   cursor: pointer;
-}
-
-.button-primary {
-  background: var(--blue);
-  color: white;
-  border: var(--fg) 1px solid;
-}
-
-.button-cancel {
-  background: var(--red);
-  color: white;
-  border: var(--fg) 1px solid;
 }
 
 button:hover {

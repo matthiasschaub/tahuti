@@ -1,0 +1,25 @@
+/* small devices (less then 1036.78px) */
+@media (max-width: calc(var(--max-width) - 0.02px)) {
+  :root {
+    --max-width: 100%;
+  }
+  body {
+    padding: var(--vspace-3) var(--vspace-3);
+    margin: var(--vspace-3) var(--vspace-3);
+  }
+
+  header > nav ul,
+  header > nav ol {
+    display: block;
+  }
+
+  /* TODO: make responsive */
+  input {
+    width: 100%;
+  }
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: calc(var(--max-width) / 2) calc(var(--max-width) / 2);
+}

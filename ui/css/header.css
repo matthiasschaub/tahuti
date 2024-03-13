@@ -23,7 +23,6 @@ header > nav ol li {
 
 header > nav a,
 header > nav a:visited {
-  /* color: var(--purple); */
   display: inline-block;
   padding: 0.1rem 1rem;
 }
