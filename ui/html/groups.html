@@ -63,41 +63,42 @@
       <img class="spinner" src="/apps/tahuti/circles.svg" />
     </div>
 
-    <h2>Tahuti</h2>
+    <main>
+      <h2>Tahuti</h2>
+      <div id="error-div" class="error">
+        <pre id="error-pre"></pre>
+      </div>
 
-    <div id="error-div" class="error">
-      <pre id="error-pre"></pre>
-    </div>
-
-    <table id="groups" class="groups">
-      <thead>
-        <tr>
-          <th>Group</th>
-          <th>Host</th>
+      <table id="groups" class="groups">
+        <thead>
+          <tr>
+            <th>Group</th>
+            <th>Host</th>
+          </tr>
+        </thead>
+        <!-- TODO: add default message: no groups yet -->
+        <tbody
+          id="groups"
+          hx-get="/api/groups"
+          hx-trigger="load"
+          mustache-template="groups-template"
+        ></tbody>
+      </table>
+      <template id="groups-template">
+        <!-- iterate over array of members object -->
+        {{#.}}
+        <tr
+          hx-get="/groups/{{gid}}/expenses"
+          hx-target="body"
+          hx-trigger="click"
+          hx-push-url="true"
+        >
+          <td>{{title}}</td>
+          <td>{{host}}</td>
         </tr>
-      </thead>
-      <!-- TODO: add default message: no groups yet -->
-      <tbody
-        id="groups"
-        hx-get="/api/groups"
-        hx-trigger="load"
-        mustache-template="groups-template"
-      ></tbody>
-    </table>
-    <template id="groups-template">
-      <!-- iterate over array of members object -->
-      {{#.}}
-      <tr
-        hx-get="/groups/{{gid}}/expenses"
-        hx-target="body"
-        hx-trigger="click"
-        hx-push-url="true"
-      >
-        <td>{{title}}</td>
-        <td>{{host}}</td>
-      </tr>
-      {{/.}}
-    </template>
+        {{/.}}
+      </template>
+    </main>
 
     <footer>
       <a href="/apps/tahuti/create">
@@ -133,6 +134,6 @@
         {{^invites}}{{/invites}}
       </template>
     </footer>
+    <script src="/apps/tahuti/helper.js"></script>
   </body>
-  <script src="/apps/tahuti/helper.js"></script>
 </html>

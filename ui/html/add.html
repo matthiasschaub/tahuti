@@ -66,176 +66,178 @@
       <img class="spinner" src="/apps/tahuti/circles.svg" />
     </div>
 
-    <div
-      hx-get="/api/groups/{gid}"
-      hx-trigger="load"
-      hx-swap="outerHTML"
-      mustache-template="title-template"
-    ></div>
-    <template id="title-template">
-      <h2>{{title}}</h2>
-      <div id="group-currency" hidden>{{currency}}</div>
-    </template>
+    <main>
+      <div
+        hx-get="/api/groups/{gid}"
+        hx-trigger="load"
+        hx-swap="outerHTML"
+        mustache-template="title-template"
+      ></div>
+      <template id="title-template">
+        <h2>{{title}}</h2>
+        <div id="group-currency" hidden>{{currency}}</div>
+      </template>
 
-    <div id="error-div" class="error">
-      <pre id="error-pre"></pre>
-    </div>
+      <div id="error-div" class="error">
+        <pre id="error-pre"></pre>
+      </div>
 
-    <h3>Add an expense</h3>
-    <!-- TODO: redirect to /expenses -->
-    <fieldset>
-      <form
-        id="put-expenses"
-        hx-put="/api/groups/{gid}/expenses"
-        hx-ext="json-enc"
-        hx-vals="js:{eid: self.crypto.randomUUID(), gid: gid()}"
-      >
-        <!-- titel -->
-        <label for="title">What for?</label>
-        <br />
-        <input
-          id="title"
-          type="text"
-          inputmode="text"
-          autocomplete="on"
-          name="title"
-          aria-label="Title"
-          placeholder="Title"
-          required
-        />
-        <br />
-
-        <!-- currency -->
-        <label for="currency">Which currency?</label>
-        <br />
-        <select
-          id="currency"
-          type="text"
-          name="currency"
-          aria-label="Currency"
-          required
+      <h3>Add an expense</h3>
+      <!-- TODO: redirect to /expenses -->
+      <fieldset>
+        <form
+          id="put-expenses"
+          hx-put="/api/groups/{gid}/expenses"
+          hx-ext="json-enc"
+          hx-vals="js:{eid: self.crypto.randomUUID(), gid: gid()}"
         >
-          <option>AUD</option>
-          <option>BGN</option>
-          <option>BRL</option>
-          <option>CAD</option>
-          <option>CHF</option>
-          <option>CNY</option>
-          <option>CZK</option>
-          <option>DKK</option>
-          <option>EUR</option>
-          <option>GBP</option>
-          <option>HKD</option>
-          <option>HUF</option>
-          <option>IDR</option>
-          <option>ILS</option>
-          <option>INR</option>
-          <option>ISK</option>
-          <option>JPY</option>
-          <option>KRW</option>
-          <option>MXN</option>
-          <option>MYR</option>
-          <option>NOK</option>
-          <option>NZD</option>
-          <option>PHP</option>
-          <option>PLN</option>
-          <option>RON</option>
-          <option>SEK</option>
-          <option>SGD</option>
-          <option>THB</option>
-          <option>TRY</option>
-          <option>USD</option>
-          <option>ZAR</option>
-        </select>
-        <br />
-
-        <!-- amount -->
-        <label for="amount">How much?</label>
-        <br />
-        <input
-          id="amount"
-          type="text"
-          inputmode="numeric"
-          name="amount"
-          aria-label="Amount"
-          placeholder="Amount"
-          autocomplete="off"
-          required
-        />
-        <br />
-        <div hidden data-amount="" id="convertedAmount"></div>
-        <br id="break" hidden />
-
-        <!-- payer -->
-        <!-- TODO: add current ship as default value -->
-        <label for="payer">Who paid?</label>
-        <br />
-        <select
-          hx-get="/api/groups/{gid}/members"
-          hx-trigger="load"
-          mustache-template="payer-template"
-          id="payer"
-          type="text"
-          name="payer"
-          aria-label="Payer"
-          required
-        ></select>
-        <template id="payer-template">
-          {{#.}}
-          <option value="{{.}}">{{.}}</option>
-          {{/.}}
-        </template>
-        <br />
-
-        <!-- involved -->
-        <label>Who is involved?</label>
-        <br />
-        <div
-          hx-get="/api/groups/{gid}/members"
-          hx-trigger="load"
-          mustache-template="involved-template"
-        ></div>
-        <template id="involved-template">
-          {{#.}}
-          <input
-            class="checkbox"
-            id="check-{{.}}"
-            type="checkbox"
-            name="involves"
-            value="{{.}}"
-            checked
-          />
-          <label for="check-{{.}}">{{.}} </label>
+          <!-- titel -->
+          <label for="title">What for?</label>
           <br />
-          {{/.}}
-        </template>
+          <input
+            id="title"
+            type="text"
+            inputmode="text"
+            autocomplete="on"
+            name="title"
+            aria-label="Title"
+            placeholder="Title"
+            required
+          />
+          <br />
 
-        <!-- When? -->
-        <label for="date">When?</label>
-        <br />
-        <input
-          id="date"
-          type="date"
-          inputmode="text"
-          name="date"
-          aria-label="Date"
-        />
-        <br />
+          <!-- currency -->
+          <label for="currency">Which currency?</label>
+          <br />
+          <select
+            id="currency"
+            type="text"
+            name="currency"
+            aria-label="Currency"
+            required
+          >
+            <option>AUD</option>
+            <option>BGN</option>
+            <option>BRL</option>
+            <option>CAD</option>
+            <option>CHF</option>
+            <option>CNY</option>
+            <option>CZK</option>
+            <option>DKK</option>
+            <option>EUR</option>
+            <option>GBP</option>
+            <option>HKD</option>
+            <option>HUF</option>
+            <option>IDR</option>
+            <option>ILS</option>
+            <option>INR</option>
+            <option>ISK</option>
+            <option>JPY</option>
+            <option>KRW</option>
+            <option>MXN</option>
+            <option>MYR</option>
+            <option>NOK</option>
+            <option>NZD</option>
+            <option>PHP</option>
+            <option>PLN</option>
+            <option>RON</option>
+            <option>SEK</option>
+            <option>SGD</option>
+            <option>THB</option>
+            <option>TRY</option>
+            <option>USD</option>
+            <option>ZAR</option>
+          </select>
+          <br />
 
-        <!-- Submit -->
-        <button class="button-primary" type="submit">Add expense ▸</button>
-        <button
-          class="button-cancel"
-          onclick="window.location.href='/apps/tahuti/groups/' + gid() + '/expenses';
+          <!-- amount -->
+          <label for="amount">How much?</label>
+          <br />
+          <input
+            id="amount"
+            type="text"
+            inputmode="numeric"
+            name="amount"
+            aria-label="Amount"
+            placeholder="Amount"
+            autocomplete="off"
+            required
+          />
+          <br />
+          <div hidden data-amount="" id="convertedAmount"></div>
+          <br id="break" hidden />
+
+          <!-- payer -->
+          <!-- TODO: add current ship as default value -->
+          <label for="payer">Who paid?</label>
+          <br />
+          <select
+            hx-get="/api/groups/{gid}/members"
+            hx-trigger="load"
+            mustache-template="payer-template"
+            id="payer"
+            type="text"
+            name="payer"
+            aria-label="Payer"
+            required
+          ></select>
+          <template id="payer-template">
+            {{#.}}
+            <option value="{{.}}">{{.}}</option>
+            {{/.}}
+          </template>
+          <br />
+
+          <!-- involved -->
+          <label>Who is involved?</label>
+          <br />
+          <div
+            hx-get="/api/groups/{gid}/members"
+            hx-trigger="load"
+            mustache-template="involved-template"
+          ></div>
+          <template id="involved-template">
+            {{#.}}
+            <input
+              class="checkbox"
+              id="check-{{.}}"
+              type="checkbox"
+              name="involves"
+              value="{{.}}"
+              checked
+            />
+            <label for="check-{{.}}">{{.}} </label>
+            <br />
+            {{/.}}
+          </template>
+
+          <!-- When? -->
+          <label for="date">When?</label>
+          <br />
+          <input
+            id="date"
+            type="date"
+            inputmode="text"
+            name="date"
+            aria-label="Date"
+          />
+          <br />
+
+          <!-- Submit -->
+          <button class="button-primary" type="submit">Add expense ▸</button>
+          <button
+            class="button-cancel"
+            onclick="window.location.href='/apps/tahuti/groups/' + gid() + '/expenses';
 "
-          type="button"
-          value="Cancel"
-        >
-          Cancel
-        </button>
-      </form>
-    </fieldset>
+            type="button"
+            value="Cancel"
+          >
+            Cancel
+          </button>
+        </form>
+      </fieldset>
+    </main>
+    <script src="/apps/tahuti/helper.js"></script>
+    <script src="/apps/tahuti/add.js"></script>
   </body>
-  <script src="/apps/tahuti/helper.js"></script>
-  <script src="/apps/tahuti/add.js"></script>
 </html>

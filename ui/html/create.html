@@ -56,109 +56,110 @@
       <img class="spinner" src="/apps/tahuti/circles.svg" />
     </div>
 
-    <h2>Tahuti</h2>
+    <main>
+      <h2>Tahuti</h2>
+      <div id="error-div" class="error">
+        <pre id="error-pre"></pre>
+      </div>
 
-    <div id="error-div" class="error">
-      <pre id="error-pre"></pre>
-    </div>
-
-    <h3>Create new group</h3>
-    <fieldset>
-      <form
-        id="put-groups"
-        hx-put="/apps/tahuti/api/groups"
-        hx-ext="json-enc"
-        hx-swap="none"
-        hx-vals="js:{gid: self.crypto.randomUUID()}"
-        hx-request="noHeaders"
-        hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups";'
-      >
-        <label>Titel</label>
-        <br />
-        <input
-          id="group-title"
-          type="text"
-          name="title"
-          aria-label="Group Title"
-          required
-        />
-        <br />
-        <label>Currency</label>
-        <br />
-        <select
-          id="currency"
-          type="text"
-          name="currency"
-          aria-label="Currency"
-          required
+      <h3>Create new group</h3>
+      <fieldset>
+        <form
+          id="put-groups"
+          hx-put="/apps/tahuti/api/groups"
+          hx-ext="json-enc"
+          hx-swap="none"
+          hx-vals="js:{gid: self.crypto.randomUUID()}"
+          hx-request="noHeaders"
+          hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups";'
         >
-          <option>AUD</option>
-          <option>BGN</option>
-          <option>BRL</option>
-          <option>CAD</option>
-          <option>CHF</option>
-          <option>CNY</option>
-          <option>CZK</option>
-          <option>DKK</option>
-          <option>EUR</option>
-          <option>GBP</option>
-          <option>HKD</option>
-          <option>HUF</option>
-          <option>IDR</option>
-          <option>ILS</option>
-          <option>INR</option>
-          <option>ISK</option>
-          <option>JPY</option>
-          <option>KRW</option>
-          <option>MXN</option>
-          <option>MYR</option>
-          <option>NOK</option>
-          <option>NZD</option>
-          <option>PHP</option>
-          <option>PLN</option>
-          <option>RON</option>
-          <option>SEK</option>
-          <option>SGD</option>
-          <option>THB</option>
-          <option>TRY</option>
-          <option>USD</option>
-          <option>ZAR</option>
-        </select>
-        <br />
-        <label>Access</label>
-        <br />
-        <select
-          id="public"
-          type="text"
-          name="public"
-          aria-label="Public"
-          required
-        >
-          <option value="false">Private</option>
-          <option value="true">Public</option>
-        </select>
-        <br />
-        <button class="button-primary" type="submit">Create group ▸</button>
-        <button
-          class="button-cancel"
-          onclick="window.location.href='/apps/tahuti/groups'"
-          type="button"
-          value="Cancel"
-        >
-          Cancel
-        </button>
-      </form>
-    </fieldset>
+          <label>Titel</label>
+          <br />
+          <input
+            id="group-title"
+            type="text"
+            name="title"
+            aria-label="Group Title"
+            required
+          />
+          <br />
+          <label>Currency</label>
+          <br />
+          <select
+            id="currency"
+            type="text"
+            name="currency"
+            aria-label="Currency"
+            required
+          >
+            <option>AUD</option>
+            <option>BGN</option>
+            <option>BRL</option>
+            <option>CAD</option>
+            <option>CHF</option>
+            <option>CNY</option>
+            <option>CZK</option>
+            <option>DKK</option>
+            <option>EUR</option>
+            <option>GBP</option>
+            <option>HKD</option>
+            <option>HUF</option>
+            <option>IDR</option>
+            <option>ILS</option>
+            <option>INR</option>
+            <option>ISK</option>
+            <option>JPY</option>
+            <option>KRW</option>
+            <option>MXN</option>
+            <option>MYR</option>
+            <option>NOK</option>
+            <option>NZD</option>
+            <option>PHP</option>
+            <option>PLN</option>
+            <option>RON</option>
+            <option>SEK</option>
+            <option>SGD</option>
+            <option>THB</option>
+            <option>TRY</option>
+            <option>USD</option>
+            <option>ZAR</option>
+          </select>
+          <br />
+          <label>Access</label>
+          <br />
+          <select
+            id="public"
+            type="text"
+            name="public"
+            aria-label="Public"
+            required
+          >
+            <option value="false">Private</option>
+            <option value="true">Public</option>
+          </select>
+          <br />
+          <button class="button-primary" type="submit">Create group ▸</button>
+          <button
+            class="button-cancel"
+            onclick="window.location.href='/apps/tahuti/groups'"
+            type="button"
+            value="Cancel"
+          >
+            Cancel
+          </button>
+        </form>
+      </fieldset>
+    </main>
+    <script>
+      var form = document.getElementById("put-groups");
+      form.addEventListener("htmx:configRequest", (event) => {
+        console.log(event);
+        if ("public" in event.detail.parameters) {
+          event.detail.parameters.public =
+            event.detail.parameters.public === "true";
+          console.log(event.detail.parameters.public === "true");
+        }
+      });
+    </script>
   </body>
-  <script>
-    var form = document.getElementById("put-groups");
-    form.addEventListener("htmx:configRequest", (event) => {
-      console.log(event);
-      if ("public" in event.detail.parameters) {
-        event.detail.parameters.public =
-          event.detail.parameters.public === "true";
-        console.log(event.detail.parameters.public === "true");
-      }
-    });
-  </script>
 </html>

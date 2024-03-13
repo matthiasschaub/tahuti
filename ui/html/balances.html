@@ -61,41 +61,43 @@
       <img class="spinner" src="/apps/tahuti/circles.svg" />
     </div>
 
-    <div
-      hx-get="/api/groups/{gid}"
-      hx-trigger="load"
-      hx-swap="outerHTML"
-      mustache-template="group-template"
-    ></div>
-    <template id="group-template">
-      <h2>{{title}}</h2>
-      <div id="currency" hidden>{{currency}}</div>
-    </template>
-
-    <table class="col-two">
-      <thead>
-        <tr>
-          <th>Member</th>
-          <th id="amount">Amount</th>
-        </tr>
-      </thead>
-      <tbody
-        id="balances"
-        hx-get="/api/groups/{gid}/balances"
+    <main>
+      <div
+        hx-get="/api/groups/{gid}"
         hx-trigger="load"
-        hx-ext="client-side-formats"
-        mustache-template="balances-template"
-      ></tbody>
-    </table>
-    <template id="balances-template">
-      <!-- iterate over array of balances object -->
-      {{#.}}
-      <tr>
-        <td>{{member}}</td>
-        <td headers="amount">{{amount}}</td>
-      </tr>
-      {{/.}}
-    </template>
+        hx-swap="outerHTML"
+        mustache-template="group-template"
+      ></div>
+      <template id="group-template">
+        <h2>{{title}}</h2>
+        <div id="currency" hidden>{{currency}}</div>
+      </template>
+
+      <table class="col-two">
+        <thead>
+          <tr>
+            <th>Member</th>
+            <th id="amount">Amount</th>
+          </tr>
+        </thead>
+        <tbody
+          id="balances"
+          hx-get="/api/groups/{gid}/balances"
+          hx-trigger="load"
+          hx-ext="client-side-formats"
+          mustache-template="balances-template"
+        ></tbody>
+      </table>
+      <template id="balances-template">
+        <!-- iterate over array of balances object -->
+        {{#.}}
+        <tr>
+          <td>{{member}}</td>
+          <td headers="amount">{{amount}}</td>
+        </tr>
+        {{/.}}
+      </template>
+    </main>
 
     <footer>
       <a
@@ -144,7 +146,6 @@
         </svg>
       </a>
     </footer>
+    <script src="/apps/tahuti/helper.js"></script>
   </body>
-
-  <script src="/apps/tahuti/helper.js"></script>
 </html>

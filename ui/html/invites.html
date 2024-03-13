@@ -56,53 +56,54 @@
       <img class="spinner" src="/apps/tahuti/circles.svg" />
     </div>
 
-    <h2>Tahuti</h2>
+    <main>
+      <h2>Tahuti</h2>
+      <div id="error-div" class="error">
+        <pre id="error-pre"></pre>
+      </div>
 
-    <div id="error-div" class="error">
-      <pre id="error-pre"></pre>
-    </div>
-
-    <div
-      hx-get="/api/invites"
-      hx-trigger="load"
-      mustache-template="invites-template"
-    ></div>
-    <template id="invites-template">
-      {{#.}}
-      <fieldset>
-        <label
-          >You got invited to join <em>{{title}}</em> by
-          <em>{{host}}</em>.</label
-        >
-        <form>
-          <button
-            id="post-join"
-            class="button-primary"
-            hx-post="/api/join"
-            hx-ext="json-enc"
-            hx-swap="none"
-            hx-vals='{"gid": "{{gid}}", "host": "{{host}}", "public": "{{public}}"}'
-            hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups"'
-            type="submit"
+      <div
+        hx-get="/api/invites"
+        hx-trigger="load"
+        mustache-template="invites-template"
+      ></div>
+      <template id="invites-template">
+        {{#.}}
+        <fieldset>
+          <label
+            >You got invited to join <em>{{title}}</em> by
+            <em>{{host}}</em>.</label
           >
-            Join group ▸
-          </button>
-          <button
-            id="post-leave"
-            class="button-cancel"
-            hx-post="/api/leave"
-            hx-ext="json-enc"
-            hx-swap="none"
-            hx-vals='{"gid": "{{gid}}", "host": "{{host}}", "public": "{{public}}"}'
-            hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups"'
-            type="submit"
-          >
-            Decline invitation ▸
-          </button>
-        </form>
-      </fieldset>
-      {{/.}}
-    </template>
+          <form>
+            <button
+              id="post-join"
+              class="button-primary"
+              hx-post="/api/join"
+              hx-ext="json-enc"
+              hx-swap="none"
+              hx-vals='{"gid": "{{gid}}", "host": "{{host}}", "public": "{{public}}"}'
+              hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups"'
+              type="submit"
+            >
+              Join group ▸
+            </button>
+            <button
+              id="post-leave"
+              class="button-cancel"
+              hx-post="/api/leave"
+              hx-ext="json-enc"
+              hx-swap="none"
+              hx-vals='{"gid": "{{gid}}", "host": "{{host}}", "public": "{{public}}"}'
+              hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups"'
+              type="submit"
+            >
+              Decline invitation ▸
+            </button>
+          </form>
+        </fieldset>
+        {{/.}}
+      </template>
+    </main>
     <script src="/apps/tahuti/helper.js"></script>
   </body>
 </html>

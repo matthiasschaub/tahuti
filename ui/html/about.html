@@ -61,62 +61,63 @@
       <img class="spinner" src="/apps/tahuti/circles.svg" />
     </div>
 
-    <div
-      hx-get="/api/groups/{gid}"
-      hx-trigger="load"
-      mustache-template="group-template"
-    ></div>
-    <template id="group-template">
-      <h2>{{title}}</h2>
-    </template>
+    <main>
+      <div
+        hx-get="/api/groups/{gid}"
+        hx-trigger="load"
+        mustache-template="group-template"
+      ></div>
+      <template id="group-template">
+        <h2>{{title}}</h2>
+      </template>
 
-    <div id="error-div" class="error">
-      <pre id="error-pre"></pre>
-    </div>
+      <div id="error-div" class="error">
+        <pre id="error-pre"></pre>
+      </div>
 
-    <blockquote>
-      <a href="https://www.createwcare.com/">Created w/ care</a>
-    </blockquote>
+      <blockquote>
+        <a href="https://www.createwcare.com/">Created w/ care</a>
+      </blockquote>
 
-    <h3>About</h3>
-    <table class="col-two">
-      <thead></thead>
-      <tbody>
-        <tr>
-          <th>Version</th>
-          <td hx-get="/api/groups/{gid}/version" hx-trigger="load"></td>
-        </tr>
-        <tr>
-          <th>Developer</th>
-          <td>
-            <a
-              href="/apps/talk/dm/~talfus-laddus"
-              target="_blank"
-              hx-boost="false"
-              >~talfus-laddus</a
-            >
-          </td>
-        </tr>
-        <tr>
-          <th>Code Repository</th>
-          <td>
-            <a href="https://github.com/matthiasschaub/tahuti">GitHub</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <template id="version-template">
-      <td>{{#.}} {{.}} {{/.}}</td>
-    </template>
+      <h3>About</h3>
+      <table class="col-two">
+        <thead></thead>
+        <tbody>
+          <tr>
+            <th>Version</th>
+            <td hx-get="/api/groups/{gid}/version" hx-trigger="load"></td>
+          </tr>
+          <tr>
+            <th>Developer</th>
+            <td>
+              <a
+                href="/apps/talk/dm/~talfus-laddus"
+                target="_blank"
+                hx-boost="false"
+                >~talfus-laddus</a
+              >
+            </td>
+          </tr>
+          <tr>
+            <th>Code Repository</th>
+            <td>
+              <a href="https://github.com/matthiasschaub/tahuti">GitHub</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <template id="version-template">
+        <td>{{#.}} {{.}} {{/.}}</td>
+      </template>
 
-    <h3>Contact</h3>
-    <p>
-      Please reach out to
-      <a href="/apps/talk/dm/~talfus-laddus" target="_blank" hx-boot="false"
-        >~talfus-laddus</a
-      >, to report any bug, to give feedbag or to receive support.
-    </p>
+      <h3>Contact</h3>
+      <p>
+        Please reach out to
+        <a href="/apps/talk/dm/~talfus-laddus" target="_blank" hx-boot="false"
+          >~talfus-laddus</a
+        >, to report any bug, to give feedbag or to receive support.
+      </p>
+    </main>
+    <script src="/apps/tahuti/helper.js"></script>
   </body>
-
-  <script src="/apps/tahuti/helper.js"></script>
 </html>

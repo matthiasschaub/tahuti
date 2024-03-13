@@ -61,79 +61,80 @@
       <img class="spinner" src="/apps/tahuti/circles.svg" />
     </div>
 
-    <div
-      hx-get="/api/groups/{gid_eid}"
-      hx-trigger="load"
-      hx-swap="outerHTML"
-      mustache-template="group-template"
-    ></div>
+    <main>
+      <div
+        hx-get="/api/groups/{gid_eid}"
+        hx-trigger="load"
+        hx-swap="outerHTML"
+        mustache-template="group-template"
+      ></div>
+      <template id="group-template">
+        <h2>{{title}}</h2>
+        <div id="currency" hidden>{{currency}}</div>
+      </template>
 
-    <template id="group-template">
-      <h2>{{title}}</h2>
-      <div id="currency" hidden>{{currency}}</div>
-    </template>
+      <div id="error-div" class="error">
+        <pre id="error-pre"></pre>
+      </div>
 
-    <div id="error-div" class="error">
-      <pre id="error-pre"></pre>
-    </div>
-
-    <div
-      id="details"
-      hx-get="/api/groups/{gid_eid}/expenses/{eid}"
-      hx-trigger="load"
-      hx-ext="client-side-formats"
-      mustache-template="details-template"
-    ></div>
-    <template id="details-template">
-      <table class="col-two">
-        <!-- iterate over array of members object -->
-        <thead></thead>
-        <tbody>
-          {{#.}}
-          <tr>
-            <th>For what?</th>
-            <td>{{title}}</td>
-          </tr>
-          <tr>
-            <th>Amount</th>
-            <td id="amount">{{amount}}</td>
-          </tr>
-          <tr>
-            <th>Paid by</th>
-            <td>{{payer}}</td>
-          </tr>
-          <tr>
-            <th>Date</th>
-            <td id="date">{{date}}</td>
-          </tr>
-          <tr>
-            <th>Time</th>
-            <td id="time">{{time}}</td>
-          </tr>
-          <tr>
-            <th>Involves</th>
-            <td>
-              {{#involves}} {{.}} <br />
-              {{/involves}}
-            </td>
-          </tr>
-          {{/.}}
-        </tbody>
-      </table>
-      <p style="text-align: center">
-        Permanently
-        <a
-          id="delete-expense"
-          hx-delete="/api/groups/{gid_eid}/expenses/{eid}"
-          hx-confirm="Are you sure?"
-          hx-ext="json-enc"
-          hx-swap="none"
-          hx-on::after-request="window.location.pathname = '/apps/tahuti/groups/{{gid}}/expenses'"
-          >delete</a
-        >
-        this expense.
-      </p>
-    </template>
+      <div
+        id="details"
+        hx-get="/api/groups/{gid_eid}/expenses/{eid}"
+        hx-trigger="load"
+        hx-ext="client-side-formats"
+        mustache-template="details-template"
+      ></div>
+      <template id="details-template">
+        <table class="col-two">
+          <!-- iterate over array of members object -->
+          <thead></thead>
+          <tbody>
+            {{#.}}
+            <tr>
+              <th>For what?</th>
+              <td>{{title}}</td>
+            </tr>
+            <tr>
+              <th>Amount</th>
+              <td id="amount">{{amount}}</td>
+            </tr>
+            <tr>
+              <th>Paid by</th>
+              <td>{{payer}}</td>
+            </tr>
+            <tr>
+              <th>Date</th>
+              <td id="date">{{date}}</td>
+            </tr>
+            <tr>
+              <th>Time</th>
+              <td id="time">{{time}}</td>
+            </tr>
+            <tr>
+              <th>Involves</th>
+              <td>
+                {{#involves}} {{.}} <br />
+                {{/involves}}
+              </td>
+            </tr>
+            {{/.}}
+          </tbody>
+        </table>
+        <p style="text-align: center">
+          Permanently
+          <a
+            id="delete-expense"
+            hx-delete="/api/groups/{gid_eid}/expenses/{eid}"
+            hx-confirm="Are you sure?"
+            hx-ext="json-enc"
+            hx-swap="none"
+            hx-on::after-request="window.location.pathname = '/apps/tahuti/groups/{{gid}}/expenses'"
+            >delete</a
+          >
+          this expense.
+        </p>
+      </template>
+    </main>
+    <script src="/apps/tahuti/helper.js"></script>
   </body>
-  <script src="/apps/tahuti/helper.js"></script>
 </html>
