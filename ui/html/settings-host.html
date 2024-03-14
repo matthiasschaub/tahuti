@@ -157,35 +157,6 @@
         all expenses of this group as JSON.
       </p>
 
-      <h3>Leave group</h3>
-
-      <div
-        hx-get="/api/groups/{gid}"
-        hx-trigger="load"
-        mustache-template="leave-template"
-      ></div>
-      <template id="leave-template">
-        {{#.}}
-        <!-- TODO: redirect after successful request? -->
-        <p>
-          <a
-            id="leave-groups"
-            hx-confirm="Are you sure?"
-            hx-post="/api/leave"
-            hx-ext="json-enc"
-            hx-swap="none"
-            hx-vals='{"gid": "{{gid}}", "host": "{{host}}", "public": "{{public}}"}'
-            hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups"'
-            >Leave</a
-          >
-          this group. This will not remove any expenses you have been involved
-          with.
-        </p>
-        <!-- <br /> -->
-        <!-- <button class="button-cancel" type="submit">Leave this group</button> -->
-        {{/.}}
-      </template>
-
       <h3>Delete group</h3>
       <p>
         Permanently

@@ -11,10 +11,13 @@
 /*  html-expenses             %html  /app/ui/html/expenses/html
 /*  html-balances             %html  /app/ui/html/balances/html
 /*  html-reimbursements       %html  /app/ui/html/reimbursements/html
-/*  html-settings             %html  /app/ui/html/settings/html
+/*  html-settings-host        %html  /app/ui/html/settings-host/html
+/*  html-settings-member      %html  /app/ui/html/settings-member/html
+/*  html-settings-public      %html  /app/ui/html/settings-public/html
 /*  html-about                %html  /app/ui/html/about/html
 /*  html-add                  %html  /app/ui/html/add/html
 /*  html-invite               %html  /app/ui/html/invite/html
+/*  html-invite-public        %html  /app/ui/html/invite-public/html
 /*  html-details              %html  /app/ui/html/details/html
 /*  css-style                 %css   /app/ui/css/style/css
 /*  css-print                 %css   /app/ui/css/print/css
@@ -103,12 +106,16 @@
     =+  ext=ext.request-line
     =+  send=(cury response:schooner eyre-id)
     =+  auth=authenticated.inbound-request
+    =/  group=(unit group)
+      ?.  (gte (lent site) 4)
+        ~
+      =/  gid   (snag 3 site)
+      =/  path  /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/[gid]/noun
+      =,  .^([=group =acl =reg =led] %gx path)
+      (some group)
     =/  public=?
-      ?:  (gte (lent site) 4)
-        =/  gid   (snag 3 site)
-        =/  path  /(scot %p our.bowl)/tahuti/(scot %da now.bowl)/[gid]/noun
-        =,  .^([=group =acl =reg =led] %gx path)
-        public.group
+      ?^  group
+        public:(need group)
       ?~  ext
         %.n
       ?+  +.ext  %.n
@@ -193,7 +200,12 @@
           %expenses        [(send [200 ~ [%html html-expenses]]) state]
           %balances        [(send [200 ~ [%html html-balances]]) state]
           %reimbursements  [(send [200 ~ [%html html-reimbursements]]) state]
-          %settings        [(send [200 ~ [%html html-settings]]) state]
+          %settings
+            ?:  auth
+              ?:  .=(our.bowl host:(need group))
+                [(send [200 ~ [%html html-settings-host]]) state]
+              [(send [200 ~ [%html html-settings-member]]) state]
+            [(send [200 ~ [%html html-settings-public]]) state]
           %about           [(send [200 ~ [%html html-about]]) state]
           %add             [(send [200 ~ [%html html-add]]) state]
           %invite
@@ -201,6 +213,8 @@
               ?.  hx-req
                 [(send [302 ~ [%login-redirect './apps/tahuti']]) state]
               [(send [200 ~ [%hx-login-redirect './apps/tahuti']]) state]
+            ?:  public
+              [(send [200 ~ [%html html-invite-public]]) state]
             [(send [200 ~ [%html html-invite]]) state]
         ==
       ::

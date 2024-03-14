@@ -86,7 +86,7 @@
           hx-swap="none"
           hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups/" + gid() + "/settings";'
         >
-          Invite people on Urbit to join this group.<br />
+          Invite people on Urbit to join this group …<br />
           <small>(In-app invite)</small>
           <br />
           <br />
@@ -104,6 +104,44 @@
           <br />
           <button class="button-primary" type="submit" form="put-invitees">
             Send invite ▸
+          </button>
+          <button
+            class="button-cancel"
+            onclick="window.location.href='/apps/tahuti/groups/' + gid() + '/settings';"
+            type="button"
+            value="Cancel"
+          >
+            Cancel
+          </button>
+        </form>
+      </fieldset>
+
+      <fieldset>
+        … or add members without Urbit ID to the group.<br />
+        <small>(Public group)</small>
+        <br />
+        <br />
+        <form
+          id="put-members"
+          hx-put="/api/groups/{gid}/members"
+          hx-ext="json-enc"
+          hx-swap="none"
+          hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups/" + gid() + "/settings";'
+        >
+          <!-- TODO: add validation for valid @p -->
+          <label>Name</label>
+          <br />
+          <input
+            id="member"
+            type="text"
+            name="member"
+            aria-label="member"
+            placeholder="Name"
+            required="required"
+          />
+          <br />
+          <button class="button-primary" type="submit" form="put-members">
+            Add member ▸
           </button>
           <button
             class="button-cancel"

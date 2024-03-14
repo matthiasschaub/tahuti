@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Group Expenses</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="An Expense Sharing App for Urbit" />
+    <meta name="view-transition" content="same-origin" />
+    <!-- PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Tahuti" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <link rel="apple-touch-icon" href="/apps/tahuti/icon180.png" />
+    <link rel="icon" href="/apps/tahuti/icon16.png" sizes="16x16" />
+    <link
+      rel="icon"
+      href="/apps/tahuti/tahuti.svg"
+      sizes="any"
+      type="image/svg+xml"
+    />
+    <link
+      rel="manifest"
+      href="/apps/tahuti/manifest.json"
+      crossorigin="use-credentials"
+    />
+    <!-- /PWA -->
+    <link rel="stylesheet" href="/apps/tahuti/style.css" />
+    <link rel="stylesheet" href="/apps/tahuti/print.css" media="print" />
+    <script src="/apps/tahuti/index.js"></script>
+    <script src="/apps/tahuti/json-enc.js"></script>
+    <script src="/apps/tahuti/client-side-templates.js"></script>
+  </head>
+
+  <body hx-boost="true" hx-ext="client-side-templates" hx-indicator="#overlay">
+    <header>
+      <nav aria-label="Global">
+        <ul>
+          <li>
+            <a href="/groups">↜ Groups</a>
+          </li>
+          <li>
+            <a href="/groups/{gid}/expenses">Expenses</a>
+          </li>
+          <li>
+            <a href="/groups/{gid}/balances">Balances</a>
+          </li>
+          <li>
+            <a href="/groups/{gid}/settings"><strong>Settings</strong></a>
+          </li>
+          <li>
+            <a href="/groups/{gid}/about">About</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <div id="overlay" class="overlay htmx-indicator htmx-request">
+      <img class="spinner" src="/apps/tahuti/circles.svg" />
+    </div>
+
+    <main>
+      <div
+        hx-get="/api/groups/{gid}"
+        hx-trigger="load"
+        mustache-template="group-template"
+      ></div>
+      <template id="group-template">
+        <h2>{{title}}</h2>
+
+        <div id="error-div" class="error">
+          <pre id="error-pre"></pre>
+        </div>
+
+        <h3>Details</h3>
+        <table class="col-two">
+          <thead></thead>
+          <tbody>
+            <tr>
+              <th>Title</th>
+              <td>{{title}}</td>
+            </tr>
+            <tr>
+              <th>Currency</th>
+              <td>{{currency}}</td>
+            </tr>
+            <tr>
+              <th>Host</th>
+              <td>{{host}}</td>
+            </tr>
+            <tr>
+              <th>Public</th>
+              <td>{{public}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </template>
+
+      <h3>Members</h3>
+      <ul>
+        <div
+          id="get-members"
+          hx-get="/api/groups/{gid}/members"
+          hx-trigger="load"
+          hx-swap="outerHTML"
+          mustache-template="members-template"
+        ></div>
+        <template id="members-template">
+          {{#.}}
+          <li>{{.}}</li>
+          {{/.}}
+        </template>
+        <div
+          id="get-invitees"
+          hx-get="/api/groups/{gid}/invitees"
+          hx-trigger="load"
+          mustache-template="invitees-template"
+        ></div>
+        <template id="invitees-template">
+          {{#.}}
+          <li>{{.}} <small>(invited)</small></li>
+          {{/.}}
+        </template>
+        <div
+          id="get-castoffs"
+          hx-get="/api/groups/{gid}/castoffs"
+          hx-trigger="load"
+          mustache-template="castoffs-template"
+        ></div>
+        <template id="castoffs-template">
+          {{#.}}
+          <li>{{.}} <small>(lost)</small></li>
+          {{/.}}
+        </template>
+      </ul>
+
+      <h3>Add members</h3>
+      <p>
+        <a
+          hx-get="/groups/{gid}/invite"
+          hx-target="body"
+          hx-trigger="click"
+          hx-push-url="true"
+          >Add</a
+        >
+        members to this group.
+      </p>
+
+      <h3>Export expenses</h3>
+      <p>
+        <a
+          onclick="window.location.pathname = '/apps/tahuti/api/groups/' + gid() + '/expenses'"
+          >Download</a
+        >
+        all expenses of this group as JSON.
+      </p>
+
+      <h3>Leave group</h3>
+
+      <div
+        hx-get="/api/groups/{gid}"
+        hx-trigger="load"
+        mustache-template="leave-template"
+      ></div>
+      <template id="leave-template">
+        {{#.}}
+        <!-- TODO: redirect after successful request? -->
+        <p>
+          <a
+            id="leave-groups"
+            hx-confirm="Are you sure?"
+            hx-post="/api/leave"
+            hx-ext="json-enc"
+            hx-swap="none"
+            hx-vals='{"gid": "{{gid}}", "host": "{{host}}", "public": "{{public}}"}'
+            hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups"'
+            >Leave</a
+          >
+          this group. This will not remove any expenses you have been involved
+          with.
+        </p>
+        <!-- <br /> -->
+        <!-- <button class="button-cancel" type="submit">Leave this group</button> -->
+        {{/.}}
+      </template>
+    </main>
+    <script src="/apps/tahuti/helper.js"></script>
+  </body>
+</html>
