@@ -118,7 +118,7 @@
           [(send [404 ~ [%plain "404 - Not Found"]]) state]
           ::
             %version
-          [(send [200 ~ [%json (version:enjs '2024-03-14.1')]]) state]
+          [(send [200 ~ [%json (version:enjs '2024-03-14.2')]]) state]
           ::
             %members
           ::  FIX: does not work due to reg containing non Urbit-ID
