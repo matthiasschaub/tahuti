@@ -4,11 +4,12 @@ Expense sharing app for [Urbit](https://urbit.org/).
 
 Install from `~talfus-laddus/tahuti`.
 
-For details about this app, see the [proposal](https://urbit.org/grants/splitwise).
+For details about this app, see the [proposal](proposal.md).
 
 ## Development
 
 Documentation:
+- [Architecture](docs/architecture.md)
 - [Development Setup](docs/development.md)
 - [Deployment](docs/deployment.md)
 

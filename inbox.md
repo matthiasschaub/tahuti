@@ -20,10 +20,6 @@
 - refactor(ui): move about page from group pages (`/groups/{gid}`)
   to index page (`/groups`)
 - refactor(ui): make upper margin of add button/svg bigger
-- refactor(ui): different setting pages for different roles
-  - host will have delete group button and remove member
-  - members will have a leave group button
-  - if public group no settings are available (only group metadata)
 - refactor(tahuti): move state transition to its own library or helper arm
 - refactor(tahuti): add helper to get all data of a group (reg, led, acl, group)
 - refactor(tahuti): host should be part of register
@@ -37,6 +33,7 @@
 - feat(ui): sort table after column header
 - feat(ui): click on suggested reimbursement to add new expense covering debt
 - feat(ui): dark mode
+- feat(ui): validate ship names
 - refactor(api): response only after successful %poke
   - add HTTP response card to state
   - wait (on-arvo) for ack from %tahuti before sending HTTP response
@@ -49,8 +46,8 @@
 - fix(ui): if deletion of expense happens by a subscriber (not the host) HTMX fetches
   to fast the new expenses list so that the deleted expense is still shown 
   (introduce polling)
-- ui: add default values in case of empty responses (no groups, no members, no reimbursements etc.)
-- ui: validate ship names
+- ui: add default values in case of empty responses
+  (no groups, no members, no reimbursements etc.)
 - feat(ui): add expense form payer default value should be current ship
 - test: use module scoped fixtures everywhere to keep it simple
 - test: front-end test using selenium to extract parts of the html for approval testing
