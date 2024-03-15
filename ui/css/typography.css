@@ -37,6 +37,7 @@ h2 {
 
 h3 {
   font-size: 1.4792em;
+  font-weight: normal;
   /* top right bottom left */
   margin: var(--vspace-1) 0 var(--vspace-3) 0;
   line-height: 1em;

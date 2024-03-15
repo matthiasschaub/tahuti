@@ -1,13 +1,9 @@
 .button-primary {
   background: var(--blue);
-  color: white;
-  border: var(--fg) 1px solid;
 }
 
 .button-cancel {
   background: var(--red);
-  color: white;
-  border: var(--fg) 1px solid;
 }
 
 .error {
