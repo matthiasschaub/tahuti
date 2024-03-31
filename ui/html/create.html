@@ -17,7 +17,7 @@
     <link rel="icon" href="/apps/tahuti/icon16.png" sizes="16x16" />
     <link
       rel="icon"
-      href="/apps/tahuti/tahuti.svg"
+      href="/apps/tahuti/icon.svg"
       sizes="any"
       type="image/svg+xml"
     />
@@ -27,6 +27,7 @@
       crossorigin="use-credentials"
     />
     <!-- /PWA -->
+    <link rel="stylesheet" href="/apps/tahuti/udjat.css" />
     <link rel="stylesheet" href="/apps/tahuti/style.css" />
     <link rel="stylesheet" href="/apps/tahuti/print.css" media="print" />
     <script src="/apps/tahuti/index.js"></script>
@@ -47,7 +48,7 @@
       </nav>
       <div class="header-icon">
         <a href="/apps/tahuti/groups">
-          <img class="svg-ico" src="/apps/tahuti/tahuti.svg" />
+          <img class="svg-ico" src="/apps/tahuti/icon.svg" />
         </a>
       </div>
     </header>
@@ -63,18 +64,17 @@
       </div>
 
       <h3>Create new group</h3>
-      <fieldset>
-        <form
-          id="put-groups"
-          hx-put="/apps/tahuti/api/groups"
-          hx-ext="json-enc"
-          hx-swap="none"
-          hx-vals="js:{gid: self.crypto.randomUUID()}"
-          hx-request="noHeaders"
-          hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups";'
-        >
+      <form
+        id="put-groups"
+        hx-put="/apps/tahuti/api/groups"
+        hx-ext="json-enc"
+        hx-swap="none"
+        hx-vals="js:{gid: self.crypto.randomUUID()}"
+        hx-request="noHeaders"
+        hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups";'
+      >
+        <fieldset>
           <label>Titel</label>
-          <br />
           <input
             id="group-title"
             type="text"
@@ -82,9 +82,7 @@
             aria-label="Group Title"
             required
           />
-          <br />
           <label>Currency</label>
-          <br />
           <select
             id="currency"
             type="text"
@@ -124,9 +122,7 @@
             <option>USD</option>
             <option>ZAR</option>
           </select>
-          <br />
           <label>Access</label>
-          <br />
           <select
             id="public"
             type="text"
@@ -137,7 +133,6 @@
             <option value="false">Private</option>
             <option value="true">Public</option>
           </select>
-          <br />
           <button class="button-primary" type="submit">Create group ▸</button>
           <button
             class="button-cancel"
@@ -147,8 +142,8 @@
           >
             Cancel
           </button>
-        </form>
-      </fieldset>
+        </fieldset>
+      </form>
     </main>
     <script>
       var form = document.getElementById("put-groups");

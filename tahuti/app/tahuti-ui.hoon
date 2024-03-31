@@ -19,11 +19,13 @@
 /*  html-invite               %html  /app/ui/html/invite/html
 /*  html-invite-public        %html  /app/ui/html/invite-public/html
 /*  html-details              %html  /app/ui/html/details/html
+/*  html-edit                 %html  /app/ui/html/edit/html
+/*  css-udjat                 %css   /app/ui/css/udjat/css
 /*  css-style                 %css   /app/ui/css/style/css
 /*  css-print                 %css   /app/ui/css/print/css
 /*  svg-add                   %svg   /app/ui/svg/add/svg
 /*  svg-circles               %svg   /app/ui/svg/circles/svg
-/*  svg-tahuti                %svg   /app/ui/svg/tahuti/svg
+/*  svg-icon                  %svg   /app/ui/svg/icon/svg
 /*  png-16                    %png   /app/ui/png/16/png
 /*  png-64                    %png   /app/ui/png/64/png
 /*  png-180                   %png   /app/ui/png/180/png
@@ -138,18 +140,20 @@
         [(send [200 ~ [%hx-redirect '/apps/tahuti/groups']]) state]
       ::  css
       ::
+      [%apps %tahuti %udjat ~]
+        [(send [200 ~ [%css css-udjat]]) state]
       [%apps %tahuti %style ~]
         [(send [200 ~ [%css css-style]]) state]
       [%apps %tahuti %print ~]
         [(send [200 ~ [%css css-print]]) state]
       ::  svg
       ::
-      [%apps %tahuti %add-expense ~]
+      [%apps %tahuti %add-icon ~]
         [(send [200 ~ [%svg svg-add]]) state]
       [%apps %tahuti %circles ~]
         [(send [200 ~ [%svg svg-circles]]) state]
-      [%apps %tahuti %tahuti ~]
-        [(send [200 ~ [%svg svg-tahuti]]) state]
+      [%apps %tahuti %icon ~]
+        [(send [200 ~ [%svg svg-icon]]) state]
       ::  png
       ::
       [%apps %tahuti %icon16 ~]
@@ -218,8 +222,10 @@
             [(send [200 ~ [%html html-invite]]) state]
         ==
       ::
-      [%apps %tahuti %groups @t %expenses @t ~]
+      [%apps %tahuti %groups @t %expenses @t %details ~]
         [(send [200 ~ [%html html-details]]) state]
+      [%apps %tahuti %groups @t %expenses @t %edit ~]
+        [(send [200 ~ [%html html-edit]]) state]
       ::
     ==
   --

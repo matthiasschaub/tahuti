@@ -17,7 +17,7 @@
     <link rel="icon" href="/apps/tahuti/icon16.png" sizes="16x16" />
     <link
       rel="icon"
-      href="/apps/tahuti/tahuti.svg"
+      href="/apps/tahuti/icon.svg"
       sizes="any"
       type="image/svg+xml"
     />
@@ -27,6 +27,7 @@
       crossorigin="use-credentials"
     />
     <!-- /PWA -->
+    <link rel="stylesheet" href="/apps/tahuti/udjat.css" />
     <link rel="stylesheet" href="/apps/tahuti/style.css" />
     <link rel="stylesheet" href="/apps/tahuti/print.css" media="print" />
     <script src="/apps/tahuti/index.js"></script>
@@ -42,16 +43,16 @@
             <a href="/groups">↜ Groups</a>
           </li>
           <li>
-            <a href="/groups/{gid_eid}/expenses">Expenses</a>
+            <a href="/groups/{gid}/expenses">Expenses</a>
           </li>
           <li>
-            <a href="/groups/{gid_eid}/balances">Balances</a>
+            <a href="/groups/{gid}/balances">Balances</a>
           </li>
           <li>
-            <a href="/groups/{gid_eid}/settings">Settings</a>
+            <a href="/groups/{gid}/settings">Settings</a>
           </li>
           <li>
-            <a href="/groups/{gid_eid}/about">About</a>
+            <a href="/groups/{gid}/about">About</a>
           </li>
         </ul>
       </nav>
@@ -63,7 +64,7 @@
 
     <main>
       <div
-        hx-get="/api/groups/{gid_eid}"
+        hx-get="/api/groups/{gid}"
         hx-trigger="load"
         hx-swap="outerHTML"
         mustache-template="group-template"
@@ -79,7 +80,7 @@
 
       <div
         id="details"
-        hx-get="/api/groups/{gid_eid}/expenses/{eid}"
+        hx-get="/api/groups/{gid}/expenses/{eid}"
         hx-trigger="load"
         hx-ext="client-side-formats"
         mustache-template="details-template"
@@ -124,7 +125,7 @@
           Permanently
           <a
             id="delete-expense"
-            hx-delete="/api/groups/{gid_eid}/expenses/{eid}"
+            hx-delete="/api/groups/{gid}/expenses/{eid}"
             hx-confirm="Are you sure?"
             hx-ext="json-enc"
             hx-swap="none"

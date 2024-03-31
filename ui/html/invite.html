@@ -17,7 +17,7 @@
     <link rel="icon" href="/apps/tahuti/icon16.png" sizes="16x16" />
     <link
       rel="icon"
-      href="/apps/tahuti/tahuti.svg"
+      href="/apps/tahuti/icon.svg"
       sizes="any"
       type="image/svg+xml"
     />
@@ -27,6 +27,7 @@
       crossorigin="use-credentials"
     />
     <!-- /PWA -->
+    <link rel="stylesheet" href="/apps/tahuti/udjat.css" />
     <link rel="stylesheet" href="/apps/tahuti/style.css" />
     <link rel="stylesheet" href="/apps/tahuti/print.css" media="print" />
     <script src="/apps/tahuti/index.js"></script>
@@ -78,21 +79,21 @@
       </div>
 
       <h3>Add members</h3>
-      <fieldset>
-        <form
-          id="put-invitees"
-          hx-put="/api/groups/{gid}/invitees"
-          hx-ext="json-enc"
-          hx-swap="none"
-          hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups/" + gid() + "/settings";'
+      <p>
+        Invite people on Urbit to join this group.<br /><small
+          >(In-app invite)</small
         >
-          Invite people on Urbit to join this group.<br />
-          <small>(In-app invite)</small>
-          <br />
-          <br />
+      </p>
+      <form
+        id="put-invitees"
+        hx-put="/api/groups/{gid}/invitees"
+        hx-ext="json-enc"
+        hx-swap="none"
+        hx-on::after-request='if(event.detail.successful) window.location.pathname = "/apps/tahuti/groups/" + gid() + "/settings";'
+      >
+        <fieldset>
           <!-- TODO: add validation for valid @p -->
           <label>Urbit ID</label>
-          <br />
           <input
             id="invitee"
             type="text"
@@ -101,7 +102,6 @@
             placeholder="~zod"
             required="required"
           />
-          <br />
           <button class="button-primary" type="submit" form="put-invitees">
             Send invite ▸
           </button>
@@ -113,8 +113,8 @@
           >
             Cancel
           </button>
-        </form>
-      </fieldset>
+        </fieldset>
+      </form>
     </main>
     <script src="/apps/tahuti/helper.js"></script>
   </body>

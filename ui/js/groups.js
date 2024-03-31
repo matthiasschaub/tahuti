@@ -2,22 +2,13 @@
 //
 function gid() {
   const parts = window.location.href.split("/");
-  parts.pop() || parts.pop(); // handle potential trailing slash
-  return parts.pop() || parts.pop();
-}
-// extract group ID from URL with expense ID
-//
-function gid_eid() {
-  const parts = window.location.href.split("/");
-  parts.pop() || parts.pop(); // handle potential trailing slash
-  parts.pop() || parts.pop();
-  return parts.pop() || parts.pop();
+  return parts[6];
 }
 // extract expense ID from URL
 //
 function eid() {
   const parts = window.location.href.split("/");
-  return parts.pop() || parts.pop(); // handle potential trailing slash
+  return parts[8];
 }
 
 // change HTMX request URL to make requests to the API
@@ -29,9 +20,6 @@ document.body.addEventListener("htmx:configRequest", (event) => {
 
   if (path.includes("{gid}")) {
     path = path.replace("{gid}", gid());
-  }
-  if (path.includes("{gid_eid}")) {
-    path = path.replace("{gid_eid}", gid_eid());
   }
   if (path.includes("{eid}")) {
     path = path.replace("{eid}", eid());
@@ -70,5 +58,4 @@ document.body.addEventListener("htmx:responseError", function (evt) {
     behavior: "smooth",
   });
 });
-
-export { gid, eid, gid_eid };
+export { gid, eid };

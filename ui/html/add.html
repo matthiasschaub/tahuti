@@ -17,7 +17,7 @@
     <link rel="icon" href="/apps/tahuti/icon16.png" sizes="16x16" />
     <link
       rel="icon"
-      href="/apps/tahuti/tahuti.svg"
+      href="/apps/tahuti/icon.svg"
       sizes="any"
       type="image/svg+xml"
     />
@@ -27,6 +27,7 @@
       crossorigin="use-credentials"
     />
     <!-- /PWA -->
+    <link rel="stylesheet" href="/apps/tahuti/udjat.css" />
     <link rel="stylesheet" href="/apps/tahuti/style.css" />
     <link rel="stylesheet" href="/apps/tahuti/print.css" media="print" />
     <script src="/apps/tahuti/index.js"></script>
@@ -84,16 +85,15 @@
 
       <h3>Add an expense</h3>
       <!-- TODO: redirect to /expenses -->
-      <fieldset>
-        <form
-          id="put-expenses"
-          hx-put="/api/groups/{gid}/expenses"
-          hx-ext="json-enc"
-          hx-vals="js:{eid: self.crypto.randomUUID(), gid: gid()}"
-        >
+      <form
+        id="put-expenses"
+        hx-put="/api/groups/{gid}/expenses"
+        hx-ext="json-enc"
+        hx-vals="js:{eid: self.crypto.randomUUID(), gid: gid()}"
+      >
+        <fieldset>
           <!-- titel -->
           <label for="title">What for?</label>
-          <br />
           <input
             id="title"
             type="text"
@@ -104,11 +104,9 @@
             placeholder="Title"
             required
           />
-          <br />
 
           <!-- currency -->
           <label for="currency">Which currency?</label>
-          <br />
           <select
             id="currency"
             type="text"
@@ -148,11 +146,9 @@
             <option>USD</option>
             <option>ZAR</option>
           </select>
-          <br />
 
           <!-- amount -->
           <label for="amount">How much?</label>
-          <br />
           <input
             id="amount"
             type="text"
@@ -163,14 +159,12 @@
             autocomplete="off"
             required
           />
-          <br />
           <div hidden data-amount="" id="convertedAmount"></div>
           <br id="break" hidden />
 
           <!-- payer -->
           <!-- TODO: add current ship as default value -->
           <label for="payer">Who paid?</label>
-          <br />
           <select
             hx-get="/api/groups/{gid}/members"
             hx-trigger="load"
@@ -186,11 +180,9 @@
             <option value="{{.}}">{{.}}</option>
             {{/.}}
           </template>
-          <br />
 
           <!-- involved -->
           <label>Who is involved?</label>
-          <br />
           <div
             hx-get="/api/groups/{gid}/members"
             hx-trigger="load"
@@ -198,22 +190,22 @@
           ></div>
           <template id="involved-template">
             {{#.}}
-            <input
-              class="checkbox"
-              id="check-{{.}}"
-              type="checkbox"
-              name="involves"
-              value="{{.}}"
-              checked
-            />
-            <label for="check-{{.}}">{{.}} </label>
-            <br />
+            <label>
+              <input
+                class="checkbox"
+                id="check-{{.}}"
+                type="checkbox"
+                name="involves"
+                value="{{.}}"
+                checked
+              />
+              {{.}}
+            </label>
             {{/.}}
           </template>
 
           <!-- When? -->
           <label for="date">When?</label>
-          <br />
           <input
             id="date"
             type="date"
@@ -221,7 +213,6 @@
             name="date"
             aria-label="Date"
           />
-          <br />
 
           <!-- Submit -->
           <button class="button-primary" type="submit">Add expense ▸</button>
@@ -234,8 +225,8 @@
           >
             Cancel
           </button>
-        </form>
-      </fieldset>
+        </fieldset>
+      </form>
     </main>
     <script src="/apps/tahuti/helper.js"></script>
     <script src="/apps/tahuti/add.js"></script>

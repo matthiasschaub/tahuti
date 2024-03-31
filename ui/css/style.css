@@ -1,71 +1,218 @@
-@charset "utf-8";
-
-@import url("class.css");
-@import url("footer.css");
-@import url("form.css");
-@import url("header.css");
-@import url("responsive.css");
-@import url("table.css");
-@import url("typography.css");
-
 :root {
-  /* https://www.layoutgridcalculator.com/typographic-scale */
-  /* Base (pt): 12 */
-  /* Scale Ratio: Golden Ratio */
-  /* No. of sizes in the scale: Pentatonic Scale (x5) */
-  /* Composition: Fibonacci Series */
-
-  /* increase or decrease the number to change the vertical spacing */
-  /* globally */
-
-  /* base vertical spacing */
-  --space: 1.62;
-
-  /* vertical spacing multiplier */
-  --vspace: calc(var(--space) * 1rem);
-  /* more space ... */
-  --vspace-0: calc(3 * var(--space) * 1rem);
-  --vspace-1: calc(2 * var(--space) * 1rem);
-  --vspace-2: calc(1.5 * var(--space) * 1rem);
-  --vspace-3: calc(0.5 * var(--space) * 1rem);
-  /* ... less space */
-
-  --max-width: calc(25 * var(--vspace));
-
-  --bg0_h: #fffff3;
-  --bg0_s: #f2e5bc;
+  --bg: #fffff3;
+  --bg2: #f2e5bc;
   --fg: #000000;
 
   --red: #cc241d;
   --blue: #0062cc;
   --grey: #767676;
-}
 
-html {
-  /* 12pt */
-  font-size: 16px;
-  font-family: system-ui;
-  font-variant-numeric: oldstyle-nums;
+  /* potential colors for dark theme (gruvbox) */
+  /* --bg: #312c2b; */
+  /* --fg: #f2e5bc; */
+  /* --bg0_h: #25033f; */
+  /* --fg: #f3f0df; */
 }
 
 body {
   position: relative;
-
-  font-size: 1em;
-
-  max-width: var(--max-width);
-  margin: 0 auto;
-
-  color: var(--fg);
-  background: var(--bg0_h);
-
   /* make room for fixed/sticky footer */
   padding-bottom: var(--vspace-1);
 }
 
-main,
-article,
 header {
-  margin-left: var(--vspace);
-  margin-right: var(--vspace);
+  position: relative;
+  z-index: 2;
+}
+
+header > nav ul li svg {
+  display: inline-block;
+  padding: 0.1rem 1rem;
+  vertical-align: middle;
+}
+
+footer {
+  text-align: center;
+
+  /* fixed/sticky footer */
+  position: sticky;
+  bottom: 0;
+  max-width: var(--max-width);
+  width: 100%;
+
+  color: var(--fg);
+  /* same as var(--bg0_h) but transparent*/
+  background-color: rgba(255, 255, 243, 0.9);
+}
+
+header > .header-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+footer > .footer-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-150%);
+}
+
+h1,
+h2 {
+  color: var(--red);
+  text-align: center;
+}
+
+h3 {
+  font-weight: normal;
+}
+
+blockquote {
+  text-align: center;
+}
+
+a,
+a:visited {
+  font-style: italic;
+  color: var(--fg);
+  text-decoration-line: underline;
+}
+
+a:hover {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+a#delete:hover {
+  color: var(--red);
+  text-decoration: none;
+}
+
+/* ? */
+/* body:not(:-moz-handler-blocked) fieldset { */
+/*   display: table-cell; */
+/* } */
+
+table > thead > tr > :is(th, td) {
+  font-style: italic;
+}
+
+.expenses > :is(thead, tbody) > tr > :is(th, td),
+.groups > :is(thead, tbody) > tr > :is(th, td) {
+  max-width: 8em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.expenses > tbody > tr:hover,
+.groups > tbody > tr:hover {
+  cursor: pointer;
+}
+
+.expenses > :is(thead, tbody) > tr > :is(th, td):nth-child(2),
+.col-two > :is(thead, tbody) > tr > :is(th, td):nth-child(2) {
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+  .expenses > tbody > tr td:nth-child(3),
+  .expenses > tbody > tr td:nth-child(4),
+  .expenses > thead > tr th:nth-child(3),
+  .expenses > thead > tr th:nth-child(4) {
+    display: none;
+  }
+  .expenses > :is(thead, tbody) > tr > :is(th, td):nth-child(2) {
+    text-align: right;
+  }
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: calc(var(--max-width) / 2) calc(var(--max-width) / 2);
+}
+
+.button-primary {
+  color: white;
+  background: var(--blue);
+}
+
+.button-cancel {
+  color: white;
+  background: var(--red);
+}
+
+.error {
+  /* same as h1 */
+  margin: var(--vspace-2) var(--vspace-3) var(--vspace-3) var(--vspace-3);
+  background: var(--bg2);
+  background-clip: content-box;
+
+  /* change on error to grid */
+  display: none;
+  grid-template-columns: 1fr auto;
+  padding: 1rem;
+  justify-items: center;
+  align-items: center;
+}
+
+.svg-ico {
+  display: inline;
+  vertical-align: middle;
+  height: 4em;
+  width: 4em;
+  margin-bottom: -23.2px;
+}
+
+.overlay {
+  /* cover whole page */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg);
+  z-index: 1;
+  pointer-events: none;
+  view-transition-name: overlay;
+}
+
+.spinner {
+  display: block;
+  margin: auto;
+  margin-top: var(--vspace-0);
+  view-transition-name: spinner;
+}
+
+.htmx-indicator {
+  opacity: 0;
+  transition: opacity 500ms ease-in;
+}
+
+.htmx-request .htmx-indicator {
+  opacity: 1;
+}
+
+.htmx-request.htmx-indicator {
+  opacity: 1;
+}
+
+/* small devices (less then 1036.78px) */
+@media (max-width: calc(var(--max-width) - 0.02px)) {
+  :root {
+    --max-width: 100%;
+  }
+  body {
+    padding: var(--vspace-3) var(--vspace-3);
+    margin: var(--vspace-3) var(--vspace-3);
+  }
+
+  header > nav ul,
+  header > nav ol {
+    display: block;
+  }
+
+  /* TODO: make responsive */
+  input {
+    width: 100%;
+  }
 }
