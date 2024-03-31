@@ -21,6 +21,7 @@ await esbuild.build({
     "./ui/css/udjat.css",
     "./ui/css/style.css",
     "./ui/css/print.css",
+    "./ui/css/soria.ttf",
     "./ui/svg/add.svg",
     "./ui/svg/circles.svg",
     "./ui/svg/icon.svg",

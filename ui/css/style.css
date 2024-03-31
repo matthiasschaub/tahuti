@@ -14,6 +14,13 @@
   /* --fg: #f3f0df; */
 }
 
+@font-face {
+  font-family: "Soria";
+  src: url("/apps/tahuti/soria.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   position: relative;
   /* make room for fixed/sticky footer */
@@ -61,11 +68,13 @@ footer > .footer-icon {
 
 h1,
 h2 {
+  font-family: "Soria";
   color: var(--red);
   text-align: center;
 }
 
 h3 {
+  font-family: "Soria";
   font-weight: normal;
 }
 

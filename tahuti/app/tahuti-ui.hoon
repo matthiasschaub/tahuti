@@ -31,6 +31,7 @@
 /*  png-180                   %png   /app/ui/png/180/png
 /*  png-192                   %png   /app/ui/png/192/png
 /*  png-512                   %png   /app/ui/png/512/png
+/*  ttf-soria                 %ttf   /app/ui/ttf/soria/ttf
 /*  js-index                  %js    /app/ui/js/index/js
 /*  js-groups                 %js    /app/ui/js/groups/js
 /*  js-add                    %js    /app/ui/js/add/js
@@ -166,6 +167,10 @@
         [(send [200 ~ [%png png-192]]) state]
       [%apps %tahuti %icon512 ~]
         [(send [200 ~ [%png png-512]]) state]
+      ::  ttf
+      ::
+      [%apps %tahuti %soria ~]
+        [(send [200 ~ [%font-ttf q.ttf-soria]]) state]
       ::  js
       ::
       [%apps %tahuti %index ~]

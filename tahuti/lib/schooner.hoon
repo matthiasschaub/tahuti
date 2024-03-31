@@ -25,6 +25,7 @@
     [%plain p=tape]
     [%png p=@]
     [%svg p=@]
+    [%font-ttf p=@]
     ::
     [%login-redirect l=cord]
     [%hx-login-redirect l=cord]
@@ -78,6 +79,11 @@
     :_  `(as-octs:mimes:html p.resource)
     :-  http-status
     (weld headers ['content-type'^'image/svg+xml']~)
+    ::
+      %font-ttf
+    :_  `(as-octs:mimes:html p.resource)
+    :-  http-status
+    (weld headers ['content-type'^'font/ttf']~)
     ::
       %login-redirect
     =+  %^  cat  3
