@@ -2,21 +2,21 @@
 
 ## Priority
 
+- fix(ui): last update introduced a regression which made the footer not sticky anymore
 - feat: remove member from group as a host
 - feat: edit expense
 - ui: page transitions - keep spinner between sending add expense request and waiting
-      for response and going to expenses page.
-      Currently, spinner loads, disappears and shortly after loads again.
+    for response and going to expenses page.
+    Currently, spinner loads, disappears and shortly after loads again.
 - fix: assert in backend that expense.currency is the same as group.currency
-- fix(ui): error message overflow
 
 ## Backlog
 
 - refactor(ui): move settings and about sites to hamburger menu
-    - main pages are expenses and balances. One could switch between those to
-      with a swipe like on mobile.
-    - move members to hamburger menu (separate from settings page)
-    - or click on heading to go to settings
+  - main pages are expenses and balances. One could switch between those to
+    with a swipe like on mobile.
+  - move members to hamburger menu (separate from settings page)
+  - or click on heading to go to settings
 - refactor(ui): move about page from group pages (`/groups/{gid}`)
   to index page (`/groups`)
 - refactor(ui): make upper margin of add button/svg bigger
@@ -30,6 +30,7 @@
 - feat: history/event log for each event (like chat of tricount)
 - feat: tags
 - feat: proportional involvement [%]
+- feat: make PWA work offline
 - feat(ui): sort table after column header
 - feat(ui): click on suggested reimbursement to add new expense covering debt
 - feat(ui): dark mode
@@ -39,8 +40,8 @@
   - wait (on-arvo) for ack from %tahuti before sending HTTP response
   - use eyre id in wire for pokes
 - docs(ui): how to
-    - install this app natively
-    - see details of an expense
+  - install this app natively
+  - see details of an expense
 - fix(ui): on loading animation scroll to beginning of the page
 - fix(ui): after joining a group the group list is still empty -> introduce polling
 - fix(ui): if deletion of expense happens by a subscriber (not the host) HTMX fetches
