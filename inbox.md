@@ -2,7 +2,6 @@
 
 ## Priority
 
-- fix(ui): last update introduced a regression which made the footer not sticky anymore
 - feat: remove member from group as a host
 - feat: edit expense
 - ui: page transitions - keep spinner between sending add expense request and waiting
@@ -19,7 +18,6 @@
   - or click on heading to go to settings
 - refactor(ui): move about page from group pages (`/groups/{gid}`)
   to index page (`/groups`)
-- refactor(ui): make upper margin of add button/svg bigger
 - refactor(tahuti): move state transition to its own library or helper arm
 - refactor(tahuti): add helper to get all data of a group (reg, led, acl, group)
 - refactor(tahuti): host should be part of register
