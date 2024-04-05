@@ -256,10 +256,11 @@ output {
   line-height: calc(0.9167 * var(--vspace));
 }
 pre {
-  background: var(--bg2);
-  border: 1px solid var(--fg);
+  color: var(--bg);
+  background: var(--fg);
+  border: 1px solid var(--bg);
   border-radius: calc(0.3 * var(--vspace-3));
-  border-color: var(--bg2);
+  border-color: var(--fg);
   overflow: auto;
   padding: var(--vspace-3);
 }
@@ -352,9 +353,19 @@ label {
   margin-bottom: calc(0.3 * var(--vspace-3));
 }
 button {
-  background: var(--bg2);
+  color: var(--fg);
+  border-color: var(--fg);
   margin-top: var(--vspace-3);
   margin-right: var(--vspace);
+}
+button:hover {
+  transform: scale(1.05);
+}
+button:active {
+  transform: scale(0.95);
+}
+button:disabled {
+  pointer-events: none;
 }
 input[type="text"],
 textarea {
@@ -365,6 +376,10 @@ select {
 }
 select[multiple] {
   min-height: var(--vspace-0);
+}
+select:focus,
+input:focus {
+  border-color: var(--primary);
 }
 table {
   max-width: 100%;
@@ -396,17 +411,27 @@ table > tbody > tr:last-child > :is(th, td) {
   --vspace-2: calc(1.5 * var(--space) * 1rem);
   --vspace-3: calc(0.5 * var(--space) * 1rem);
   --max-width: calc(25 * var(--vspace));
+  --black: #222222;
+  --white: #fffff3;
+  --gray: #e9e9ed;
+  --light-blue: #f0f8ff;
+  --blue: #0062cc;
+  --dark-blue: #162dab;
+  --red: #cc241d;
+  --green: #006951;
 }
 @media (prefers-color-scheme: light) {
   :root {
-    --black: #151515;
-    --white: #ffffff;
-    --gray: #f4f4f4;
-    --blue: #0062cc;
-    --green: #1c7631;
-    --red: #cc241d;
     --fg: var(--black);
     --bg: var(--white);
+    --bg2: var(--gray);
+    --primary: var(--blue);
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fg: var(--white);
+    --bg: var(--black);
     --bg2: var(--gray);
     --primary: var(--blue);
   }
@@ -429,6 +454,15 @@ main {
   margin-left: var(--vspace);
   margin-right: var(--vspace);
 }
+@media (max-width: calc(var(--max-width) - 0.02px)) {
+  article,
+  footer,
+  header,
+  main {
+    margin-left: var(--vspace-3);
+    margin-right: var(--vspace-3);
+  }
+}
 img,
 svg,
 picture {
@@ -447,4 +481,8 @@ aside {
 footer {
   text-align: right;
   margin-bottom: var(--vspace);
+}
+::selection {
+  background-color: var(--fg);
+  color: var(--bg);
 }
