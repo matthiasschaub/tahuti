@@ -39,13 +39,12 @@ header > nav ul li svg {
 }
 
 footer {
-  text-align: center;
-
   /* fixed/sticky footer */
   position: sticky;
   bottom: 0;
   max-width: var(--max-width);
-  width: 100%;
+  margin: auto;
+  padding: var(--vspace-3);
 
   color: var(--fg);
   /* same as var(--bg0_h) but transparent*/
@@ -57,13 +56,6 @@ header > .header-icon {
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
-}
-
-footer > .footer-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-150%);
 }
 
 h1,
@@ -203,25 +195,4 @@ table > thead > tr > :is(th, td) {
 
 .htmx-request.htmx-indicator {
   opacity: 1;
-}
-
-/* small devices (less then 1036.78px) */
-@media (max-width: calc(var(--max-width) - 0.02px)) {
-  :root {
-    --max-width: 100%;
-  }
-  body {
-    padding: var(--vspace-3) var(--vspace-3);
-    margin: var(--vspace-3) var(--vspace-3);
-  }
-
-  header > nav ul,
-  header > nav ol {
-    display: block;
-  }
-
-  /* TODO: make responsive */
-  input {
-    width: 100%;
-  }
 }
