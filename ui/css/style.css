@@ -100,9 +100,16 @@ table > thead > tr > :is(th, td) {
   font-style: italic;
 }
 
+td {
+  max-width: calc(100% / 2);
+}
+
+.expenses {
+  width: 100%;
+}
+
 .expenses > :is(thead, tbody) > tr > :is(th, td),
 .groups > :is(thead, tbody) > tr > :is(th, td) {
-  max-width: 8em;
   overflow: hidden;
   text-overflow: ellipsis;
 }

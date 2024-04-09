@@ -256,11 +256,10 @@ output {
   line-height: calc(0.9167 * var(--vspace));
 }
 pre {
-  color: var(--bg);
-  background: var(--fg);
+  color: var(--fg);
+  background: var(--gray);
   border: 1px solid var(--bg);
   border-radius: calc(0.3 * var(--vspace-3));
-  border-color: var(--fg);
   overflow: auto;
   padding: var(--vspace-3);
 }
@@ -352,17 +351,30 @@ label {
   display: inline-block;
   margin-bottom: calc(0.3 * var(--vspace-3));
 }
+label > input[type="checkbox"] {
+  margin-bottom: 0;
+}
+label + label {
+  margin-bottom: 0;
+}
 button {
   color: var(--fg);
   border-color: var(--fg);
   margin-top: var(--vspace-3);
   margin-right: var(--vspace);
+  inline-size: fit-content;
+  touch-action: manipulation;
+  user-select: none;
+  &:focus-visible {
+    outline: 2px solid magenta;
+    outline-offset: 2px;
+  }
 }
 button:hover {
-  transform: scale(1.05);
+  transform: scale(1.025);
 }
 button:active {
-  transform: scale(0.95);
+  transform: scale(0.975);
 }
 button:disabled {
   pointer-events: none;
@@ -382,26 +394,36 @@ input:focus {
   border-color: var(--primary);
 }
 table {
-  max-width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
   font-variant-numeric: slashed-zero tabular-nums;
-  margin: var(--vspace) 0;
-  margin-left: auto;
-  margin-right: auto;
+  margin: var(--vspace) auto;
   white-space: nowrap;
 }
 table > thead > tr > :is(th, td) {
   border-top: 2px solid;
   border-bottom: 1px solid;
-  max-width: 8em;
+  max-width: 20ch;
 }
 table > :is(thead, tbody) > tr > :is(th, td) {
   padding: 3px;
   text-align: left;
   padding-right: var(--vspace-2);
+  max-width: 20ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 table > tbody > tr:last-child > :is(th, td) {
   border-bottom: 2px solid;
+}
+@media (max-width: calc(var(--max-width) - 0.02px)) {
+  article,
+  footer,
+  header,
+  main {
+    margin-left: var(--vspace-3);
+    margin-right: var(--vspace-3);
+  }
 }
 :root {
   --space: 1.62;
@@ -411,34 +433,20 @@ table > tbody > tr:last-child > :is(th, td) {
   --vspace-2: calc(1.5 * var(--space) * 1rem);
   --vspace-3: calc(0.5 * var(--space) * 1rem);
   --max-width: calc(25 * var(--vspace));
-  --black: #222222;
-  --white: #fffff3;
+  --black: #000000;
+  --white: #ffffff;
   --gray: #e9e9ed;
-  --light-blue: #f0f8ff;
   --blue: #0062cc;
-  --dark-blue: #162dab;
+  --green: #1c7631;
   --red: #cc241d;
-  --green: #006951;
-}
-@media (prefers-color-scheme: light) {
-  :root {
-    --fg: var(--black);
-    --bg: var(--white);
-    --bg2: var(--gray);
-    --primary: var(--blue);
-  }
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --fg: var(--white);
-    --bg: var(--black);
-    --bg2: var(--gray);
-    --primary: var(--blue);
-  }
+  --fg: var(--black);
+  --bg: var(--white);
+  --bg2: var(--gray);
+  --primary: var(--blue);
 }
 html {
   font-size: 16px;
-  font-family: sans-serif;
+  font-family: sans-serif, system-ui;
 }
 body {
   font-size: 1em;
@@ -453,15 +461,6 @@ header,
 main {
   margin-left: var(--vspace);
   margin-right: var(--vspace);
-}
-@media (max-width: calc(var(--max-width) - 0.02px)) {
-  article,
-  footer,
-  header,
-  main {
-    margin-left: var(--vspace-3);
-    margin-right: var(--vspace-3);
-  }
 }
 img,
 svg,
@@ -481,8 +480,4 @@ aside {
 footer {
   text-align: right;
   margin-bottom: var(--vspace);
-}
-::selection {
-  background-color: var(--fg);
-  color: var(--bg);
 }
