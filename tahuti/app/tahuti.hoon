@@ -361,7 +361,7 @@
     ==
   ==
 ::
-::  another agent unsubscribes, quite subscription
+::  another agent unsubscribes, quit subscription
 ::
 ++  on-leave
   |=  path=(pole knot)
