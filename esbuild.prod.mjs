@@ -37,9 +37,10 @@ await esbuild.build({
     "./node_modules/htmx.org/dist/ext/json-enc.js",
     "./node_modules/htmx.org/dist/ext/client-side-templates.js",
   ],
+  external: ['*.ttf'],
   entryNames: "[ext]/[name]", // will name the result files by their folder names
   bundle: true,
   minify: true,
-  loader: { ".json": "copy", ".html": "copy", ".svg": "copy", ".png": "copy" },
+  loader: { ".json": "copy", ".html": "copy", ".svg": "copy", ".png": "copy", ".ttf": "copy"},
   outdir: "tahuti/app/ui",
 });

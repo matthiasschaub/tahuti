@@ -1,9 +1,6 @@
 {
   "name": "tahuti",
-  "version": "0.0.17",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build-dev": "node esbuild.dev.mjs",
     "build-prod": "node esbuild.prod.mjs",
     "lint": "eslint ."

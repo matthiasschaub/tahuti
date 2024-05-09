@@ -1,4 +1,4 @@
-# Group Expenses
+# Tahuti
 
 Expense sharing app for [Urbit](https://urbit.org/).
 
