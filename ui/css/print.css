@@ -19,7 +19,7 @@ a,
 a:visited,
 a:hover {
   break-inside: avoid;
-    text-decoration: underline;
+  /*   text-decoration: underline; */
   color: black;
 }
 
@@ -29,10 +29,14 @@ footer {
 }
 
 /* keinen Seitenumbruch nach Überschriften */
+/* https://clagnut.com/blog/2426/ */
 h1,
 h2,
 h3 {
   break-after: avoid;
+  break-inside: avoid;
+  page-break-after: avoid;
+  page-break-inside: avoid;
 }
 
 /* h2 { */

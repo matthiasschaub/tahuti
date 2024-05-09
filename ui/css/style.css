@@ -19,7 +19,14 @@
   src: url("/apps/tahuti/soria.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
+
+/* html { */
+/* border-left: 0.25rem solid var(--red); */
+/* min-height: 100vh; */
+/* min-height: -webkit-fill-available; */
+/* } */
 
 body {
   position: relative;
@@ -63,11 +70,14 @@ h2 {
   font-family: "Soria";
   color: var(--red);
   text-align: center;
+  text-transform: capitalize;
+  font-weight: 600;
 }
 
 h3 {
   font-family: "Soria";
   font-weight: normal;
+  text-transform: none;
 }
 
 blockquote {
@@ -96,6 +106,10 @@ a#delete:hover {
 /*   display: table-cell; */
 /* } */
 
+/* table { */
+/*   line-height: var(--vspace); */
+/* } */
+
 table > thead > tr > :is(th, td) {
   font-style: italic;
 }
@@ -104,9 +118,9 @@ td {
   max-width: calc(100% / 2);
 }
 
-.expenses {
-  width: 100%;
-}
+/* .expenses { */
+/*   width: 100%; */
+/* } */
 
 .expenses > :is(thead, tbody) > tr > :is(th, td),
 .groups > :is(thead, tbody) > tr > :is(th, td) {
@@ -166,11 +180,10 @@ td {
 }
 
 .svg-ico {
+  margin-top: var(--vspace);
   display: inline;
   vertical-align: middle;
   height: 4em;
-  width: 4em;
-  margin-bottom: -23.2px;
 }
 
 .overlay {
