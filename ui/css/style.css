@@ -65,16 +65,14 @@ header > .header-icon {
   transform: translateX(-50%) translateY(-50%);
 }
 
-h1,
-h2 {
+h1 {
   font-family: "Soria";
   color: var(--red);
   text-align: center;
   text-transform: capitalize;
   font-weight: 600;
 }
-
-h3 {
+h2 {
   font-family: "Soria";
   font-weight: normal;
   text-transform: none;
