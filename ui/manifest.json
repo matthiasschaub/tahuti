@@ -1,6 +1,6 @@
 {
   "lang": "en-us",
-  "name": "Group Expenses",
+  "name": "Tahuti",
   "description": "An expense sharing app for Urbit",
   "start_url": "/apps/tahuti",
   "scope": "/apps/tahuti",
