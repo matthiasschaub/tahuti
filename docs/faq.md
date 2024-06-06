@@ -8,7 +8,7 @@ Alternatively, you can use the command-line tool `tahuti` to download the
 expenses:
 
 ```bash
-> pipx install https://github.com/matthiasschaub/tahuti
+> pipx install git+https://github.com/matthiasschaub/tahuti.git
 > tahuti backup --help 
 Usage: tahuti backup [OPTIONS]
 
@@ -40,7 +40,7 @@ Right now, the only way to do it is to use the command-line tool `tahuti` to
 restore your backup:
 
 ```bash
-> pipx install https://github.com/matthiasschaub/tahuti
+> pipx install git+https://github.com/matthiasschaub/tahuti.git
 > tahuti restore --help
 Usage: tahuti restore [OPTIONS]
 
