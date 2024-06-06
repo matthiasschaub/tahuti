@@ -26,7 +26,7 @@ def cli():
         path_type=Path,
     ),
     required=True,
-    help="Input JSON file.",
+    help="Output JSON file.",
 )
 @click.option(
     "--access-code",
@@ -69,7 +69,7 @@ def backup(url, gid: str, file: Path, access_code: None | str):
         path_type=Path,
     ),
     required=True,
-    help="Output JSON file.",
+    help="Input JSON file.",
 )
 @click.option("--access-code", type=str, required=False, help="Access code of your ship.")
 def restore(url, gid: str, file: Path, access_code: None | str):
