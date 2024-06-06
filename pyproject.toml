@@ -2,7 +2,13 @@
 name = "tahuti"
 version = "0.0.1"
 description = ""
-authors = ["~talfus-laddus"]
+authors = ["talfus-laddus <talfus-laddus@posteo.de>"]
+packages = [
+    { include = "scripts" },
+]
+
+[tool.poetry.scripts]
+tahuti = 'scripts.tahuti:cli'
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -12,6 +18,7 @@ schema = "^0.7.5"
 hypothesis = "^6.97.5"
 ruff = "^0.2.0"
 pilothouse = {git = "https://github.com/matthiasschaub/pilothouse"}
+click = "^8.1.7"
 
 [build-system]
 requires = ["poetry-core"]
