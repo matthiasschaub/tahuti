@@ -370,6 +370,8 @@
     ::  (remove from access-control list)
       ::
       [=gid ~]
+    ::  TODO: log planet who leaves
+    ::
     ~&  >  '%tahuti (on-leave)'
     =/  acl  (~(got by acls) gid.path)
     =.  acl  (~(del in acl) src.bowl)
@@ -429,6 +431,7 @@
 ::
 ++  on-agent
   |=  [=wire =sign:agent:gall]
+  =/  =gid  `@tas`(head wire)
   ^-  [(list card) $_(this)]
   ?+  -.sign  (on-agent:default wire sign)
     ::
@@ -443,14 +446,24 @@
     ::        removed the agent or deleted the group
     ::  NOTE: maybe this agent has already left the group and no more
     ::        group data is present
+    ::  NOTE: It should be noted that %kick gifts are not only emitted
+    ::  intentionally by the publishing agent. Gall itself will %kick
+    ::  remote subscribers if too many undelivered outbound %facts queue
+    ::  up due to network connectivity problems. On the subscriber side,
+    ::  their Gall will %kick themselves if they crash while processing
+    ::  an incoming %fact.
       ::
       %kick
-    !!
+    %-  (slog '%tahuti (on-agent): resubscribe' ~)
+    =/  path  /[gid]
+    :-  ^-  (list card)
+      :~  [%pass path [%agent [src.bowl %tahuti] [%watch path]]]
+      ==
+    this
     ::
       %fact
     ?>  ?=(%tahuti-update p.cage.sign)
     =/  =update  !<(update q.cage.sign)
-    =/  =gid  `@tas`(head wire)
     ?>  =(gid gid.update)
     :: ?>  =(our.bowl host.group.update)
     ?-  -.update

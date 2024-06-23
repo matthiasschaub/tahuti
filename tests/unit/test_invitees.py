@@ -8,9 +8,9 @@ import requests
         {},
         "",
         "~zod",
-        {"member": ""},
-        {"member": None},
-        {"member": " "},
+        {"invitee": ""},
+        {"invitee": None},
+        {"invitee": " "},
     ),
 )
 @pytest.mark.usefixtures("group")
